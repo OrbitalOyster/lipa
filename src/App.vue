@@ -4,7 +4,7 @@ const n = ref(0)
 </script>
 
 <template>
-  <h1>Hello, World!</h1>
+  <h1>Lipa</h1>
   <button @click="n++">
     Click me
   </button>
