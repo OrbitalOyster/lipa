@@ -5,6 +5,6 @@ declare module '*.vue' {
 
 interface ImportMeta {
   env: {
-    VITE_SOME_FOO: string
+    VITE_AUTH_API: string
   }
 }
