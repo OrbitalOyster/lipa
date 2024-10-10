@@ -18,19 +18,22 @@ const router = createRouter({
 })
 
 // Auth check
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
+  const loginStore = useLoginStore()
+  const loggedIn = await loginStore.check()
+
   // Except login page
   if (to.name === 'Login') {
+    // Logged in users get redirected
+    if (loggedIn)
+      return { name: 'Home' }
     return true
   }
 
-  const loginStore = useLoginStore()
+  console.log({ loggedIn })
 
-  if (loginStore.username)
-    console.log('Auth ok')
-  else {
-    // TODO: Send login check
-  }
+  if (!loggedIn)
+    return { name: 'Login' }
 
   console.log(`Navigated from ${from.path} to ${to.path}`)
 })
