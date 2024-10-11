@@ -16,15 +16,15 @@ const authEndpoint = import.meta.env.VITE_AUTH_API
 if (!authEndpoint)
   throw new Error('Missing auth endpoint')
 
-export const useLoginStore = defineStore('login', {
+export default defineStore('login', {
   state: (): ILoginStore => ({
     username: null,
     role: null,
   }),
   actions: {
-    async auth(username: string, password) {
+    async auth(username: string, password: string) {
       const res: AxiosResponse<AuthResponse | null> = await axios.post(
-        authEndpoint + '/auth', {
+        `${authEndpoint}/auth`, {
           username,
           password,
         }, {
@@ -36,22 +36,22 @@ export const useLoginStore = defineStore('login', {
         this.role = res.data.role
         return true
       }
-      else
-        return false
+      return false
     },
     async check() {
       // Already logged in
       if (this.username)
         return true
       const authCheck: AxiosResponse<AuthResponse | null>
-        = await axios.get(authEndpoint + '/check', { withCredentials: true })
+        = await axios.get(`${authEndpoint}/check`, { withCredentials: true })
       if (authCheck.data === null)
         return false
       this.username = authCheck.data.username
       this.role = authCheck.data.role
       return true
     },
-    logout() {
+    async logout() {
+      await axios.get(`${authEndpoint}/logout`, { withCredentials: true })
       this.username = null
       this.role = null
     },

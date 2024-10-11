@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import useLoginStore from '../stores/loginStore.ts'
+
+const loginStore = useLoginStore()
 const router = useRouter()
-const logoutEndpoint = `${import.meta.env.VITE_AUTH_API}/logout`
+
 const logout = async () => {
-  await axios.get(logoutEndpoint)
+  await loginStore.logout()
   await router.push('/login')
 }
+
 </script>
 
 <template>

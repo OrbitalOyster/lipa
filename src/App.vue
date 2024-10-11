@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// import { ref } from 'vue'
-// const n = ref(0)
-// const foo = import.meta.env.VITE_SOME_FOO
+// Import { ref } from 'vue'
+// Const n = ref(0)
+// Const foo = import.meta.env.VITE_SOME_FOO
 </script>
 
 <template>

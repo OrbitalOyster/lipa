@@ -1,23 +1,20 @@
 <script setup lang="ts">
 
-import { useLoginStore } from '../stores/loginStore.ts'
+import useLoginStore from '../stores/loginStore.ts'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
-
-const username = ref('')
-const password = ref('')
-
-const loginStore = useLoginStore()
-
-const auth = async () => {
-  const authRes = await loginStore.auth(username.value, password.value)
-  if (authRes)
-    await router.push('/')
-  else
-    console.log('Login failed')
-}
+const router = useRouter(),
+  loginStore = useLoginStore(),
+  username = ref(''),
+  password = ref(''),
+  auth = async () => {
+    const authRes = await loginStore.auth(username.value, password.value)
+    if (authRes)
+      await router.push('/')
+    else
+      console.log('Login failed')
+  }
 
 </script>
 
@@ -28,6 +25,8 @@ const auth = async () => {
       <input
         v-model="username"
         type="text"
+        name="username"
+        autofocus
       >
       <input
         v-model="password"
