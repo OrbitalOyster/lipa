@@ -11,7 +11,9 @@ interface AuthResponse {
   role: string
 }
 
-const authEndpoint = import.meta.env.VITE_AUTH_API
+const axiosOptions = { withCredentials: true },
+  authEndpoint = import.meta.env.VITE_AUTH_API
+
 if (!authEndpoint) {
   throw new Error('Missing auth endpoint')
 }
@@ -27,13 +29,13 @@ export default defineStore('login', {
       if (this.username) {
         return true
       }
-      const authCheck: AxiosResponse<AuthResponse | null>
-        = await axios.get(`${authEndpoint}/check`, { withCredentials: true })
-      if (authCheck.data === null) {
+      const res: AxiosResponse<AuthResponse | null>
+        = await axios.get(`${authEndpoint}/check`, axiosOptions)
+      if (res.data === null) {
         return false
       }
-      this.username = authCheck.data.username
-      this.role = authCheck.data.role
+      this.username = res.data.username
+      this.role = res.data.role
       return true
     },
     async auth(username: string, password: string) {
@@ -41,9 +43,7 @@ export default defineStore('login', {
         `${authEndpoint}/auth`, {
           username,
           password,
-        }, {
-          withCredentials: true,
-        },
+        }, axiosOptions,
       )
       if (res.data !== null) {
         this.username = res.data.username
@@ -53,7 +53,7 @@ export default defineStore('login', {
       return false
     },
     async logout() {
-      await axios.get(`${authEndpoint}/logout`, { withCredentials: true })
+      await axios.get(`${authEndpoint}/logout`, axiosOptions)
       this.username = null
       this.role = null
     },
