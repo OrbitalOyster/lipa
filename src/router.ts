@@ -15,15 +15,10 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   console.log(`Navigating from ${from.path} to ${to.path}`)
-
   const loggedIn = await useLoginStore().check()
-
-  // Except login page
   if (to.name === 'Login') {
-    // Logged in users get redirected
     return loggedIn ? { name: 'Home' } : true
   }
-
   return loggedIn ? true : { name: 'Login' }
 })
 

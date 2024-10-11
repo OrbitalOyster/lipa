@@ -5,7 +5,7 @@ import stylistic from "@stylistic/eslint-plugin"
 
 export default [
   { ignores: ["eslint.config.js", "dist"] },
-  pluginJs.configs.recommended,
+  pluginJs.configs.all,
   ...tseslint.configs.strictTypeChecked,
   ...pluginVue.configs["flat/recommended"],
   stylistic.configs["recommended-flat"],
@@ -20,6 +20,8 @@ export default [
     rules: {
       "no-console": "off",
       "no-ternary": "off",
+      "sort-keys": "off",
+      "sort-vars": "off",
       // Some eslint rules are not enforced in the <script> section 
       "prefer-const": "error",
       "no-var": "error",

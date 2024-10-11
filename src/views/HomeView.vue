@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import useLoginStore from '../stores/loginStore.ts'
+import { useRouter } from 'vue-router'
 
-const loginStore = useLoginStore()
-const router = useRouter()
-
-const logout = async () => {
-  await loginStore.logout()
-  await router.push('/login')
-}
+const loginStore = useLoginStore(),
+  router = useRouter(),
+  // eslint-disable-next-line no-useless-assignment
+  logout = async () => {
+    await loginStore.logout()
+    await router.push('/login')
+  }
 
 </script>
 
@@ -23,9 +23,7 @@ const logout = async () => {
       About
     </RouterLink>
     <br>
-    <button
-      @click="logout"
-    >
+    <button @click="logout">
       Logout
     </button>
   </div>

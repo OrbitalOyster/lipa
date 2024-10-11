@@ -1,19 +1,20 @@
 <script setup lang="ts">
 
-import useLoginStore from '../stores/loginStore.ts'
 import { ref } from 'vue'
+import useLoginStore from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
 const router = useRouter(),
   loginStore = useLoginStore(),
   username = ref(''),
   password = ref(''),
+  // eslint-disable-next-line no-useless-assignment
   auth = async () => {
     const authRes = await loginStore.auth(username.value, password.value)
-    if (authRes)
+    if (authRes) {
       await router.push('/')
-    else
-      console.log('Login failed')
+    }
+    else { console.log('Login failed') }
   }
 
 </script>
