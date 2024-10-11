@@ -13,13 +13,16 @@ interface AuthResponse {
 
 const authEndpoint = import.meta.env.VITE_AUTH_API
 
+if (!authEndpoint)
+  throw new Error('Missing auth endpoint')
+
 export const useLoginStore = defineStore('login', {
   state: (): ILoginStore => ({
     username: null,
     role: null,
   }),
   actions: {
-    async auth(username: string, password: string) {
+    async auth(username: string, password) {
       const res: AxiosResponse<AuthResponse | null> = await axios.post(
         authEndpoint + '/auth', {
           username,
@@ -40,9 +43,9 @@ export const useLoginStore = defineStore('login', {
       // Already logged in
       if (this.username)
         return true
-      const authCheck: AxiosResponse<AuthResponse | false>
+      const authCheck: AxiosResponse<AuthResponse | null>
         = await axios.get(authEndpoint + '/check', { withCredentials: true })
-      if (authCheck.data === false)
+      if (authCheck.data === null)
         return false
       this.username = authCheck.data.username
       this.role = authCheck.data.role

@@ -19,6 +19,8 @@ const router = createRouter({
 
 // Auth check
 router.beforeEach(async (to, from) => {
+  console.log('Navigation guard', to.path)
+
   const loginStore = useLoginStore()
   const loggedIn = await loginStore.check()
 
