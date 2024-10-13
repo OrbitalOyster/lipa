@@ -4,7 +4,7 @@ import pluginVue from "eslint-plugin-vue";
 import stylistic from "@stylistic/eslint-plugin"
 
 export default [
-  { ignores: ["eslint.config.js", "dist"] },
+  { ignores: ["eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
   pluginJs.configs.all,
   ...tseslint.configs.strictTypeChecked,
   ...pluginVue.configs["flat/recommended"],

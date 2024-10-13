@@ -21,7 +21,9 @@ const router = useRouter(),
 
 <template>
   <div>
-    Login page
+    <h1 class="text-3xl font-bold underline">
+      Login page
+    </h1>
     <form @submit.prevent="auth">
       <input
         v-model="username"
