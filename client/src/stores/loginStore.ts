@@ -6,7 +6,7 @@ interface ILoginStore {
   role: null | string
 }
 
-interface AuthResponse {
+interface IAuthResponse {
   username: string
   role: string
 }
@@ -25,12 +25,13 @@ export default defineStore('login', {
   }),
   actions: {
     async check() {
-      // Already logged in
+      /* Already logged in */
       if (this.username) {
         return true
       }
-      const res: AxiosResponse<AuthResponse | null>
+      const res: AxiosResponse<IAuthResponse | null>
         = await axios.get(`${authEndpoint}/check`, axiosOptions)
+      /* Invalid token */
       if (res.data === null) {
         return false
       }
@@ -39,18 +40,19 @@ export default defineStore('login', {
       return true
     },
     async auth(username: string, password: string) {
-      const res: AxiosResponse<AuthResponse | null> = await axios.post(
+      const res: AxiosResponse<IAuthResponse | null> = await axios.post(
         `${authEndpoint}/auth`, {
           username,
           password,
         }, axiosOptions,
       )
-      if (res.data !== null) {
-        this.username = res.data.username
-        this.role = res.data.role
-        return true
+      /* Failed login */
+      if (res.data === null) {
+        return false
       }
-      return false
+      this.username = res.data.username
+      this.role = res.data.role
+      return true
     },
     async logout() {
       await axios.get(`${authEndpoint}/logout`, axiosOptions)

@@ -1,2 +1,11 @@
 @tailwind base;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Exo2";
+  src: url("/public/fonts/Exo2/static/Exo2-Regular.ttf");
+}
+
+body {
+  font-family: "Exo2";
+}
