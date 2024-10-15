@@ -18,6 +18,7 @@ export default [
       }
     },
     rules: {
+      "id-length": "off",
       "no-console": "off",
       "no-ternary": "off",
       "sort-keys": "off",
