@@ -8,14 +8,13 @@ const checked = defineModel<boolean>()
 </script>
 
 <template>
-  <label> {{title}}
+  <label> {{ title }}
     <input
       v-model="checked"
       type="checkbox"
       :name="formName"
     >
-    <span class="checkmark">
-    </span>
+    <span class="checkmark" />
   </label>
 </template>
 
@@ -23,7 +22,7 @@ const checked = defineModel<boolean>()
 
  /* Customize the label (the container) */
 label {
-  @apply relative pl-10 select-none cursor-pointer;
+  @apply relative pl-8 select-none cursor-pointer;
 }
 
 /* Hide the browser's default checkbox */
@@ -50,6 +49,10 @@ input:checked ~ .checkmark {
   @apply bg-emerald-500 border-0;
 }
 
+input:active ~ .checkmark {
+  @apply bg-emerald-700;
+}
+
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
@@ -69,7 +72,7 @@ input:focus ~ .checkmark {
 /* Style the checkmark/indicator */
 label .checkmark:after {
   @apply inset-1.5 w-3 h-3;
-	border-radius: 50%;
-	background: white;
+  border-radius: 50%;
+  background: white;
 }
 </style>

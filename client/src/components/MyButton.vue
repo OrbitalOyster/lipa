@@ -8,11 +8,12 @@ defineProps({
     type: String,
     default: null,
   },
+  submit: Boolean
 })
 </script>
 
 <template>
-  <button type="button">
+  <button type="submit ? 'submit' : 'button'">
     <div class="p-2 px-8">
       {{ title }}
       <span class="pl-1">

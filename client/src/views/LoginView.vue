@@ -27,12 +27,19 @@ const router = useRouter(),
 
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
-    <div>
-      <MyCard class="w-auto">
+    <div class="w-1/3">
+      <MyCard>
         <div class="pb-4">
-          <img class="float-right w-14 h-14" src="/icon.svg"/>
-          <h1 class="text-3xl font-bold text-gray-600">Lipa</h1>
-          <h2 class="text-lg text-gray-400">Последний шанс снять бахилы</h2>
+          <img
+            class="float-right w-14 h-14"
+            src="/icon.svg"
+          >
+          <h1 class="text-3xl font-bold text-slate-600">
+            Lipa
+          </h1>
+          <h2 class="text-lg text-slate-400">
+            Последний шанс снять бахилы
+          </h2>
         </div>
 
         <form @submit.prevent="auth">
@@ -48,6 +55,7 @@ const router = useRouter(),
             class="w-full"
             name="password"
             placeholder="Пароль"
+            password
           />
           <div class="flex justify-between items-center pt-4">
             <MyCheckbox
@@ -57,6 +65,7 @@ const router = useRouter(),
             <MyButton
               title="Войти"
               icon="arrow-right-to-bracket"
+              submit
             />
           </div>
         </form>

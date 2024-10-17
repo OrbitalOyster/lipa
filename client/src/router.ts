@@ -53,8 +53,6 @@ router.beforeEach(async (to, from) => {
   if (to.name === 'Error') {
     return true
   }
-  /* Set document title */
-  document.title = `Lipa / ${to.meta.title}`
   /* Login page */
   const loggedIn = await useLoginStore().check()
   if (to.name === 'Login') {
@@ -63,6 +61,11 @@ router.beforeEach(async (to, from) => {
   }
   /* Default handler */
   return loggedIn ? true : { name: 'Login' }
+})
+
+router.afterEach(async(to, from) => {
+  /* Set document title */
+  document.title = `Lipa / ${to.meta.title}`
 })
 
 export default router
