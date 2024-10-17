@@ -8,7 +8,7 @@ const checked = defineModel<boolean>()
 </script>
 
 <template>
-  <label class="container"> {{title}}
+  <label> {{title}}
     <input
       v-model="checked"
       type="checkbox"
@@ -22,15 +22,12 @@ const checked = defineModel<boolean>()
 <style scoped>
 
  /* Customize the label (the container) */
-.container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  user-select: none;
+label {
+  @apply relative pl-10 select-none cursor-pointer;
 }
 
 /* Hide the browser's default checkbox */
-.container input {
+input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -40,25 +37,17 @@ const checked = defineModel<boolean>()
 
 /* Create a custom checkbox */
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1.5rem;
-  width: 1.5rem;
-  background-color: gray;
-  border-radius: .5rem;
+  /* Border */
+  @apply border border-slate-300 rounded;
+  /* Sizing */
+  @apply absolute inset-0 w-6 h-6;
+  /* Colors */
+  @apply bg-slate-50;
 }
-
-/* On mouse-over, add a grey background color */
-/*
-.container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-*/
 
 /* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
-  background-color: green;
+input:checked ~ .checkmark {
+  @apply bg-emerald-500 border-0;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -69,29 +58,18 @@ const checked = defineModel<boolean>()
 }
 
 /* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
+input:checked ~ .checkmark:after {
   display: block;
 }
 
+input:focus ~ .checkmark {
+  @apply ring-offset-2 ring-2 ring-emerald-400;
+}
+
 /* Style the checkmark/indicator */
-.container .checkmark:after {
-  /*
-  left: 0;
-  top: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-  */
-  top: 8px;
-	left: 8px;
-	width: 8px;
-	height: 8px;
+label .checkmark:after {
+  @apply inset-1.5 w-3 h-3;
 	border-radius: 50%;
 	background: white;
-  /*
-  border: solid red;
-  border-width: 4px 4px 4px 4px;
-  border-radius: 4px;
-  */
-  /* transform: rotate(45deg); */
 }
 </style>

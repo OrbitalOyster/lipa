@@ -28,18 +28,16 @@ defineProps({
 
 <style scoped>
   button {
-    @apply drop-shadow-md rounded;
-
-    @apply outline-none text-white bg-green-500;
+    @apply rounded outline-none text-white bg-emerald-500;
 
     /* Hover */
-    @apply hover:bg-green-400 hover:shadow;
+    @apply hover:bg-emerald-400 hover:drop-shadow-md;
 
     /* Focus */
-    @apply focus:outline-2 focus:outline-green-400;
+    @apply focus:outline-2 focus:outline-emerald-400;
 
     /* Active */
-    @apply active:bg-green-700;
+    @apply active:bg-emerald-700;
 
     /* Animations */
     @apply transition-all duration-200;

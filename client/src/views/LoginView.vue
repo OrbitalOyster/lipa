@@ -31,8 +31,8 @@ const router = useRouter(),
       <MyCard class="w-auto">
         <div class="pb-4">
           <img class="float-right w-14 h-14" src="/icon.svg"/>
-          <h1>Lipa</h1>
-          <h2>Последний шанс снять бахилы</h2>
+          <h1 class="text-3xl font-bold text-gray-600">Lipa</h1>
+          <h2 class="text-lg text-gray-400">Последний шанс снять бахилы</h2>
         </div>
 
         <form @submit.prevent="auth">
@@ -49,7 +49,7 @@ const router = useRouter(),
             name="password"
             placeholder="Пароль"
           />
-          <div class="flex justify-between pt-4">
+          <div class="flex justify-between items-center pt-4">
             <MyCheckbox
               title="Запомнить меня"
               form-name="rememberMe"
@@ -67,13 +67,3 @@ const router = useRouter(),
     </div>
   </div>
 </template>
-
-<style scoped>
-  h1 {
-    @apply text-3xl font-bold text-gray-600;
-  }
-
-  h2 {
-    @apply text-lg text-gray-400;
-  }
-</style>

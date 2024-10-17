@@ -20,10 +20,11 @@ defineProps({
 <style scoped>
   main {
     /* Border */
-    @apply outline-none border border-gray-200 rounded;
+    @apply border border-slate-300 rounded;
+    /* Colors */
     @apply bg-white;
-
-    @apply shadow-sm;
+    /* Effects */
+    @apply drop-shadow;
   }
 
 </style>

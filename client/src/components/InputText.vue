@@ -15,16 +15,12 @@ const model = defineModel<string>()
 </template>
 
 <style scoped>
-  .focus-outline:focus {
-    box-shadow: 0 0 0 .25rem green;
-  }
-
   input {
     /* Border */
-    @apply outline-none border border-gray-300 rounded;
-    @apply bg-gray-50;
+    @apply outline-none border border-slate-300 rounded;
+    @apply bg-slate-50;
     /* On focus */
-    @apply focus:outline-2 focus:outline-green-400;
+    @apply focus:outline-2 focus:outline-emerald-400;
     /* Animations */
     @apply transition-all duration-200;
   }
