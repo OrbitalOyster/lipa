@@ -1,16 +1,26 @@
 <script setup lang="ts">
-  defineProps({
-    title: String,
-    icon: String,
-  });
+defineProps({
+  title: {
+    type: String,
+    default: 'INSERT TITLE',
+  },
+  icon: {
+    type: String,
+    default: null,
+  },
+})
 </script>
 
 <template>
   <button type="button">
-    <div class="px-2">
-      {{title}}
+    <div class="p-2 px-8">
+      {{ title }}
       <span class="pl-1">
-        <font-awesome-icon v-if=icon :icon="['fas', icon]" size="lg"/>
+        <font-awesome-icon
+          v-if="icon"
+          :icon="['fas', icon]"
+          size="lg"
+        />
       </span>
     </div>
   </button>
@@ -18,16 +28,19 @@
 
 <style scoped>
   button {
-    @apply shadow-sm rounded;
-    @apply p-2;
+    @apply drop-shadow-md rounded;
 
-    @apply text-white bg-green-600;
+    @apply outline-none text-white bg-green-500;
 
     /* Hover */
-    @apply hover:bg-green-500 hover:shadow;
-    /* Actiive */
+    @apply hover:bg-green-400 hover:shadow;
+
+    /* Focus */
+    @apply focus:outline-2 focus:outline-green-400;
+
+    /* Active */
     @apply active:bg-green-700;
-    
+
     /* Animations */
     @apply transition-all duration-200;
   }

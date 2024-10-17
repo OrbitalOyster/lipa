@@ -2,8 +2,8 @@
 
 import InputText from '../components/InputText.vue'
 import MyButton from '../components/MyButton.vue'
-import MyCheckbox from '../components/MyCheckbox.vue'
 import MyCard from '../components/MyCard.vue'
+import MyCheckbox from '../components/MyCheckbox.vue'
 import { ref } from 'vue'
 import useLoginStore from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
@@ -20,24 +20,60 @@ const router = useRouter(),
     }
     else { console.log('Login failed') }
   },
+  // eslint-disable-next-line no-useless-assignment
   year = new Date().getFullYear()
 
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
-    <MyCard class="w-1/3" title="LIPA" subtitle="Последний шанс снять бахилы">
-      <form @submit.prevent="auth">
-        <InputText class="w-full mb-3" name="username" v-model="username" placeholder="Имя пользователя" autofocus/>
-        <InputText class="w-full" name="password" v-model="password" placeholder="Пароль"/>
-        <div class="flex justify-between pt-4">
-          <MyCheckbox title="Запомнить меня" form-id="rememberMe" form-name="rememberMe"/>
-          <MyButton title="Войти" icon="arrow-right-to-bracket"/>
+    <div>
+      <MyCard class="w-auto">
+        <div class="pb-4">
+          <img class="float-right w-14 h-14" src="/icon.svg"/>
+          <h1>Lipa</h1>
+          <h2>Последний шанс снять бахилы</h2>
         </div>
-      </form>
-    </MyCard>
-    <div class="p-2 w-1/3 text-end">
-      (c) {{year}}
+
+        <form @submit.prevent="auth">
+          <InputText
+            v-model="username"
+            class="w-full mb-3"
+            name="username"
+            placeholder="Имя пользователя"
+            autofocus
+          />
+          <InputText
+            v-model="password"
+            class="w-full"
+            name="password"
+            placeholder="Пароль"
+          />
+          <div class="flex justify-between pt-4">
+            <MyCheckbox
+              title="Запомнить меня"
+              form-name="rememberMe"
+            />
+            <MyButton
+              title="Войти"
+              icon="arrow-right-to-bracket"
+            />
+          </div>
+        </form>
+      </MyCard>
+      <div class="p-2 text-end">
+        (c) {{ year }}
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+  h1 {
+    @apply text-3xl font-bold text-gray-600;
+  }
+
+  h2 {
+    @apply text-lg text-gray-400;
+  }
+</style>

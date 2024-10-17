@@ -1,17 +1,19 @@
 <script setup lang="ts">
-  defineProps({
-    title: String,
-    subtitle: String, 
-  })
+defineProps({
+  title: {
+    type: String,
+    default: 'INSERT TITLE',
+  },
+  subtitle: {
+    type: String,
+    default: 'INSERT TITLE',
+  },
+})
 </script>
 
 <template>
   <main class="p-4">
-    <div class="pb-4">
-      <h1>{{title}}</h1>
-      <h2>{{subtitle}}</h2>
-    </div>
-    <slot/>
+    <slot />
   </main>
 </template>
 
@@ -24,11 +26,4 @@
     @apply shadow-sm;
   }
 
-  h1 {
-    @apply text-3xl font-bold text-gray-600;
-  }
-
-  h2 {
-    @apply text-lg text-gray-400;
-  }
 </style>
