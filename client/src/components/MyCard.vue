@@ -12,7 +12,6 @@
       <h2>{{subtitle}}</h2>
     </div>
     <slot/>
-    <slot name="footer"/>
   </main>
 </template>
 
