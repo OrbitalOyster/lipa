@@ -8,7 +8,7 @@ defineProps({
     type: String,
     default: null,
   },
-  submit: Boolean
+  submit: Boolean,
 })
 </script>
 
@@ -29,18 +29,15 @@ defineProps({
 
 <style scoped>
   button {
-    @apply rounded outline-none text-white bg-emerald-500;
-
-    /* Hover */
+    /* Border */
+    @apply outline-none rounded;
+    /* Colors */
+    @apply bg-emerald-500 text-white;
+    /* On hover */
     @apply hover:bg-emerald-400 hover:drop-shadow-md;
-
-    /* Focus */
-    @apply focus:outline-2 focus:outline-emerald-400;
-
-    /* Active */
+    /* On focus */
+    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+    /* On active */
     @apply active:bg-emerald-700;
-
-    /* Animations */
-    @apply transition-all duration-200;
   }
 </style>

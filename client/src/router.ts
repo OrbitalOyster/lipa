@@ -63,7 +63,7 @@ router.beforeEach(async (to, from) => {
   return loggedIn ? true : { name: 'Login' }
 })
 
-router.afterEach(async(to, from) => {
+router.afterEach((to) => {
   /* Set document title */
   document.title = `Lipa / ${to.meta.title}`
 })

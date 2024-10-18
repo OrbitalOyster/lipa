@@ -66,7 +66,7 @@ input:checked ~ .checkmark:after {
 }
 
 input:focus ~ .checkmark {
-  @apply ring-offset-2 ring-2 ring-emerald-400;
+  @apply ring-2 ring-offset-2 ring-emerald-400;
 }
 
 /* Style the checkmark/indicator */
