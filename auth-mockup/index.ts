@@ -2,6 +2,8 @@ import { decode, sign, verify } from 'hono/jwt'
 import { cors } from 'hono/cors'
 import { Hono } from 'hono'
 
+import { setTimeout as sleep } from 'node:timers/promises'
+
 import {
   getSignedCookie,
   setSignedCookie,
@@ -48,6 +50,9 @@ async function updateCookie(c, username, role) {
 
 // Auth attempt
 app.post('/auth', async (c) => {
+
+  await sleep(2500)
+
   const body = await c.req.json()
   const {username, password} = body
 

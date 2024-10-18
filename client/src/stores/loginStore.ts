@@ -39,11 +39,12 @@ export default defineStore('login', {
       this.role = res.data.role
       return true
     },
-    async auth(username: string, password: string) {
+    async auth(username: string, password: string, rememberMe: boolean) {
       const res: AxiosResponse<IAuthResponse | null> = await axios.post(
         `${authEndpoint}/auth`, {
           username,
           password,
+          rememberMe,
         }, axiosOptions,
       )
       /* Failed login */

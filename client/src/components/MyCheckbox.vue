@@ -20,21 +20,10 @@ const checked = defineModel<boolean>()
 
 <style scoped>
 
- /* Customize the label (the container) */
 label {
   @apply relative pl-8 select-none cursor-pointer;
 }
 
-/* Hide the browser's default checkbox */
-input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* Create a custom checkbox */
 .checkmark {
   /* Border */
   @apply border border-slate-300 rounded;
@@ -44,35 +33,36 @@ input {
   @apply bg-slate-50;
 }
 
-/* When the checkbox is checked, add a blue background */
-input:checked ~ .checkmark {
-  @apply bg-emerald-500 border-0;
-}
-
-input:active ~ .checkmark {
-  @apply bg-emerald-700;
-}
-
-/* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
+  @apply absolute hidden content-none;
   content: "";
-  position: absolute;
-  display: none;
+
+  @apply inset-1.5 w-3 h-3 rounded bg-white;
 }
 
-/* Show the checkmark when checked */
-input:checked ~ .checkmark:after {
-  display: block;
+/* Actual checkbox */
+input {
+  @apply absolute opacity-0 w-0 h-0;
 }
 
+/* On focus */
 input:focus ~ .checkmark {
   @apply ring-2 ring-offset-2 ring-emerald-400;
 }
 
-/* Style the checkmark/indicator */
-label .checkmark:after {
-  @apply inset-1.5 w-3 h-3;
-  border-radius: 50%;
-  background: white;
+/* On active */
+label input:active ~ .checkmark {
+  @apply bg-emerald-700;
 }
+
+/* On checked - box */
+input:checked ~ .checkmark {
+  @apply bg-emerald-500 border-0;
+}
+
+/* On checked - mark */
+input:checked ~ .checkmark:after {
+  display: block;
+}
+
 </style>

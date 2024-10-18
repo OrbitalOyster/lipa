@@ -62,5 +62,7 @@ const props = defineProps({
     @apply inline-flex justify-center absolute cursor-pointer;
     /* Colors */
     @apply text-slate-500;
+    /* Misc */
+    @apply select-none;
   }
 </style>

@@ -12,13 +12,18 @@ const router = useRouter(),
   loginStore = useLoginStore(),
   username = ref(''),
   password = ref(''),
+  rememberMe = ref(false),
+  loading = ref(false),
+  disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async () => {
-    const authRes = await loginStore.auth(username.value, password.value)
+    loading.value = disabled.value = true
+    const authRes = await loginStore.auth(username.value, password.value, rememberMe.value)
     if (authRes) {
       await router.push('/')
     }
     else { console.log('Login failed') }
+    loading.value = disabled.value = false
   },
   // eslint-disable-next-line no-useless-assignment
   year = new Date().getFullYear()
@@ -59,6 +64,7 @@ const router = useRouter(),
           />
           <div class="flex justify-between items-center pt-4">
             <MyCheckbox
+              v-model="rememberMe"
               title="Запомнить меня"
               form-name="rememberMe"
             />
@@ -66,6 +72,8 @@ const router = useRouter(),
               title="Войти"
               icon="arrow-right-to-bracket"
               submit
+              :loading
+              :disabled
             />
           </div>
         </form>
