@@ -52,7 +52,7 @@ input:focus ~ .checkmark {
 
 /* On active */
 label input:active ~ .checkmark {
-  @apply bg-emerald-700;
+  @apply bg-emerald-700 border-0;
 }
 
 /* On checked - box */
