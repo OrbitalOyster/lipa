@@ -46,7 +46,6 @@ const router = useRouter(),
             Последний шанс снять бахилы
           </h2>
         </div>
-
         <form @submit.prevent="auth">
           <InputText
             v-model="username"

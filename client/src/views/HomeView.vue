@@ -13,18 +13,27 @@ const loginStore = useLoginStore(),
 </script>
 
 <template>
-  <div>
+  <div class="space-y-1">
     <h1>Home page</h1>
-    <RouterLink to="/login">
-      Login
-    </RouterLink>
-    <br>
-    <RouterLink to="/about">
-      About
-    </RouterLink>
-    <br>
-    <button @click="logout">
-      Logout
-    </button>
+    <div>
+      <RouterLink to="/login">
+        Login
+      </RouterLink>
+    </div>
+    <div>
+      <RouterLink to="/form">
+        Form
+      </RouterLink>
+    </div>
+    <div>
+      <RouterLink to="/about">
+        About
+      </RouterLink>
+    </div>
+    <div>
+      <button @click="logout">
+        Logout
+      </button>
+    </div>
   </div>
 </template>

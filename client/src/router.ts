@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from './views/AboutView.vue'
 import ErrorView from './views/ErrorView.vue'
+import ExampleFormView from './views/ExampleFormView.vue'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
 import useLoginStore from './stores/loginStore.ts'
@@ -14,25 +15,30 @@ declare module 'vue-router' {
 
 /* Routes */
 const routes = [{
+    component: LoginView,
+    name: 'Login',
+    path: '/login',
+    meta: { title: 'Вход' },
+  }, {
     component: HomeView,
     name: 'Home',
     path: '/',
     meta: { title: 'Главная' },
-  }, {
-    component: ErrorView,
-    name: 'Error',
-    path: '/error',
-    meta: { title: 'Ошибка' },
   }, {
     component: AboutView,
     name: 'About',
     path: '/about',
     meta: { title: 'О программе' },
   }, {
-    component: LoginView,
-    name: 'Login',
-    path: '/login',
-    meta: { title: 'Вход' },
+    component: ExampleFormView,
+    name: 'ExampleForm',
+    path: '/form',
+    meta: { title: 'Example Form' },
+  }, {
+    component: ErrorView,
+    name: 'Error',
+    path: '/error',
+    meta: { title: 'Ошибка' },
   },
   ],
   router = createRouter({
