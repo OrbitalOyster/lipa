@@ -24,16 +24,37 @@ togglePassword = () => {
   type.value = passwordHidden.value ? 'password' : 'text'
 }
 
+
 const inputRef = ref(null)
 
+/*
 const validate = (e) => {
+  console.log('Validate here')
+  console.log(inputRef.value.validity)
   e.preventDefault()
   e.stopPropagation()
-  inputRef.value.setCustomValidity('WUT?!')
-  console.log('Validate here')
+  if (props.fooRequired && !inputRef.value.text) {
+    inputRef.value.setCustomValidity('Foo Required!')
+    return false
+  }
+  return true
+}
+*/
+
+const oninvalid = (e) => {
+  e.preventDefault()
+  e.target.classList.add('validated')
+  // e.stopPropagation()
+  if (inputRef.value.validity.valueMissing) {
+    inputRef.value.setCustomValidity('Type something here!')
+  }
 }
 
-onMounted(() => {inputRef.value.setCustomValidity('')})
+/*
+onMounted(() => {
+  inputRef.value.setCustomValidity('')
+})
+*/
 
 </script>
 
@@ -46,8 +67,9 @@ onMounted(() => {inputRef.value.setCustomValidity('')})
       :autofocus
       :placeholder
       :type
-      :oninput="validate"
-      :oninvalid="validate"
+      :required
+      :oninvalid
+      title=""
     >
     <span
       v-if="password"
@@ -73,12 +95,25 @@ onMounted(() => {inputRef.value.setCustomValidity('')})
     @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
   }
 
-  .validated input:invalid {
+
+  /*
+  input:invalid {
     @apply border-red-300;
     @apply bg-pink-100;
   }
 
-  .validated input:valid {
+  input:valid {
+    @apply border-green-300;
+    @apply bg-green-100;
+  }
+  */
+
+  input.validated:invalid {
+    @apply border-red-300;
+    @apply bg-pink-100;
+  }
+
+  input.validated:valid {
     @apply border-green-300;
     @apply bg-green-100;
   }
