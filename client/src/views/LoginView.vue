@@ -17,13 +17,15 @@ const router = useRouter(),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async () => {
-    loading.value = disabled.value = true
+    loading.value = true
+    disabled.value = true
     const authRes = await loginStore.auth(username.value, password.value, rememberMe.value)
     if (authRes) {
       await router.push('/')
     }
     else { console.log('Login failed') }
-    loading.value = disabled.value = false
+    loading.value = false
+    disabled.value = false
   },
   // eslint-disable-next-line no-useless-assignment
   year = new Date().getFullYear()

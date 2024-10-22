@@ -1,75 +1,49 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 const props = defineProps({
-  name: String, 
-  autofocus: Boolean,
-  password: Boolean,
-  placeholder: {
-    type: String,
-    default: '',
-  },
-  required: Boolean,
-}),
-// eslint-disable-next-line no-useless-assignment
-model = defineModel<string>(),
+    name: {
+      type: String,
+      default: 'INSERT FORM NAME',
+    },
+    autofocus: Boolean,
+    password: Boolean,
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    required: Boolean,
+    foo: {
+      type: String,
+      default: 'INSERT FOO',
+    },
+  }),
+  // eslint-disable-next-line no-useless-assignment
+  model = defineModel<string>(),
 
-type = ref(props.password ? 'password' : 'text'),
-passwordHidden = ref(true),
-passwordIcon = ref('eye'),
+  type = ref(props.password ? 'password' : 'text'),
+  passwordHidden = ref(true),
+  passwordIcon = ref('eye'),
 
-// eslint-disable-next-line no-useless-assignment
-togglePassword = () => {
-  passwordHidden.value = !passwordHidden.value
-  passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
-  type.value = passwordHidden.value ? 'password' : 'text'
-}
-
-
-const inputRef = ref(null)
-
-/*
-const validate = (e) => {
-  console.log('Validate here')
-  console.log(inputRef.value.validity)
-  e.preventDefault()
-  e.stopPropagation()
-  if (props.fooRequired && !inputRef.value.text) {
-    inputRef.value.setCustomValidity('Foo Required!')
-    return false
+  // eslint-disable-next-line no-useless-assignment
+  togglePassword = () => {
+    passwordHidden.value = !passwordHidden.value
+    passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
+    type.value = passwordHidden.value ? 'password' : 'text'
   }
-  return true
-}
-*/
-
-const oninvalid = (e) => {
-  e.preventDefault()
-  e.target.classList.add('validated')
-  // e.stopPropagation()
-  if (inputRef.value.validity.valueMissing) {
-    inputRef.value.setCustomValidity('Type something here!')
-  }
-}
-
-/*
-onMounted(() => {
-  inputRef.value.setCustomValidity('')
-})
-*/
-
 </script>
 
 <template>
   <div>
     <input
       v-model="model"
-      ref="inputRef"
       :name
       :autofocus
       :placeholder
       :type
+      data-lipa="form-input"
       :required
-      :oninvalid
-      title=""
+      :data-foo="foo"
+      @input="$el.firstChild.classList.remove('validated')"
     >
     <span
       v-if="password"
@@ -95,14 +69,13 @@ onMounted(() => {
     @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
   }
 
-
   /*
-  input:invalid {
+  .validated input:invalid {
     @apply border-red-300;
     @apply bg-pink-100;
   }
 
-  input:valid {
+  .validated input:valid {
     @apply border-green-300;
     @apply bg-green-100;
   }
@@ -117,6 +90,18 @@ onMounted(() => {
     @apply border-green-300;
     @apply bg-green-100;
   }
+
+  /*
+  input:invalid {
+    @apply border-red-300;
+    @apply bg-pink-100;
+  }
+
+  input:valid {
+    @apply border-green-300;
+    @apply bg-green-100;
+  }
+  */
 
   span {
     /* Sizing */

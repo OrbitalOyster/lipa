@@ -26,8 +26,8 @@ const props = defineProps({
           size="lg"
         />
         <font-awesome-icon
-          class="animate-spin"
           v-if="loading"
+          class="animate-spin"
           :icon="['fas', 'spinner']"
           size="lg"
         />
