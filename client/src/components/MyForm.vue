@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { Ref, ref, nextTick } from 'vue'
 
 const form: Ref<HTMLFormElement | null> = ref(null),
   /* All custom inputs */
@@ -27,6 +27,7 @@ const form: Ref<HTMLFormElement | null> = ref(null),
       /* Check for required */
       if (e.required && !e.value) {
         e.setCustomValidity('Enter something')
+        e.dispatchEvent(new Event('error'))
       }
       /* Check for foo */
       if (e.dataset.foo === 'hello' && e.value !== 'hello') {

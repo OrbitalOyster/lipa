@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 const props = defineProps({
     name: {
       type: String,
@@ -33,9 +33,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <div>
+  <div class="flex items-center">
     <input
       v-model="model"
+      ref="inputRef"
+      :class="placeholder ? 'p-2 pl-4 pt-6' : 'p-2 pl-4'"
       :name
       :autofocus
       :placeholder
@@ -45,6 +47,9 @@ const props = defineProps({
       :data-foo="foo"
       @input="$el.firstChild.classList.remove('validated')"
     >
+    <label>
+      {{ placeholder }}
+    </label>
     <span
       v-if="password"
       @click="togglePassword"
@@ -58,9 +63,15 @@ const props = defineProps({
 </template>
 
 <style scoped>
+  div {
+    position: relative;
+  }
+
   input {
     /* Sizing */
-    @apply w-full p-2;
+    @apply w-full;
+    /*padding-top: v-bind('placeholder ? "1.5rem" : ".5rem"');*/
+    /* : v-bind('placeholder ? "1.5rem" : ".5rem"'); */
     /* Border */
     @apply outline-none border border-slate-300 rounded;
     /* Colors */
@@ -69,43 +80,36 @@ const props = defineProps({
     @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
   }
 
-  /*
-  .validated input:invalid {
-    @apply border-red-300;
-    @apply bg-pink-100;
+  input::placeholder {
+    opacity: 0;
   }
 
-  .validated input:valid {
-    @apply border-green-300;
-    @apply bg-green-100;
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    transform: translateY(calc(-50%)) scale(.8);
   }
-  */
+
+  label {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    pointer-events: none;
+    transition: transform 200ms;
+    transform-origin: left;
+    @apply text-slate-500;
+  }
 
   input.validated:invalid {
-    @apply border-red-300;
-    @apply bg-pink-100;
+    @apply border-red-300 bg-pink-100;
   }
 
   input.validated:valid {
-    @apply border-green-300;
-    @apply bg-green-100;
+    @apply border-green-300 bg-green-100;
   }
-
-  /*
-  input:invalid {
-    @apply border-red-300;
-    @apply bg-pink-100;
-  }
-
-  input:valid {
-    @apply border-green-300;
-    @apply bg-green-100;
-  }
-  */
 
   span {
     /* Sizing */
-    @apply w-3 p-3 right-6;
+    @apply w-3 right-5;
 
     @apply inline-flex justify-center absolute cursor-pointer;
     /* Colors */
