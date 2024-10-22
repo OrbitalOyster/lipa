@@ -27,7 +27,7 @@ const form: Ref<HTMLFormElement | null> = ref(null),
       /* Check for required */
       if (e.required && !e.value) {
         e.setCustomValidity('Enter something')
-        e.dispatchEvent(new Event('error'))
+        e.dispatchEvent(new CustomEvent('form-error', {detail: 'Enter something'}))
       }
       /* Check for foo */
       if (e.dataset.foo === 'hello' && e.value !== 'hello') {

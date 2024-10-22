@@ -30,10 +30,18 @@ const props = defineProps({
     passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
     type.value = passwordHidden.value ? 'password' : 'text'
   }
+
+  const reset = () => {
+    inputRef.value.classList.remove('validated')
+    customError.value = ''
+  }
+
+  const inputRef = ref(null)
+  const customError = ref(inputRef.value?.validationMessage)
 </script>
 
 <template>
-  <div class="flex items-center">
+  <div class="flex flex-col justify-center pb-5">
     <input
       v-model="model"
       ref="inputRef"
@@ -45,7 +53,8 @@ const props = defineProps({
       data-lipa="form-input"
       :required
       :data-foo="foo"
-      @input="$el.firstChild.classList.remove('validated')"
+      @input="reset"
+      @form-error="e => customError = e.detail"
     >
     <label>
       {{ placeholder }}
@@ -59,6 +68,7 @@ const props = defineProps({
         size="lg"
       />
     </span>
+    <p class="absolute -bottom-0.5 text-red-500 text-sm">{{ customError }}</p>
   </div>
 </template>
 

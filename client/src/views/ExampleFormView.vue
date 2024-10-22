@@ -17,6 +17,7 @@ const validateForm = (form, inputs) => {
 
 <template>
   <div class="flex w-screen h-screen items-center justify-center">
+
     <div class="border bg-sky-100 w-1/2 h-1/2 p-3">
       <MyForm class="space-y-2">
         <InputText
@@ -39,8 +40,10 @@ const validateForm = (form, inputs) => {
         />
       </MyForm>
     </div>
+
+<!--
     <div class="border bg-zinc-100 w-1/2 h-1/2 p-3">
-      <form class="space-y-2">
+      <form class="space-y-2" novalidate>
         <InputText
           name="sampleInput1"
           v-model="sampleInput1"
@@ -61,5 +64,7 @@ const validateForm = (form, inputs) => {
         />
       </form>
     </div>
+-->
+
   </div>
 </template>
