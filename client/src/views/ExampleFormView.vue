@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 
 import InputText from '../components/InputText.vue'
 import MyButton from '../components/MyButton.vue'
@@ -14,25 +13,25 @@ import MyForm from '../components/MyForm.vue'
       <MyForm class="space-y-2" id="mySampleForm" @submit="e => console.log('YAY', e)">
         <InputText
           name="from"
-          store="mySampleForm"
+          store-id="mySampleForm"
           placeholder="From"
           :checks="['required', 'lessThanTo']"
         />
         <InputText
           name="to"
-          store="mySampleForm"
+          store-id="mySampleForm"
           placeholder="To"
           :checks="['required', 'moreThanFrom']"
         />
         <InputText
           name="sampleInput2"
-          store="mySampleForm"
+          store-id="mySampleForm"
           placeholder="Бугага"
           :checks="['required']"
         />
         <InputText
           name="sampleInput3"
-          store="mySampleForm"
+          store-id="mySampleForm"
         />
         <MyButton
           title="Готово"

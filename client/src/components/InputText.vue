@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, getCurrentInstance } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
     name: {
       type: String,
-      default: 'INSERT FORM NAME',
+      required: true,
     },
     autofocus: Boolean,
     password: Boolean,
@@ -17,7 +17,7 @@ const props = defineProps({
       type: Array,
       default: [],
     },
-    store: {
+    storeId: {
       type: String,
       default: ''
     },
@@ -34,27 +34,35 @@ const props = defineProps({
     type.value = passwordHidden.value ? 'password' : 'text'
   }
 
-  const store = useFormStore(props.store)
+  const store = useFormStore(props.storeId)
   store.checks[props.name] = props.checks
   store.inputs[props.name] = ''
 
   const inputRef = ref(null)
 
   const reset = () => {
-    inputRef.value.classList.remove('valid', 'invalid')
-  }
-
-  const validate = () => {
-    // console.log(store.validate())
+    inputRef.value.classList.remove('checked')
+    delete store.errors[props.name]
   }
 
   onMounted(() => {
     // store.validate()
   }) 
 
-  const isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
-
-//  console.log("Parent id", getCurrentInstance().parent.props.id)
+  const isValid = computed(() => {
+    switch (store.errors[props.name]) {
+      case undefined:
+        return ''
+        break;
+      case '':
+        return 'valid'
+        break;
+      default:
+        return 'invalid'
+        break;
+    }
+   }
+  )
 </script>
 
 <template>
@@ -93,9 +101,6 @@ const props = defineProps({
   input {
     /* Sizing */
     @apply w-full;
-    /*padding-top: v-bind('placeholder ? "1.5rem" : ".5rem"');*/
-    /* : v-bind('placeholder ? "1.5rem" : ".5rem"'); */
-    /* @apply p-2 pl-4; */
     /* Border */
     @apply outline-none border border-slate-300 rounded;
     /* Colors */

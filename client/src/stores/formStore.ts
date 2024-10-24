@@ -12,9 +12,10 @@ export const useFormStore = (id: string) => defineStore(id, {
       Object.keys(this.inputs).forEach(key => {
         const value = this.inputs[key]
         const checks = this.checks[key]
+        this.errors[key] = ''
+
         if (!checks.length)
           return
-        this.errors[key] = ''
 
         /* Required */
         if (checks.includes('required') && !value) {
