@@ -1,5 +1,5 @@
 import './style.css'
-import { faArrowRightToBracket, faEye, faEyeSlash, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRightToBracket, faEye, faEyeSlash, faSpinner, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import App from './App.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createApp } from 'vue'
@@ -12,6 +12,6 @@ const app = createApp(App),
 
 app.use(pinia)
 app.use(router)
-library.add(faArrowRightToBracket, faEye, faEyeSlash, faSpinner)
+library.add(faArrowRightToBracket, faEye, faEyeSlash, faSpinner, faTriangleExclamation)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 app.mount('#app')

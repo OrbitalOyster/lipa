@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import InputText from '../components/InputText.vue'
+import MyForm from '../components/MyForm.vue'
 import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
@@ -10,16 +11,16 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter(),
   loginStore = useLoginStore(),
-  username = ref(''),
-  password = ref(''),
   rememberMe = ref(false),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
-  auth = async () => {
+  auth = async (formCheck) => {
+    if (!formCheck)
+      return
     loading.value = true
     disabled.value = true
-    const authRes = await loginStore.auth(username.value, password.value, rememberMe.value)
+    const authRes = await loginStore.auth(formCheck.username, formCheck.password)
     if (authRes) {
       await router.push('/')
     }
@@ -48,24 +49,25 @@ const router = useRouter(),
             Последний шанс снять бахилы
           </h2>
         </div>
-        <form @submit.prevent="auth">
+        <MyForm id="loginForm" @submit="auth">
           <InputText
-            v-model="username"
             class="w-full mb-3"
             name="username"
+            store-id="loginForm"
+            :checks="['required']"
             placeholder="Имя пользователя"
             autofocus
           />
           <InputText
-            v-model="password"
             class="w-full"
             name="password"
+            store-id="loginForm"
+            :checks="['required']"
             placeholder="Пароль"
             password
           />
           <div class="flex justify-between items-center pt-4">
             <MyCheckbox
-              v-model="rememberMe"
               title="Запомнить меня"
               form-name="rememberMe"
             />
@@ -77,7 +79,7 @@ const router = useRouter(),
               :disabled
             />
           </div>
-        </form>
+        </MyForm>
       </MyCard>
       <div class="p-2 text-end">
         (c) {{ year }}

@@ -19,26 +19,18 @@ const onSubmit = () => {
   store.validate()
   if (Object.values(store.errors).every(e => e === '')) {
     console.log("Form validation success")
-    emits('submit', store.myInputs)
+    emits('submit', store.inputs)
   }
-  else
+  else {
     console.log("Form validation failed")
+    emits('submit', null)
+  }
 }
 
 </script>
 
 <template>
-  <form
-    novalidate
-    @submit.prevent="onSubmit"
-  >
-    <h1>Form</h1>
+  <form novalidate @submit.prevent="onSubmit" >
     <slot />
-    <button
-      type="button"
-      @click="reset"
-    >
-      Сброс
-    </button>
   </form>
 </template>

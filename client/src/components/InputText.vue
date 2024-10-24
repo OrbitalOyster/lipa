@@ -19,7 +19,7 @@ const props = defineProps({
     },
     storeId: {
       type: String,
-      default: ''
+      required: true,
     },
   }),
 
@@ -76,16 +76,26 @@ const props = defineProps({
     <label>
       {{ placeholder }}
     </label>
-    <p>{{store.errors[props.name]}}</p>
-    <span
-      v-if="password"
-      @click="togglePassword"
-    >
-      <font-awesome-icon
-        :icon="['fas', passwordIcon]"
-        size="lg"
-      />
-    </span>
+    <div class="input-icons flex space-x-2">
+      <span>
+        <font-awesome-icon
+          :icon="['fas', 'triangle-exclamation']"
+          size="xl"
+          class="text-red-400"
+          :title="store.errors[props.name]"
+        />
+      </span>
+      <span
+        v-if="password"
+        @click="togglePassword"
+        class="password-toggle"
+      >
+        <font-awesome-icon
+          :icon="['fas', passwordIcon]"
+          size="lg"
+        />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -136,11 +146,20 @@ const props = defineProps({
     @apply border-green-300 bg-green-100;
   }
 
-  span {
+  .input-icons {
     /* Sizing */
-    @apply w-3 right-5;
+    @apply right-5;
 
-    @apply inline-flex justify-center absolute cursor-pointer;
+    @apply inline-flex justify-center absolute;
+    /* Misc */
+    @apply select-none;
+  }
+
+  span.password-toggle {
+    /* Sizing */
+    @apply w-3;
+
+    @apply inline-flex justify-center cursor-pointer;
     /* Colors */
     @apply text-slate-500;
     /* Misc */
