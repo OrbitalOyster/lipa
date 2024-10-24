@@ -35,27 +35,12 @@ const form: Ref<HTMLFormElement | null> = ref(null),
   },
   // eslint-disable-next-line no-useless-assignment
   onSubmit = () => {
-    if (Object.values(store.myChecks).every(Boolean)) {
+    if (Object.values(store.errors).every(e => e === '')) {
       console.log("Form validation success")
       emits('submit', store.myInputs)
     }
     else
       console.log("Form validation failed")
-
-//    getInputs().forEach((e) => {
-//      e.setCustomValidity('')
-//      e.classList.add('validated')
-//      /* Check for required */
-//      if (e.required && !e.value) {
-//        e.setCustomValidity('Enter something')
-//        e.dispatchEvent(new CustomEvent('form-error', {detail: 'Enter something'}))
-//      }
-//      /* Check for foo */
-//      if (e.dataset.foo === 'hello' && e.value !== 'hello') {
-//        e.setCustomValidity('Foo!')
-//      }
-//    })
-    // store.$dispose()
   }
 
 </script>

@@ -14,10 +14,8 @@ const props = defineProps({
       default: '',
     },
     required: Boolean,
-    foo: {
-      type: String,
-      default: 'INSERT FOO',
-    },
+    lessThanTo: Boolean,
+    moreThanFrom: Boolean,
     store: {
       type: String,
       default: ''
@@ -41,26 +39,40 @@ const props = defineProps({
     // customError.value = ''
   }
 
+  const errorMessage = ref('')
+  const isValid = ref('invalid')
+
   const validate = () => {
-    store.myChecks[props.name] = true
-    if (props.required && !store.myInputs[props.name]) {
-      store.myChecks[props.name] = false
+    store.errors[props.name] = ''
+    const value = store.myInputs[props.name]
+
+    if (props.required && !value) {
+      store.errors[props.name] = 'Value required'
     }
-    console.log("Validated", store.myChecks)
+
+    if (props.lessThanTo && (store.myInputs['to'] === '' || Number(value) >= Number(store.myInputs['to']))) {
+      store.errors[props.name] = 'Must be less than to'
+    }
+
+    if (props.moreThanFrom && (!store.myInputs['from'] || Number(value) <= Number(store.myInputs['from']))) {
+      store.errors[props.name] = 'Must be more than from'
+    }
+
+    isValid.value = store.errors[props.name]  === '' ? 'valid' : 'invalid'
   }
 
   onMounted(() => {
     validate()
   }) 
 
-  console.log("Parent id", getCurrentInstance().parent.props.id)
+//  console.log("Parent id", getCurrentInstance().parent.props.id)
 </script>
 
 <template>
-  <div class="flex flex-col justify-center pb-5">
+  <div class="flex flex-col justify-center pb-1">
     <input
       v-model="store.myInputs[props.name]"
-      :class="placeholder ? 'p-2 pl-4 pt-6' : 'p-2 pl-4'"
+      :class="placeholder ? `p-2 pl-4 pt-6 ${isValid}` : `p-2 pl-4 ${isValid}`"
       :name
       :autofocus
       :placeholder
@@ -70,6 +82,7 @@ const props = defineProps({
     <label>
       {{ placeholder }}
     </label>
+    <p>{{store.errors[props.name]}}</p>
     <span
       v-if="password"
       @click="togglePassword"
@@ -92,6 +105,7 @@ const props = defineProps({
     @apply w-full;
     /*padding-top: v-bind('placeholder ? "1.5rem" : ".5rem"');*/
     /* : v-bind('placeholder ? "1.5rem" : ".5rem"'); */
+    /* @apply p-2 pl-4; */
     /* Border */
     @apply outline-none border border-slate-300 rounded;
     /* Colors */
