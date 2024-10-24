@@ -11,7 +11,7 @@ const props = defineProps({
     password: Boolean,
     placeholder: {
       type: String,
-      default: '',
+      default: null,
     },
     checks: {
       type: Array,
@@ -45,10 +45,6 @@ const props = defineProps({
     delete store.errors[props.name]
   }
 
-  onMounted(() => {
-    // store.validate()
-  }) 
-
   const isValid = computed(() => {
     switch (store.errors[props.name]) {
       case undefined:
@@ -70,7 +66,7 @@ const props = defineProps({
     <input
       v-model="store.inputs[props.name]"
       ref="inputRef"
-      :class="placeholder ? `p-2 pl-4 pt-6 ${isValid}` : `p-2 pl-4 ${isValid}`"
+      :class="isValid"
       :name
       :autofocus
       :placeholder
@@ -100,7 +96,7 @@ const props = defineProps({
 
   input {
     /* Sizing */
-    @apply w-full;
+    @apply w-full p-2 pl-4;
     /* Border */
     @apply outline-none border border-slate-300 rounded;
     /* Colors */
@@ -111,6 +107,10 @@ const props = defineProps({
 
   input::placeholder {
     opacity: 0;
+  }
+
+  input[placeholder] {
+    @apply pt-6;
   }
 
   input:focus + label,
@@ -135,16 +135,6 @@ const props = defineProps({
   input.valid {
     @apply border-green-300 bg-green-100;
   }
-
-  /*
-  input.validated:invalid {
-    @apply border-red-300 bg-pink-100;
-  }
-
-  input.validated:valid {
-    @apply border-green-300 bg-green-100;
-  }
-  */
 
   span {
     /* Sizing */
