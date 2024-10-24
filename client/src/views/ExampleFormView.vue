@@ -16,21 +16,19 @@ import MyForm from '../components/MyForm.vue'
           name="from"
           store="mySampleForm"
           placeholder="From"
-          required
-          less-than-to
+          :checks="['required', 'lessThanTo']"
         />
         <InputText
           name="to"
           store="mySampleForm"
           placeholder="To"
-          required
-          more-than-from
+          :checks="['required', 'moreThanFrom']"
         />
         <InputText
           name="sampleInput2"
           store="mySampleForm"
           placeholder="Бугага"
-          required
+          :checks="['required']"
         />
         <InputText
           name="sampleInput3"

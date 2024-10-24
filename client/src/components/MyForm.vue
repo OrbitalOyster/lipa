@@ -35,6 +35,7 @@ const form: Ref<HTMLFormElement | null> = ref(null),
   },
   // eslint-disable-next-line no-useless-assignment
   onSubmit = () => {
+    store.validate()
     if (Object.values(store.errors).every(e => e === '')) {
       console.log("Form validation success")
       emits('submit', store.myInputs)

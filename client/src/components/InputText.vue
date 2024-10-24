@@ -13,13 +13,14 @@ const props = defineProps({
       type: String,
       default: '',
     },
-    required: Boolean,
-    lessThanTo: Boolean,
-    moreThanFrom: Boolean,
+    checks: {
+      type: Array,
+      default: [],
+    },
     store: {
       type: String,
       default: ''
-    }
+    },
   }),
 
   type = ref(props.password ? 'password' : 'text'),
@@ -34,36 +35,24 @@ const props = defineProps({
   }
 
   const store = useFormStore(props.store)
+  store.checks[props.name] = props.checks
+  store.inputs[props.name] = ''
+
+  const inputRef = ref(null)
+
   const reset = () => {
-    // inputRef.value.classList.remove('validated')
-    // customError.value = ''
+    inputRef.value.classList.remove('valid', 'invalid')
   }
 
-  const errorMessage = ref('')
-  const isValid = ref('invalid')
-
   const validate = () => {
-    store.errors[props.name] = ''
-    const value = store.myInputs[props.name]
-
-    if (props.required && !value) {
-      store.errors[props.name] = 'Value required'
-    }
-
-    if (props.lessThanTo && (store.myInputs['to'] === '' || Number(value) >= Number(store.myInputs['to']))) {
-      store.errors[props.name] = 'Must be less than to'
-    }
-
-    if (props.moreThanFrom && (!store.myInputs['from'] || Number(value) <= Number(store.myInputs['from']))) {
-      store.errors[props.name] = 'Must be more than from'
-    }
-
-    isValid.value = store.errors[props.name]  === '' ? 'valid' : 'invalid'
+    // console.log(store.validate())
   }
 
   onMounted(() => {
-    validate()
+    // store.validate()
   }) 
+
+  const isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
 
 //  console.log("Parent id", getCurrentInstance().parent.props.id)
 </script>
@@ -71,13 +60,14 @@ const props = defineProps({
 <template>
   <div class="flex flex-col justify-center pb-1">
     <input
-      v-model="store.myInputs[props.name]"
+      v-model="store.inputs[props.name]"
+      ref="inputRef"
       :class="placeholder ? `p-2 pl-4 pt-6 ${isValid}` : `p-2 pl-4 ${isValid}`"
       :name
       :autofocus
       :placeholder
       :type
-      @input="validate"
+      @input="reset"
     >
     <label>
       {{ placeholder }}
