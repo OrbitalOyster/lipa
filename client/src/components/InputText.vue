@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted, getCurrentInstance } from 'vue'
+import { useFormStore } from '../stores/formStore.ts'
+
 const props = defineProps({
     name: {
       type: String,
@@ -16,9 +18,11 @@ const props = defineProps({
       type: String,
       default: 'INSERT FOO',
     },
+    store: {
+      type: String,
+      default: ''
+    }
   }),
-  // eslint-disable-next-line no-useless-assignment
-  model = defineModel<string>(),
 
   type = ref(props.password ? 'password' : 'text'),
   passwordHidden = ref(true),
@@ -31,30 +35,37 @@ const props = defineProps({
     type.value = passwordHidden.value ? 'password' : 'text'
   }
 
+  const store = useFormStore(props.store)
   const reset = () => {
-    inputRef.value.classList.remove('validated')
-    customError.value = ''
+    // inputRef.value.classList.remove('validated')
+    // customError.value = ''
   }
 
-  const inputRef = ref(null)
-  const customError = ref(inputRef.value?.validationMessage)
+  const validate = () => {
+    store.myChecks[props.name] = true
+    if (props.required && !store.myInputs[props.name]) {
+      store.myChecks[props.name] = false
+    }
+    console.log("Validated", store.myChecks)
+  }
+
+  onMounted(() => {
+    validate()
+  }) 
+
+  console.log("Parent id", getCurrentInstance().parent.props.id)
 </script>
 
 <template>
   <div class="flex flex-col justify-center pb-5">
     <input
-      v-model="model"
-      ref="inputRef"
+      v-model="store.myInputs[props.name]"
       :class="placeholder ? 'p-2 pl-4 pt-6' : 'p-2 pl-4'"
       :name
       :autofocus
       :placeholder
       :type
-      data-lipa="form-input"
-      :required
-      :data-foo="foo"
-      @input="reset"
-      @form-error="e => customError = e.detail"
+      @input="validate"
     >
     <label>
       {{ placeholder }}
@@ -68,7 +79,6 @@ const props = defineProps({
         size="lg"
       />
     </span>
-    <p class="absolute -bottom-0.5 text-red-500 text-sm">{{ customError }}</p>
   </div>
 </template>
 
@@ -109,6 +119,15 @@ const props = defineProps({
     @apply text-slate-500;
   }
 
+  input.invalid {
+    @apply border-red-300 bg-pink-100;
+  }
+
+  input.valid {
+    @apply border-green-300 bg-green-100;
+  }
+
+  /*
   input.validated:invalid {
     @apply border-red-300 bg-pink-100;
   }
@@ -116,6 +135,7 @@ const props = defineProps({
   input.validated:valid {
     @apply border-green-300 bg-green-100;
   }
+  */
 
   span {
     /* Sizing */

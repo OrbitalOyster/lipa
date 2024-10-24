@@ -1,5 +1,19 @@
 <script setup lang="ts">
-import { Ref, ref, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
+import type InputText from './InputText.vue'
+
+import { useFormStore } from '../stores/formStore.ts'
+
+const emits = defineEmits(['submit'])
+
+const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+  },
+})
+
+const store = useFormStore(props.id)
 
 const form: Ref<HTMLFormElement | null> = ref(null),
   /* All custom inputs */
@@ -21,20 +35,29 @@ const form: Ref<HTMLFormElement | null> = ref(null),
   },
   // eslint-disable-next-line no-useless-assignment
   onSubmit = () => {
-    getInputs().forEach((e) => {
-      e.setCustomValidity('')
-      e.classList.add('validated')
-      /* Check for required */
-      if (e.required && !e.value) {
-        e.setCustomValidity('Enter something')
-        e.dispatchEvent(new CustomEvent('form-error', {detail: 'Enter something'}))
-      }
-      /* Check for foo */
-      if (e.dataset.foo === 'hello' && e.value !== 'hello') {
-        e.setCustomValidity('Foo!')
-      }
-    })
+    if (Object.values(store.myChecks).every(Boolean)) {
+      console.log("Form validation success")
+      emits('submit', store.myInputs)
+    }
+    else
+      console.log("Form validation failed")
+
+//    getInputs().forEach((e) => {
+//      e.setCustomValidity('')
+//      e.classList.add('validated')
+//      /* Check for required */
+//      if (e.required && !e.value) {
+//        e.setCustomValidity('Enter something')
+//        e.dispatchEvent(new CustomEvent('form-error', {detail: 'Enter something'}))
+//      }
+//      /* Check for foo */
+//      if (e.dataset.foo === 'hello' && e.value !== 'hello') {
+//        e.setCustomValidity('Foo!')
+//      }
+//    })
+    // store.$dispose()
   }
+
 </script>
 
 <template>
