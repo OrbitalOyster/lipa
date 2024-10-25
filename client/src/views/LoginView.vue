@@ -20,7 +20,7 @@ const router = useRouter(),
       return
     loading.value = true
     disabled.value = true
-    const authRes = await loginStore.auth(formCheck.username, formCheck.password)
+    const authRes = await loginStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe)
     if (authRes) {
       await router.push('/')
     }
@@ -69,7 +69,8 @@ const router = useRouter(),
           <div class="flex justify-between items-center pt-4">
             <MyCheckbox
               title="Запомнить меня"
-              form-name="rememberMe"
+              name="rememberMe"
+              store-id="loginForm"
             />
             <MyButton
               title="Войти"

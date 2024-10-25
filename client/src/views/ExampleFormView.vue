@@ -26,7 +26,6 @@ import MyForm from '../components/MyForm.vue'
         <InputText
           name="sampleInput2"
           store-id="mySampleForm"
-          placeholder="Бугага"
           :checks="['required']"
         />
         <InputText

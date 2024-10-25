@@ -1,18 +1,33 @@
 <script setup lang="ts">
-defineProps({
-  title: { type: String, default: 'INSERT TITLE' },
-  formName: { type: String, default: 'INSERT FORM NAME' },
+import { useFormStore } from '../stores/formStore.ts'
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  title: { 
+    type: String, 
+    required: true,
+  },
+  storeId: {
+    type: String,
+    required: true,
+  },
 })
-// eslint-disable-next-line no-useless-assignment
-const checked = defineModel<boolean>()
+
+const store = useFormStore(props.storeId)
+store.checks[props.name] = props.checks
+store.inputs[props.name] = false
+
 </script>
 
 <template>
   <label> {{ title }}
     <input
-      v-model="checked"
       type="checkbox"
-      :name="formName"
+      v-model="store.inputs[props.name]"
+      :name
     >
     <span class="checkmark" />
   </label>
