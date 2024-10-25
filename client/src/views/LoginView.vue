@@ -6,7 +6,7 @@ import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
 import { ref } from 'vue'
-import useLoginStore from '../stores/loginStore.ts'
+import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
 const router = useRouter(),

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useLoginStore from '../stores/loginStore.ts'
+import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
 const loginStore = useLoginStore(),

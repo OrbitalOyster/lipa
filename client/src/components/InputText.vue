@@ -37,13 +37,14 @@ togglePassword = () => {
 const store = useFormStore(props.storeId)
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
-
+/*
 const inputRef = ref(null)
 
 const reset = () => {
   inputRef.value.classList.remove('checked')
   delete store.errors[props.name]
 }
+*/
 
 const isValid = computed(() => {
   switch (store.errors[props.name]) {
@@ -71,7 +72,7 @@ const isValid = computed(() => {
       :autofocus
       :placeholder
       :type
-      @input="reset"
+      @input="store.validate"
     >
     <label>
       {{ placeholder }}
@@ -135,15 +136,15 @@ const isValid = computed(() => {
     transform: translateY(calc(-50%)) scale(.8);
   }
 
-  input.invalid {
+  .validated input.invalid {
     @apply border-red-300 bg-pink-100;
   }
 
-  input.valid {
+  .validated input.valid {
     @apply border-green-300 bg-green-100;
   }
 
-  input.invalid ~ .input-icons .error-triangle {
+  .validated input.invalid ~ .input-icons .error-triangle {
     display: block;
   }
 

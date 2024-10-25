@@ -4,7 +4,7 @@ import ErrorView from './views/ErrorView.vue'
 import ExampleFormView from './views/ExampleFormView.vue'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
-import useLoginStore from './stores/loginStore.ts'
+import { useLoginStore } from './stores/loginStore.ts'
 
 /* Typings */
 declare module 'vue-router' {

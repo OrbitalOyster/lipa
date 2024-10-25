@@ -18,7 +18,7 @@ if (!authEndpoint) {
   throw new Error('Missing auth endpoint')
 }
 
-export default defineStore('login', {
+export const useLoginStore = defineStore('login', {
   state: (): ILoginStore => ({
     username: null,
     role: null,
