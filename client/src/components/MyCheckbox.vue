@@ -23,7 +23,6 @@ const props = defineProps({
 
 store.checks[props.name] = props.checks
 store.inputs[props.name] = false
-
 </script>
 
 <template>
@@ -59,7 +58,7 @@ label {
   @apply inset-1.5 w-3 h-3 rounded bg-white;
 }
 
-/* Actual checkbox */
+/* Hide actual checkbox */
 input {
   @apply absolute opacity-0 w-0 h-0;
 }

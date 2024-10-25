@@ -22,11 +22,9 @@ const props = defineProps({
       default: null,
     },
   }),
-
   type = ref(props.password ? 'password' : 'text'),
   passwordHidden = ref(true),
   passwordIcon = ref('eye'),
-
   // eslint-disable-next-line no-useless-assignment
   togglePassword = () => {
     passwordHidden.value = !passwordHidden.value
@@ -67,7 +65,7 @@ store.inputs[props.name] = ''
         v-if="password"
         :icon="['fas', passwordIcon]"
         size="xl"
-        class="w-8 text-slate-500 select-none cursor-pointer"
+        class="password-toggle"
         @click="togglePassword"
       />
     </div>
@@ -79,7 +77,7 @@ store.inputs[props.name] = ''
     /* Sizing */
     @apply w-full p-2 pl-4;
     /* Border */
-    @apply outline-none border border-slate-300 rounded;
+    @apply border border-slate-300 rounded outline-none;
     /* Colors */
     @apply bg-slate-50;
     /* On focus */
@@ -87,7 +85,7 @@ store.inputs[props.name] = ''
   }
 
   label {
-    /* Sizing */
+    /* Position */
     @apply absolute top-4 left-4;
     /* Color */
     @apply text-slate-500;
@@ -124,23 +122,19 @@ store.inputs[props.name] = ''
   }
 
   .validated input.invalid ~ .input-icons .error-triangle {
-    display: block;
+    @apply block;
   }
 
   .input-icons {
-    /* Flexbox */
     /* Sizing and position */
-    @apply absolute right-3 inline-flex justify-center items-center space-x-2;
+    @apply absolute right-3 space-x-2;
+    /* Flexbox */
+    @apply inline-flex justify-center items-center;
     /* Misc */
     @apply select-none;
   }
 
-  span.password-toggle {
-    /* Sizing */
-    @apply w-3 inline-flex justify-center;
-    /* Colors */
-    @apply text-slate-500;
-    /* Misc */
-    @apply select-none cursor-pointer;
+  .password-toggle {
+    @apply w-8 text-slate-500 select-none cursor-pointer;
   }
 </style>
