@@ -62,7 +62,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col justify-center pb-1">
+  <div class="flex flex-col justify-center pb-1 relative">
     <input
       v-model="store.inputs[props.name]"
       ref="inputRef"
@@ -76,34 +76,25 @@ const props = defineProps({
     <label>
       {{ placeholder }}
     </label>
-    <div class="input-icons flex space-x-2">
-      <span>
-        <font-awesome-icon
-          :icon="['fas', 'triangle-exclamation']"
-          size="xl"
-          class="text-red-400"
-          :title="store.errors[props.name]"
-        />
-      </span>
-      <span
+    <div class="input-icons flex items-center space-x-2">
+      <font-awesome-icon
+        :icon="['fas', 'triangle-exclamation']"
+        size="xl"
+        class="text-red-400 error-triangle hidden"
+        :title="store.errors[props.name]"
+      />
+      <font-awesome-icon
         v-if="password"
         @click="togglePassword"
-        class="password-toggle"
-      >
-        <font-awesome-icon
-          :icon="['fas', passwordIcon]"
-          size="lg"
-        />
-      </span>
+        :icon="['fas', passwordIcon]"
+        size="xl"
+        class="w-8 text-slate-500 select-none cursor-pointer"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-  div {
-    position: relative;
-  }
-
   input {
     /* Sizing */
     @apply w-full p-2 pl-4;
@@ -115,27 +106,33 @@ const props = defineProps({
     @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
   }
 
-  input::placeholder {
-    opacity: 0;
+  label {
+    /* Sizing */
+    @apply absolute top-4 left-4;
+    /* Color */
+    @apply text-slate-500;
+    /* Ignore pointer */
+    @apply pointer-events-none;
+    /* Animation */
+    @apply duration-200 origin-left;
   }
 
+  /* Hide original placeholder */
+  input::placeholder {
+    @apply opacity-0;
+  }
+
+  /* Inputs with placeholders are bigger */
   input[placeholder] {
     @apply pt-6;
   }
 
+  /* Shrink and translate label if:
+   * - input is focused
+   * - placeholder not shown */
   input:focus + label,
   input:not(:placeholder-shown) + label {
     transform: translateY(calc(-50%)) scale(.8);
-  }
-
-  label {
-    position: absolute;
-    left: 1rem;
-    top: 1rem;
-    pointer-events: none;
-    transition: transform 200ms;
-    transform-origin: left;
-    @apply text-slate-500;
   }
 
   input.invalid {
@@ -146,23 +143,23 @@ const props = defineProps({
     @apply border-green-300 bg-green-100;
   }
 
-  .input-icons {
-    /* Sizing */
-    @apply right-5;
+  input.invalid ~ .input-icons .error-triangle {
+    display: block;
+  }
 
-    @apply inline-flex justify-center absolute;
+  .input-icons {
+    /* Sizing and position */
+    @apply absolute right-5 inline-flex justify-center;
     /* Misc */
     @apply select-none;
   }
 
   span.password-toggle {
     /* Sizing */
-    @apply w-3;
-
-    @apply inline-flex justify-center cursor-pointer;
+    @apply w-3 inline-flex justify-center;
     /* Colors */
     @apply text-slate-500;
     /* Misc */
-    @apply select-none;
+    @apply select-none cursor-pointer;
   }
 </style>
