@@ -1,72 +1,51 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  autofocus: Boolean,
-  password: Boolean,
-  placeholder: {
-    type: String,
-    default: null,
-  },
-  checks: {
-    type: Array,
-    default: [],
-  },
-  storeId: {
-    type: String,
-    required: true,
-  },
-}),
+    name: {
+      type: String,
+      required: true,
+    },
+    storeId: {
+      type: String,
+      required: true,
+    },
+    checks: {
+      type: Array<string>,
+      default: () => [],
+    },
+    autofocus: Boolean,
+    password: Boolean,
+    placeholder: {
+      type: String,
+      default: null,
+    },
+  }),
 
-type = ref(props.password ? 'password' : 'text'),
-passwordHidden = ref(true),
-passwordIcon = ref('eye'),
+  type = ref(props.password ? 'password' : 'text'),
+  passwordHidden = ref(true),
+  passwordIcon = ref('eye'),
 
-// eslint-disable-next-line no-useless-assignment
-togglePassword = () => {
-  passwordHidden.value = !passwordHidden.value
-  passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
-  type.value = passwordHidden.value ? 'password' : 'text'
-}
+  // eslint-disable-next-line no-useless-assignment
+  togglePassword = () => {
+    passwordHidden.value = !passwordHidden.value
+    passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
+    type.value = passwordHidden.value ? 'password' : 'text'
+  },
+  store = useFormStore(props.storeId),
+  // eslint-disable-next-line no-useless-assignment
+  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
 
-const store = useFormStore(props.storeId)
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
-/*
-const inputRef = ref(null)
-
-const reset = () => {
-  inputRef.value.classList.remove('checked')
-  delete store.errors[props.name]
-}
-*/
-
-const isValid = computed(() => {
-  switch (store.errors[props.name]) {
-    case undefined:
-      return ''
-      break;
-    case '':
-      return 'valid'
-      break;
-    default:
-      return 'invalid'
-      break;
-  }
- }
-)
 </script>
 
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
     <input
-      v-model="store.inputs[props.name]"
       ref="inputRef"
+      v-model="store.inputs[props.name]"
       :class="isValid"
       :name
       :autofocus
@@ -86,10 +65,10 @@ const isValid = computed(() => {
       />
       <font-awesome-icon
         v-if="password"
-        @click="togglePassword"
         :icon="['fas', passwordIcon]"
         size="xl"
         class="w-8 text-slate-500 select-none cursor-pointer"
+        @click="togglePassword"
       />
     </div>
   </div>

@@ -1,23 +1,29 @@
 <script setup lang="ts">
 
 import InputText from '../components/InputText.vue'
-import MyForm from '../components/MyForm.vue'
 import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
+import MyForm from '../components/MyForm.vue'
 import { ref } from 'vue'
 import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
+interface ILoginFormCheck {
+  username: string
+  password: string
+  rememberMe: boolean
+}
+
 const router = useRouter(),
   loginStore = useLoginStore(),
-  rememberMe = ref(false),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
-  auth = async (formCheck) => {
-    if (!formCheck)
+  auth = async (formCheck: ILoginFormCheck | null) => {
+    if (!formCheck) {
       return
+    }
     loading.value = true
     disabled.value = true
     const authRes = await loginStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe)
@@ -49,7 +55,10 @@ const router = useRouter(),
             Последний шанс снять бахилы
           </h2>
         </div>
-        <MyForm id="loginForm" @submit="auth">
+        <MyForm
+          id="loginForm"
+          @submit="auth"
+        >
           <InputText
             class="w-full mb-3"
             name="username"

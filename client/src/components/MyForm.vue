@@ -1,32 +1,31 @@
 <script setup lang="ts">
-import type InputText from './InputText.vue'
+import { onMounted, ref } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
-import { ref, onMounted } from 'vue'
 
-const emits = defineEmits(['submit'])
+const emits = defineEmits(['submit']),
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-})
+  props = defineProps({
+    id: {
+      type: String,
+      required: true,
+    },
+  }),
 
-const store = useFormStore(props.id)
-const validated = ref('')
+  store = useFormStore(props.id),
+  validated = ref(''),
 
-// eslint-disable-next-line no-useless-assignment
-const onSubmit = () => {
-  if (Object.values(store.errors).every(e => e === '')) {
-    console.log("Form validation success")
-    emits('submit', store.inputs)
+  // eslint-disable-next-line no-useless-assignment
+  onSubmit = () => {
+    if (Object.values(store.errors).every(e => e === '')) {
+      console.log('Form validation success')
+      emits('submit', store.inputs)
+    }
+    else {
+      console.log('Form validation failed')
+      emits('submit', null)
+    }
+    validated.value = 'validated'
   }
-  else {
-    console.log("Form validation failed")
-    emits('submit', null)
-  }
-  validated.value = 'validated'
-}
 
 onMounted(() => {
   store.validate()
@@ -35,7 +34,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <form novalidate @submit.prevent="onSubmit" :class="validated">
+  <form
+    novalidate
+    :class="validated"
+    @submit.prevent="onSubmit"
+  >
     <slot />
   </form>
 </template>

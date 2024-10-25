@@ -8,9 +8,12 @@ import MyForm from '../components/MyForm.vue'
 
 <template>
   <div class="flex w-screen h-screen items-center justify-center">
-
     <div class="border bg-sky-100 w-1/2 h-1/2 p-3">
-      <MyForm class="space-y-2" id="mySampleForm" @submit="e => console.log('YAY', e)">
+      <MyForm
+        id="mySampleForm"
+        class="space-y-2"
+        @submit="e => console.log('YAY', e)"
+      >
         <InputText
           name="from"
           store-id="mySampleForm"
@@ -42,6 +45,5 @@ import MyForm from '../components/MyForm.vue'
         Back
       </RouterLink>
     </div>
-
   </div>
 </template>

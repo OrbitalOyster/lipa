@@ -2,21 +2,25 @@
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  title: { 
-    type: String, 
-    required: true,
-  },
-  storeId: {
-    type: String,
-    required: true,
-  },
-})
+    name: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    storeId: {
+      type: String,
+      required: true,
+    },
+    checks: {
+      type: Array<string>,
+      default: () => [],
+    },
+  }),
+  store = useFormStore(props.storeId)
 
-const store = useFormStore(props.storeId)
 store.checks[props.name] = props.checks
 store.inputs[props.name] = false
 
@@ -25,8 +29,8 @@ store.inputs[props.name] = false
 <template>
   <label> {{ title }}
     <input
-      type="checkbox"
       v-model="store.inputs[props.name]"
+      type="checkbox"
       :name
     >
     <span class="checkmark" />

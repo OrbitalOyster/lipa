@@ -1,21 +1,28 @@
 import { defineStore } from 'pinia'
 
+interface IFormStore {
+  errors: Record<string, string>
+  inputs: Record<string, string | boolean>
+  checks: Record<string, string[]>
+}
+
 export const useFormStore = (id: string) => defineStore(id, {
-  state: () => ({
+  state: (): IFormStore => ({
     errors: {},
     inputs: {},
-    checks: [],
+    checks: {},
   }),
   actions: {
     validate() {
       let result = true
-      Object.keys(this.inputs).forEach(key => {
-        const value = this.inputs[key]
-        const checks = this.checks[key]
+      Object.keys(this.inputs).forEach((key) => {
+        const value = this.inputs[key],
+          checks = this.checks[key]
         this.errors[key] = ''
 
-        if (!checks?.length)
+        if (!checks.length) {
           return
+        }
 
         /* Required */
         if (checks.includes('required')) {
@@ -28,8 +35,7 @@ export const useFormStore = (id: string) => defineStore(id, {
 
         /* Less than 'to' */
         if (checks.includes('lessThanTo')) {
-          if (this.inputs.to === undefined || this.inputs.to === '' ||
-            Number(value) >= Number(this.inputs.to)) {
+          if (!this.inputs.to || Number(value) >= Number(this.inputs.to)) {
             this.errors[key] = 'Must be less than to'
             result = false
             return
@@ -38,17 +44,14 @@ export const useFormStore = (id: string) => defineStore(id, {
 
         /* More than 'from' */
         if (checks.includes('moreThanFrom')) {
-          if (this.inputs.from === undefined || this.inputs.from === '' ||
-            Number(value) <= Number(this.inputs.from)) {
+          if (!this.inputs.from || Number(value) <= Number(this.inputs.from)) {
             this.errors[key] = 'Must be more than from'
             result = false
-            return
-          } 
+          }
         }
-
       })
 
       return result
-    }
-  }
+    },
+  },
 })()
