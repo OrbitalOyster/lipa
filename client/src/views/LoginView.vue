@@ -6,6 +6,7 @@ import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
 import MyForm from '../components/MyForm.vue'
 import { ref } from 'vue'
+import { sleep } from '../utils.ts'
 import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
@@ -14,6 +15,8 @@ interface ILoginFormCheck {
   password: string
   rememberMe: boolean
 }
+
+const cardAnimation = ref('')
 
 const router = useRouter(),
   loginStore = useLoginStore(),
@@ -30,7 +33,12 @@ const router = useRouter(),
     if (authRes) {
       await router.push('/')
     }
-    else { console.log('Login failed') }
+    else { 
+      console.log('Login failed')
+      cardAnimation.value = 'shake'
+      await sleep(250)
+      cardAnimation.value = ''
+    }
     loading.value = false
     disabled.value = false
   },
@@ -42,7 +50,7 @@ const router = useRouter(),
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
     <div class="w-1/3">
-      <MyCard>
+      <MyCard :class="cardAnimation">
         <div class="pb-4">
           <img
             class="float-right w-14 h-14"
