@@ -20,23 +20,26 @@ const router = useRouter(),
   loginStore = useLoginStore(),
   cardClass = ref(''),
   shakeTime = 250,
+  shake = async () => {
+    cardClass.value = 'shake'
+    await sleep(shakeTime)
+    cardClass.value = ''
+  },
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async (formCheck: ILoginFormCheck | null) => {
     if (!formCheck) {
+      await shake()
       return
     }
     loading.value = true
     disabled.value = true
-    const authRes = await loginStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe)
-    if (authRes) {
+    if (await loginStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe)) {
       await router.push('/')
     }
     else {
-      cardClass.value = 'shake'
-      await sleep(shakeTime)
-      cardClass.value = ''
+      await shake()
     }
     loading.value = false
     disabled.value = false
