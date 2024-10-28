@@ -1,5 +1,5 @@
-function sleep(ms: Number) {
- return new Promise((res) => setTimeout(res, ms));
-}
+const sleep = (ms: number) => new Promise((res) => {
+  setTimeout(res, ms)
+})
 
 export { sleep }

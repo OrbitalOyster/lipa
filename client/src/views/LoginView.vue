@@ -16,10 +16,10 @@ interface ILoginFormCheck {
   rememberMe: boolean
 }
 
-const cardAnimation = ref('')
-
 const router = useRouter(),
   loginStore = useLoginStore(),
+  cardClass = ref(''),
+  shakeTime = 250,
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
@@ -33,11 +33,10 @@ const router = useRouter(),
     if (authRes) {
       await router.push('/')
     }
-    else { 
-      console.log('Login failed')
-      cardAnimation.value = 'shake'
-      await sleep(250)
-      cardAnimation.value = ''
+    else {
+      cardClass.value = 'shake'
+      await sleep(shakeTime)
+      cardClass.value = ''
     }
     loading.value = false
     disabled.value = false
@@ -50,7 +49,7 @@ const router = useRouter(),
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
     <div class="w-1/3">
-      <MyCard :class="cardAnimation">
+      <MyCard :class="cardClass">
         <div class="pb-4">
           <img
             class="float-right w-14 h-14"
