@@ -42,7 +42,6 @@ store.inputs[props.name] = ''
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
     <input
-      ref="inputRef"
       v-model="store.inputs[props.name]"
       :class="isValid"
       :name

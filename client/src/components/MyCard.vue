@@ -1,4 +1,8 @@
 <script setup lang="ts">
+
+import { Ref, useTemplateRef } from 'vue'
+import { sleep } from '../utils.ts'
+
 defineProps({
   title: {
     type: String,
@@ -9,10 +13,27 @@ defineProps({
     default: 'INSERT TITLE',
   },
 })
+
+const main: Ref<HTMLElement | null> = useTemplateRef('main'),
+  shakeTime = 250,
+  shake = async () => {
+    if (!main.value) {
+      throw new Error('Major screwup')
+    }
+    main.value.classList.add('shake')
+    await sleep(shakeTime)
+    main.value.classList.remove('shake')
+  }
+
+defineExpose({ shake })
+
 </script>
 
 <template>
-  <main class="p-4">
+  <main
+    ref="main"
+    class="p-4"
+  >
     <slot />
   </main>
 </template>

@@ -1,12 +1,11 @@
 <script setup lang="ts">
 
+import { ref, useTemplateRef } from 'vue'
 import InputText from '../components/InputText.vue'
 import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
 import MyForm from '../components/MyForm.vue'
-import { ref } from 'vue'
-import { sleep } from '../utils.ts'
 import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
@@ -16,21 +15,23 @@ interface ILoginFormCheck {
   rememberMe: boolean
 }
 
+/* TODO: This is ass */
+interface MyCardType extends InstanceType<typeof MyCard> {
+  shake(): Promise<void>
+}
+
 const router = useRouter(),
   loginStore = useLoginStore(),
-  cardClass = ref(''),
-  shakeTime = 250,
-  shake = async () => {
-    cardClass.value = 'shake'
-    await sleep(shakeTime)
-    cardClass.value = ''
-  },
+  mainCard = useTemplateRef<MyCardType>('mainCard'),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async (formCheck: ILoginFormCheck | null) => {
+    if (!mainCard.value) {
+      throw new Error('Major screwup')
+    }
     if (!formCheck) {
-      await shake()
+      await mainCard.value.shake()
       return
     }
     loading.value = true
@@ -39,20 +40,19 @@ const router = useRouter(),
       await router.push('/')
     }
     else {
-      await shake()
+      await mainCard.value.shake()
     }
     loading.value = false
     disabled.value = false
   },
   // eslint-disable-next-line no-useless-assignment
   year = new Date().getFullYear()
-
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
     <div class="w-1/3">
-      <MyCard :class="cardClass">
+      <MyCard ref="mainCard">
         <div class="pb-4">
           <img
             class="float-right w-14 h-14"
