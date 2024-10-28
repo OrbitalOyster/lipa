@@ -6,11 +6,15 @@ import { sleep } from '../utils.ts'
 defineProps({
   title: {
     type: String,
-    default: 'INSERT TITLE',
+    default: '',
   },
   subtitle: {
     type: String,
-    default: 'INSERT TITLE',
+    default: '',
+  },
+  icon: {
+    type: String,
+    default: '',
   },
 })
 
@@ -32,8 +36,20 @@ defineExpose({ shake })
 <template>
   <main
     ref="main"
-    class="p-4"
+    class="p-4 space-y-4"
   >
+    <header>
+      <img
+        v-if="icon"
+        :src="icon"
+      >
+      <h1>
+        {{ title }}
+      </h1>
+      <h2>
+        {{ subtitle }}
+      </h2>
+    </header>
     <slot />
   </main>
 </template>
@@ -48,4 +64,18 @@ defineExpose({ shake })
     @apply drop-shadow;
   }
 
+  /* Title */
+  h1 {
+    @apply text-3xl font-bold text-slate-600;
+  }
+
+  /* Subtitle */
+  h2 {
+    @apply text-lg text-slate-400;
+  }
+
+  /* Icon */
+  img {
+    @apply float-right w-14 h-14;
+  }
 </style>

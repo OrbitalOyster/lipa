@@ -47,19 +47,12 @@ const router = useRouter(),
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
     <div class="w-1/3">
-      <MyCard ref="mainCard">
-        <div class="pb-4">
-          <img
-            class="float-right w-14 h-14"
-            src="/icon.svg"
-          >
-          <h1 class="text-3xl font-bold text-slate-600">
-            Lipa
-          </h1>
-          <h2 class="text-lg text-slate-400">
-            Последний шанс снять бахилы
-          </h2>
-        </div>
+      <MyCard
+        ref="mainCard"
+        title="Lipa"
+        subtitle="Последний шанс снять бахилы"
+        icon="icon.svg"
+      >
         <MyForm
           id="loginForm"
           @submit="auth"
