@@ -15,14 +15,9 @@ interface ILoginFormCheck {
   rememberMe: boolean
 }
 
-/* TODO: This is ass */
-interface MyCardType extends InstanceType<typeof MyCard> {
-  shake(): Promise<void>
-}
-
 const router = useRouter(),
   loginStore = useLoginStore(),
-  mainCard = useTemplateRef<MyCardType>('mainCard'),
+  mainCard = useTemplateRef<MyCard>('mainCard'),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment

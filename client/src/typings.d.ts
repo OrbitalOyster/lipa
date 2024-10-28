@@ -8,3 +8,7 @@ interface ImportMeta {
     VITE_AUTH_API: string
   }
 }
+
+interface MyCard {
+  shake(): Promise<void>
+}
