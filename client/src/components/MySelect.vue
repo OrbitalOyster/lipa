@@ -36,8 +36,8 @@
 </script>
 
 <template>
-  <div class="relative">
-    <input class="input" ref="input" @click="isOpen=!isOpen" @blur="handleBlur" :value>
+  <div class="input relative" ref="input" tabindex=0 @click="isOpen=!isOpen" @blur="handleBlur">
+    {{ value || placeholder}}
     <div class="icon">
       <font-awesome-icon
         :icon="['fas', 'angle-down']"
@@ -50,11 +50,12 @@
         {{option}}
       </div>
     </div>
+    <input class="hidden" :value>
   </div>
 </template>
 
 <style scoped>
-  input {
+  .input {
     /* Flexbox */
     @apply flex flex-col justify-center;
     /* Sizing */
