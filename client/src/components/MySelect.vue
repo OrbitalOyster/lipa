@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref, useTemplateRef } from 'vue'
 
+  const emits = defineEmits(['submit'])
+
   const props = defineProps({
       name: {
         type: String,
@@ -24,14 +26,18 @@
       },
     })
 
+  const input = useTemplateRef('input')
   const isOpen = ref(false)
   const value = ref(null)
 
+  const handleBlur = (e) => {
+    isOpen.value = e.currentTarget.contains(e.relatedTarget)
+  }
 </script>
 
 <template>
-  <div class="input" tabindex=0 @click="isOpen=!isOpen" @blur="isOpen=false">
-    {{value || placeholder}}
+  <div class="relative">
+    <input class="input" ref="input" @click="isOpen=!isOpen" @blur="handleBlur" :value>
     <div class="icon">
       <font-awesome-icon
         :icon="['fas', 'angle-down']"
@@ -39,8 +45,8 @@
         class="text-slate-500"
       />
     </div>
-    <div :class="{ list: true, hidden: !isOpen }">
-      <div v-for="(option, i) in options" :key="i" class="option" @click.stop="value=option; isOpen=false">
+    <div :class="{ list: true, hidden: !isOpen }" @mousedown.prevent>
+      <div v-for="(option, i) in options" :key="i" class="option" @click.stop="value=option; isOpen=false; input.focus()">
         {{option}}
       </div>
     </div>
@@ -48,11 +54,11 @@
 </template>
 
 <style scoped>
-  .input {
+  input {
     /* Flexbox */
     @apply flex flex-col justify-center;
     /* Sizing */
-    @apply relative w-full p-2 pl-4;
+    @apply w-full p-2 pl-4;
     /* Border */
     @apply border border-slate-300 rounded outline-none;
     /* Colors */

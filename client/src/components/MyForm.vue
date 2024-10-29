@@ -13,6 +13,7 @@ const emits = defineEmits(['submit']),
   validated = ref(''),
   // eslint-disable-next-line no-useless-assignment
   onSubmit = () => {
+  console.log('Form submit')
     if (Object.values(store.errors).every(e => e === '')) {
       console.log('Form validation success')
       emits('submit', store.inputs)
@@ -34,7 +35,7 @@ onMounted(() => {
   <form
     novalidate
     :class="validated"
-    @submit.prevent="onSubmit"
+    @submit.prevent="console.log(123); onSubmit()"
   >
     <slot />
   </form>
