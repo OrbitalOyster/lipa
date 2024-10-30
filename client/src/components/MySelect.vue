@@ -21,7 +21,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: 'Select value',
+    default: null,
   },
 })
 
@@ -50,10 +50,15 @@ store.inputs[props.name] = ''
       tabindex="0"
       type="text"
       readonly
-      :value="store.inputs[props.name] || placeholder"
+      :value="store.inputs[props.name]"
+      :placeholder
       @blur="onBlur"
       @click="isOpen=!isOpen"
     >
+
+    <label>
+      {{ placeholder }}
+    </label>
 
     <div class="input-icons">
       <font-awesome-icon
@@ -106,6 +111,34 @@ store.inputs[props.name] = ''
     @apply select-none cursor-pointer;
   }
 
+  label {
+    /* Position */
+    @apply absolute top-4 left-4;
+    /* Color */
+    @apply text-slate-500;
+    /* Ignore pointer */
+    @apply pointer-events-none;
+    /* Animation */
+    @apply duration-200 origin-left;
+  }
+
+  /* Hide original placeholder */
+  input::placeholder {
+    @apply opacity-0;
+  }
+
+  /* Inputs with placeholders are bigger */
+  input[placeholder] {
+    @apply pt-6;
+  }
+
+  /* Shrink and translate label if:
+   * - input is focused
+   * - placeholder not shown */
+  input:not(:placeholder-shown) + label {
+    transform: translateY(calc(-50%)) scale(.8);
+  }
+
   .angle-icon {
     /* Sizing and position */
     @apply absolute right-3 space-x-2;
@@ -136,13 +169,11 @@ store.inputs[props.name] = ''
     @apply block;
   }
 
-
-
   ul {
     /* Size */
-    @apply w-full max-h-64;
+    @apply w-full max-h-72;
     /* Position */
-    @apply absolute top-11 left-0 mt-1;
+    @apply absolute -bottom-72 left-0 mt-1;
     /* Border */
     @apply border border-slate-300 outline-none rounded drop-shadow-md;
     /* Colors */

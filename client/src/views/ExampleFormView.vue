@@ -65,6 +65,7 @@ const options = [
         <MySelect
           name="selectInput1"
           store-id="mySampleForm"
+          placeholder="Select something"
           :checks="['required']"
           :options
         />
