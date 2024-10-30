@@ -27,68 +27,62 @@
     })
 
   const input = useTemplateRef('input')
+  const list = useTemplateRef('list')
+
   const isOpen = ref(false)
   const value = ref(null)
 
   const onBlur = (e) => {
     /* Don't lose focus on list click */
-    isOpen.value = e.currentTarget.contains(e.relatedTarget)
+    isOpen.value = e.relatedTarget === list.value
   }
 </script>
 
 <template>
-  <div class="focusable relative" tabindex="0" ref="input" @blur="onBlur">
-    <div class="input" @click="isOpen=!isOpen">
-      {{ value || placeholder}}
-      <div class="icon">
-        <font-awesome-icon
-          :icon="['fas', 'angle-down']"
-          size="xl"
-          class="text-slate-500"
-        />
-      </div>
+  <div class="relative">
+    <input tabindex="0" type="text" readonly :value="value || placeholder" ref="input" @blur="onBlur" @click="isOpen=!isOpen">
+    <div class="angle-icon">
+      <font-awesome-icon
+        :icon="['fas', 'angle-down']"
+        size="xl"
+        class="text-slate-500"
+      />
     </div>
-    <div tabindex="0" :class="{ list: true, hidden: !isOpen }" @click="isOpen=false" @focus="input.focus()">
-      <div v-for="option in options" class="option" @click="value=option">
+    <ul tabindex="0" ref="list" :class="{ hidden: !isOpen }" @click="isOpen=false" @focus="input.focus()">
+      <li v-for="option in options" @click="value=option">
         {{option}}
-      </div>
-    </div>
-    <input class="hidden" :value>
+      </li>
+    </ul>
   </div>
 </template>
 
 <style scoped>
 
-  .focusable {
-    /* Border */
-    @apply rounded outline-none;
-    /* On focus */
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
-  }
-
-  .input {
+  input {
     /* Flexbox */
     @apply flex flex-col justify-center;
     /* Sizing */
     @apply w-full p-2 pl-4;
     /* Border */
-    @apply border border-slate-300 rounded;
+    @apply outline-none border border-slate-300 rounded;
     /* Colors */
     @apply bg-slate-50;
+    /* On focus */
+    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
     /* Misc */
     @apply select-none cursor-pointer;
   }
 
-  .icon {
+  .angle-icon {
     /* Sizing and position */
     @apply absolute top-2 right-3;
     /* Flexbox */
     @apply inline-flex justify-center items-center;
     /* Misc */
-    @apply select-none;
+    @apply select-none pointer-events-none;
   }
 
-  .list {
+  ul {
     /* Size */
     @apply w-full max-h-64;
     /* Position */
@@ -101,11 +95,11 @@
     @apply overflow-auto;
   }
 
-  .option {
+  li {
     @apply p-2 cursor-pointer select-none;
   }
 
-  .option:hover {
+  li:hover {
     @apply bg-slate-200;
   }
 </style>
