@@ -1,56 +1,89 @@
 <script setup lang="ts">
-  import { ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
+import { useFormStore } from '../stores/formStore.ts'
 
-  const emits = defineEmits(['submit'])
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  storeId: {
+    type: String,
+    required: true,
+  },
+  options: {
+    type: Array<string>,
+    required: true,
+  },
+  checks: {
+    type: Array<string>,
+    default: () => [],
+  },
+  placeholder: {
+    type: String,
+    default: 'Select value',
+  },
+})
 
-  const props = defineProps({
-      name: {
-        type: String,
-        required: true,
-      },
-      storeId: {
-        type: String,
-        required: true,
-      },
-      options: {
-        type: Array<string>,
-        required: true,
-      },
-      checks: {
-        type: Array<string>,
-        default: () => [],
-      },
-      placeholder: {
-        type: String,
-        default: 'Select value',
-      },
-    })
-
-  const input = useTemplateRef('input')
-  const list = useTemplateRef('list')
-
-  const isOpen = ref(false)
-  const value = ref(null)
-
-  const onBlur = (e) => {
+const input = useTemplateRef('input'),
+  list = useTemplateRef('list'),
+  isOpen = ref(false),
+  onBlur = (e: FocusEvent) => {
     /* Don't lose focus on list click */
     isOpen.value = e.relatedTarget === list.value
-  }
+  },
+  store = useFormStore(props.storeId),
+  // eslint-disable-next-line no-useless-assignment
+  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
+
+store.checks[props.name] = props.checks
+store.inputs[props.name] = ''
+
 </script>
 
 <template>
-  <div class="relative">
-    <input tabindex="0" type="text" readonly :value="value || placeholder" ref="input" @blur="onBlur" @click="isOpen=!isOpen">
+  <div class="flex flex-col justify-center pb-1 relative">
+    <input
+      ref="input"
+      :class="isValid"
+      :name
+      tabindex="0"
+      type="text"
+      readonly
+      :value="store.inputs[props.name] || placeholder"
+      @blur="onBlur"
+      @click="isOpen=!isOpen"
+    >
+
+    <div class="input-icons">
+      <font-awesome-icon
+        :icon="['fas', 'triangle-exclamation']"
+        size="xl"
+        class="text-red-400 error-triangle hidden"
+        :title="store.errors[props.name]"
+      />
+    </div>
     <div class="angle-icon">
       <font-awesome-icon
         :icon="['fas', 'angle-down']"
         size="xl"
-        class="text-slate-500"
+        class="text-slate-500 cursor-pointer"
       />
     </div>
-    <ul tabindex="0" ref="list" :class="{ hidden: !isOpen }" @click="isOpen=false" @focus="input.focus()">
-      <li v-for="option in options" @click="value=option">
-        {{option}}
+
+    <ul
+      ref="list"
+      tabindex="0"
+      :class="{ hidden: !isOpen }"
+      @click="isOpen=false"
+      @focus="input?.focus()"
+    >
+      <li
+        v-for="(option, i) in options"
+        :key="i"
+        @click="store.inputs[props.name]=option; store.validate()"
+      >
+        {{ option }}
       </li>
     </ul>
   </div>
@@ -75,12 +108,35 @@
 
   .angle-icon {
     /* Sizing and position */
-    @apply absolute top-2 right-3;
+    @apply absolute right-3 space-x-2;
     /* Flexbox */
     @apply inline-flex justify-center items-center;
     /* Misc */
     @apply select-none pointer-events-none;
   }
+
+  .input-icons {
+    /* Sizing and position */
+    @apply absolute right-10;
+    /* Flexbox */
+    @apply inline-flex justify-center items-center;
+    /* Misc */
+    @apply select-none;
+  }
+
+  .validated input.invalid {
+    @apply border-red-300 bg-pink-100;
+  }
+
+  .validated input.valid {
+    @apply border-green-300 bg-green-100;
+  }
+
+  .validated input.invalid ~ .input-icons .error-triangle {
+    @apply block;
+  }
+
+
 
   ul {
     /* Size */

@@ -1,6 +1,6 @@
 import './style.css'
 import './animations.css'
-import { faArrowRightToBracket, faEye, faEyeSlash, faSpinner, faTriangleExclamation, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faArrowRightToBracket, faEye, faEyeSlash, faSpinner, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import App from './App.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createApp } from 'vue'

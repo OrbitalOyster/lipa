@@ -6,28 +6,28 @@ import MyForm from '../components/MyForm.vue'
 import MySelect from '../components/MySelect.vue'
 
 const options = [
-  "Macao",
-  "Madagascar",
-  "Malawi",
-  "Malaysia",
-  "Maldives",
-  "Mali",
-  "Malta",
-  "Marshall Islands (the)",
-  "Martinique",
-  "Mauritania",
-  "Mauritius",
-  "Mayotte",
-  "Mexico",
-  "Micronesia (Federated States of)",
-  "Moldova (the Republic of)",
-  "Monaco",
-  "Mongolia",
-  "Montenegro",
-  "Montserrat",
-  "Morocco",
-  "Mozambique",
-  "Myanmar"
+  'Macao',
+  'Madagascar',
+  'Malawi',
+  'Malaysia',
+  'Maldives',
+  'Mali',
+  'Malta',
+  'Marshall Islands (the)',
+  'Martinique',
+  'Mauritania',
+  'Mauritius',
+  'Mayotte',
+  'Mexico',
+  'Micronesia (Federated States of)',
+  'Moldova (the Republic of)',
+  'Monaco',
+  'Mongolia',
+  'Montenegro',
+  'Montserrat',
+  'Morocco',
+  'Mozambique',
+  'Myanmar',
 ]
 
 </script>
@@ -65,6 +65,7 @@ const options = [
         <MySelect
           name="selectInput1"
           store-id="mySampleForm"
+          :checks="['required']"
           :options
         />
 
