@@ -35,7 +35,7 @@ onMounted(() => {
   <form
     novalidate
     :class="validated"
-    @submit.prevent="console.log(123); onSubmit()"
+    @submit.prevent="onSubmit()"
   >
     <slot />
   </form>
