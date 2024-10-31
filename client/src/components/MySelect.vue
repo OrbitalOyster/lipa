@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
@@ -39,26 +39,66 @@ const input = useTemplateRef('input'),
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
 
+const selectedIndex = ref(-1)
+
+const toggle = async () => {
+  isOpen.value = !isOpen.value 
+  await nextTick()
+  /* Scroll to selected option or to top */
+  if (selectedIndex.value !== -1)
+    list.value.children[selectedIndex.value].scrollIntoView()
+  else
+    list.value.scrollTop = 0
+}
+
+const setValue = () => {
+  store.inputs[props.name] = props.options[selectedIndex.value]
+  store.validate()
+}
+
+const keyDown = () => {
+  selectedIndex.value++
+  if (selectedIndex.value > props.options.length - 1) {
+    selectedIndex.value = 0
+  }
+  setValue()
+}
+
+const keyUp = () => {
+  selectedIndex.value--
+  if (selectedIndex.value < 0) {
+    selectedIndex.value = 0
+  }
+  setValue()
+}
+
 </script>
 
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
-    <input
+    <div class="input"
       ref="input"
       :class="isValid"
       :name
       tabindex="0"
       type="text"
       readonly
-      :value="store.inputs[props.name]"
       :placeholder
+      :value="store.inputs[props.name]"
       @blur="onBlur"
-      @click="isOpen=!isOpen"
+      @click="toggle"
+      @keydown.up="keyUp"
+      @keydown.down="keyDown"
+      @keydown.enter="toggle"
     >
+      {{store.inputs[props.name] || placeholder}}
+    </div>
 
+    <!--
     <label>
       {{ placeholder }}
     </label>
+    -->
 
     <div class="input-icons">
       <font-awesome-icon
@@ -80,13 +120,13 @@ store.inputs[props.name] = ''
       ref="list"
       tabindex="0"
       :class="{ hidden: !isOpen }"
-      @click="isOpen=false"
+      @click="toggle"
       @focus="input?.focus()"
     >
       <li
         v-for="(option, i) in options"
         :key="i"
-        @click="store.inputs[props.name]=option; store.validate()"
+        @click="selectedIndex=i; setValue()"
       >
         {{ option }}
       </li>
@@ -96,7 +136,7 @@ store.inputs[props.name] = ''
 
 <style scoped>
 
-  input {
+  .input {
     /* Flexbox */
     @apply flex flex-col justify-center;
     /* Sizing */
@@ -157,15 +197,15 @@ store.inputs[props.name] = ''
     @apply select-none;
   }
 
-  .validated input.invalid {
+  .validated .input.invalid {
     @apply border-red-300 bg-pink-100;
   }
 
-  .validated input.valid {
+  .validated .input.valid {
     @apply border-green-300 bg-green-100;
   }
 
-  .validated input.invalid ~ .input-icons .error-triangle {
+  .validated .input.invalid ~ .input-icons .error-triangle {
     @apply block;
   }
 
