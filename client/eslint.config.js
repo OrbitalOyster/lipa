@@ -23,6 +23,7 @@ export default [
       "no-ternary": "off",
       "sort-keys": "off",
       "sort-vars": "off",
+      "no-magic-numbers": "off",
       // Some eslint rules are not enforced in the <script> section 
       "prefer-const": "error",
       "no-var": "error",

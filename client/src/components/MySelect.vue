@@ -25,8 +25,8 @@ const props = defineProps({
     },
   }),
 
-  input: Ref<HTMLElement> = useTemplateRef('input'),
-  list: Ref<HTMLElement> = useTemplateRef('list'),
+  input: Ref<HTMLElement | null> = useTemplateRef('input'),
+  list: Ref<HTMLElement | null> = useTemplateRef('list'),
   isOpen = ref(false),
   onBlur = (e: FocusEvent) => {
     /* Don't lose focus on list click */
@@ -34,12 +34,9 @@ const props = defineProps({
   },
   store = useFormStore(props.storeId),
   // eslint-disable-next-line no-useless-assignment
-  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
+  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid'),
 
-store.checks[props.name] = props.checks
-store.inputs[props.name] = ''
-
-const selectedIndex = ref(-1),
+  selectedIndex = ref(-1),
   highlightedIndex = ref(-1),
 
   toggle = async () => {
@@ -66,13 +63,14 @@ const selectedIndex = ref(-1),
         highlightedIndex.value = 0
       }
       list.value.children[highlightedIndex.value].scrollIntoView()
-      return
     }
-    selectedIndex.value += 1
-    if (selectedIndex.value > props.options.length - 1) {
-      selectedIndex.value = 0
+    else {
+      selectedIndex.value += 1
+      if (selectedIndex.value > props.options.length - 1) {
+        selectedIndex.value = 0
+      }
+      setValue()
     }
-    setValue()
   },
 
   keyUp = () => {
@@ -82,24 +80,22 @@ const selectedIndex = ref(-1),
         highlightedIndex.value = props.options.length - 1
       }
       list.value.children[highlightedIndex.value].scrollIntoView()
-      return
     }
-    selectedIndex.value -= 1
-    if (selectedIndex.value < 0) {
-      selectedIndex.value = props.options.length - 1
+    else {
+      selectedIndex.value -= 1
+      if (selectedIndex.value < 0) {
+        selectedIndex.value = props.options.length - 1
+      }
+      setValue()
     }
-    setValue()
   },
 
   keyEnter = async () => {
-    if (!isOpen.value) {
-      await toggle()
-    }
-    else {
+    if (isOpen.value) {
       selectedIndex.value = highlightedIndex.value
       setValue()
-      await toggle()
     }
+    await toggle()
   },
 
   keyEsc = async () => {
@@ -107,20 +103,19 @@ const selectedIndex = ref(-1),
       await toggle()
     }
   }
+
+store.checks[props.name] = props.checks
+store.inputs[props.name] = ''
+
 </script>
 
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
     <div
       ref="input"
-      class="input"
+      class="select"
       :class="isValid"
-      :name
       tabindex="0"
-      type="text"
-      readonly
-      :placeholder
-      :value="store.inputs[props.name]"
       @blur="onBlur"
       @click="toggle"
       @keydown.up="keyUp"
@@ -162,8 +157,8 @@ const selectedIndex = ref(-1),
         v-for="(option, i) in options"
         :key="i"
         :class="{ highlighted: highlightedIndex === i}"
-        @mouseover="highlightedIndex = i; selectedIndex = i"
-        @click="setValue"
+        @mouseover="highlightedIndex = i"
+        @click="selectedIndex = i; setValue()"
       >
         {{ option }}
       </li>
@@ -173,7 +168,7 @@ const selectedIndex = ref(-1),
 
 <style scoped>
 
-  .input {
+  .select {
     /* Flexbox */
     @apply flex flex-col justify-center;
     /* Sizing */
@@ -199,15 +194,15 @@ const selectedIndex = ref(-1),
     @apply duration-200 origin-left;
   }
 
-  .input:empty {
+  .select:empty {
     @apply h-14;
   }
 
-  .input:not(:empty) {
-    @apply pt-6;
+  .select:not(:empty) {
+    @apply pt-6 h-14;
   }
 
-  .input:not(:empty) + label {
+  .select:not(:empty) + label {
     transform: translateY(calc(-50%)) scale(.8);
   }
 
@@ -229,15 +224,15 @@ const selectedIndex = ref(-1),
     @apply select-none;
   }
 
-  .validated .input.invalid {
+  .validated .select.invalid {
     @apply border-red-300 bg-pink-100;
   }
 
-  .validated .input.valid {
+  .validated .select.valid {
     @apply border-green-300 bg-green-100;
   }
 
-  .validated .input.invalid ~ .input-icons .error-triangle {
+  .validated .select.invalid ~ .input-icons .error-triangle {
     @apply block;
   }
 
