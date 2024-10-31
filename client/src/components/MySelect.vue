@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { Ref, computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  storeId: {
-    type: String,
-    required: true,
-  },
-  options: {
-    type: Array<string>,
-    required: true,
-  },
-  checks: {
-    type: Array<string>,
-    default: () => [],
-  },
-  placeholder: {
-    type: String,
-    default: null,
-  },
-})
+    name: {
+      type: String,
+      required: true,
+    },
+    storeId: {
+      type: String,
+      required: true,
+    },
+    options: {
+      type: Array<string>,
+      required: true,
+    },
+    checks: {
+      type: Array<string>,
+      default: () => [],
+    },
+    placeholder: {
+      type: String,
+      default: null,
+    },
+  }),
 
-const input = useTemplateRef('input'),
-  list = useTemplateRef('list'),
+  input: Ref<HTMLElement> = useTemplateRef('input'),
+  list: Ref<HTMLElement> = useTemplateRef('list'),
   isOpen = ref(false),
   onBlur = (e: FocusEvent) => {
     /* Don't lose focus on list click */
@@ -39,78 +39,81 @@ const input = useTemplateRef('input'),
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
 
-const selectedIndex = ref(-1)
-const highlightedIndex = ref(-1)
+const selectedIndex = ref(-1),
+  highlightedIndex = ref(-1),
 
-const toggle = async () => {
-  isOpen.value = !isOpen.value 
-  await nextTick()
-  /* Scroll to selected option or to top */
-  if (selectedIndex.value !== -1)
-    list.value.children[selectedIndex.value].scrollIntoView()
-  else
-    list.value.scrollTop = 0
-
-  highlightedIndex.value = selectedIndex.value
-}
-
-const setValue = () => {
-  store.inputs[props.name] = props.options[selectedIndex.value]
-  store.validate()
-}
-
-const keyDown = () => {
-  if (isOpen.value) {
-    highlightedIndex.value++
-    if (highlightedIndex.value > props.options.length - 1) {
-      highlightedIndex.value = 0
+  toggle = async () => {
+    isOpen.value = !isOpen.value
+    await nextTick()
+    /* Scroll to selected option or to top */
+    if (selectedIndex.value > -1) {
+      list.value.children[selectedIndex.value].scrollIntoView()
     }
-    list.value.children[highlightedIndex.value].scrollIntoView()
-    return
-  }
-  selectedIndex.value++
-  if (selectedIndex.value > props.options.length - 1) {
-    selectedIndex.value = 0
-  }
-  setValue()
-}
+    else { list.value.scrollTop = 0 }
 
-const keyUp = () => {
-  if (isOpen.value) {
-    highlightedIndex.value--
-    if (highlightedIndex.value < 0) {
-      highlightedIndex.value = props.options.length - 1
+    highlightedIndex.value = selectedIndex.value
+  },
+
+  setValue = () => {
+    store.inputs[props.name] = props.options[selectedIndex.value]
+    store.validate()
+  },
+
+  keyDown = () => {
+    if (isOpen.value) {
+      highlightedIndex.value += 1
+      if (highlightedIndex.value > props.options.length - 1) {
+        highlightedIndex.value = 0
+      }
+      list.value.children[highlightedIndex.value].scrollIntoView()
+      return
     }
-    list.value.children[highlightedIndex.value].scrollIntoView()
-    return
-  }
-  selectedIndex.value--
-  if (selectedIndex.value < 0) {
-    selectedIndex.value = props.options.length - 1
-  }
-  setValue()
-}
-
-const keyEnter = () => {
-  if (!isOpen.value) {
-    toggle()
-  } else {
-    selectedIndex.value = highlightedIndex.value
+    selectedIndex.value += 1
+    if (selectedIndex.value > props.options.length - 1) {
+      selectedIndex.value = 0
+    }
     setValue()
-    toggle()
-  }
-}
+  },
 
-const keyEsc = () => {
-  if (isOpen.value)
-    toggle()
-}
+  keyUp = () => {
+    if (isOpen.value) {
+      highlightedIndex.value -= 1
+      if (highlightedIndex.value < 0) {
+        highlightedIndex.value = props.options.length - 1
+      }
+      list.value.children[highlightedIndex.value].scrollIntoView()
+      return
+    }
+    selectedIndex.value -= 1
+    if (selectedIndex.value < 0) {
+      selectedIndex.value = props.options.length - 1
+    }
+    setValue()
+  },
+
+  keyEnter = async () => {
+    if (!isOpen.value) {
+      await toggle()
+    }
+    else {
+      selectedIndex.value = highlightedIndex.value
+      setValue()
+      await toggle()
+    }
+  },
+
+  keyEsc = async () => {
+    if (isOpen.value) {
+      await toggle()
+    }
+  }
 </script>
 
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
-    <div class="input"
+    <div
       ref="input"
+      class="input"
       :class="isValid"
       :name
       tabindex="0"
@@ -125,14 +128,12 @@ const keyEsc = () => {
       @keydown.enter="keyEnter"
       @keydown.esc="keyEsc"
     >
-      {{store.inputs[props.name] || placeholder}}
+      {{ store.inputs[props.name] }}
     </div>
 
-    <!--
     <label>
       {{ placeholder }}
     </label>
-    -->
 
     <div class="input-icons">
       <font-awesome-icon
@@ -160,9 +161,9 @@ const keyEsc = () => {
       <li
         v-for="(option, i) in options"
         :key="i"
-        @mouseover="highlightedIndex = i"
         :class="{ highlighted: highlightedIndex === i}"
-        @click="selectedIndex=i; setValue()"
+        @mouseover="highlightedIndex = i; selectedIndex = i"
+        @click="setValue"
       >
         {{ option }}
       </li>
@@ -198,20 +199,15 @@ const keyEsc = () => {
     @apply duration-200 origin-left;
   }
 
-  /* Hide original placeholder */
-  input::placeholder {
-    @apply opacity-0;
+  .input:empty {
+    @apply h-14;
   }
 
-  /* Inputs with placeholders are bigger */
-  input[placeholder] {
+  .input:not(:empty) {
     @apply pt-6;
   }
 
-  /* Shrink and translate label if:
-   * - input is focused
-   * - placeholder not shown */
-  input:not(:placeholder-shown) + label {
+  .input:not(:empty) + label {
     transform: translateY(calc(-50%)) scale(.8);
   }
 
@@ -261,12 +257,6 @@ const keyEsc = () => {
   li {
     @apply p-2 cursor-pointer select-none;
   }
-
-  /*
-  li:hover {
-    @apply bg-slate-200;
-  }
-  */
 
   li.highlighted {
     @apply bg-slate-200;
