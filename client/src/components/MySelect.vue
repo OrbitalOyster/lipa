@@ -40,6 +40,7 @@ store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
 
 const selectedIndex = ref(-1)
+const highlightedIndex = ref(-1)
 
 const toggle = async () => {
   isOpen.value = !isOpen.value 
@@ -49,6 +50,8 @@ const toggle = async () => {
     list.value.children[selectedIndex.value].scrollIntoView()
   else
     list.value.scrollTop = 0
+
+  highlightedIndex.value = selectedIndex.value
 }
 
 const setValue = () => {
@@ -57,6 +60,14 @@ const setValue = () => {
 }
 
 const keyDown = () => {
+  if (isOpen.value) {
+    highlightedIndex.value++
+    if (highlightedIndex.value > props.options.length - 1) {
+      highlightedIndex.value = 0
+    }
+    list.value.children[highlightedIndex.value].scrollIntoView()
+    return
+  }
   selectedIndex.value++
   if (selectedIndex.value > props.options.length - 1) {
     selectedIndex.value = 0
@@ -65,13 +76,35 @@ const keyDown = () => {
 }
 
 const keyUp = () => {
+  if (isOpen.value) {
+    highlightedIndex.value--
+    if (highlightedIndex.value < 0) {
+      highlightedIndex.value = props.options.length - 1
+    }
+    list.value.children[highlightedIndex.value].scrollIntoView()
+    return
+  }
   selectedIndex.value--
   if (selectedIndex.value < 0) {
-    selectedIndex.value = 0
+    selectedIndex.value = props.options.length - 1
   }
   setValue()
 }
 
+const keyEnter = () => {
+  if (!isOpen.value) {
+    toggle()
+  } else {
+    selectedIndex.value = highlightedIndex.value
+    setValue()
+    toggle()
+  }
+}
+
+const keyEsc = () => {
+  if (isOpen.value)
+    toggle()
+}
 </script>
 
 <template>
@@ -89,7 +122,8 @@ const keyUp = () => {
       @click="toggle"
       @keydown.up="keyUp"
       @keydown.down="keyDown"
-      @keydown.enter="toggle"
+      @keydown.enter="keyEnter"
+      @keydown.esc="keyEsc"
     >
       {{store.inputs[props.name] || placeholder}}
     </div>
@@ -126,6 +160,8 @@ const keyUp = () => {
       <li
         v-for="(option, i) in options"
         :key="i"
+        @mouseover="highlightedIndex = i"
+        :class="{ highlighted: highlightedIndex === i}"
         @click="selectedIndex=i; setValue()"
       >
         {{ option }}
@@ -226,7 +262,13 @@ const keyUp = () => {
     @apply p-2 cursor-pointer select-none;
   }
 
+  /*
   li:hover {
+    @apply bg-slate-200;
+  }
+  */
+
+  li.highlighted {
     @apply bg-slate-200;
   }
 </style>
