@@ -42,8 +42,10 @@ const props = defineProps({
     if (!optionsRef.value) {
       throw new Error('Major screwup')
     }
-    highlightedElement.value = optionsRef.value[selectedIndex || 0]
-    highlightedElement.value.scrollIntoView()
+    if (selectedIndex !== null) {
+      highlightedElement.value = optionsRef.value[selectedIndex]
+      highlightedElement.value.scrollIntoView()
+    }
   },
 
   setValue = (ind: number | null) => {
