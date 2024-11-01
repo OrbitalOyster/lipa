@@ -2,6 +2,8 @@
 import { Ref, computed, nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
+let selectedIndex = -1
+
 const props = defineProps({
     name: {
       type: String,
@@ -36,71 +38,35 @@ const props = defineProps({
   // eslint-disable-next-line no-useless-assignment
   isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid'),
 
-  selectedIndex = ref(-1),
-  highlightedIndex = ref(-1),
+  highlightedElement = ref(null),
+  optionsRef = useTemplateRef('optionsRef'),
 
   toggle = async () => {
     isOpen.value = !isOpen.value
     await nextTick()
-    /* Scroll to selected option or to top */
-    if (selectedIndex.value > -1) {
-      list.value.children[selectedIndex.value].scrollIntoView()
-    }
-    else { list.value.scrollTop = 0 }
-
-    highlightedIndex.value = selectedIndex.value
+    highlightedElement.value = optionsRef.value[selectedIndex]
+    highlightedElement.value?.scrollIntoView()
   },
 
-  setValue = () => {
-    store.inputs[props.name] = props.options[selectedIndex.value]
+  setValue = (i) => {
+    // selectedIndex = i ?? selectedIndex 
+    selectedIndex = i
+    store.inputs[props.name] = props.options[i]
     store.validate()
   },
 
-  keyDown = () => {
+  wrap = (r, d) => (r + d + props.options.length) % props.options.length,
+
+  onKeyScroll = (d) => {
     if (isOpen.value) {
-      highlightedIndex.value += 1
-      if (highlightedIndex.value > props.options.length - 1) {
-        highlightedIndex.value = 0
-      }
-      list.value.children[highlightedIndex.value].scrollIntoView()
+      highlightedElement.value?.classList.remove('highlighted')
+      const newIndex = wrap(optionsRef.value.indexOf(highlightedElement.value), d)
+      highlightedElement.value = optionsRef.value[newIndex]
+      highlightedElement.value.classList.add('highlighted')
+      highlightedElement.value.scrollIntoView()
     }
     else {
-      selectedIndex.value += 1
-      if (selectedIndex.value > props.options.length - 1) {
-        selectedIndex.value = 0
-      }
-      setValue()
-    }
-  },
-
-  keyUp = () => {
-    if (isOpen.value) {
-      highlightedIndex.value -= 1
-      if (highlightedIndex.value < 0) {
-        highlightedIndex.value = props.options.length - 1
-      }
-      list.value.children[highlightedIndex.value].scrollIntoView()
-    }
-    else {
-      selectedIndex.value -= 1
-      if (selectedIndex.value < 0) {
-        selectedIndex.value = props.options.length - 1
-      }
-      setValue()
-    }
-  },
-
-  keyEnter = async () => {
-    if (isOpen.value) {
-      selectedIndex.value = highlightedIndex.value
-      setValue()
-    }
-    await toggle()
-  },
-
-  keyEsc = async () => {
-    if (isOpen.value) {
-      await toggle()
+      setValue(wrap(selectedIndex, d))
     }
   }
 
@@ -118,10 +84,10 @@ store.inputs[props.name] = ''
       tabindex="0"
       @blur="onBlur"
       @click="toggle"
-      @keydown.up="keyUp"
-      @keydown.down="keyDown"
-      @keydown.enter="keyEnter"
-      @keydown.esc="keyEsc"
+      @keydown.up="onKeyScroll(-1)"
+      @keydown.down="onKeyScroll(1)"
+      @keydown.enter="isOpen && setValue(optionsRef.indexOf(highlightedElement)); toggle()"
+      @keydown.esc="isOpen && toggle()"
     >
       {{ store.inputs[props.name] }}
     </div>
@@ -155,10 +121,11 @@ store.inputs[props.name] = ''
     >
       <li
         v-for="(option, i) in options"
+        ref="optionsRef"
         :key="i"
-        :class="{ highlighted: highlightedIndex === i}"
-        @mouseover="highlightedIndex = i"
-        @click="selectedIndex = i; setValue()"
+        @mouseover="highlightedElement = optionsRef[i]"
+        :class="{ highlighted: optionsRef?.indexOf(highlightedElement) === i }"
+        @click="setValue(i)"
       >
         {{ option }}
       </li>
