@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Ref, computed, nextTick, ref, useTemplateRef } from 'vue'
+import { Ref, nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
-let selectedIndex = -1
+let selectedIndex: null | number = null
 
 const props = defineProps({
     name: {
@@ -26,46 +26,70 @@ const props = defineProps({
       default: null,
     },
   }),
-
-  input: Ref<HTMLElement | null> = useTemplateRef('input'),
-  list: Ref<HTMLElement | null> = useTemplateRef('list'),
-  isOpen = ref(false),
-  onBlur = (e: FocusEvent) => {
-    /* Don't lose focus on list click */
-    isOpen.value = e.relatedTarget === list.value
-  },
   store = useFormStore(props.storeId),
   // eslint-disable-next-line no-useless-assignment
-  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid'),
+  input: Ref<HTMLElement | null> = useTemplateRef('input'),
+  // eslint-disable-next-line no-useless-assignment
+  list: Ref<HTMLElement | null> = useTemplateRef('list'),
+  optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
+  highlightedElement = ref<HTMLElement | null>(null),
+  isOpen = ref(false),
 
-  highlightedElement = ref(null),
-  optionsRef = useTemplateRef('optionsRef'),
-
+  // eslint-disable-next-line no-useless-assignment
   toggle = async () => {
     isOpen.value = !isOpen.value
     await nextTick()
-    highlightedElement.value = optionsRef.value[selectedIndex]
-    highlightedElement.value?.scrollIntoView()
+    if (!optionsRef.value) {
+      throw new Error('Major screwup')
+    }
+    highlightedElement.value = optionsRef.value[selectedIndex || 0]
+    highlightedElement.value.scrollIntoView()
   },
 
-  setValue = (i) => {
-    // selectedIndex = i ?? selectedIndex 
-    selectedIndex = i
-    store.inputs[props.name] = props.options[i]
+  setValue = (ind: number | null) => {
+    selectedIndex = ind
+    /* Resetting value? */
+    if (ind === null) {
+      store.inputs[props.name] = ''
+    }
+    else { store.inputs[props.name] = props.options[ind] }
+
     store.validate()
   },
 
-  wrap = (r, d) => (r + d + props.options.length) % props.options.length,
+  wrap = (r: number, d: number) => (r + d + props.options.length) % props.options.length,
 
-  onKeyScroll = (d) => {
+  getHighlightedIndex = () => {
+    if (highlightedElement.value === null) {
+      return null
+    }
+    if (!optionsRef.value) {
+      throw new Error('Major screwup')
+    }
+    return optionsRef.value.indexOf(highlightedElement.value)
+  },
+
+  setHighlighted = (ind: number) => {
+    if (!optionsRef.value) {
+      throw new Error('Major screwup')
+    }
+    highlightedElement.value = optionsRef.value[ind]
+    highlightedElement.value.classList.add('highlighted')
+    highlightedElement.value.scrollIntoView()
+  },
+
+  // eslint-disable-next-line no-useless-assignment
+  keyScroll = (d: number) => {
     if (isOpen.value) {
       highlightedElement.value?.classList.remove('highlighted')
-      const newIndex = wrap(optionsRef.value.indexOf(highlightedElement.value), d)
-      highlightedElement.value = optionsRef.value[newIndex]
-      highlightedElement.value.classList.add('highlighted')
-      highlightedElement.value.scrollIntoView()
+      const oldIndex = getHighlightedIndex()
+      if (oldIndex !== null) {
+        setHighlighted(wrap(oldIndex, d))
+      }
     }
     else {
+      /* Edge case - nothing selected */
+      selectedIndex ??= (d > 0 ? -1 : 0)
       setValue(wrap(selectedIndex, d))
     }
   }
@@ -80,13 +104,13 @@ store.inputs[props.name] = ''
     <div
       ref="input"
       class="select"
-      :class="isValid"
+      :class="store.errors[props.name] ? 'invalid' : 'valid'"
       tabindex="0"
-      @blur="onBlur"
+      @blur="e => isOpen = e.relatedTarget === list"
       @click="toggle"
-      @keydown.up="onKeyScroll(-1)"
-      @keydown.down="onKeyScroll(1)"
-      @keydown.enter="isOpen && setValue(optionsRef.indexOf(highlightedElement)); toggle()"
+      @keydown.up="keyScroll(-1)"
+      @keydown.down="keyScroll(1)"
+      @keydown.enter="isOpen && getHighlightedIndex() && setValue(getHighlightedIndex()); toggle()"
       @keydown.esc="isOpen && toggle()"
     >
       {{ store.inputs[props.name] }}
@@ -123,8 +147,8 @@ store.inputs[props.name] = ''
         v-for="(option, i) in options"
         ref="optionsRef"
         :key="i"
-        @mouseover="highlightedElement = optionsRef[i]"
-        :class="{ highlighted: optionsRef?.indexOf(highlightedElement) === i }"
+        :class="{ highlighted: getHighlightedIndex() === i }"
+        @mouseover="highlightedElement = optionsRef?.[i] || null"
         @click="setValue(i)"
       >
         {{ option }}

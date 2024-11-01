@@ -5,6 +5,7 @@ import MyButton from '../components/MyButton.vue'
 import MyForm from '../components/MyForm.vue'
 import MySelect from '../components/MySelect.vue'
 
+// eslint-disable-next-line no-useless-assignment
 const options = [
   '1 Macao',
   '2 Madagascar',
