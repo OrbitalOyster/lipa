@@ -49,12 +49,17 @@ label {
   @apply absolute inset-0 w-6 h-6;
   /* Colors */
   @apply bg-slate-50;
+  /* Animation */
+  @apply transition duration-200 ease-in-out;
+}
+
+.checkmark:hover {
+  @apply hover:border-slate-400;
 }
 
 .checkmark:after {
   @apply absolute hidden content-none;
   content: "";
-
   @apply inset-1.5 w-3 h-3 rounded bg-white;
 }
 

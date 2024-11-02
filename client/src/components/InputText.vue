@@ -79,8 +79,18 @@ store.inputs[props.name] = ''
     @apply border border-slate-300 rounded outline-none;
     /* Colors */
     @apply bg-slate-50;
-    /* On focus */
+    /* Animation */
+    @apply transition duration-200 ease-in-out;
+  }
+
+  /* On focus */
+  input:focus {
     @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+  }
+
+  /* On hover */
+  input:hover {
+    @apply hover:border-slate-400;
   }
 
   label {
@@ -135,5 +145,9 @@ store.inputs[props.name] = ''
 
   .password-toggle {
     @apply w-8 text-slate-500 select-none cursor-pointer;
+  }
+
+  .password-toggle:hover {
+    @apply text-slate-400;
   }
 </style>

@@ -170,10 +170,20 @@ store.inputs[props.name] = ''
     @apply outline-none border border-slate-300 rounded;
     /* Colors */
     @apply bg-slate-50;
-    /* On focus */
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
     /* Misc */
     @apply select-none cursor-pointer;
+    /* Animation */
+    @apply transition duration-200 ease-in-out;
+  }
+
+  /* On focus */
+  .select:focus {
+    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+  }
+
+  /* On hover */
+  .select:hover {
+    @apply hover:border-slate-400;
   }
 
   label {
@@ -240,6 +250,7 @@ store.inputs[props.name] = ''
     @apply bg-slate-50;
     /* Misc */
     @apply overflow-auto;
+    
   }
 
   li {

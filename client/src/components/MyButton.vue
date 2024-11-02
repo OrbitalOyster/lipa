@@ -42,14 +42,25 @@ const props = defineProps({
     @apply outline-none rounded;
     /* Colors */
     @apply bg-emerald-500 text-white;
-    /* On hover */
-    @apply hover:bg-emerald-400 hover:drop-shadow-md;
-    /* On focus */
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
-    /* On active */
-    @apply active:bg-emerald-700;
     /* Misc */
     @apply select-none;
+    /* Animation */
+    @apply transition duration-200 ease-in-out;
+  }
+
+  /* On focus */
+  button:focus {
+    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+  }
+
+  /* On hover */
+  button:hover {
+    @apply hover:bg-emerald-400 hover:drop-shadow-md;
+  }
+
+    /* On active */
+  button:active {
+    @apply active:drop-shadow-none active:bg-emerald-700;
   }
 
   button:disabled {
