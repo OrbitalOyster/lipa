@@ -248,7 +248,7 @@ store.inputs[props.name] = ''
     @apply bg-slate-50;
     /* Misc */
     @apply overflow-auto;
-    
+
   }
 
   li {

@@ -63,6 +63,7 @@ const router = useRouter(),
             store-id="loginForm"
             :checks="['required']"
             placeholder="Имя пользователя"
+            :disabled
             autofocus
           />
           <InputText
@@ -71,6 +72,7 @@ const router = useRouter(),
             store-id="loginForm"
             :checks="['required']"
             placeholder="Пароль"
+            :disabled
             password
           />
           <div class="flex justify-between items-center pt-4">

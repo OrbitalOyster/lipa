@@ -77,6 +77,7 @@ const options = [
 
         <MyButton
           title="Готово"
+          icon="floppy-disk"
           submit
         />
       </MyForm>

@@ -41,7 +41,7 @@ const props = defineProps({
     /* Border */
     @apply outline-none rounded;
     /* Colors */
-    @apply bg-emerald-500 text-white;
+    @apply bg-emerald-500 text-white text-lg;
     /* Misc */
     @apply select-none;
     /* Animation */
@@ -61,6 +61,7 @@ const props = defineProps({
     /* On active */
   button:active {
     @apply active:drop-shadow-none active:bg-emerald-700;
+    @apply scale-95;
   }
 
   button:disabled {

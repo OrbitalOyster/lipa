@@ -41,7 +41,7 @@ const props = defineProps({
   isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
 
 store.checks[props.name] = props.checks
-store.inputs[props.name] = props.value 
+store.inputs[props.name] = props.value
 </script>
 
 <template>
