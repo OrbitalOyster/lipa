@@ -7,6 +7,10 @@ const props = defineProps({
       type: String,
       required: true,
     },
+    value: {
+      type: String,
+      default: '',
+    },
     storeId: {
       type: String,
       required: true,
@@ -17,6 +21,7 @@ const props = defineProps({
     },
     autofocus: Boolean,
     password: Boolean,
+    disabled: Boolean,
     placeholder: {
       type: String,
       default: null,
@@ -36,7 +41,7 @@ const props = defineProps({
   isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
 
 store.checks[props.name] = props.checks
-store.inputs[props.name] = ''
+store.inputs[props.name] = props.value 
 </script>
 
 <template>
@@ -47,6 +52,7 @@ store.inputs[props.name] = ''
       :name
       :autofocus
       :placeholder
+      :disabled
       :type
       @input="store.validate"
     >
@@ -93,6 +99,13 @@ store.inputs[props.name] = ''
     @apply hover:border-slate-400;
   }
 
+  input:disabled {
+    @apply hover:border-slate-300;
+    /* Colors */
+    @apply bg-slate-200 text-slate-400;
+    @apply cursor-not-allowed;
+  }
+
   label {
     /* Position */
     @apply absolute top-4 left-4;
@@ -122,11 +135,11 @@ store.inputs[props.name] = ''
     transform: translateY(calc(-50%)) scale(.8);
   }
 
-  .validated input.invalid {
+  .validated input.invalid:not(:disabled) {
     @apply border-red-300 bg-pink-100;
   }
 
-  .validated input.valid {
+  .validated input.valid:not(:disabled) {
     @apply border-green-300 bg-green-100;
   }
 

@@ -67,6 +67,8 @@ const props = defineProps({
     /* Colors */
     @apply bg-zinc-200 text-slate-400;
     /* On hover */
-    @apply hover:drop-shadow-none;
+    @apply hover:drop-shadow-none hover:bg-zinc-200;
+
+    @apply cursor-not-allowed;
   }
 </style>

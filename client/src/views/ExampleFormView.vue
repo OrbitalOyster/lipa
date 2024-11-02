@@ -60,6 +60,12 @@ const options = [
           name="sampleInput3"
           store-id="mySampleForm"
         />
+        <InputText
+          name="disabledInput"
+          disabled
+          value="Disabled input"
+          store-id="mySampleForm"
+        />
 
         <MySelect
           name="selectInput1"

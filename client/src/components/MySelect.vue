@@ -85,9 +85,7 @@ const props = defineProps({
     if (isOpen.value) {
       highlightedElement.value?.classList.remove('highlighted')
       const oldIndex = getHighlightedIndex()
-      if (oldIndex !== null) {
-        setHighlighted(wrap(oldIndex, d))
-      }
+      setHighlighted(wrap(oldIndex ?? (d > 0 ? -1 : 0), d))
     }
     else {
       /* Edge case - nothing selected */
@@ -112,7 +110,7 @@ store.inputs[props.name] = ''
       @click="toggle"
       @keydown.up="keyScroll(-1)"
       @keydown.down="keyScroll(1)"
-      @keydown.enter="isOpen && getHighlightedIndex() && setValue(getHighlightedIndex()); toggle()"
+      @keydown.enter="isOpen && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
       @keydown.esc="isOpen && toggle()"
     >
       {{ store.inputs[props.name] }}
