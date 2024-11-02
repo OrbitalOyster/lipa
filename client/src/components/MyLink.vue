@@ -1,39 +1,29 @@
 <script setup lang="ts">
-const props = defineProps({
-    title: {
-      type: String,
-      default: 'INSERT TITLE',
-    },
-    icon: {
-      type: String,
-      default: null,
-    },
-    submit: Boolean,
-    loading: Boolean,
-  }),
-  // eslint-disable-next-line no-useless-assignment
-  type = props.submit ? 'submit' : 'button'
+defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
+  to: {
+    type: String,
+    default: '/',
+  },
+})
 </script>
 
 <template>
-  <button :type>
-    <div>
+  <RouterLink
+    v-slot="{ navigate }"
+    :to
+    custom
+  >
+    <button
+      role="link"
+      @click="navigate"
+    >
       {{ title }}
-      <span class="pl-2">
-        <font-awesome-icon
-          v-if="icon && !loading"
-          :icon="['fas', icon]"
-          size="lg"
-        />
-        <font-awesome-icon
-          v-if="loading"
-          class="animate-spin"
-          :icon="['fas', 'spinner']"
-          size="lg"
-        />
-      </span>
-    </div>
-  </button>
+    </button>
+  </RouterLink>
 </template>
 
 <style scoped>

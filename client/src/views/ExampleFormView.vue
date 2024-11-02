@@ -2,7 +2,9 @@
 
 import InputText from '../components/InputText.vue'
 import MyButton from '../components/MyButton.vue'
+import MyCard from '../components/MyCard.vue'
 import MyForm from '../components/MyForm.vue'
+import MyLink from '../components/MyLink.vue'
 import MySelect from '../components/MySelect.vue'
 
 // eslint-disable-next-line no-useless-assignment
@@ -33,11 +35,13 @@ const options = [
 
 <template>
   <div class="flex w-screen h-screen items-center justify-center">
-    <div class="border bg-sky-100 w-1/2 h-1/2 p-3">
+    <MyCard
+      title="Example form"
+      class="w-1/3"
+    >
       <MyForm
         id="mySampleForm"
         class="space-y-2"
-        @submit="e => console.log('YAY', e)"
       >
         <InputText
           name="from"
@@ -75,16 +79,18 @@ const options = [
           :options
         />
 
-        <MyButton
-          title="Готово"
-          icon="floppy-disk"
-          submit
-        />
+        <div class="space-x-2">
+          <MyButton
+            title="Готово"
+            icon="floppy-disk"
+            submit
+          />
+          <MyLink
+            to="/"
+            title="На главную"
+          />
+        </div>
       </MyForm>
-
-      <RouterLink to="/">
-        Back
-      </RouterLink>
-    </div>
+    </MyCard>
   </div>
 </template>

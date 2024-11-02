@@ -36,7 +36,6 @@ defineExpose({ shake })
 <template>
   <main
     ref="main"
-    class="p-4 space-y-4"
   >
     <header>
       <img
@@ -56,6 +55,8 @@ defineExpose({ shake })
 
 <style scoped>
   main {
+    /* Sizing */
+    @apply p-4 space-y-4;
     /* Border */
     @apply border border-slate-300 rounded;
     /* Colors */
