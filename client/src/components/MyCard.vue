@@ -77,6 +77,6 @@ defineExpose({ shake })
 
   /* Icon */
   img {
-    @apply float-right w-14 h-14;
+    @apply float-right w-16 h-16 rounded-full;
   }
 </style>

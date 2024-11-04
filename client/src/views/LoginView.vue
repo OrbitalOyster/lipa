@@ -51,7 +51,7 @@ const router = useRouter(),
         ref="mainCard"
         title="Lipa"
         subtitle="Последний шанс снять бахилы"
-        icon="icon.svg"
+        icon="goose.png"
       >
         <MyForm
           id="loginForm"

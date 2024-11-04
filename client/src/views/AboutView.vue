@@ -5,20 +5,20 @@ import MyButton from '../components/MyButton.vue'
 <template>
   <main>
 
-    <div class="flex flex-col items-center justify-center w-screen h-screen bg-white/50 fixed backdrop-blur-sm">
-      <div class="flex bg-white p-2 border rounded">
-        <div>
-          <p> Are you sure you want to log out?</p>
+    <div class="flex items-center justify-center w-screen h-screen bg-white/50 fixed backdrop-blur-sm">
+      <div class="flex flex-col bg-white p-3 border border-slate-300 rounded drop-shadow">
+        <div class="flex flex-row items-center">
           <font-awesome-icon
-            class="text-sky-500"
-            :icon="['fas', 'circle-info']"
-            size="2x"
+            class="text-amber-500 p-4"
+            :icon="['fas', 'triangle-exclamation']"
+            size="3x"
           />
-          <footer class="flex w-full space-x-2">
-            <MyButton title="Yes"/>
-            <MyButton title="No"/>
-          </footer>
+          <p class="p-1"> Are you sure you want to log out?</p>
         </div>
+        <footer class="flex justify-end pt-3 space-x-2 border-t">
+          <MyButton title="Yes" icon="check"/>
+          <MyButton title="No" icon="multiply"/>
+        </footer>
       </div>
     </div>
 
