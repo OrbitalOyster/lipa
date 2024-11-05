@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
 const props = defineProps({
     title: {
       type: String,
@@ -13,10 +14,16 @@ const props = defineProps({
   }),
   // eslint-disable-next-line no-useless-assignment
   type = props.submit ? 'submit' : 'button'
+
+  const button = useTemplateRef('button')
+  const focus = () => button.value.focus()
+  const blur = () => button.value.blur()
+  defineExpose({ focus, blur })
+
 </script>
 
 <template>
-  <button :type>
+  <button ref="button" :type>
     <div>
       {{ title }}
       <span class="pl-2">
