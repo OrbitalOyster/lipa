@@ -13,17 +13,29 @@ const props = defineProps({
     loading: Boolean,
   }),
   // eslint-disable-next-line no-useless-assignment
-  type = props.submit ? 'submit' : 'button'
-
-  const button = useTemplateRef('button')
-  const focus = () => button.value.focus()
-  const blur = () => button.value.blur()
-  defineExpose({ focus, blur })
+  type = props.submit ? 'submit' : 'button',
+  button = useTemplateRef<HTMLElement>('button'),
+  focus = () => {
+    if (!button.value) {
+      throw new Error('Major screwup')
+    }
+    button.value.focus()
+  },
+  blur = () => {
+    if (!button.value) {
+      throw new Error('Major screwup')
+    }
+    button.value.blur()
+  }
+defineExpose({ focus, blur })
 
 </script>
 
 <template>
-  <button ref="button" :type>
+  <button
+    ref="button"
+    :type
+  >
     <div>
       {{ title }}
       <span class="pl-2">
