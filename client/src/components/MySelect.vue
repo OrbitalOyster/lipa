@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, nextTick, ref, useTemplateRef } from 'vue'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 let selectedIndex: null | number = null
@@ -28,9 +28,9 @@ const props = defineProps({
   }),
   store = useFormStore(props.storeId),
   // eslint-disable-next-line no-useless-assignment
-  input: Ref<HTMLElement | null> = useTemplateRef('input'),
+  input = useTemplateRef<HTMLElement>('input'),
   // eslint-disable-next-line no-useless-assignment
-  list: Ref<HTMLElement | null> = useTemplateRef('list'),
+  list = useTemplateRef<HTMLElement>('list'),
   optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
   highlightedElement = ref<HTMLElement | null>(null),
   isOpen = ref(false),

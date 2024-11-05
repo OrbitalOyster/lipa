@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import { Ref, useTemplateRef } from 'vue'
 import { sleep } from '../utils.ts'
+import { useTemplateRef } from 'vue'
 
 defineProps({
   title: {
@@ -18,7 +18,7 @@ defineProps({
   },
 })
 
-const main: Ref<HTMLElement | null> = useTemplateRef('main'),
+const main = useTemplateRef<HTMLElement>('main'),
   shakeTime = 250,
   shake = async () => {
     if (!main.value) {
