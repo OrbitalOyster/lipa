@@ -58,7 +58,7 @@ defineExpose({ focus, blur })
 <style scoped>
   button {
     /* Sizing */
-    @apply p-2 px-6;
+    @apply h-12 p-2 px-6;
     /* Border */
     @apply outline-none rounded;
     /* Colors */

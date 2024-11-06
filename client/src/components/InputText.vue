@@ -80,7 +80,7 @@ store.inputs[props.name] = props.value
 <style scoped>
   input {
     /* Sizing */
-    @apply w-full p-2 pl-4;
+    @apply w-full h-14 p-2 pl-4;
     /* Border */
     @apply border border-slate-300 rounded outline-none;
     /* Colors */
