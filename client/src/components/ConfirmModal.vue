@@ -30,8 +30,8 @@ defineExpose({ show })
 
 <template>
   <Teleport to="#modals">
-    <div
-      :class="{ root: true, 'opacity-0': !isActive, 'opacity-100': isActive, 'pointer-events-none': !isActive }"
+    <main
+      :class="{ 'opacity-0': !isActive, 'opacity-100': isActive, 'pointer-events-none': !isActive }"
     >
       <div
         class="backdrop"
@@ -39,11 +39,11 @@ defineExpose({ show })
       >
         <div
           tabindex="0"
-          :class="{ card: true }"
+          class="card"
           @click.stop
           @keyup.esc="hide"
         >
-          <div class="flex flex-row items-center">
+          <div class="flex flex-row items-center pb-2">
             <font-awesome-icon
               class="text-amber-500 p-4"
               :icon="['fas', 'triangle-exclamation']"
@@ -53,7 +53,7 @@ defineExpose({ show })
               {{ title }}
             </p>
           </div>
-          <footer class="flex justify-end pt-3 space-x-2 border-t">
+          <footer>
             <MyButton
               ref="okButton"
               title="Ok"
@@ -68,12 +68,12 @@ defineExpose({ show })
           </footer>
         </div>
       </div>
-    </div>
+    </main>
   </Teleport>
 </template>
 
 <style scoped>
-  .root {
+  main {
     @apply z-50 absolute;
     @apply duration-200;
   }
@@ -84,5 +84,9 @@ defineExpose({ show })
 
   .card {
     @apply outline-none flex flex-col bg-white p-3 border border-slate-300 rounded drop-shadow;
+  }
+
+  footer {
+    @apply flex justify-end pt-3 space-x-2 border-t;
   }
 </style>

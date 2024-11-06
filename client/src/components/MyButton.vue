@@ -38,7 +38,7 @@ defineExpose({ focus, blur })
   >
     <div>
       {{ title }}
-      <span class="pl-2">
+      <span class="pl-2" v-if="icon || loading">
         <font-awesome-icon
           v-if="icon && !loading"
           :icon="['fas', icon]"
@@ -58,7 +58,7 @@ defineExpose({ focus, blur })
 <style scoped>
   button {
     /* Sizing */
-    @apply p-3 px-6;
+    @apply p-2 px-6;
     /* Border */
     @apply outline-none rounded;
     /* Colors */
