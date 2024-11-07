@@ -1,25 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-const width = ref(300)
+  import MainDashboard from '../components/MainDashboard.vue'
+  import { ref } from 'vue'
+  import MyAccordion from '../components/MyAccordion.vue'
+  import LoremIpsum from '../components/LoremIpsum.vue'
+
+  const slots = [
+    {title: "Организации", icon: 'hospital'},
+    {title: "Формы", icon: 'clipboard'},
+    {title: "Статусы", icon: 'pencil'}
+  ]
+
 </script>
 
 <template>
-  <div>
-    <div class="switch-button">
-      <font-awesome-icon
-        :icon="['fas', 'ellipsis-vertical']"
-        size="2x"
-      />
-    </div>
-    <div class="bg-rose-400 fixed left-8 h-screen"> 
-      <p>Hello</p>
-    </div>
-  </div>
+  <main>
+    <MyAccordion class="h-full" :slots>
+      <template #Организации>
+        <p><LoremIpsum /></p>
+      </template>
+      <template #Формы>
+        <p>Bar</p>
+      </template>
+    </MyAccordion>
+ </main>
 </template>
 
 <style scoped>
-  .switch-button {
-    @apply fixed top-1/2 text-slate-600 p-3 cursor-pointer select-none;
-    @apply bg-green-100;
+  main {
+    @apply w-[32rem] fixed top-0 left-8 z-10 h-screen pt-16 pb-6 pr-2;
   }
 </style>

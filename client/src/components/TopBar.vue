@@ -1,6 +1,6 @@
 <template>
-  <main class="flex items-center justify-between bg-indigo-200/50 h-16">
-    <div class="flex items-center space-x-2">
+  <main>
+    <div class="flex items-center space-x-3">
       <img class="rounded-full w-12 h-12"
         src="/goose.png"
       >
@@ -23,11 +23,12 @@
 
 <style scoped>
   main {
-    @apply px-4 py-2;
+    @apply fixed w-full px-8 py-2 h-16 top-0 z-50;
+    @apply flex items-center justify-between backdrop-blur;
   }
 
   a {
-    @apply text-3xl font-bold text-slate-600 underline;
+    @apply text-3xl font-bold text-slate-600 underline outline-none;
   }
 
   h1 {

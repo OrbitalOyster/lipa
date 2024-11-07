@@ -20,33 +20,29 @@ const sidebarOut = ref(true)
 </script>
 
 <template>
-
-<nav class="fixed top-0 z-50 w-full bg-pink-300">
-  <TopBar />
-</nav>
-
-<aside :class="{ 'w-80': sidebarOut, 'w-0': !sidebarOut }">
-   <div class="h-full overflow-y-auto">
-     <MainDashboard />
-   </div>
-</aside>
-
-<div class="main" :class="{ 'left-80': sidebarOut, 'left-0': !sidebarOut }">
-  <MyButton title="toggle" @click="sidebarOut=!sidebarOut"/>
-  <MainDashboard />
-</div>
-
+  <main>
+    <TopBar />
+    <font-awesome-icon
+      :icon="['fas', 'ellipsis-vertical']"
+      size="2x"
+      class="switch-button" @click="sidebarOut=!sidebarOut"
+    />
+    <SidePanel />
+    <MainDashboard class="main-dashboard" :class="{ 'left-[34rem]': sidebarOut, 'left-[2rem]': !sidebarOut }"/>
+  </main>
 </template>
 
 <style scoped>
-  aside {
-    @apply fixed top-0 left-0 z-10 h-screen pt-16 bg-blue-200;
-    @apply transition-all duration-100;
+  .switch-button {
+    @apply fixed top-1/2 text-slate-600 p-3 cursor-pointer select-none;
   }
 
-  .main {
-    @apply absolute right-0 z-30 pt-16 bg-green-200 overflow-y-auto;
-    /* @apply pt-16 bg-green-200; */
-    @apply transition-all duration-100;
+  .switch-button:hover {
+    @apply text-slate-500;
+  }
+
+  .main-dashboard {
+    @apply absolute right-[2rem] z-30 pt-16 overflow-y-auto;
+    @apply transition-all duration-300;
   }
 </style>
