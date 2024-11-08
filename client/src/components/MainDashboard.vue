@@ -1,18 +1,23 @@
 <script setup lang="ts">
-  import LoremIpsum from '../components/LoremIpsum.vue'
-  import MyCard from '../components/MyCard.vue'
+  import MyTabs from '../components/MyTabs.vue'
+  import MyButton from '../components/MyButton.vue'
+
+  const slots = [
+    {title: "Первичные_отчёты", icon: 'hospital'},
+    {title: "Сводные_отчёты", icon: 'clipboard'},
+  ]
 </script>
 
 <template>
-  <main>
-    <MyCard>
-      <p><LoremIpsum /></p>
-    </MyCard>
-  </main>
+  <MyTabs :slots>
+    <template #toolbar>
+      <MyButton icon="fa-plus" />
+    </template>
+    <template #Первичные_отчёты>
+      <p>Foo</p>
+    </template>
+    <template #Сводные_отчёты>
+      <p>Bar</p>
+    </template>
+  </MyTabs>
 </template>
-
-<style scoped>
-  main {
-     
-  }
-</style>

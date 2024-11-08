@@ -8,6 +8,8 @@
 
 body {
   font-family: "Exo2";
-  @apply bg-slate-200; 
+  /* background-color: #f6f2f0; */
+  background-color: #f6f2f0;
+  /* @apply bg-stone-100; */
   @apply text-slate-800;
 }

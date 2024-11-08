@@ -3,7 +3,7 @@ import { useTemplateRef } from 'vue'
 const props = defineProps({
     title: {
       type: String,
-      default: 'INSERT TITLE',
+      default: '',
     },
     icon: {
       type: String,
@@ -42,13 +42,13 @@ defineExpose({ focus, blur })
         <font-awesome-icon
           v-if="icon && !loading"
           :icon="['fas', icon]"
-          size="lg"
+          size="xl"
         />
         <font-awesome-icon
           v-if="loading"
           class="animate-spin"
           :icon="['fas', 'spinner']"
-          size="lg"
+          size="xl"
         />
       </span>
     </div>
