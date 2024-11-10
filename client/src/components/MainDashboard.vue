@@ -3,6 +3,7 @@
   import MyButton from '../components/MyButton.vue'
 
   const slots = [
+    {title: "Исходники", icon: 'file-excel'},
     {title: "Первичные_отчёты", icon: 'hospital'},
     {title: "Сводные_отчёты", icon: 'clipboard'},
   ]
@@ -12,6 +13,9 @@
   <MyTabs :slots>
     <template #toolbar>
       <MyButton icon="fa-plus" />
+    </template>
+    <template #Исходники>
+      <p>Bar</p>
     </template>
     <template #Первичные_отчёты>
       <p>Foo</p>

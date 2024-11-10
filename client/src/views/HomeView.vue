@@ -42,7 +42,7 @@ const sidebarOut = ref(true)
   }
 
   .main-dashboard {
-    @apply absolute right-[2rem] z-30 pt-16 overflow-y-auto;
+    @apply absolute right-[2rem] z-30 pt-20 overflow-y-auto;
     @apply transition-all duration-300;
   }
 </style>

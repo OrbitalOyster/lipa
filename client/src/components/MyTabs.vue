@@ -11,7 +11,7 @@
 <template>
   <main>
 
-    <div class="flex justify-between p-2 border rounded bg-white overflow-x-auto">
+    <div class="flex justify-between overflow-x-auto">
       <ul>
         <li v-for="slot in slots" :key="slot.title">
           <h1 @click="selected = slot.title" :class="{'underline': slot.title === selected}">
@@ -42,8 +42,7 @@
 
   li {
     @apply bg-white;
-    @apply outline-none border border-slate-300 rounded;
-    @apply drop-shadow;
+    @apply outline-none border-t rounded-t border-l border-r border-slate-300;
     @apply transition-all duration-100;
   }
 

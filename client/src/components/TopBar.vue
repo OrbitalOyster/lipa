@@ -23,7 +23,7 @@
 
 <style scoped>
   main {
-    @apply fixed w-full px-8 py-2 h-16 top-0 z-50;
+    @apply fixed w-full px-8 py-4 h-20 top-0 z-50;
     @apply flex items-center justify-between backdrop-blur;
   }
 

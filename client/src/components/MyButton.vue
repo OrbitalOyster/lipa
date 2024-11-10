@@ -36,9 +36,11 @@ defineExpose({ focus, blur })
     ref="button"
     :type
   >
-    <div>
-      {{ title }}
-      <span class="pl-2" v-if="icon || loading">
+    <div class="space-x-2 whitespace-nowrap">
+      <span v-if="title">
+        {{ title }}
+      </span>
+      <span v-if="icon || loading">
         <font-awesome-icon
           v-if="icon && !loading"
           :icon="['fas', icon]"
@@ -57,8 +59,10 @@ defineExpose({ focus, blur })
 
 <style scoped>
   button {
+    /* Flexbox */
+    @apply inline-flex items-center;
     /* Sizing */
-    @apply h-12 p-2 px-6;
+    @apply h-12 p-3;
     /* Border */
     @apply outline-none rounded;
     /* Colors */
