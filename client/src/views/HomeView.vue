@@ -27,7 +27,7 @@ const sidebarOut = ref(true)
       size="2x"
       class="switch-button" @click="sidebarOut=!sidebarOut"
     />
-    <SidePanel />
+    <SidePanel class="side-panel "/>
     <MainDashboard class="main-dashboard" :class="{ 'left-[34rem]': sidebarOut, 'left-[2rem]': !sidebarOut }"/>
   </main>
 </template>
@@ -41,8 +41,15 @@ const sidebarOut = ref(true)
     @apply text-slate-500;
   }
 
+  .side-panel {
+    /* Sizing */
+    @apply w-[32rem] h-full;
+    /* Position */
+    @apply fixed left-8 pt-36 pb-8 pr-2;
+  }
+
   .main-dashboard {
-    @apply absolute right-[2rem] z-30 pt-20 overflow-y-auto;
+    @apply fixed top-0 pb-8 right-[2rem] z-30 pt-20 overflow-y-auto;
     @apply transition-all duration-300;
   }
 </style>

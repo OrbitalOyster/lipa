@@ -26,7 +26,7 @@
 
 <style scoped>
   ul {
-    @apply flex flex-col space-y-2;
+    @apply h-full flex flex-col space-y-2;
   }
 
   li {
@@ -46,6 +46,7 @@
   }
 
   .slot-container {
+    /* Substract toggler height */
     height: calc(100% - 3rem);
   }
 </style>

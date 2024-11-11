@@ -14,7 +14,7 @@
 
 <template>
   <main>
-    <MyAccordion class="h-full" :slots>
+    <MyAccordion :slots>
       <template #Организации>
         <p><LoremIpsum /></p>
       </template>
@@ -22,11 +22,5 @@
         <p>Bar</p>
       </template>
     </MyAccordion>
- </main>
+  </main>
 </template>
-
-<style scoped>
-  main {
-    @apply w-[32rem] fixed top-0 left-8 z-10 h-screen pt-20 pb-6 pr-2;
-  }
-</style>

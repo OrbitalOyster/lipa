@@ -10,23 +10,18 @@
 
 <template>
   <main>
-
-    <div class="flex justify-between overflow-x-auto">
-      <ul>
-        <li v-for="slot in slots" :key="slot.title">
-          <h1 @click="selected = slot.title" :class="{'underline': slot.title === selected}">
-            <span class="inline-block w-6"><font-awesome-icon :icon="['fas', slot.icon]" /></span>
-            {{slot.title}}
-          </h1>
-        </li>
-      </ul>
-      <slot name="toolbar"/> 
-    </div>
-
-    <div class="tab" v-for="slot in slots" :key="slot.title" :class="{hidden: slot.title !== selected}">
+    <ul>
+      <li v-for="slot in slots" :key="slot.title" :class="{'selected': slot.title === selected}">
+        <h1 class="space-x-2"@click="selected = slot.title">
+          <span class="inline-block text-center"><font-awesome-icon :icon="['fas', slot.icon]" size="lg" /></span>
+          <span>{{slot.title}}</span>
+        </h1>
+        <div class="curtain"></div>
+      </li>
+    </ul>
+    <div class="tab pt-2" v-for="slot in slots" :key="slot.title" :class="{hidden: slot.title !== selected}">
       <slot :name="slot.title"/>
     </div>
-
   </main>
 </template>
 
@@ -35,22 +30,35 @@
     @apply flex flex-row;
   }
 
+  li {
+    @apply relative px-2 py-2 pb-4 top-3;
+    @apply bg-white text-slate-400;
+    @apply outline-none border-t rounded-t border-l border-r border-slate-200;
+    @apply transition-all duration-100;
+  }
+
+  li.selected {
+    @apply top-0;
+    @apply text-slate-600 border-slate-300;
+  }
+
   h1 {
-    @apply cursor-pointer select-none p-2 text-slate-600;
+    @apply cursor-pointer select-none;
     @apply underline-offset-4 whitespace-nowrap;
   }
 
-  li {
+  .curtain {
     @apply bg-white;
-    @apply outline-none border-t rounded-t border-l border-r border-slate-300;
-    @apply transition-all duration-100;
+    @apply absolute;
+    @apply w-full h-1 -bottom-0.5 left-0;
+    @apply z-50
   }
 
   .tab {
     /* Sizing */
-    @apply p-4 space-y-4;
+    @apply space-y-4 h-full;
     /* Border */
-    @apply border border-slate-300 rounded;
+    @apply border border-slate-300 rounded rounded-tl-none;
     /* Colors */
     @apply bg-white;
     /* Effects */
