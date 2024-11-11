@@ -7,7 +7,7 @@ interface ISlot {
 }
 
 const props = defineProps<{
-    slots: ISlot[]
+    slots: Array<ISlot>
   }>(),
 
   // eslint-disable-next-line no-useless-assignment
