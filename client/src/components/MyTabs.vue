@@ -1,26 +1,47 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import LoremIpsum from '../components/LoremIpsum.vue'
-  const props = defineProps({
-    slots: Array
-  }); 
+import { ref } from 'vue'
 
-  const selected = ref(props.slots[0].title)
+interface ISlot {
+  title: string
+  icon: string
+}
+
+const props = defineProps<{
+    slots: ISlot[]
+  }>(),
+
+  // eslint-disable-next-line no-useless-assignment
+  selected = ref(props.slots[0].title)
 </script>
 
 <template>
   <main>
     <ul>
-      <li v-for="slot in slots" :key="slot.title" :class="{'selected': slot.title === selected}">
-        <h1 class="space-x-2"@click="selected = slot.title">
-          <span class="inline-block text-center"><font-awesome-icon :icon="['fas', slot.icon]" size="lg" /></span>
-          <span>{{slot.title}}</span>
+      <li
+        v-for="slot in slots"
+        :key="slot.title"
+        :class="{'selected': slot.title === selected}"
+      >
+        <h1
+          class="space-x-2"
+          @click="selected = slot.title"
+        >
+          <span class="inline-block text-center"><font-awesome-icon
+            :icon="['fas', slot.icon]"
+            size="lg"
+          /></span>
+          <span>{{ slot.title }}</span>
         </h1>
-        <div class="curtain"></div>
+        <div class="curtain" />
       </li>
     </ul>
-    <div class="tab pt-2" v-for="slot in slots" :key="slot.title" :class="{hidden: slot.title !== selected}">
-      <slot :name="slot.title"/>
+    <div
+      v-for="slot in slots"
+      :key="slot.title"
+      class="tab pt-2"
+      :class="{hidden: slot.title !== selected}"
+    >
+      <slot :name="slot.title" />
     </div>
   </main>
 </template>

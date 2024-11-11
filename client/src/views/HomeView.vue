@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import { useLoginStore } from '../stores/loginStore.ts'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import TopBar from '../components/TopBar.vue'
-import SidePanel from '../components/SidePanel.vue'
 import MainDashboard from '../components/MainDashboard.vue'
-import MyButton from '../components/MyButton.vue'
+import SidePanel from '../components/SidePanel.vue'
+import TopBar from '../components/TopBar.vue'
+import { ref } from 'vue'
+import { useLoginStore } from '../stores/loginStore.ts'
+import { useRouter } from 'vue-router'
 
 const loginStore = useLoginStore(),
   router = useRouter(),
-  // eslint-disable-next-line no-useless-assignment
+
   logout = async () => {
     await loginStore.logout()
     await router.push('/login')
-  }
+  },
 
-const sidebarOut = ref(true)
-
+  // eslint-disable-next-line no-useless-assignment
+  sidepanel = ref(true)
 </script>
 
 <template>
@@ -25,10 +24,14 @@ const sidebarOut = ref(true)
     <font-awesome-icon
       :icon="['fas', 'ellipsis-vertical']"
       size="2x"
-      class="switch-button" @click="sidebarOut=!sidebarOut"
+      class="switch-button"
+      @click="sidepanel=!sidepanel"
     />
-    <SidePanel class="side-panel "/>
-    <MainDashboard class="main-dashboard" :class="{ 'left-[34rem]': sidebarOut, 'left-[2rem]': !sidebarOut }"/>
+    <SidePanel class="side-panel " />
+    <MainDashboard
+      class="main-dashboard"
+      :class="{ 'left-[34rem]': sidepanel, 'left-[2rem]': !sidepanel }"
+    />
   </main>
 </template>
 
@@ -50,6 +53,6 @@ const sidebarOut = ref(true)
 
   .main-dashboard {
     @apply fixed top-0 pb-8 right-[2rem] z-30 pt-20 overflow-y-auto;
-    @apply transition-all duration-300;
+    @apply transition-all duration-100;
   }
 </style>

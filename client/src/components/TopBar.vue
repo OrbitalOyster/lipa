@@ -1,7 +1,8 @@
 <template>
   <main>
     <div class="flex items-center space-x-3">
-      <img class="rounded-full w-12 h-12"
+      <img
+        class="rounded-full w-12 h-12"
         src="/goose.png"
       >
       <RouterLink to="/">

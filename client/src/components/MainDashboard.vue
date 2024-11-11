@@ -1,17 +1,17 @@
 <script setup lang="ts">
-  import MyTabs from '../components/MyTabs.vue'
-  import MyButton from '../components/MyButton.vue'
+import MyTabs from '../components/MyTabs.vue'
 
-  const slots = [
-    {title: "Исходники", icon: 'file-excel'},
-    {title: "Первичные_отчёты", icon: 'hospital'},
-    {title: "Сводные_отчёты", icon: 'clipboard'},
-  ]
+// eslint-disable-next-line no-useless-assignment
+const slots = [
+  { title: 'Исходники', icon: 'file-excel' },
+  { title: 'Первичные_отчёты', icon: 'clipboard' },
+  { title: 'Сводные_отчёты', icon: 'clipboard-list' },
+]
 </script>
 
 <template>
   <main>
-    <MyTabs :slots >
+    <MyTabs :slots>
       <template #Исходники>
         <p>Bar</p>
       </template>

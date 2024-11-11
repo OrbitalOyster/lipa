@@ -1,24 +1,47 @@
 <script setup>
-  import { ref } from 'vue'
-  defineProps({
-    slots: Array
-  }); 
+import { ref } from 'vue'
+defineProps({
+  slots: {
+    type: Array,
+    default: () => [],
+  },
+})
 
-  const selected = ref('')
+// eslint-disable-next-line no-useless-assignment
+const selected = ref('')
 </script>
 
 <template>
   <ul>
-    <li v-for="slot in slots" :key="slot.title" :class="{grow: slot.title === selected}">
-      <div class="toggle" @click="selected = selected === slot.title ? '' : slot.title">
+    <li
+      v-for="slot in slots"
+      :key="slot.title"
+      :class="{grow: slot.title === selected}"
+    >
+      <div
+        class="toggle"
+        @click="selected = selected === slot.title ? '' : slot.title"
+      >
         <h1>
-          <span class="inline-block w-12 text-center"><font-awesome-icon :icon="['fas', slot.icon]" size="xl" /></span>
-          {{slot.title}}
+          <span class="inline-block w-12 text-center"><font-awesome-icon
+            :icon="['fas', slot.icon]"
+            size="xl"
+          /></span>
+          {{ slot.title }}
         </h1>
-        <span class="inline-block transition-all" :class="{ 'rotate-180': slot.title === selected}"><font-awesome-icon :icon="['fas', 'chevron-down']" size="lg" /></span>
+        <span
+          class="inline-block transition-all"
+          :class="{ 'rotate-180': slot.title === selected}"
+        ><font-awesome-icon
+          :icon="['fas', 'chevron-down']"
+          size="lg"
+        /></span>
       </div>
-      <div class="slot-container overflow-auto h-full" v-if="slot.title === selected">
-        <slot :name="slot.title"/>
+      <div
+        v-if="slot.title === selected"
+        class="slot-container overflow-auto h-full"
+      >
+        <slot :name="slot.title" />
       </div>
     </li>
   </ul>
