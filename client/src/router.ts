@@ -4,6 +4,7 @@ import ErrorView from './views/ErrorView.vue'
 import ExampleFormView from './views/ExampleFormView.vue'
 import HomeView from './views/HomeView.vue'
 import LoginView from './views/LoginView.vue'
+import TestingGrounds from './views/TestingGrounds.vue'
 import { useLoginStore } from './stores/loginStore.ts'
 
 /* Typings */
@@ -39,6 +40,11 @@ const routes = [{
     name: 'Error',
     path: '/error',
     meta: { title: 'Ошибка' },
+  }, {
+    component: TestingGrounds,
+    name: 'Test',
+    path: '/test',
+    meta: { title: 'Test' },
   },
   ],
   router = createRouter({

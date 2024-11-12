@@ -28,7 +28,6 @@ const props = defineProps({
     button.value.blur()
   }
 defineExpose({ focus, blur })
-
 </script>
 
 <template>
@@ -86,7 +85,7 @@ defineExpose({ focus, blur })
     /* On active */
   button:active {
     @apply active:drop-shadow-none active:bg-emerald-700;
-    @apply scale-95;
+    /* apply scale-95; */
   }
 
   button:disabled {

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
   <main>
     <div class="flex items-center space-x-3">
@@ -13,7 +17,7 @@
       <h1>Главная</h1>
       <h2>Отчёты</h2>
     </div>
-    <span class="button">
+    <span class="button" ref="reference">
       <font-awesome-icon
         :icon="['fas', 'user']"
         size="xl"

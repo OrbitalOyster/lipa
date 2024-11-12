@@ -8,12 +8,10 @@ import { useRouter } from 'vue-router'
 
 const loginStore = useLoginStore(),
   router = useRouter(),
-
   logout = async () => {
     await loginStore.logout()
     await router.push('/login')
   },
-
   // eslint-disable-next-line no-useless-assignment
   sidepanel = ref(true)
 </script>
