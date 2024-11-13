@@ -17,7 +17,10 @@
       <h1>Главная</h1>
       <h2>Отчёты</h2>
     </div>
-    <span class="button" ref="reference">
+    <span
+      ref="reference"
+      class="button"
+    >
       <font-awesome-icon
         :icon="['fas', 'user']"
         size="xl"

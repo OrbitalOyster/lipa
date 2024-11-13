@@ -74,7 +74,7 @@ defineExpose({ focus, blur })
 
   /* On focus */
   button:focus {
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 focus:ring-offset-current;
   }
 
   /* On hover */
