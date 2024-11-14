@@ -9,12 +9,25 @@ import MyPopover from '../components/MyPopover.vue'
     <main class="overflow-auto">
       <h1>Testing grounds</h1>
       <LoremIpsum />
+
+      <!--
       <MyPopover>
         <MyButton title="Button" />
         <template #popover>
           <p>Tooltip</p>
         </template>
       </MyPopover>
+      -->
+
+      <MyPopover placement="top" match-width>
+        <template #popover>
+          <LoremIpsum />
+        </template>
+        <div class="target bg-pink-300 text-center">
+          Target
+        </div>
+      </MyPopover>
+
       <LoremIpsum />
     </main>
   </div>
@@ -22,6 +35,11 @@ import MyPopover from '../components/MyPopover.vue'
 
 <style scoped>
   main {
-    @apply w-1/2 h-1/2 bg-sky-200 p-4;
+    @apply w-2/3 h-full bg-sky-200 p-4;
+  }
+
+  .target {
+    width: 400px;
+    height: 32px;
   }
 </style>

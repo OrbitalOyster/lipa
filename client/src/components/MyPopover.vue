@@ -1,11 +1,48 @@
 <script setup lang="ts">
-import { arrow, autoPlacement, autoUpdate, hide, offset, useFloating } from '@floating-ui/vue'
+import { arrow, autoPlacement, size, flip, autoUpdate, hide, offset, useFloating } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
+
+const props = defineProps({
+  arrow: Boolean,
+  auto: Boolean,
+  matchWidth: Boolean,
+  placement: {
+    type: String,
+    default: 'top',
+  }
+});
+
+const offsetValue = props.arrow ? 16 : 2
+
+if (!props.auto && !props.placement) {
+  console.log(props)
+  throw new Error('Invalid popover props')
+}
+
 const target = ref(null),
   floating = ref(null),
+  elements = {floating: floating.value},
   arrowRef = ref(null),
+  targetWidth = computed(() => target.value?.offsetWidth),
   { floatingStyles, middlewareData } = useFloating(target, floating, {
-    middleware: [offset(16), autoPlacement(), hide(), arrow({ element: arrowRef })],
+    placement: props.placement,
+    middleware: [
+      offset({mainAxis: offsetValue}),
+      props.auto && autoPlacement(),
+      props.auto || flip(),
+      hide(),
+      arrow({ element: arrowRef, padding: 8 }),
+
+    size({
+      apply({elements}) {
+        Object.assign(elements.floating.style, {
+          maxWidth: `${Math.max(0, targetWidth)}px`,
+          maxHeight: `${Math.max(0, 400)}px`,
+        });
+      },
+    }),
+
+    ],
     whileElementsMounted: autoUpdate,
   }),
   arrowStyle = computed(() => {
@@ -28,10 +65,16 @@ const target = ref(null),
     <div
       ref="floating"
       class="floating"
-      :style="[floatingStyles, { display: middlewareData.hide?.referenceHidden ? 'none' : 'block' }]"
-      @click="middlewareData.hide"
+      :style="[
+        floatingStyles, { 
+          display: middlewareData.hide?.referenceHidden ? 'none' : 'block',
+          width: (matchWidth ? `${targetWidth}px` : 'auto'),
+        }
+      ]"
+      @click="console.log(targetWidth)"
     >
       <div
+        v-if="props.arrow"
         ref="arrowRef"
         class="arrow"
         :style="arrowStyle"
@@ -49,8 +92,9 @@ const target = ref(null),
 
 <style scoped>
   .floating {
+    display: none;
     @apply absolute top-0 left-0 px-6 py-3;
-    @apply border border-slate-300 rounded;
+    @apply border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
   }
