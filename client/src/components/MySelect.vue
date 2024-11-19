@@ -6,7 +6,7 @@ import MyPopover from './MyPopover.vue'
 
 let selectedIndex: null | number = null
 
-const popoverRef = useTemplateRef('popover')
+const popover = useTemplateRef('popover')
 
 const props = defineProps({
     name: {
@@ -37,12 +37,10 @@ const props = defineProps({
   list = useTemplateRef<HTMLElement>('list'),
   optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
   highlightedElement = ref<HTMLElement | null>(null),
-  isOpen = ref(false),
 
   // eslint-disable-next-line no-useless-assignment
   toggle = async () => {
-    isOpen.value = !isOpen.value
-    popoverRef.value.toggle()
+    popover.value.toggle()
     await nextTick()
     if (!optionsRef.value) {
       throw new Error('Major screwup')
@@ -87,7 +85,7 @@ const props = defineProps({
 
   // eslint-disable-next-line no-useless-assignment
   keyScroll = (d: number) => {
-    if (isOpen.value) {
+    if (popover.value.active) {
       highlightedElement.value?.classList.remove('highlighted')
       const oldIndex = getHighlightedIndex()
       setHighlighted(wrap(oldIndex ?? (d > 0 ? -1 : 0), d))
@@ -108,38 +106,18 @@ store.inputs[props.name] = ''
 
   <MyPopover ref="popover" placement="bottom" match-width>
 
-      <template #popover>
-      <ul
-        ref="list"
-        tabindex="0"
-        @click="toggle"
-        @focus="input?.focus()"
-      >
-        <li
-          v-for="(option, i) in options"
-          ref="optionsRef"
-          :key="i"
-          :class="{ highlighted: getHighlightedIndex() === i }"
-          @mouseover="highlightedElement = optionsRef?.[i] || null"
-          @click="setValue(i)"
-        >
-          {{ option }}
-        </li>
-      </ul>
-      </template>
-
     <div class="flex flex-col justify-center pb-1 relative">
       <div
         ref="input"
         class="select"
         :class="store.errors[props.name] ? 'invalid' : 'valid'"
         tabindex="0"
-        @blur="e => {console.log(e.relatedTarget); isOpen && e.relatedTarget !== list && toggle()}"
+        @blur="e => popover.active && e.relatedTarget !== list && toggle()"
         @click="toggle"
         @keydown.up="keyScroll(-1)"
         @keydown.down="keyScroll(1)"
-        @keydown.enter="isOpen && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
-        @keydown.esc="isOpen && toggle()"
+        @keydown.enter="popover.active && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
+        @keydown.esc="popover.active && toggle()"
       >
         {{ store.inputs[props.name] }}
       </div>
@@ -163,9 +141,27 @@ store.inputs[props.name] = ''
           class="text-slate-500 cursor-pointer"
         />
       </div>
-        
     </div>
 
+    <template #popover>
+      <ul
+        ref="list"
+        tabindex="0"
+        @click="toggle"
+        @focus="input?.focus()"
+      >
+        <li
+          v-for="(option, i) in options"
+          ref="optionsRef"
+          :key="i"
+          :class="{ highlighted: getHighlightedIndex() === i }"
+          @mouseover="highlightedElement = optionsRef?.[i] || null"
+          @click="setValue(i)"
+        >
+          {{ option }}
+        </li>
+      </ul>
+    </template>
 
   </MyPopover>
 

@@ -13,8 +13,7 @@ const popover = useTemplateRef('popover')
       <h1>Testing grounds</h1>
       <LoremIpsum />
 
-      <div class="w-64 h-12">
-        <MyPopover ref="popover" placement="bottom" match-width>
+        <MyPopover ref="popover" placement="bottom" class="w-64">
           <template #popover>
             <LoremIpsum />
           </template>
@@ -22,7 +21,6 @@ const popover = useTemplateRef('popover')
             Target
           </div>
         </MyPopover>
-      </div>
 
       <LoremIpsum />
     </main>

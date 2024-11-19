@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { arrow, autoPlacement, size, flip, autoUpdate, hide, offset, useFloating } from '@floating-ui/vue'
-import { computed, ref, useSlots, onMounted, useTemplateRef } from 'vue'
+import { computed, ref, useSlots, onMounted, useTemplateRef, nextTick } from 'vue'
 
 const props = defineProps({
   arrow: Boolean,
@@ -18,7 +18,6 @@ const target = ref(null),
   floating = ref(null),
   elements = {floating: floating.value},
   arrowRef = ref(null),
-  targetWidth = computed(() => target.value?.offsetWidth),
   { floatingStyles, middlewareData } = useFloating(target, floating, {
     placement: props.placement,
     middleware: [
@@ -27,10 +26,13 @@ const target = ref(null),
       arrow({ element: arrowRef, padding: 8 }),
 
       size({
-        apply({availableWidth, availableHeight, elements}) {
+        apply({availableWidth, availableHeight, rects, elements}) {
           Object.assign(elements.floating.style, {
-            maxWidth: `${Math.max(64, availableWidth)}px`,
-            maxHeight: `${Math.max(64, availableHeight - 32)}px`,
+            maxWidth: `${Math.max(128, availableWidth)}px`,
+            maxHeight: `${Math.max(128, availableHeight - 32)}px`,
+            minWidth1: `${rects.reference.width}px`,
+            width: `${rects.reference.width}px`,
+            width1: `100px`,
           });
         },
       }),
@@ -52,53 +54,44 @@ const target = ref(null),
         : `${(floating.value?.offsetHeight * (side === 'top') - 9).toString()}px`,
     }
   }),
-  hidden = ref(true),
-  toggle = () => hidden.value = !hidden.value
+  active = ref(false),
 
-defineExpose({ toggle })
+  toggle = () => active.value = !active.value
+
+defineExpose({ toggle, active })
 
 </script>
 
 <template>
   <div ref="target">
-
-
-  <div
-    ref="floating"
-    class="floating bg-yellow-500"
-    :style="[
-      floatingStyles, { 
-        display: (middlewareData.hide?.referenceHidden || hidden) ? 'none' : 'block',
-        width: (matchWidth ? `${targetWidth}px` : '100%'),
-      }
-    ]"
-  >
-
+    <slot />
+    
+    <div
+      ref="floating"
+      class="floating bg-yellow-500"
+      :style="[
+        floatingStyles, { 
+          display: (middlewareData.hide?.referenceHidden || !active) ? 'none' : 'block',
+        }
+      ]"
+    >
     <slot name="popover" />
-
     <div
       v-if="props.arrow"
       ref="arrowRef"
       class="arrow"
       :style="arrowStyle"
     />
+    </div>
 
   </div>
-
-
-
-
-    <slot />
-  </div>
-
-
 
 </template>
 
 <style scoped>
   .floating {
     @apply absolute top-0 left-0;
-    @apply border border-slate-300 rounded overflow-auto;
+    @apply outline-none border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
   }
