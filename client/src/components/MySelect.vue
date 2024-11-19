@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { nextTick, ref, useTemplateRef } from 'vue'
+import { nextTick, ref, useTemplateRef, getCurrentInstance, onMounted } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
+import MyPopover from './MyPopover.vue'
+
 let selectedIndex: null | number = null
+
+const popoverRef = useTemplateRef('popover')
 
 const props = defineProps({
     name: {
@@ -38,6 +42,7 @@ const props = defineProps({
   // eslint-disable-next-line no-useless-assignment
   toggle = async () => {
     isOpen.value = !isOpen.value
+    popoverRef.value.toggle()
     await nextTick()
     if (!optionsRef.value) {
       throw new Error('Major screwup')
@@ -100,61 +105,70 @@ store.inputs[props.name] = ''
 </script>
 
 <template>
-  <div class="flex flex-col justify-center pb-1 relative">
-    <div
-      ref="input"
-      class="select"
-      :class="store.errors[props.name] ? 'invalid' : 'valid'"
-      tabindex="0"
-      @blur="e => isOpen = e.relatedTarget === list"
-      @click="toggle"
-      @keydown.up="keyScroll(-1)"
-      @keydown.down="keyScroll(1)"
-      @keydown.enter="isOpen && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
-      @keydown.esc="isOpen && toggle()"
-    >
-      {{ store.inputs[props.name] }}
-    </div>
 
-    <label>
-      {{ placeholder }}
-    </label>
+  <MyPopover ref="popover" placement="bottom" match-width>
 
-    <div class="input-icons">
-      <font-awesome-icon
-        :icon="['fas', 'triangle-exclamation']"
-        size="xl"
-        class="text-red-400 error-triangle hidden"
-        :title="store.errors[props.name]"
-      />
-    </div>
-    <div class="angle-icon">
-      <font-awesome-icon
-        :icon="['fas', 'angle-down']"
-        size="xl"
-        class="text-slate-500 cursor-pointer"
-      />
-    </div>
-
-    <ul
-      ref="list"
-      tabindex="0"
-      :class="{ hidden: !isOpen }"
-      @click="toggle"
-      @focus="input?.focus()"
-    >
-      <li
-        v-for="(option, i) in options"
-        ref="optionsRef"
-        :key="i"
-        :class="{ highlighted: getHighlightedIndex() === i }"
-        @mouseover="highlightedElement = optionsRef?.[i] || null"
-        @click="setValue(i)"
+      <template #popover>
+      <ul
+        ref="list"
+        tabindex="0"
+        @click="toggle"
+        @focus="input?.focus()"
       >
-        {{ option }}
-      </li>
-    </ul>
-  </div>
+        <li
+          v-for="(option, i) in options"
+          ref="optionsRef"
+          :key="i"
+          :class="{ highlighted: getHighlightedIndex() === i }"
+          @mouseover="highlightedElement = optionsRef?.[i] || null"
+          @click="setValue(i)"
+        >
+          {{ option }}
+        </li>
+      </ul>
+      </template>
+
+    <div class="flex flex-col justify-center pb-1 relative">
+      <div
+        ref="input"
+        class="select"
+        :class="store.errors[props.name] ? 'invalid' : 'valid'"
+        tabindex="0"
+        @blur="e => {console.log(e.relatedTarget); isOpen && e.relatedTarget !== list && toggle()}"
+        @click="toggle"
+        @keydown.up="keyScroll(-1)"
+        @keydown.down="keyScroll(1)"
+        @keydown.enter="isOpen && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
+        @keydown.esc="isOpen && toggle()"
+      >
+        {{ store.inputs[props.name] }}
+      </div>
+
+      <label>
+        {{ placeholder }}
+      </label>
+
+      <div class="input-icons">
+        <font-awesome-icon
+          :icon="['fas', 'triangle-exclamation']"
+          size="xl"
+          class="text-red-400 error-triangle hidden"
+          :title="store.errors[props.name]"
+        />
+      </div>
+      <div class="angle-icon">
+        <font-awesome-icon
+          :icon="['fas', 'angle-down']"
+          size="xl"
+          class="text-slate-500 cursor-pointer"
+        />
+      </div>
+        
+    </div>
+
+
+  </MyPopover>
+
 </template>
 
 <style scoped>
@@ -239,16 +253,16 @@ store.inputs[props.name] = ''
 
   ul {
     /* Size */
-    @apply w-full max-h-72;
+    /* @apply w-full max-h-72; */
+    /* @apply w-full; */
     /* Position */
-    @apply absolute -bottom-72 left-0 mt-1;
+    /* @apply absolute -bottom-72 left-0 mt-1; */
     /* Border */
-    @apply border border-slate-300 outline-none rounded drop-shadow-md;
+    /* @apply border border-slate-300 outline-none rounded drop-shadow-md; */
     /* Colors */
     @apply bg-slate-50;
     /* Misc */
-    @apply overflow-auto;
-
+    /* @apply overflow-auto; */
   }
 
   li {

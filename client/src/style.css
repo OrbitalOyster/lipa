@@ -12,4 +12,6 @@ body {
   background-color: #f6f2f0;
   /* @apply bg-stone-100; */
   @apply text-slate-800;
+
+  overflow: hidden;
 }

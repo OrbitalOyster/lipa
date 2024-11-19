@@ -2,6 +2,9 @@
 import LoremIpsum from '../components/LoremIpsum.vue'
 import MyButton from '../components/MyButton.vue'
 import MyPopover from '../components/MyPopover.vue'
+import { useTemplateRef } from 'vue'
+
+const popover = useTemplateRef('popover')
 </script>
 
 <template>
@@ -10,23 +13,16 @@ import MyPopover from '../components/MyPopover.vue'
       <h1>Testing grounds</h1>
       <LoremIpsum />
 
-      <!--
-      <MyPopover>
-        <MyButton title="Button" />
-        <template #popover>
-          <p>Tooltip</p>
-        </template>
-      </MyPopover>
-      -->
-
-      <MyPopover placement="top" match-width>
-        <template #popover>
-          <LoremIpsum />
-        </template>
-        <div class="target bg-pink-300 text-center">
-          Target
-        </div>
-      </MyPopover>
+      <div class="w-64 h-12">
+        <MyPopover ref="popover" placement="bottom" match-width>
+          <template #popover>
+            <LoremIpsum />
+          </template>
+          <div class="text-center bg-pink-300" @click="popover.toggle">
+            Target
+          </div>
+        </MyPopover>
+      </div>
 
       <LoremIpsum />
     </main>
@@ -36,10 +32,5 @@ import MyPopover from '../components/MyPopover.vue'
 <style scoped>
   main {
     @apply w-2/3 h-full bg-sky-200 p-4;
-  }
-
-  .target {
-    width: 400px;
-    height: 32px;
   }
 </style>

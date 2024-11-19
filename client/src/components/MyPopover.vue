@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { arrow, autoPlacement, size, flip, autoUpdate, hide, offset, useFloating } from '@floating-ui/vue'
-import { computed, ref } from 'vue'
+import { computed, ref, useSlots, onMounted, useTemplateRef } from 'vue'
 
 const props = defineProps({
   arrow: Boolean,
-  auto: Boolean,
+  flip: Boolean,
   matchWidth: Boolean,
   placement: {
     type: String,
@@ -13,11 +13,6 @@ const props = defineProps({
 });
 
 const offsetValue = props.arrow ? 16 : 2
-
-if (!props.auto && !props.placement) {
-  console.log(props)
-  throw new Error('Invalid popover props')
-}
 
 const target = ref(null),
   floating = ref(null),
@@ -28,20 +23,19 @@ const target = ref(null),
     placement: props.placement,
     middleware: [
       offset({mainAxis: offsetValue}),
-      props.auto && autoPlacement(),
-      props.auto || flip(),
-      hide(),
+      props.flip && flip(),
       arrow({ element: arrowRef, padding: 8 }),
 
-    size({
-      apply({elements}) {
-        Object.assign(elements.floating.style, {
-          maxWidth: `${Math.max(0, targetWidth)}px`,
-          maxHeight: `${Math.max(0, 400)}px`,
-        });
-      },
-    }),
+      size({
+        apply({availableWidth, availableHeight, elements}) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${Math.max(64, availableWidth)}px`,
+            maxHeight: `${Math.max(64, availableHeight - 32)}px`,
+          });
+        },
+      }),
 
+      hide(),
     ],
     whileElementsMounted: autoUpdate,
   }),
@@ -57,43 +51,53 @@ const target = ref(null),
         ? (`${middlewareData.value.arrow.y.toString()}px`)
         : `${(floating.value?.offsetHeight * (side === 'top') - 9).toString()}px`,
     }
-  })
+  }),
+  hidden = ref(true),
+  toggle = () => hidden.value = !hidden.value
+
+defineExpose({ toggle })
+
 </script>
 
 <template>
-  <span>
+  <div ref="target">
+
+
+  <div
+    ref="floating"
+    class="floating bg-yellow-500"
+    :style="[
+      floatingStyles, { 
+        display: (middlewareData.hide?.referenceHidden || hidden) ? 'none' : 'block',
+        width: (matchWidth ? `${targetWidth}px` : '100%'),
+      }
+    ]"
+  >
+
+    <slot name="popover" />
+
     <div
-      ref="floating"
-      class="floating"
-      :style="[
-        floatingStyles, { 
-          display: middlewareData.hide?.referenceHidden ? 'none' : 'block',
-          width: (matchWidth ? `${targetWidth}px` : 'auto'),
-        }
-      ]"
-      @click="console.log(targetWidth)"
-    >
-      <div
-        v-if="props.arrow"
-        ref="arrowRef"
-        class="arrow"
-        :style="arrowStyle"
-      />
-      <slot name="popover" />
-    </div>
-    <div
-      ref="target"
-      class="inline-block"
-    >
-      <slot />
-    </div>
-  </span>
+      v-if="props.arrow"
+      ref="arrowRef"
+      class="arrow"
+      :style="arrowStyle"
+    />
+
+  </div>
+
+
+
+
+    <slot />
+  </div>
+
+
+
 </template>
 
 <style scoped>
   .floating {
-    display: none;
-    @apply absolute top-0 left-0 px-6 py-3;
+    @apply absolute top-0 left-0;
     @apply border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;

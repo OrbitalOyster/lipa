@@ -71,6 +71,10 @@ const options = [
           store-id="mySampleForm"
         />
 
+        <div>
+          <p>Hello</p>
+        </div>
+
         <MySelect
           name="selectInput1"
           store-id="mySampleForm"
