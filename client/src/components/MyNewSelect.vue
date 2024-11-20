@@ -103,15 +103,12 @@ const target = ref(null),
     placement: 'bottom',
     middleware: [
       offset({mainAxis: offsetValue}),
-      flip(),
       size({
         apply({availableWidth, availableHeight, rects, elements}) {
           Object.assign(elements.floating.style, {
             maxWidth: `${Math.max(128, availableWidth)}px`,
             maxHeight: `${Math.max(128, availableHeight - 32)}px`,
-            minWidth1: `${rects.reference.width}px`,
             width: `${rects.reference.width}px`,
-            width1: `100px`,
           });
         },
       }),
@@ -121,7 +118,6 @@ const target = ref(null),
   }),
   active = ref(false)
 
-
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
 
@@ -129,77 +125,76 @@ store.inputs[props.name] = ''
 
 <template>
 
-    <div ref="target" class="flex flex-col justify-center pb-1 relative">
-      <div
-        ref="input"
-        class="select"
-        :class="store.errors[props.name] ? 'invalid' : 'valid'"
-        tabindex="0"
-        @blur="e => active && e.relatedTarget !== floating && toggle()"
-        @click="toggle"
-        @keydown.up="keyScroll(-1)"
-        @keydown.down="keyScroll(1)"
-        @keydown.enter="active && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
-        @keydown.esc="active && toggle()"
-      >
-        {{ store.inputs[props.name] }}
-      </div>
+  <div class="flex flex-col justify-center pb-1 relative">
 
-      <label>
-        {{ placeholder }}
-      </label>
-
-      <div class="input-icons">
-        <font-awesome-icon
-          :icon="['fas', 'triangle-exclamation']"
-          size="xl"
-          class="text-red-400 error-triangle hidden"
-          :title="store.errors[props.name]"
-        />
-      </div>
-      <div class="angle-icon">
-        <font-awesome-icon
-          :icon="['fas', 'angle-down']"
-          size="xl"
-          class="text-slate-500 cursor-pointer"
-        />
-      </div>
+    <div
+      ref="target"
+      class="select "
+      :class="store.errors[props.name] ? 'invalid' : 'valid'"
+      tabindex="0"
+      @blur="e => active && e.relatedTarget !== floating && toggle()"
+      @click="toggle"
+      @keydown.up="keyScroll(-1)"
+      @keydown.down="keyScroll(1)"
+      @keydown.enter="active && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
+      @keydown.esc="active && toggle()"
+    >
+      {{ store.inputs[props.name] }}
     </div>
 
-      <ul
-        tabindex="0"
-        @click="toggle"
-    
+    <label>
+      {{ placeholder }}
+    </label>
 
+    <div class="input-icons">
+      <font-awesome-icon
+        :icon="['fas', 'triangle-exclamation']"
+        size="xl"
+        class="text-red-400 error-triangle hidden"
+        :title="store.errors[props.name]"
+      />
+    </div>
+    <div class="angle-icon">
+      <font-awesome-icon
+        :icon="['fas', 'angle-down']"
+        size="xl"
+        class="text-slate-500 cursor-pointer"
+      />
+    </div>
+
+    <ul
+      tabindex="0"
+      @click="toggle"
       ref="floating"
       class="floating"
-      @focus="input?.focus()"
+      @focus="target?.focus()"
       :style="[
         floatingStyles, { 
           display: (middlewareData.hide?.referenceHidden || !active) ? 'none' : 'block',
         }
       ]"
-
+    >
+      <li
+        v-for="(option, i) in options"
+        ref="optionsRef"
+        :key="i"
+        :class="{ highlighted: getHighlightedIndex() === i }"
+        @mouseover="highlightedElement = optionsRef?.[i] || null"
+        @click="setValue(i)"
       >
-        <li
-          v-for="(option, i) in options"
-          ref="optionsRef"
-          :key="i"
-          :class="{ highlighted: getHighlightedIndex() === i }"
-          @mouseover="highlightedElement = optionsRef?.[i] || null"
-          @click="setValue(i)"
-        >
-          {{ option }}
-        </li>
-      </ul>
+        {{ option }}
+      </li>
+    </ul>
+
+  </div>
 
 </template>
 
 <style scoped>
 
   .floating {
-    @apply absolute top-0 left-0;
-    @apply outline-none border border-red-300 rounded overflow-auto;
+    @apply absolute top-0 left-0 mt-1;
+    @apply outline-none border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
   }
@@ -280,20 +275,6 @@ store.inputs[props.name] = ''
 
   .validated .select.invalid ~ .input-icons .error-triangle {
     @apply block;
-  }
-
-  ul {
-    /* Size */
-    /* @apply w-full max-h-72; */
-    /* @apply w-full; */
-    /* Position */
-    /* @apply absolute -bottom-72 left-0 mt-1; */
-    /* Border */
-    /* @apply border border-slate-300 outline-none rounded drop-shadow-md; */
-    /* Colors */
-    @apply bg-slate-50;
-    /* Misc */
-    /* @apply overflow-auto; */
   }
 
   li {
