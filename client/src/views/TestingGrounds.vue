@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LoremIpsum from '../components/LoremIpsum.vue'
 import MyButton from '../components/MyButton.vue'
 import MyPopover from '../components/MyPopover.vue'
@@ -13,14 +13,21 @@ const popover = useTemplateRef('popover')
       <h1>Testing grounds</h1>
       <LoremIpsum />
 
-        <MyPopover ref="popover" placement="bottom" class="w-64">
-          <template #popover>
-            <LoremIpsum />
-          </template>
-          <div class="text-center bg-pink-300" @click="popover.toggle">
-            Target
-          </div>
-        </MyPopover>
+      <MyPopover
+        ref="popover"
+        placement="bottom"
+        class="w-64"
+      >
+        <template #popover>
+          <LoremIpsum />
+        </template>
+        <div
+          class="text-center bg-pink-300"
+          @click="popover.toggle"
+        >
+          Target
+        </div>
+      </MyPopover>
 
       <LoremIpsum />
     </main>

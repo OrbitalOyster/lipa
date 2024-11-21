@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { nextTick, ref, useTemplateRef, getCurrentInstance, onMounted } from 'vue'
+import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
-
-import MyPopover from './MyPopover.vue'
-
-let selectedIndex: null | number = null
-
-const popover = useTemplateRef('popover')
 
 const props = defineProps({
     name: {
@@ -31,71 +26,63 @@ const props = defineProps({
     },
   }),
   store = useFormStore(props.storeId),
-  // eslint-disable-next-line no-useless-assignment
-  input = useTemplateRef<HTMLElement>('input'),
-  // eslint-disable-next-line no-useless-assignment
-  list = useTemplateRef<HTMLElement>('list'),
+  active = ref(false),
   optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
-  highlightedElement = ref<HTMLElement | null>(null),
-
-  // eslint-disable-next-line no-useless-assignment
-  toggle = async () => {
-    popover.value.toggle()
-    await nextTick()
-    if (!optionsRef.value) {
-      throw new Error('Major screwup')
-    }
-    if (selectedIndex !== null) {
-      highlightedElement.value = optionsRef.value[selectedIndex]
-      highlightedElement.value.scrollIntoView()
+  placement = 'bottom',
+  minDistanceToBottom = 32,
+  minHeight = 128,
+  selectedIndex = ref<null | number>(null),
+  scrollToSelected = () => {
+    if (selectedIndex.value !== null && optionsRef.value !== null) {
+      const highlightedElement = optionsRef.value[selectedIndex.value],
+        behavior = active.value ? 'smooth' : 'instant'
+      highlightedElement.scrollIntoView({ behavior, block: 'center' })
     }
   },
-
+  // eslint-disable-next-line no-useless-assignment
+  toggle = async () => {
+    active.value = !active.value
+    await nextTick()
+    scrollToSelected()
+  },
   setValue = (ind: number | null) => {
-    selectedIndex = ind
+    selectedIndex.value = ind
     /* Resetting value? */
     if (ind === null) {
       store.inputs[props.name] = ''
     }
-    else { store.inputs[props.name] = props.options[ind] }
-
+    else {
+      store.inputs[props.name] = props.options[ind]
+      scrollToSelected()
+    }
     store.validate()
   },
-
   wrap = (r: number, d: number) => (r + d + props.options.length) % props.options.length,
-
-  getHighlightedIndex = () => {
-    if (highlightedElement.value === null) {
-      return null
-    }
-    if (!optionsRef.value) {
-      throw new Error('Major screwup')
-    }
-    return optionsRef.value.indexOf(highlightedElement.value)
-  },
-
-  setHighlighted = (ind: number) => {
-    if (!optionsRef.value) {
-      throw new Error('Major screwup')
-    }
-    highlightedElement.value = optionsRef.value[ind]
-    highlightedElement.value.classList.add('highlighted')
-    highlightedElement.value.scrollIntoView()
-  },
-
   // eslint-disable-next-line no-useless-assignment
   keyScroll = (d: number) => {
-    if (popover.value.active) {
-      highlightedElement.value?.classList.remove('highlighted')
-      const oldIndex = getHighlightedIndex()
-      setHighlighted(wrap(oldIndex ?? (d > 0 ? -1 : 0), d))
-    }
-    else {
-      /* Edge case - nothing selected */
-      selectedIndex ??= (d > 0 ? -1 : 0)
-      setValue(wrap(selectedIndex, d))
-    }
-  }
+    /* Edge case - nothing selected */
+    selectedIndex.value ??= (d > 0 ? -1 : 0)
+    setValue(wrap(selectedIndex.value, d))
+  },
+  target = ref<HTMLElement | null>(null),
+  floating = ref(null),
+  // eslint-disable-next-line no-useless-assignment
+  { floatingStyles } = useFloating(target, floating, {
+    placement,
+    middleware: [
+      size({
+        apply({ availableWidth, availableHeight, rects, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${Math.max(128, availableWidth).toString()}px`,
+            maxHeight: `${Math.max(minHeight, availableHeight - minDistanceToBottom).toString()}px`,
+            width: `${rects.reference.width.toString()}px`,
+          })
+        },
+      }),
+      hide(),
+    ],
+    whileElementsMounted: autoUpdate,
+  })
 
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
@@ -103,71 +90,74 @@ store.inputs[props.name] = ''
 </script>
 
 <template>
-
-  <MyPopover ref="popover" placement="bottom" match-width>
-
-    <div class="flex flex-col justify-center pb-1 relative">
-      <div
-        ref="input"
-        class="select"
-        :class="store.errors[props.name] ? 'invalid' : 'valid'"
-        tabindex="0"
-        @blur="e => popover.active && e.relatedTarget !== list && toggle()"
-        @click="toggle"
-        @keydown.up="keyScroll(-1)"
-        @keydown.down="keyScroll(1)"
-        @keydown.enter="popover.active && getHighlightedIndex() !== null && setValue(getHighlightedIndex()); toggle()"
-        @keydown.esc="popover.active && toggle()"
-      >
-        {{ store.inputs[props.name] }}
-      </div>
-
-      <label>
-        {{ placeholder }}
-      </label>
-
-      <div class="input-icons">
-        <font-awesome-icon
-          :icon="['fas', 'triangle-exclamation']"
-          size="xl"
-          class="text-red-400 error-triangle hidden"
-          :title="store.errors[props.name]"
-        />
-      </div>
-      <div class="angle-icon">
-        <font-awesome-icon
-          :icon="['fas', 'angle-down']"
-          size="xl"
-          class="text-slate-500 cursor-pointer"
-        />
-      </div>
+  <div class="flex flex-col justify-center pb-1 relative">
+    <div
+      ref="target"
+      class="select "
+      :class="store.errors[props.name] ? 'invalid' : 'valid'"
+      tabindex="0"
+      @blur="e => active && e.relatedTarget !== floating && toggle()"
+      @click="toggle"
+      @keydown.up="keyScroll(-1)"
+      @keydown.down="keyScroll(1)"
+      @keydown.enter="toggle()"
+      @keydown.esc="active && toggle()"
+    >
+      {{ store.inputs[props.name] }}
     </div>
 
-    <template #popover>
-      <ul
-        ref="list"
-        tabindex="0"
-        @click="toggle"
-        @focus="input?.focus()"
+    <label>
+      {{ placeholder }}
+    </label>
+
+    <div class="input-icons">
+      <font-awesome-icon
+        :icon="['fas', 'triangle-exclamation']"
+        size="xl"
+        class="text-red-400 error-triangle hidden"
+        :title="store.errors[props.name]"
+      />
+    </div>
+    <div class="angle-icon">
+      <font-awesome-icon
+        :icon="['fas', 'angle-down']"
+        size="xl"
+        class="text-slate-500 cursor-pointer"
+      />
+    </div>
+
+    <ul
+      ref="floating"
+      tabindex="0"
+      class="floating"
+      :style="[
+        floatingStyles, {
+          visibility: active ? 'visible' : 'hidden',
+        }
+      ]"
+      @focus="target?.focus()"
+    >
+      <li
+        v-for="(option, i) in options"
+        ref="optionsRef"
+        :key="i"
+        :class="{ highlighted: selectedIndex === i }"
+        @click="setValue(i); toggle();"
       >
-        <li
-          v-for="(option, i) in options"
-          ref="optionsRef"
-          :key="i"
-          :class="{ highlighted: getHighlightedIndex() === i }"
-          @mouseover="highlightedElement = optionsRef?.[i] || null"
-          @click="setValue(i)"
-        >
-          {{ option }}
-        </li>
-      </ul>
-    </template>
-
-  </MyPopover>
-
+        {{ option }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
+
+  .floating {
+    @apply absolute top-0 left-0 mt-2 z-50;
+    @apply outline-none border border-slate-300 rounded overflow-auto;
+    @apply bg-white;
+    @apply drop-shadow;
+  }
 
   .select {
     /* Flexbox */
@@ -247,25 +237,11 @@ store.inputs[props.name] = ''
     @apply block;
   }
 
-  ul {
-    /* Size */
-    /* @apply w-full max-h-72; */
-    /* @apply w-full; */
-    /* Position */
-    /* @apply absolute -bottom-72 left-0 mt-1; */
-    /* Border */
-    /* @apply border border-slate-300 outline-none rounded drop-shadow-md; */
-    /* Colors */
-    @apply bg-slate-50;
-    /* Misc */
-    /* @apply overflow-auto; */
-  }
-
   li {
     @apply p-2 cursor-pointer select-none;
   }
 
-  li.highlighted {
+  li:hover, li.highlighted {
     @apply bg-slate-200;
   }
 </style>

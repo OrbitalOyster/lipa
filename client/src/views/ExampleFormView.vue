@@ -5,7 +5,7 @@ import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyForm from '../components/MyForm.vue'
 import MyLink from '../components/MyLink.vue'
-import MyNewSelect from '../components/MyNewSelect.vue'
+import MySelect from '../components/MySelect.vue'
 
 // eslint-disable-next-line no-useless-assignment
 const options = [
@@ -75,7 +75,7 @@ const options = [
           <p>Hello</p>
         </div>
 
-        <MyNewSelect
+        <MySelect
           name="selectInput1"
           store-id="mySampleForm"
           placeholder="Select something"

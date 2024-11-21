@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { arrow, autoPlacement, size, flip, autoUpdate, hide, offset, useFloating } from '@floating-ui/vue'
-import { computed, ref, useSlots, onMounted, useTemplateRef, nextTick } from 'vue'
+import { arrow, autoPlacement, autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
+import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef } from 'vue'
 
 const props = defineProps({
-  arrow: Boolean,
-  flip: Boolean,
-  matchWidth: Boolean,
-  placement: {
-    type: String,
-    default: 'top',
-  }
-});
+    arrow: Boolean,
+    flip: Boolean,
+    matchWidth: Boolean,
+    placement: {
+      type: String,
+      default: 'top',
+    },
+  }),
 
-const offsetValue = props.arrow ? 16 : 2
+  offsetValue = props.arrow ? 16 : 2,
 
-const target = ref(null),
+  target = ref(null),
   floating = ref(null),
-  elements = {floating: floating.value},
+  elements = { floating: floating.value },
   arrowRef = ref(null),
   { floatingStyles, middlewareData } = useFloating(target, floating, {
     placement: props.placement,
     middleware: [
-      offset({mainAxis: offsetValue}),
+      offset({ mainAxis: offsetValue }),
       props.flip && flip(),
       arrow({ element: arrowRef, padding: 8 }),
 
       size({
-        apply({availableWidth, availableHeight, rects, elements}) {
+        apply({ availableWidth, availableHeight, rects, elements }) {
           Object.assign(elements.floating.style, {
             maxWidth: `${Math.max(128, availableWidth)}px`,
             maxHeight: `${Math.max(128, availableHeight - 32)}px`,
             minWidth1: `${rects.reference.width}px`,
             width: `${rects.reference.width}px`,
             width1: `100px`,
-          });
+          })
         },
       }),
 
@@ -65,27 +65,25 @@ defineExpose({ toggle, active })
 <template>
   <div ref="target">
     <slot />
-    
+
     <div
       ref="floating"
       class="floating bg-yellow-500"
       :style="[
-        floatingStyles, { 
+        floatingStyles, {
           display: (middlewareData.hide?.referenceHidden || !active) ? 'none' : 'block',
         }
       ]"
     >
-    <slot name="popover" />
-    <div
-      v-if="props.arrow"
-      ref="arrowRef"
-      class="arrow"
-      :style="arrowStyle"
-    />
+      <slot name="popover" />
+      <div
+        v-if="props.arrow"
+        ref="arrowRef"
+        class="arrow"
+        :style="arrowStyle"
+      />
     </div>
-
   </div>
-
 </template>
 
 <style scoped>
