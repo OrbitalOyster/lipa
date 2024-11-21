@@ -30,11 +30,11 @@ const selected = ref('')
           {{ slot.title }}
         </h1>
         <span
-          class="inline-block transition-all"
+          class="transition-transform"
           :class="{ 'rotate-180': slot.title === selected}"
         ><font-awesome-icon
-          :icon="['fas', 'chevron-down']"
-          size="lg"
+          :icon="['fas', 'angle-down']"
+          size="xl"
         /></span>
       </div>
       <div

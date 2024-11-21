@@ -73,7 +73,6 @@ const props = defineProps({
       size({
         apply({ availableWidth, availableHeight, rects, elements }) {
           Object.assign(elements.floating.style, {
-            maxWidth: `${Math.max(128, availableWidth).toString()}px`,
             maxHeight: `${Math.max(minHeight, availableHeight - minDistanceToBottom).toString()}px`,
             width: `${rects.reference.width.toString()}px`,
           })
@@ -118,11 +117,12 @@ store.inputs[props.name] = ''
         :title="store.errors[props.name]"
       />
     </div>
-    <div class="angle-icon">
+    <div class="angle-icon"
+        :class="{ 'rotate-180': active }"
+    >
       <font-awesome-icon
         :icon="['fas', 'angle-down']"
         size="xl"
-        class="text-slate-500 cursor-pointer"
       />
     </div>
 
@@ -132,6 +132,7 @@ store.inputs[props.name] = ''
       class="floating"
       :style="[
         floatingStyles, {
+          opacity: active ? 1 : 0,
           visibility: active ? 'visible' : 'hidden',
         }
       ]"
@@ -157,6 +158,7 @@ store.inputs[props.name] = ''
     @apply outline-none border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
+    @apply transition-all duration-200;
   }
 
   .select {
@@ -208,6 +210,8 @@ store.inputs[props.name] = ''
   }
 
   .angle-icon {
+    @apply text-slate-500 cursor-pointer transition-transform;
+
     /* Sizing and position */
     @apply absolute right-3 space-x-2;
     /* Flexbox */

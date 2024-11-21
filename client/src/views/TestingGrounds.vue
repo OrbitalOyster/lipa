@@ -16,13 +16,13 @@ const popover = useTemplateRef('popover')
       <MyPopover
         ref="popover"
         placement="bottom"
-        class="w-64"
+        arrow
       >
         <template #popover>
           <LoremIpsum />
         </template>
         <div
-          class="text-center bg-pink-300"
+          class="text-center bg-pink-300 w-64"
           @click="popover.toggle"
         >
           Target

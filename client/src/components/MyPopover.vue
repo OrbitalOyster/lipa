@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { arrow, autoPlacement, autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoPlacement, autoUpdate, flip, hide, offset, size, useFloating, inline } from '@floating-ui/vue'
 import { computed, nextTick, onMounted, ref, useSlots, useTemplateRef } from 'vue'
 
 const props = defineProps({
@@ -31,7 +31,7 @@ const props = defineProps({
             maxWidth: `${Math.max(128, availableWidth)}px`,
             maxHeight: `${Math.max(128, availableHeight - 32)}px`,
             minWidth1: `${rects.reference.width}px`,
-            width: `${rects.reference.width}px`,
+            width: `${rects.reference.width.toString()}px`,
             width1: `100px`,
           })
         },
@@ -62,28 +62,35 @@ defineExpose({ toggle, active })
 
 </script>
 
+
 <template>
-  <div ref="target">
-    <slot />
+    <div
+      ref="target"
+      class="inline-block"
+    >
+      <slot />
+    </div>
 
     <div
       ref="floating"
-      class="floating bg-yellow-500"
+      class="floating"
       :style="[
-        floatingStyles, {
-          display: (middlewareData.hide?.referenceHidden || !active) ? 'none' : 'block',
+        floatingStyles, { 
+          visibility: (middlewareData.hide?.referenceHidden || !active) ? 'hidden' : 'visible',
         }
       ]"
     >
-      <slot name="popover" />
+
       <div
         v-if="props.arrow"
         ref="arrowRef"
         class="arrow"
         :style="arrowStyle"
       />
+
+      <slot name="popover" />
     </div>
-  </div>
+
 </template>
 
 <style scoped>
@@ -97,7 +104,8 @@ defineExpose({ toggle, active })
   .arrow {
     width: 16px;
     height: 16px;
-    @apply absolute bg-white;
+    @apply z-50;
+    @apply absolute bg-yellow-400;
     @apply border-slate-300 border-t border-l;
   }
 </style>
