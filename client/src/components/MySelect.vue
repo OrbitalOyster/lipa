@@ -117,8 +117,9 @@ store.inputs[props.name] = ''
         :title="store.errors[props.name]"
       />
     </div>
-    <div class="angle-icon"
-        :class="{ 'rotate-180': active }"
+    <div
+      class="angle-icon"
+      :class="{ 'rotate-180': active }"
     >
       <font-awesome-icon
         :icon="['fas', 'angle-down']"

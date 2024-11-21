@@ -15,7 +15,7 @@ const popover = useTemplateRef('popover')
 
       <MyPopover
         ref="popover"
-        placement="bottom"
+        placement="right"
         arrow
       >
         <template #popover>
