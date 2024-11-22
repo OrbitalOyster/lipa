@@ -16,7 +16,7 @@ const popover = useTemplateRef('popover')
       <MyPopover
         ref="popover"
         placement="right"
-        arrow
+        has-arrow
       >
         <template #popover>
           <LoremIpsum />

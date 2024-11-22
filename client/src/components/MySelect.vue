@@ -3,28 +3,13 @@ import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
-const props = defineProps({
-    name: {
-      type: String,
-      required: true,
-    },
-    storeId: {
-      type: String,
-      required: true,
-    },
-    options: {
-      type: Array<string>,
-      required: true,
-    },
-    checks: {
-      type: Array<string>,
-      default: () => [],
-    },
-    placeholder: {
-      type: String,
-      default: null,
-    },
-  }),
+const props = defineProps<{
+    name: string
+    storeId: string
+    options: Array<string>
+    checks: Array<string>
+    placeholder: string
+  }>(),
   store = useFormStore(props.storeId),
   active = ref(false),
   optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
@@ -69,8 +54,8 @@ const props = defineProps({
     middleware: [
       size({
         apply({ availableHeight, rects, elements }) {
-          const maxHeight = Math.max(minHeight, availableHeight - maxDistanceToBottom)
-          const width = rects.reference.width
+          const maxHeight = Math.max(minHeight, availableHeight - maxDistanceToBottom),
+            { width } = rects.reference
           Object.assign(elements.floating.style, {
             maxHeight: `${maxHeight.toString()}px`,
             width: `${width.toString()}px`,

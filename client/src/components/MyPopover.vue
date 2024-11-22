@@ -1,24 +1,22 @@
 <script setup lang="ts">
-import { arrow, autoUpdate, flip, shift, hide, offset, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
 
-const props = defineProps({
-    arrow: Boolean,
-    clickToggle: Boolean,
-    placement: {
-      type: String,
-      default: 'top',
-    },
-  }),
+const props = defineProps<{
+    hasArrow: boolean,
+    clickToggle: boolean,
+    placement: string,
+  }>(),
   active = ref(false),
   minSize = 128,
-  offsetValue = props.arrow ? 16 : 2,
+  offsetValue = props.hasArrow ? 16 : 2,
   target = ref(null),
-  floating = ref(null),
+  floating = ref<HTMLElement | null>(null),
   arrowRef = ref(null),
+  // eslint-disable-next-line no-useless-assignment
   { floatingStyles, middlewareData } = useFloating(target, floating, {
     open: active,
-    placement: props.placement,
+    placement: <string> props.placement,
     middleware: [
       offset({ mainAxis: offsetValue }),
       flip(),
@@ -36,11 +34,12 @@ const props = defineProps({
     ],
     whileElementsMounted: autoUpdate,
   }),
+  // eslint-disable-next-line no-useless-assignment
   arrowStyle = computed(() => {
     const side = <string>middlewareData.value.offset?.placement.split('-')[0],
       rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] || 0
     return {
-      transform: `rotate(${rotation.toString()}deg) translate(0, 2px)`,
+      transform: `rotate(${rotation.toString()}deg)`,
       left: middlewareData.value.arrow?.x != null
         ? `${middlewareData.value.arrow.x.toString()}px`
         : `${(floating.value?.offsetWidth * (side === 'left') - 9).toString()}px`,
@@ -74,7 +73,7 @@ defineExpose({ toggle, active })
     :style="floatingStyles"
   >
     <div
-      v-if="props.arrow"
+      v-if="props.hasArrow"
       ref="arrowRef"
       :style="arrowStyle"
       class="arrow"

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 
-import { useTemplateRef } from 'vue'
-import MyPopover from '../components/MyPopover.vue'
 import MyButton from '../components/MyButton.vue'
+import MyPopover from '../components/MyPopover.vue'
 
 </script>
 
@@ -21,7 +20,11 @@ import MyButton from '../components/MyButton.vue'
       <h1>Главная</h1>
       <h2>Отчёты</h2>
     </div>
-    <MyPopover placement="bottom" arrow click-toggle>
+    <MyPopover
+      placement="bottom"
+      has-arrow
+      click-toggle
+    >
       <span
         class="button"
       >
@@ -33,12 +36,11 @@ import MyButton from '../components/MyButton.vue'
 
       <template #popover>
         <div class="p-4 text-lg">
-          <p>Вы зашли как: <strong> User </strong> </p> 
-          <p>Роль: <strong> User </strong> </p> 
+          <p>Вы зашли как: <strong> User </strong> </p>
+          <p>Роль: <strong> User </strong> </p>
           <MyButton title="Выйти" />
         </div>
       </template>
-
     </MyPopover>
   </main>
 </template>
