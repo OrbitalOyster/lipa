@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+import { useTemplateRef } from 'vue'
+import MyPopover from '../components/MyPopover.vue'
+import MyButton from '../components/MyButton.vue'
+
 </script>
 
 <template>
@@ -17,15 +21,25 @@
       <h1>Главная</h1>
       <h2>Отчёты</h2>
     </div>
-    <span
-      ref="reference"
-      class="button"
-    >
-      <font-awesome-icon
-        :icon="['fas', 'user']"
-        size="xl"
-      />
-    </span>
+    <MyPopover placement="bottom" arrow click-toggle>
+      <span
+        class="button"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'user']"
+          size="xl"
+        />
+      </span>
+
+      <template #popover>
+        <div class="p-4 text-lg">
+          <p>Вы зашли как: <strong> User </strong> </p> 
+          <p>Роль: <strong> User </strong> </p> 
+          <MyButton title="Выйти" />
+        </div>
+      </template>
+
+    </MyPopover>
   </main>
 </template>
 

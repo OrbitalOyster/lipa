@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { arrow, autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoUpdate, flip, shift, hide, offset, size, useFloating } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
     arrow: Boolean,
-    matchWidth: Boolean,
+    clickToggle: Boolean,
     placement: {
       type: String,
       default: 'top',
     },
   }),
-
+  active = ref(false),
+  minSize = 128,
   offsetValue = props.arrow ? 16 : 2,
-
   target = ref(null),
   floating = ref(null),
   arrowRef = ref(null),
   { floatingStyles, middlewareData } = useFloating(target, floating, {
+    open: active,
     placement: props.placement,
     middleware: [
       offset({ mainAxis: offsetValue }),
       flip(),
-      arrow({ element: arrowRef, padding: 8 }),
-
+      shift({ padding: 16 }),
+      arrow({ element: arrowRef, padding: 4 }),
       size({
         apply({ availableWidth, availableHeight, elements }) {
           Object.assign(elements.floating.style, {
-            width: `${Math.max(128, availableWidth - 32).toString()}px`,
-            height: `${Math.max(128, availableHeight - 32).toString()}px`,
+            maxWidth: `${Math.max(minSize, availableWidth).toString()}px`,
+            maxHeight: `${Math.max(minSize, availableHeight).toString()}px`,
           })
         },
       }),
-
       hide(),
     ],
     whileElementsMounted: autoUpdate,
@@ -49,7 +49,6 @@ const props = defineProps({
         : `${(floating.value?.offsetHeight * (side === 'top') - 9).toString()}px`,
     }
   }),
-  active = ref(false),
 
   toggle = () => {
     active.value = !active.value
@@ -63,18 +62,16 @@ defineExpose({ toggle, active })
   <div
     ref="target"
     class="inline-block"
+    @click="props.clickToggle && toggle()"
   >
     <slot />
   </div>
 
   <div
+    v-if="active"
     ref="floating"
     class="floating"
-    :style="[
-      floatingStyles, {
-        visibility: (middlewareData.hide?.referenceHidden || !active) ? 'hidden' : 'visible',
-      }
-    ]"
+    :style="floatingStyles"
   >
     <div
       v-if="props.arrow"

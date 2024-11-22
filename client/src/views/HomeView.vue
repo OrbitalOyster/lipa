@@ -51,6 +51,6 @@ const loginStore = useLoginStore(),
 
   .main-dashboard {
     @apply fixed top-0 pb-8 right-[2rem] z-30 pt-20 overflow-y-auto;
-    @apply transition-all duration-100;
+    @apply transition-all duration-200;
   }
 </style>

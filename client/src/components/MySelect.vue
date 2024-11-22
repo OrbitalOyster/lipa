@@ -29,7 +29,7 @@ const props = defineProps({
   active = ref(false),
   optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
   placement = 'bottom',
-  minDistanceToBottom = 32,
+  maxDistanceToBottom = 32,
   minHeight = 128,
   selectedIndex = ref<null | number>(null),
   scrollToSelected = (fast: boolean) => {
@@ -69,9 +69,11 @@ const props = defineProps({
     middleware: [
       size({
         apply({ availableHeight, rects, elements }) {
+          const maxHeight = Math.max(minHeight, availableHeight - maxDistanceToBottom)
+          const width = rects.reference.width
           Object.assign(elements.floating.style, {
-            maxHeight: `${Math.max(minHeight, availableHeight - minDistanceToBottom).toString()}px`,
-            width: `${rects.reference.width.toString()}px`,
+            maxHeight: `${maxHeight.toString()}px`,
+            width: `${width.toString()}px`,
           })
         },
       }),
@@ -156,7 +158,6 @@ store.inputs[props.name] = ''
     @apply outline-none border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
-    @apply transition-opacity duration-500;
   }
 
   .select {
@@ -171,12 +172,12 @@ store.inputs[props.name] = ''
     /* Misc */
     @apply select-none cursor-pointer;
     /* Animation */
-    @apply transition duration-200 ease-in-out;
+    @apply transition-shadow duration-100 ease-in-out;
   }
 
   /* On focus */
   .select:focus {
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
+    @apply focus:ring-4 focus:ring-offset-2 focus:ring-emerald-400;
   }
 
   /* On hover */
@@ -209,7 +210,6 @@ store.inputs[props.name] = ''
 
   .angle-icon {
     @apply text-slate-500 cursor-pointer transition-transform;
-
     /* Sizing and position */
     @apply absolute right-3 space-x-2;
     /* Flexbox */
