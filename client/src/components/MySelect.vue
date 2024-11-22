@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
-import { nextTick, ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps({
@@ -32,18 +32,12 @@ const props = defineProps({
   minDistanceToBottom = 32,
   minHeight = 128,
   selectedIndex = ref<null | number>(null),
-  scrollToSelected = () => {
+  scrollToSelected = (fast: boolean) => {
     if (selectedIndex.value !== null && optionsRef.value !== null) {
       const highlightedElement = optionsRef.value[selectedIndex.value],
-        behavior = active.value ? 'smooth' : 'instant'
+        behavior = fast ? 'instant' : 'smooth'
       highlightedElement.scrollIntoView({ behavior, block: 'center' })
     }
-  },
-  // eslint-disable-next-line no-useless-assignment
-  toggle = async () => {
-    active.value = !active.value
-    await nextTick()
-    scrollToSelected()
   },
   setValue = (ind: number | null) => {
     selectedIndex.value = ind
@@ -53,7 +47,6 @@ const props = defineProps({
     }
     else {
       store.inputs[props.name] = props.options[ind]
-      scrollToSelected()
     }
     store.validate()
   },
@@ -63,15 +56,19 @@ const props = defineProps({
     /* Edge case - nothing selected */
     selectedIndex.value ??= (d > 0 ? -1 : 0)
     setValue(wrap(selectedIndex.value, d))
+    if (active.value) {
+      scrollToSelected(false)
+    }
   },
   target = ref<HTMLElement | null>(null),
   floating = ref(null),
   // eslint-disable-next-line no-useless-assignment
-  { floatingStyles } = useFloating(target, floating, {
+  { floatingStyles, isPositioned } = useFloating(target, floating, {
     placement,
+    open: active,
     middleware: [
       size({
-        apply({ availableWidth, availableHeight, rects, elements }) {
+        apply({ availableHeight, rects, elements }) {
           Object.assign(elements.floating.style, {
             maxHeight: `${Math.max(minHeight, availableHeight - minDistanceToBottom).toString()}px`,
             width: `${rects.reference.width.toString()}px`,
@@ -82,6 +79,13 @@ const props = defineProps({
     ],
     whileElementsMounted: autoUpdate,
   })
+
+watch(isPositioned, (opened) => {
+  if (opened) {
+    scrollToSelected(true)
+  }
+},
+)
 
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
@@ -95,20 +99,18 @@ store.inputs[props.name] = ''
       class="select "
       :class="store.errors[props.name] ? 'invalid' : 'valid'"
       tabindex="0"
-      @blur="e => active && e.relatedTarget !== floating && toggle()"
-      @click="toggle"
+      @blur="e => active = active && e.relatedTarget === floating"
+      @click="active = !active"
       @keydown.up="keyScroll(-1)"
       @keydown.down="keyScroll(1)"
-      @keydown.enter="toggle()"
-      @keydown.esc="active && toggle()"
+      @keydown.enter="active = !active"
+      @keydown.esc="active = false"
     >
       {{ store.inputs[props.name] }}
     </div>
-
     <label>
       {{ placeholder }}
     </label>
-
     <div class="input-icons">
       <font-awesome-icon
         :icon="['fas', 'triangle-exclamation']"
@@ -126,17 +128,12 @@ store.inputs[props.name] = ''
         size="xl"
       />
     </div>
-
     <ul
+      v-if="active"
       ref="floating"
       tabindex="0"
       class="floating"
-      :style="[
-        floatingStyles, {
-          opacity: active ? 1 : 0,
-          visibility: active ? 'visible' : 'hidden',
-        }
-      ]"
+      :style="floatingStyles"
       @focus="target?.focus()"
     >
       <li
@@ -144,7 +141,7 @@ store.inputs[props.name] = ''
         ref="optionsRef"
         :key="i"
         :class="{ highlighted: selectedIndex === i }"
-        @click="setValue(i); toggle();"
+        @click="setValue(i); active = false"
       >
         {{ option }}
       </li>
@@ -159,7 +156,7 @@ store.inputs[props.name] = ''
     @apply outline-none border border-slate-300 rounded overflow-auto;
     @apply bg-white;
     @apply drop-shadow;
-    @apply transition-all duration-200;
+    @apply transition-opacity duration-500;
   }
 
   .select {
