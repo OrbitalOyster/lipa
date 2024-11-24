@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import MyButton from '../components/MyButton.vue'
 import MyPopover from '../components/MyPopover.vue'
+import UserCard from '../components/UserCard.vue'
 
 </script>
 
@@ -35,11 +35,7 @@ import MyPopover from '../components/MyPopover.vue'
       </span>
 
       <template #popover>
-        <div class="p-4 text-lg">
-          <p>Вы зашли как: <strong> User </strong> </p>
-          <p>Роль: <strong> User </strong> </p>
-          <MyButton title="Выйти" />
-        </div>
+        <UserCard />
       </template>
     </MyPopover>
   </main>

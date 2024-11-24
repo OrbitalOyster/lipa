@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
+import { Placement, arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
-    hasArrow: boolean,
-    clickToggle: boolean,
-    placement: string,
+    hasArrow: boolean
+    clickToggle?: boolean
+    placement: Placement
   }>(),
   active = ref(false),
   minSize = 128,
@@ -16,7 +16,7 @@ const props = defineProps<{
   // eslint-disable-next-line no-useless-assignment
   { floatingStyles, middlewareData } = useFloating(target, floating, {
     open: active,
-    placement: <string> props.placement,
+    placement: props.placement,
     middleware: [
       offset({ mainAxis: offsetValue }),
       flip(),
@@ -37,15 +37,18 @@ const props = defineProps<{
   // eslint-disable-next-line no-useless-assignment
   arrowStyle = computed(() => {
     const side = <string>middlewareData.value.offset?.placement.split('-')[0],
-      rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] || 0
+      rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] || 0,
+      leftOffset = side === 'left' ? 1 : 0,
+      topOffset = side === 'top' ? 1 : 0,
+      arrowOffset = 9
     return {
       transform: `rotate(${rotation.toString()}deg)`,
       left: middlewareData.value.arrow?.x != null
         ? `${middlewareData.value.arrow.x.toString()}px`
-        : `${(floating.value?.offsetWidth * (side === 'left') - 9).toString()}px`,
+        : `${(floating.value?.offsetWidth * leftOffset - arrowOffset).toString()}px`,
       top: middlewareData.value.arrow?.y != null
         ? (`${middlewareData.value.arrow.y.toString()}px`)
-        : `${(floating.value?.offsetHeight * (side === 'top') - 9).toString()}px`,
+        : `${(floating.value?.offsetHeight * topOffset - arrowOffset).toString()}px`,
     }
   }),
 

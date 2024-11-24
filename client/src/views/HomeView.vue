@@ -3,17 +3,9 @@ import MainDashboard from '../components/MainDashboard.vue'
 import SidePanel from '../components/SidePanel.vue'
 import TopBar from '../components/TopBar.vue'
 import { ref } from 'vue'
-import { useLoginStore } from '../stores/loginStore.ts'
-import { useRouter } from 'vue-router'
 
-const loginStore = useLoginStore(),
-  router = useRouter(),
-  logout = async () => {
-    await loginStore.logout()
-    await router.push('/login')
-  },
-  // eslint-disable-next-line no-useless-assignment
-  sidepanel = ref(true)
+// eslint-disable-next-line no-useless-assignment
+const sidepanel = ref(true)
 </script>
 
 <template>
@@ -25,7 +17,7 @@ const loginStore = useLoginStore(),
       class="switch-button"
       @click="sidepanel=!sidepanel"
     />
-    <SidePanel class="side-panel " />
+    <SidePanel class="side-panel" />
     <MainDashboard
       class="main-dashboard"
       :class="{ 'left-[34rem]': sidepanel, 'left-[2rem]': !sidepanel }"
