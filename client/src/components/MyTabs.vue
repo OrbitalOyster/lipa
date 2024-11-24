@@ -32,7 +32,6 @@ const props = defineProps<{
           /></span>
           <span>{{ slot.title }}</span>
         </h1>
-        <div class="curtain" />
       </li>
     </ul>
     <div
@@ -52,27 +51,21 @@ const props = defineProps<{
   }
 
   li {
-    @apply relative px-2 py-2 pb-4 top-3;
+    @apply relative px-2 py-2 pb-2 mt-3;
     @apply bg-white text-slate-400;
     @apply outline-none border-t rounded-t border-l border-r border-slate-200;
     @apply transition-all duration-100;
   }
 
   li.selected {
-    @apply top-0;
+    @apply mt-0;
     @apply text-slate-600 border-slate-300;
+    @apply z-10 translate-y-0.5;
   }
 
   h1 {
     @apply cursor-pointer select-none;
     @apply underline-offset-4 whitespace-nowrap;
-  }
-
-  .curtain {
-    @apply bg-white;
-    @apply absolute;
-    @apply w-full h-1 -bottom-0.5 left-0;
-    @apply z-50
   }
 
   .tab {
