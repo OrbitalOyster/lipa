@@ -34,6 +34,7 @@ defineExpose({ focus, blur })
   <button
     ref="button"
     :type
+    class="focusable"
   >
     <div class="space-x-2 whitespace-nowrap">
       <span v-if="title">
@@ -47,7 +48,7 @@ defineExpose({ focus, blur })
         />
         <font-awesome-icon
           v-if="loading"
-          class="animate-spin"
+          class="fa-pulse"
           :icon="['fas', 'spinner']"
           size="xl"
         />
@@ -70,11 +71,6 @@ defineExpose({ focus, blur })
     @apply select-none;
     /* Animation */
     @apply duration-200;
-  }
-
-  /* On focus */
-  button:focus {
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 focus:ring-offset-current;
   }
 
   /* On hover */

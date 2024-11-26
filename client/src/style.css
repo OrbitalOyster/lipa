@@ -8,10 +8,52 @@
 
 body {
   font-family: "Exo2";
-  /* background-color: #f6f2f0; */
   background-color: #f6f2f0;
-  /* @apply bg-stone-100; */
   @apply text-slate-800;
 
   overflow: hidden;
+}
+
+/* Green animated outline on focus */
+.focusable {
+  @apply outline-none;
+}
+
+.focusable:focus {
+  @apply ring-4 ring-emerald-300;
+}
+
+/* Basic form field */
+.form-input {
+  /* Border */
+  @apply border border-slate-300 rounded outline-none;
+  /* Colors */
+  @apply bg-slate-50;
+}
+
+.form-input:disabled {
+  @apply hover:border-slate-300;
+  /* Colors */
+  @apply bg-slate-200 text-slate-400;
+  @apply cursor-not-allowed;
+}
+
+.form-input:hover {
+  @apply hover:border-slate-400;
+}
+
+/* Validation rules */
+.validated .form-input.invalid:not(:disabled) {
+  @apply border-red-300 bg-rose-50;
+  @apply hover:border-red-400;
+}
+
+.validated .form-input.valid:not(:disabled) {
+  @apply border-green-300 bg-green-50;
+  @apply hover:border-green-400;
+}
+
+/* Invalid but not yet validated input */
+form:not(.validated) .form-input.invalid ~ .input-icons .error-triangle {
+  @apply hidden;
 }

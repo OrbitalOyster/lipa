@@ -47,6 +47,7 @@ store.inputs[props.name] = props.value
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
     <input
+      class="form-input focusable transition"
       v-model="store.inputs[props.name]"
       :class="isValid"
       :name
@@ -61,9 +62,10 @@ store.inputs[props.name] = props.value
     </label>
     <div class="input-icons">
       <font-awesome-icon
+        v-if="store.errors[props.name]"
         :icon="['fas', 'triangle-exclamation']"
         size="xl"
-        class="text-red-400 error-triangle hidden"
+        class="text-red-400 error-triangle"
         :title="store.errors[props.name]"
       />
       <font-awesome-icon
@@ -81,29 +83,6 @@ store.inputs[props.name] = props.value
   input {
     /* Sizing */
     @apply w-full h-14 p-2 pl-4;
-    /* Border */
-    @apply border border-slate-300 rounded outline-none;
-    /* Colors */
-    @apply bg-slate-50;
-    /* Animation */
-    @apply transition duration-200 ease-in-out;
-  }
-
-  /* On focus */
-  input:focus {
-    @apply focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400;
-  }
-
-  /* On hover */
-  input:hover {
-    @apply hover:border-slate-400;
-  }
-
-  input:disabled {
-    @apply hover:border-slate-300;
-    /* Colors */
-    @apply bg-slate-200 text-slate-400;
-    @apply cursor-not-allowed;
   }
 
   label {
@@ -133,18 +112,6 @@ store.inputs[props.name] = props.value
   input:focus + label,
   input:not(:placeholder-shown) + label {
     transform: translateY(calc(-50%)) scale(.8);
-  }
-
-  .validated input.invalid:not(:disabled) {
-    @apply border-red-300 bg-pink-100;
-  }
-
-  .validated input.valid:not(:disabled) {
-    @apply border-green-300 bg-green-100;
-  }
-
-  .validated input.invalid ~ .input-icons .error-triangle {
-    @apply block;
   }
 
   .input-icons {
