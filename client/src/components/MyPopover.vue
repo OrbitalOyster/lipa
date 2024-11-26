@@ -38,17 +38,20 @@ const props = defineProps<{
   arrowStyle = computed(() => {
     const side = <string>middlewareData.value.offset?.placement.split('-')[0],
       rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] || 0,
+      floatingWidth = floating.value?.offsetWidth || 0,
+      floatingHeight = floating.value?.offsetHeight || 0,
       leftOffset = side === 'left' ? 1 : 0,
       topOffset = side === 'top' ? 1 : 0,
+      middlewareArrow = middlewareData.value.arrow,
       arrowOffset = 9
     return {
       transform: `rotate(${rotation.toString()}deg)`,
-      left: middlewareData.value.arrow?.x != null
-        ? `${middlewareData.value.arrow.x.toString()}px`
-        : `${(floating.value?.offsetWidth * leftOffset - arrowOffset).toString()}px`,
-      top: middlewareData.value.arrow?.y != null
-        ? (`${middlewareData.value.arrow.y.toString()}px`)
-        : `${(floating.value?.offsetHeight * topOffset - arrowOffset).toString()}px`,
+      left: middlewareArrow?.x || middlewareArrow?.x === 0
+        ? `${middlewareArrow.x.toString()}px`
+        : `${(floatingWidth * leftOffset - arrowOffset).toString()}px`,
+      top: middlewareArrow?.y || middlewareArrow?.y === 0
+        ? (`${middlewareArrow.y.toString()}px`)
+        : `${(floatingHeight * topOffset - arrowOffset).toString()}px`,
     }
   }),
 

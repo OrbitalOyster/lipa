@@ -44,13 +44,13 @@ defineExpose({ focus, blur })
         <font-awesome-icon
           v-if="icon && !loading"
           :icon="['fas', icon]"
-          size="xl"
+          size="lg"
         />
         <font-awesome-icon
           v-if="loading"
           class="fa-pulse"
           :icon="['fas', 'spinner']"
-          size="xl"
+          size="lg"
         />
       </span>
     </div>

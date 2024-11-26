@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import LoremIpsum from '../components/LoremIpsum.vue'
-import MyButton from '../components/MyButton.vue'
 import MyPopover from '../components/MyPopover.vue'
 import { useTemplateRef } from 'vue'
 
@@ -23,7 +22,7 @@ const popover = useTemplateRef('popover')
         </template>
         <div
           class="text-center bg-pink-300 w-64"
-          @click="popover.toggle"
+          @click="popover?.toggle"
         >
           Target
         </div>

@@ -53,7 +53,18 @@ body {
   @apply hover:border-green-400;
 }
 
-/* Invalid but not yet validated input */
-form:not(.validated) .form-input.invalid ~ .input-icons .error-triangle {
-  @apply hidden;
+/* Alert icon on invalid inputs */
+.validated .form-input.invalid ~ .input-icons::before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f071";
+  @apply pe-1 font-black text-3xl text-red-400;
+}
+
+/* Icons */
+.alert-icon::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 1.5rem;
+  content: "\f071";
+  @apply text-blue-400;
 }

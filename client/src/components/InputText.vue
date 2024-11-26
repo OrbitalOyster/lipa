@@ -47,8 +47,8 @@ store.inputs[props.name] = props.value
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
     <input
-      class="form-input focusable transition"
       v-model="store.inputs[props.name]"
+      class="form-input focusable transition"
       :class="isValid"
       :name
       :autofocus
@@ -61,13 +61,6 @@ store.inputs[props.name] = props.value
       {{ placeholder }}
     </label>
     <div class="input-icons">
-      <font-awesome-icon
-        v-if="store.errors[props.name]"
-        :icon="['fas', 'triangle-exclamation']"
-        size="xl"
-        class="text-red-400 error-triangle"
-        :title="store.errors[props.name]"
-      />
       <font-awesome-icon
         v-if="password"
         :icon="['fas', passwordIcon]"
