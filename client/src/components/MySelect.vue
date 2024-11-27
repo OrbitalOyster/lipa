@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import { useFormStore } from '../stores/formStore.ts'
@@ -45,7 +46,7 @@ const props = defineProps<{
       scrollToSelected(false)
     }
   },
-  target = ref<HTMLElement | null>(null),
+  target = useTemplateRef<HTMLElement>('target'),
   floating = ref(null),
   // eslint-disable-next-line no-useless-assignment
   { floatingStyles, isPositioned } = useFloating(target, floating, {

@@ -51,6 +51,7 @@ store.inputs[props.name] = props.value
       class="form-input focusable transition"
       :class="isValid"
       :name
+      :title="store.errors[props.name]"
       :autofocus
       :placeholder
       :disabled

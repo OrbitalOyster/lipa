@@ -9,6 +9,7 @@ interface ImportMeta {
   }
 }
 
-interface MyCard {
+/* TODO: Workaround */
+interface MyShakeable {
   shake(): Promise<void>
 }

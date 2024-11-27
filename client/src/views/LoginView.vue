@@ -6,6 +6,7 @@ import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
 import MyCheckbox from '../components/MyCheckbox.vue'
 import MyForm from '../components/MyForm.vue'
+import MyShakeable from '../components/base/MyShakeable.vue'
 import { useLoginStore } from '../stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
@@ -17,16 +18,15 @@ interface ILoginFormCheck {
 
 const router = useRouter(),
   loginStore = useLoginStore(),
-  mainCard = useTemplateRef<MyCard>('mainCard'),
+  shakeable = useTemplateRef<MyShakeable>('shakeable'),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async (formCheck: ILoginFormCheck | null) => {
-    if (!mainCard.value) {
+    if (!shakeable.value) {
       throw new Error('Major screwup')
     }
     if (!formCheck) {
-      await mainCard.value.shake()
       return
     }
     loading.value = true
@@ -35,7 +35,7 @@ const router = useRouter(),
       await router.push('/')
     }
     else {
-      await mainCard.value.shake()
+      await shakeable.value.shake()
     }
     loading.value = false
     disabled.value = false
@@ -46,9 +46,11 @@ const router = useRouter(),
 
 <template>
   <div class="flex flex-col items-center justify-center w-screen h-screen">
-    <div class="w-1/3">
+    <MyShakeable
+      ref="shakeable"
+      class="w-1/3"
+    >
       <MyCard
-        ref="mainCard"
         title="Lipa"
         subtitle="Последний шанс снять бахилы"
         icon="goose.png"
@@ -94,6 +96,6 @@ const router = useRouter(),
       <div class="p-2 text-end">
         (c) {{ year }}
       </div>
-    </div>
+    </MyShakeable>
   </div>
 </template>

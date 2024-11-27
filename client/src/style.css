@@ -14,13 +14,18 @@ body {
   overflow: hidden;
 }
 
-/* Green animated outline on focus */
+/* Animated green outline on focus */
 .focusable {
   @apply outline-none;
 }
 
 .focusable:focus {
   @apply ring-4 ring-emerald-300;
+}
+
+/* Generic container */
+.card {
+
 }
 
 /* Basic form field */

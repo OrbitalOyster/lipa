@@ -13,7 +13,9 @@ const slots = [
   <main>
     <MyTabs :slots>
       <template #Исходники>
-        <p>Bar</p>
+        <div class="bg-red-300 border border-black">
+          Bar
+        </div>
       </template>
       <template #Первичные_отчёты>
         <p>Foo</p>
