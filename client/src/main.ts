@@ -1,6 +1,7 @@
 import './style.css'
 import './animations.css'
 import App from './App.vue'
+import type { Component } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -8,7 +9,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import router from './router.ts'
 
-const app = createApp(App),
+const app = createApp(<Component>App),
   pinia = createPinia()
 
 app.use(pinia)

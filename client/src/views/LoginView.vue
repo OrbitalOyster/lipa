@@ -16,9 +16,14 @@ interface ILoginFormCheck {
   rememberMe: boolean
 }
 
+/* TODO: Workaround */
+interface IMyShakeable extends InstanceType<typeof MyShakeable> {
+  shake(): Promise<void>
+}
+
 const router = useRouter(),
   loginStore = useLoginStore(),
-  shakeable = useTemplateRef<MyShakeable>('shakeable'),
+  shakeable = useTemplateRef<IMyShakeable>('shakeable'),
   loading = ref(false),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment

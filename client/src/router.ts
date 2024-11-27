@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AboutView from './views/AboutView.vue'
+import type { Component } from 'vue'
 import ErrorView from './views/ErrorView.vue'
 import ExampleFormView from './views/ExampleFormView.vue'
 import HomeView from './views/HomeView.vue'
@@ -16,32 +17,32 @@ declare module 'vue-router' {
 
 /* Routes */
 const routes = [{
-    component: LoginView,
+    component: <Component>LoginView,
     name: 'Login',
     path: '/login',
     meta: { title: 'Вход' },
   }, {
-    component: HomeView,
+    component: <Component>HomeView,
     name: 'Home',
     path: '/',
     meta: { title: 'Главная' },
   }, {
-    component: AboutView,
+    component: <Component>AboutView,
     name: 'About',
     path: '/about',
     meta: { title: 'О программе' },
   }, {
-    component: ExampleFormView,
+    component: <Component>ExampleFormView,
     name: 'ExampleForm',
     path: '/form',
     meta: { title: 'Example Form' },
   }, {
-    component: ErrorView,
+    component: <Component>ErrorView,
     name: 'Error',
     path: '/error',
     meta: { title: 'Ошибка' },
   }, {
-    component: TestingGrounds,
+    component: <Component>TestingGrounds,
     name: 'Test',
     path: '/test',
     meta: { title: 'Test' },

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Placement, arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref } from 'vue'
+import type { Placement } from '@floating-ui/utils'
 
 const props = defineProps<{
     hasArrow: boolean

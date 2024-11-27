@@ -1,15 +1,10 @@
 declare module '*.vue' {
-  import Vue from 'vue'
-  export default Vue
+  import * as vue from 'vue'
+  export default vue
 }
 
 interface ImportMeta {
   env: {
     VITE_AUTH_API: string
   }
-}
-
-/* TODO: Workaround */
-interface MyShakeable {
-  shake(): Promise<void>
 }
