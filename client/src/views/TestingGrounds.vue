@@ -3,6 +3,7 @@ import LoremIpsum from '../components/LoremIpsum.vue'
 import MyPopover from '../components/MyPopover.vue'
 import { useTemplateRef } from 'vue'
 
+// eslint-disable-next-line no-useless-assignment
 const popover = useTemplateRef('popover')
 </script>
 

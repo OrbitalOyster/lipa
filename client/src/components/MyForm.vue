@@ -14,7 +14,7 @@ const emits = defineEmits(['submit']),
   // eslint-disable-next-line no-useless-assignment
   onSubmit = () => {
     console.log('Form submit')
-    if (Object.values(store.errors).every(e => e === '')) {
+    if (store.isValid) {
       console.log('Form validation success')
       emits('submit', store.inputs)
     }

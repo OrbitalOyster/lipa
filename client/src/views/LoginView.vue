@@ -16,7 +16,6 @@ interface ILoginFormCheck {
   rememberMe: boolean
 }
 
-/* TODO: Workaround */
 interface IMyShakeable extends InstanceType<typeof MyShakeable> {
   shake(): Promise<void>
 }
@@ -28,9 +27,6 @@ const router = useRouter(),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async (formCheck: ILoginFormCheck | null) => {
-    if (!shakeable.value) {
-      throw new Error('Major screwup')
-    }
     if (!formCheck) {
       return
     }
@@ -40,7 +36,7 @@ const router = useRouter(),
       await router.push('/')
     }
     else {
-      await shakeable.value.shake()
+      await shakeable.value?.shake()
     }
     loading.value = false
     disabled.value = false

@@ -2,13 +2,14 @@
 
 import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
+import type { MyFormCheck } from '../stores/formStore.ts'
 import { useFormStore } from '../stores/formStore.ts'
 
 const props = defineProps<{
     name: string
     storeId: string
     options: Array<string>
-    checks: Array<string>
+    checks: Array<MyFormCheck>
     placeholder: string
   }>(),
   store = useFormStore(props.storeId),
