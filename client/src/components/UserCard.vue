@@ -1,7 +1,6 @@
 <script setup lang="ts">
-
-import MyButton from '../components/MyButton.vue'
-import { useLoginStore } from '../stores/loginStore.ts'
+import MyButton from '@components/MyButton.vue'
+import { useLoginStore } from '@stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
 const loginStore = useLoginStore(),
@@ -11,7 +10,6 @@ const loginStore = useLoginStore(),
     await loginStore.logout()
     await router.push('/login')
   }
-
 </script>
 
 <template>

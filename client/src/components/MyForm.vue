@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useFormStore } from '../stores/formStore.ts'
+import { useFormStore } from '@stores/formStore.ts'
 
 const emits = defineEmits(['submit']),
   props = defineProps({
@@ -28,7 +28,6 @@ const emits = defineEmits(['submit']),
 onMounted(() => {
   store.validate()
 })
-
 </script>
 
 <template>

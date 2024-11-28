@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
-import MyButton from '../components/MyButton.vue'
+import MyButton from '@components/MyButton.vue'
 
 defineProps({
   title: {

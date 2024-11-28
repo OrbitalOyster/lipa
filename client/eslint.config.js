@@ -32,7 +32,11 @@ export default [
     settings: {
       'import/resolver': {
         alias: {
-          map: [['@components', './src/components']],
+          map: [
+            ['@components', './src/components/'],
+            ['@stores', './src/stores/'],
+            ['@views', './src/views/']
+          ],
           extensions: ['.ts', '.vue'],
         },
       },

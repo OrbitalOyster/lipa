@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MainDashboard from '@components/MainDashboard.vue'
-import SidePanel from '../components/SidePanel.vue'
-import TopBar from '../components/TopBar.vue'
+import SidePanel from '@components/SidePanel.vue'
+import TopBar from '@components/TopBar.vue'
 import { ref } from 'vue'
 
 // eslint-disable-next-line no-useless-assignment

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MyTabs from '../components/MyTabs.vue'
+import MyTabs from '@components/MyTabs.vue'
 
 // eslint-disable-next-line no-useless-assignment
 const slots = [

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { MyFormCheck } from '../stores/formStore.ts'
-import { useFormStore } from '../stores/formStore.ts'
+import type { MyFormCheck } from '@stores/formStore.ts'
+import { useFormStore } from '@stores/formStore.ts'
 
 const props = defineProps({
     name: {

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-
 import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
-import type { MyFormCheck } from '../stores/formStore.ts'
-import { useFormStore } from '../stores/formStore.ts'
+import type { MyFormCheck } from '@stores/formStore.ts'
+import { useFormStore } from '@stores/formStore.ts'
 
 const props = defineProps<{
     name: string
@@ -78,7 +77,6 @@ watch(isPositioned, (opened) => {
 
 store.checks[props.name] = props.checks
 store.inputs[props.name] = ''
-
 </script>
 
 <template>

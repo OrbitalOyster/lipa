@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
 import { ref, useTemplateRef } from 'vue'
-import InputText from '../components/InputText.vue'
-import MyButton from '../components/MyButton.vue'
-import MyCard from '../components/MyCard.vue'
-import MyCheckbox from '../components/MyCheckbox.vue'
-import MyForm from '../components/MyForm.vue'
-import MyShakeable from '../components/base/MyShakeable.vue'
-import { useLoginStore } from '../stores/loginStore.ts'
+import InputText from '@components/InputText.vue'
+import MyButton from '@components/MyButton.vue'
+import MyCard from '@components/MyCard.vue'
+import MyCheckbox from '@components/MyCheckbox.vue'
+import MyForm from '@components/MyForm.vue'
+import MyShakeable from '@components/base/MyShakeable.vue'
+import { useLoginStore } from '@stores/loginStore.ts'
 import { useRouter } from 'vue-router'
 
 interface ILoginFormCheck {

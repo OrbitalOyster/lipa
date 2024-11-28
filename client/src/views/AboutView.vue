@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ConfirmModal from '../components/ConfirmModal.vue'
-import MyButton from '../components/MyButton.vue'
+import ConfirmModal from '@components/ConfirmModal.vue'
+import MyButton from '@components/MyButton.vue'
 import { useTemplateRef } from 'vue'
 // eslint-disable-next-line no-useless-assignment
 const confirmModal = useTemplateRef('confirmModal')

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-
-import MyContainer from './base/MyContainer.vue'
+import MyContainer from '@components/base/MyContainer.vue'
 
 defineProps({
   title: {
@@ -16,7 +15,6 @@ defineProps({
     default: '',
   },
 })
-
 </script>
 
 <template>

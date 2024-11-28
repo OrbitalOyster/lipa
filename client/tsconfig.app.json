@@ -1,4 +1,5 @@
 {
+  "include": ["src/**/*.ts", "src/**/*.vue"],
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -18,7 +19,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.vue"]
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path aliases */
+    "paths": {
+      "@components/*": [ "./src/components/*" ],
+      "@stores/*": [ "./src/stores/*" ],
+      "@views/*": [ "./src/views/*" ]
+    }
+  }
 }

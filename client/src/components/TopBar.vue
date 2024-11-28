@@ -1,8 +1,6 @@
 <script setup lang="ts">
-
-import MyPopover from '../components/MyPopover.vue'
-import UserCard from '../components/UserCard.vue'
-
+import MyPopover from '@components/MyPopover.vue'
+import UserCard from '@components/UserCard.vue'
 </script>
 
 <template>

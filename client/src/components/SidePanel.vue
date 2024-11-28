@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LoremIpsum from '../components/LoremIpsum.vue'
-import MyAccordion from '../components/MyAccordion.vue'
+import LoremIpsum from '@components/LoremIpsum.vue'
+import MyAccordion from '@components/MyAccordion.vue'
 
 // eslint-disable-next-line no-useless-assignment
 const slots = [
