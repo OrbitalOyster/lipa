@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MainDashboard from '../components/MainDashboard.vue'
+import MainDashboard from '@components/MainDashboard.vue'
 import SidePanel from '../components/SidePanel.vue'
 import TopBar from '../components/TopBar.vue'
 import { ref } from 'vue'

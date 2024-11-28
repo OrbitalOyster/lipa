@@ -5,7 +5,7 @@ import pluginImport from "eslint-plugin-import";
 import stylistic from "@stylistic/eslint-plugin"
 
 export default [
-  { ignores: ["eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
+  { ignores: ["vite.config.ts", "eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
   pluginJs.configs.all,
   ...tseslint.configs.strictTypeChecked,
   ...pluginVue.configs["flat/recommended"],
@@ -28,9 +28,14 @@ export default [
       "no-magic-numbers": "off",
       // Replaced by import/no-duplicates
       "no-duplicate-imports": "off",
-      // Some eslint rules are not enforced in the <script> section 
-      "prefer-const": "error",
-      "no-var": "error",
-    }
+    },
+    settings: {
+      'import/resolver': {
+        alias: {
+          map: [['@components', './src/components']],
+          extensions: ['.ts', '.vue'],
+        },
+      },
+    },
   },
 ];
