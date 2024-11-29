@@ -37,7 +37,6 @@ export default [
             ['@stores', './src/stores/'],
             ['@views', './src/views/']
           ],
-          extensions: ['.ts', '.vue'],
         },
       },
     },
