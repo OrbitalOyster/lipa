@@ -8,8 +8,10 @@ interface IState {
   checks: Record<string, MyFormCheck[]>
 }
 
-type IGetters = {
+interface IGetters {
   isValid: () => boolean
+  /* Generic getter */
+  [key: string]: () => void
 }
 
 interface IActions {

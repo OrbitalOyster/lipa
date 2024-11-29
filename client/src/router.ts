@@ -17,12 +17,12 @@ declare module 'vue-router' {
 
 /* Routes */
 const routes = [{
-    component: <Component>LoginView,
+    component: LoginView as Component,
     name: 'Login',
     path: '/login',
     meta: { title: 'Вход' },
   }, {
-    component: <Component>HomeView,
+    component: HomeView as Component,
     name: 'Home',
     path: '/',
     meta: { title: 'Главная' },
@@ -32,17 +32,17 @@ const routes = [{
     path: '/about',
     meta: { title: 'О программе' },
   }, {
-    component: <Component>ExampleFormView,
+    component: ExampleFormView as Component,
     name: 'ExampleForm',
     path: '/form',
     meta: { title: 'Example Form' },
   }, {
-    component: <Component>ErrorView,
+    component: ErrorView as Component,
     name: 'Error',
     path: '/error',
     meta: { title: 'Ошибка' },
   }, {
-    component: <Component>TestingGrounds,
+    component: TestingGrounds as Component,
     name: 'Test',
     path: '/test',
     meta: { title: 'Test' },

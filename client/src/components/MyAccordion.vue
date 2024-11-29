@@ -1,11 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-defineProps({
-  slots: {
-    type: Array,
-    default: () => [],
-  },
-})
+
+interface ISlot {
+  title: string
+  icon: string
+}
+
+defineProps<{
+  slots: ISlot[]
+}>()
 
 // eslint-disable-next-line no-useless-assignment
 const selected = ref('')

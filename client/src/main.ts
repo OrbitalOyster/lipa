@@ -9,7 +9,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import router from './router.ts'
 
-const app = createApp(<Component>App),
+const app = createApp((App as Component)),
   pinia = createPinia()
 
 app.use(pinia)

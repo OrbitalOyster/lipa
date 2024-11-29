@@ -7,8 +7,8 @@ import { useFormStore } from '@stores/formStore.ts'
 const props = defineProps<{
     name: string
     storeId: string
-    options: Array<string>
-    checks: Array<MyFormCheck>
+    options: string[]
+    checks: MyFormCheck[]
     placeholder: string
   }>(),
   store = useFormStore(props.storeId),

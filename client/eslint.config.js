@@ -1,14 +1,18 @@
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginVue from "eslint-plugin-vue";
+import vueTsEslintConfig from "@vue/eslint-config-typescript";
 import pluginImport from "eslint-plugin-import";
 import stylistic from "@stylistic/eslint-plugin"
 
 export default [
-  { ignores: ["vite.config.ts", "eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
+  { ignores: ["eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
   pluginJs.configs.all,
   ...tseslint.configs.strictTypeChecked,
   ...pluginVue.configs["flat/recommended"],
+  ...vueTsEslintConfig({
+    extends: [ "recommendedTypeChecked", "stylisticTypeChecked" ],
+  }),
   pluginImport.flatConfigs.recommended,
   stylistic.configs["recommended-flat"],
   {

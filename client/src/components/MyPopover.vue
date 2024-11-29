@@ -37,10 +37,10 @@ const props = defineProps<{
   }),
   // eslint-disable-next-line no-useless-assignment
   arrowStyle = computed(() => {
-    const side = <string>middlewareData.value.offset?.placement.split('-')[0],
-      rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] || 0,
-      floatingWidth = floating.value?.offsetWidth || 0,
-      floatingHeight = floating.value?.offsetHeight || 0,
+    const side = middlewareData.value.offset?.placement.split('-')[0] ?? 'bottom',
+      rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] ?? 0,
+      floatingWidth = floating.value?.offsetWidth ?? 0,
+      floatingHeight = floating.value?.offsetHeight ?? 0,
       leftOffset = side === 'left' ? 1 : 0,
       topOffset = side === 'top' ? 1 : 0,
       middlewareArrow = middlewareData.value.arrow,
