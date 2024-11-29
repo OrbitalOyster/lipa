@@ -1,37 +1,40 @@
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginVue from "eslint-plugin-vue";
-import vueTsEslintConfig from "@vue/eslint-config-typescript";
-import pluginImport from "eslint-plugin-import";
-import stylistic from "@stylistic/eslint-plugin"
+import pluginImport from 'eslint-plugin-import'
+import pluginJs from '@eslint/js'
+import pluginVue from 'eslint-plugin-vue'
+import stylistic from '@stylistic/eslint-plugin'
+import tseslint from 'typescript-eslint'
+import vueTsEslintConfig from '@vue/eslint-config-typescript'
 
 export default [
-  { ignores: ["eslint.config.js", "postcss.config.js", "tailwind.config.js", "dist"] },
+  { ignores: ['dist'] },
   pluginJs.configs.all,
   ...tseslint.configs.strictTypeChecked,
-  ...pluginVue.configs["flat/recommended"],
+  ...pluginVue.configs['flat/recommended'],
   ...vueTsEslintConfig({
-    extends: [ "recommendedTypeChecked", "stylisticTypeChecked" ],
+    extends: ['recommendedTypeChecked', 'stylisticTypeChecked'],
   }),
   pluginImport.flatConfigs.recommended,
-  stylistic.configs["recommended-flat"],
+  stylistic.configs['recommended-flat'],
   {
     languageOptions: {
       parserOptions: {
-        extraFileExtensions: [".vue"],
+        extraFileExtensions: ['.vue'],
         parser: tseslint.parser,
-        projectService: true,
-      }
+        projectService: {
+          allowDefaultProject: ['eslint.config.js', 'postcss.config.js', 'tailwind.config.js'],
+          defaultProject: 'tsconfig.json',
+        },
+      },
     },
     rules: {
-      "id-length": "off",
-      "no-console": "off",
-      "no-ternary": "off",
-      "sort-keys": "off",
-      "sort-vars": "off",
-      "no-magic-numbers": "off",
+      'id-length': 'off',
+      'no-console': 'off',
+      'no-ternary': 'off',
+      'sort-keys': 'off',
+      'sort-vars': 'off',
+      'no-magic-numbers': 'off',
       // Replaced by import/no-duplicates
-      "no-duplicate-imports": "off",
+      'no-duplicate-imports': 'off',
     },
     settings: {
       'import/resolver': {
@@ -39,10 +42,10 @@ export default [
           map: [
             ['@components', './src/components/'],
             ['@stores', './src/stores/'],
-            ['@views', './src/views/']
+            ['@views', './src/views/'],
           ],
         },
       },
     },
   },
-];
+]
