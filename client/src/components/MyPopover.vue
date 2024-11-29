@@ -61,7 +61,6 @@ const props = defineProps<{
   }
 
 defineExpose({ toggle, active })
-
 </script>
 
 <template>

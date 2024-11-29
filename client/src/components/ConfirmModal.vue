@@ -2,12 +2,9 @@
 import { ref, useTemplateRef } from 'vue'
 import MyButton from '@components/MyButton.vue'
 
-defineProps({
-  title: {
-    type: String,
-    default: 'INSERT TITLE',
-  },
-})
+defineProps<{
+  title: string
+}>()
 
 // eslint-disable-next-line no-useless-assignment
 const emit = defineEmits(['submit']),

@@ -1,20 +1,11 @@
 <script setup lang="ts">
 import MyContainer from '@components/base/MyContainer.vue'
 
-defineProps({
-  title: {
-    type: String,
-    default: '',
-  },
-  subtitle: {
-    type: String,
-    default: '',
-  },
-  icon: {
-    type: String,
-    default: '',
-  },
-})
+defineProps<{
+  title: string
+  subtitle?: string
+  icon?: string
+}>()
 </script>
 
 <template>

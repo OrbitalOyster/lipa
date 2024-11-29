@@ -1,14 +1,8 @@
 <script setup lang="ts">
-defineProps({
-  title: {
-    type: String,
-    default: '',
-  },
-  to: {
-    type: String,
-    default: '/',
-  },
-})
+defineProps<{
+  title: string
+  to: string
+}>()
 </script>
 
 <template>

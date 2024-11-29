@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
 
-const props = defineProps({
-    title: {
-      type: String,
-      default: '',
-    },
-    icon: {
-      type: String,
-      default: null,
-    },
-    submit: Boolean,
-    loading: Boolean,
-  }),
+const props = defineProps<{
+    title: string
+    icon?: string
+    submit?: boolean
+    loading?: boolean
+  }>(),
   // eslint-disable-next-line no-useless-assignment
   type = props.submit ? 'submit' : 'button',
   button = useTemplateRef<HTMLElement>('button'),

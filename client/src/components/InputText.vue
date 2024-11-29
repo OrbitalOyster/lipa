@@ -3,31 +3,16 @@ import { computed, ref } from 'vue'
 import type { MyFormCheck } from '@stores/formStore.ts'
 import { useFormStore } from '@stores/formStore.ts'
 
-const props = defineProps({
-    name: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: String,
-      default: '',
-    },
-    storeId: {
-      type: String,
-      required: true,
-    },
-    checks: {
-      type: Array<MyFormCheck>,
-      default: () => [],
-    },
-    autofocus: Boolean,
-    password: Boolean,
-    disabled: Boolean,
-    placeholder: {
-      type: String,
-      default: null,
-    },
-  }),
+const props = defineProps<{
+    name: string
+    value?: string
+    storeId: string
+    checks?: MyFormCheck[]
+    autofocus?: boolean
+    password?: boolean
+    disabled?: boolean
+    placeholder?: string
+  }>(),
   type = ref(props.password ? 'password' : 'text'),
   passwordHidden = ref(true),
   passwordIcon = ref('eye'),
@@ -41,8 +26,8 @@ const props = defineProps({
   // eslint-disable-next-line no-useless-assignment
   isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
 
-store.checks[props.name] = props.checks
-store.inputs[props.name] = props.value
+store.checks[props.name] = props.checks ?? []
+store.inputs[props.name] = props.value ?? ''
 </script>
 
 <template>

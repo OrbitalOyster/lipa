@@ -2,27 +2,15 @@
 import type { MyFormCheck } from '@stores/formStore.ts'
 import { useFormStore } from '@stores/formStore.ts'
 
-const props = defineProps({
-    name: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    storeId: {
-      type: String,
-      required: true,
-    },
-    checks: {
-      type: Array<MyFormCheck>,
-      default: () => [],
-    },
-  }),
+const props = defineProps<{
+    name: string
+    title: string
+    storeId: string
+    checks?: MyFormCheck[]
+  }>(),
   store = useFormStore(props.storeId)
 
-store.checks[props.name] = props.checks
+store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = false
 </script>
 

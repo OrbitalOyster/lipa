@@ -3,12 +3,9 @@ import { onMounted, ref } from 'vue'
 import { useFormStore } from '@stores/formStore.ts'
 
 const emits = defineEmits(['submit']),
-  props = defineProps({
-    id: {
-      type: String,
-      required: true,
-    },
-  }),
+  props = defineProps<{
+    id: string
+  }>(),
   store = useFormStore(props.id),
   validated = ref(''),
   // eslint-disable-next-line no-useless-assignment
