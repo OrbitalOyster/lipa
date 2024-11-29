@@ -10,18 +10,8 @@ const props = defineProps<{
   // eslint-disable-next-line no-useless-assignment
   type = props.submit ? 'submit' : 'button',
   button = useTemplateRef<HTMLElement>('button'),
-  focus = () => {
-    if (!button.value) {
-      throw new Error('Major screwup')
-    }
-    button.value.focus()
-  },
-  blur = () => {
-    if (!button.value) {
-      throw new Error('Major screwup')
-    }
-    button.value.blur()
-  }
+  focus = () => button.value?.focus(),
+  blur = () => button.value?.blur()
 defineExpose({ focus, blur })
 </script>
 

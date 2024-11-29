@@ -12,10 +12,7 @@ const emit = defineEmits(['submit']),
   okButton = useTemplateRef<HTMLElement>('okButton'),
   show = () => {
     isActive.value = true
-    if (!okButton.value) {
-      throw new Error('Major screwup')
-    }
-    okButton.value.focus()
+    okButton.value?.focus()
   },
   // eslint-disable-next-line no-useless-assignment
   hide = () => {
