@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { MyFormCheck } from '@stores/formStore.ts'
 import { useFormStore } from '@stores/formStore.ts'
 
@@ -10,15 +9,11 @@ const props = defineProps<{
     checks?: MyFormCheck[]
   }>(),
   store = useFormStore(props.storeId),
-  toggle = () => {
-    console.log('Ok')
-    store.inputs[props.name] = !store.inputs[props.name]
-  },
-  isToggled = computed(() => store.inputs[props.name])
+  // eslint-disable-next-line no-useless-assignment
+  toggle = () => { store.inputs[props.name] = !store.inputs[props.name] }
 
 store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = false
-
 </script>
 
 <template>
@@ -28,21 +23,23 @@ store.inputs[props.name] = false
     type="checkbox"
     :name
   >
-  <button type="button" class="foo relative form-input focusable transition" @click="toggle">
-    <div v-if="isToggled" class="block absolute inset-1.5 w-2.5 h-2.5 rounded bg-emerald-500"/>
-    <p class="pl-8 select-none cursor-pointer"> {{ title }} </p>
-  </button>
+  <div class="flex space-x-2">
+    <button
+      :id="`${storeId}-${props.name}`"
+      type="button"
+      class="w-6 h-6 cursor-pointer relative form-input focusable transition active:bg-emerald-500"
+      @click="toggle"
+    >
+      <div
+        v-if="store.inputs[props.name]"
+        class="block absolute inset-1 w-3.5 h-3.5 rounded bg-emerald-500"
+      />
+    </button>
+    <label
+      class="select-none cursor-pointer"
+      :for="`${storeId}-${props.name}`"
+    >
+      {{ title }}
+    </label>
+  </div>
 </template>
-
-<style scoped>
-
-.foo {
-  @apply w-6 h-6 cursor-pointer;
-  content: "";
-}
-
-.foo:active {
-  @apply bg-emerald-500;
-}
-
-</style>
