@@ -83,7 +83,7 @@ store.inputs[props.name] = ''
   <div class="flex flex-col justify-center pb-1 relative">
     <div
       ref="target"
-      class="select "
+      class="select"
       :class="store.errors[props.name] ? 'invalid' : 'valid'"
       tabindex="0"
       @blur="e => active = active && e.relatedTarget === floating"
@@ -115,24 +115,26 @@ store.inputs[props.name] = ''
         size="xl"
       />
     </div>
-    <ul
-      v-if="active"
-      ref="floating"
-      tabindex="0"
-      class="floating"
-      :style="floatingStyles"
-      @focus="target?.focus()"
-    >
-      <li
-        v-for="(option, i) in options"
-        ref="optionsRef"
-        :key="i"
-        :class="{ highlighted: selectedIndex === i }"
-        @click="setValue(i); active = false"
+    <Transition name="fade">
+      <ul
+        v-if="active"
+        ref="floating"
+        tabindex="0"
+        class="card floating"
+        :style="floatingStyles"
+        @focus="target?.focus()"
       >
-        {{ option }}
-      </li>
-    </ul>
+        <li
+          v-for="(option, i) in options"
+          ref="optionsRef"
+          :key="i"
+          :class="{ highlighted: selectedIndex === i }"
+          @click="setValue(i); active = false"
+        >
+          {{ option }}
+        </li>
+      </ul>
+    </Transition>
   </div>
 </template>
 
@@ -140,9 +142,7 @@ store.inputs[props.name] = ''
 
   .floating {
     @apply absolute top-0 left-0 mt-2 z-50;
-    @apply outline-none border border-slate-300 rounded overflow-auto;
-    @apply bg-white;
-    @apply drop-shadow;
+    @apply overflow-auto;
   }
 
   .select {

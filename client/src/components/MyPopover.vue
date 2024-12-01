@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { arrow, autoUpdate, flip, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
-import { computed, ref } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 import type { Placement } from '@floating-ui/utils'
 
 const props = defineProps<{
@@ -11,9 +11,9 @@ const props = defineProps<{
   active = ref(false),
   minSize = 128,
   offsetValue = props.hasArrow ? 16 : 2,
-  target = ref(null),
-  floating = ref<HTMLElement | null>(null),
-  arrowRef = ref(null),
+  target = useTemplateRef('target'),
+  floating = useTemplateRef('floating'),
+  arrowRef = useTemplateRef('arrowRef'),
   // eslint-disable-next-line no-useless-assignment
   { floatingStyles, middlewareData } = useFloating(target, floating, {
     open: active,
@@ -71,41 +71,32 @@ defineExpose({ toggle, active })
   >
     <slot />
   </div>
-
-  <div
-    v-if="active"
-    ref="floating"
-    class="floating"
-    :style="floatingStyles"
-  >
+  <Transition name="fade">
     <div
-      v-if="props.hasArrow"
-      ref="arrowRef"
-      :style="arrowStyle"
-      class="arrow"
-    />
-    <div class="h-[inherit] w-[inherit] overflow-auto">
-      <div>
-        <slot name="popover" />
+      v-if="active"
+      ref="floating"
+      class="card absolute top-0 left-0"
+      :style="floatingStyles"
+    >
+      <div
+        v-if="props.hasArrow"
+        ref="arrowRef"
+        :style="arrowStyle"
+        class="arrow absolute bg-white border-slate-300 border-t border-l"
+      />
+      <div class="h-[inherit] w-[inherit] overflow-auto">
+        <div>
+          <slot name="popover" />
+        </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <style scoped>
-  .floating {
-    @apply absolute top-0 left-0;
-    @apply outline-none border border-slate-300 rounded;
-    @apply bg-white;
-    @apply drop-shadow;
-  }
-
   .arrow {
     width: 16px;
     height: 16px;
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%);
-    @apply absolute;
-    @apply bg-white;
-    @apply border-slate-300 border-t border-l;
   }
 </style>

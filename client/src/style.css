@@ -25,7 +25,9 @@ body {
 
 /* Generic container */
 .card {
-
+  @apply outline-none border border-slate-300 rounded;
+  @apply bg-white;
+  @apply drop-shadow;
 }
 
 /* Basic form field */
