@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import MyContainer from '@components/base/MyContainer.vue'
-
 defineProps<{
   title: string
   subtitle?: string
@@ -9,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <MyContainer class="p-4 space-y-4">
+  <div class="card p-4 space-y-4">
     <header>
       <img
         v-if="icon"
@@ -24,5 +22,5 @@ defineProps<{
       </h2>
     </header>
     <slot />
-  </MyContainer>
+  </div>
 </template>

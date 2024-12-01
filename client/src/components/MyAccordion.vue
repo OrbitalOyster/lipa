@@ -15,8 +15,9 @@ const selected = ref('')
 </script>
 
 <template>
-  <ul>
+  <ul class="h-full flex flex-col space-y-2">
     <li
+      class="card min-h-12 overflow-hidden transition-all"
       v-for="slot in slots"
       :key="slot.title"
       :class="{grow: slot.title === selected}"
@@ -51,18 +52,6 @@ const selected = ref('')
 </template>
 
 <style scoped>
-  ul {
-    @apply h-full flex flex-col space-y-2;
-  }
-
-  li {
-    @apply min-h-12 overflow-hidden;
-    @apply bg-white;
-    @apply outline-none border border-slate-300 rounded;
-    @apply drop-shadow;
-    @apply transition-all;
-  }
-
   .toggle {
     @apply bg-white h-12 p-1 pr-3;
     @apply text-slate-700;

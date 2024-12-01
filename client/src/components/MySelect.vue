@@ -83,7 +83,7 @@ store.inputs[props.name] = ''
   <div class="flex flex-col justify-center pb-1 relative">
     <div
       ref="target"
-      class="select"
+      class="select flex flex-col p-2 pl-4 justify-center select-none cursor-pointer form-input focusable transition"
       :class="store.errors[props.name] ? 'invalid' : 'valid'"
       tabindex="0"
       @blur="e => active = active && e.relatedTarget === floating"
@@ -143,31 +143,6 @@ store.inputs[props.name] = ''
   .floating {
     @apply absolute top-0 left-0 mt-2 z-50;
     @apply overflow-auto;
-  }
-
-  .select {
-    /* Flexbox */
-    @apply flex flex-col justify-center;
-    /* Sizing */
-    @apply w-full p-2 pl-4;
-    /* Border */
-    @apply outline-none border border-slate-300 rounded;
-    /* Colors */
-    @apply bg-slate-50;
-    /* Misc */
-    @apply select-none cursor-pointer;
-    /* Animation */
-    @apply transition-shadow duration-100 ease-in-out;
-  }
-
-  /* On focus */
-  .select:focus {
-    @apply focus:ring-4 focus:ring-offset-2 focus:ring-emerald-400;
-  }
-
-  /* On hover */
-  .select:hover {
-    @apply hover:border-slate-400;
   }
 
   label {
