@@ -38,7 +38,7 @@ input:focus ~ .checkmark {
 }
 
 /* On active */
-label input:active ~ .checkmark {
+input:active ~ .checkmark {
   @apply bg-emerald-700;
 }
 
