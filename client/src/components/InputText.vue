@@ -52,7 +52,7 @@ store.inputs[props.name] = props.value ?? ''
         v-if="password"
         :icon="['fas', passwordIcon]"
         size="xl"
-        class="password-toggle"
+        class="w-8 text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
         @click="togglePassword"
       />
     </div>
@@ -60,24 +60,16 @@ store.inputs[props.name] = props.value ?? ''
 </template>
 
 <style scoped>
-  /* Inputs with placeholders are bigger */
-  input[placeholder] {
-    @apply pt-6;
-  }
+/* Inputs with placeholders are bigger */
+input[placeholder] {
+  @apply pt-6;
+}
 
-  /* Shrink and translate label if:
-   * - input is focused
-   * - placeholder not shown */
-  input:focus + .form-input-label,
-  input:not(:placeholder-shown) + .form-input-label {
-    transform: translateY(calc(-50%)) scale(.8);
-  }
-
-  .password-toggle {
-    @apply w-8 text-slate-500 cursor-pointer pointer-events-auto;
-  }
-
-  .password-toggle:hover {
-    @apply text-slate-400;
-  }
+/* Shrink and translate label if:
+ * - input is focused
+ * - placeholder not shown */
+input:focus + .form-input-label,
+input:not(:placeholder-shown) + .form-input-label {
+  transform: translateY(calc(-50%)) scale(.8);
+}
 </style>

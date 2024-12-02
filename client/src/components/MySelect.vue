@@ -140,23 +140,21 @@ store.inputs[props.name] = ''
 </template>
 
 <style scoped>
+/* Shrink and translate label if:
+ * - select is not empty */
+.select:not(:empty) + .form-input-label {
+  transform: translateY(calc(-50%)) scale(.8);
+}
 
-  /* Shrink and translate label if:
-   * - select is not empty */
-  .select:not(:empty) + .form-input-label {
-    transform: translateY(calc(-50%)) scale(.8);
-  }
+.angle-icon {
+  @apply text-slate-500 cursor-pointer transition-transform;
+  /* Flexbox */
+  @apply inline-flex justify-center items-center;
+  /* Misc */
+  @apply select-none;
+}
 
-  .angle-icon {
-    @apply text-slate-500 cursor-pointer transition-transform;
-    /* Flexbox */
-    @apply inline-flex justify-center items-center;
-    /* Misc */
-    @apply select-none ;
-  }
-
-  li:hover, li.highlighted {
-    @apply bg-slate-200;
-  }
-
+li:hover, li.highlighted {
+  @apply bg-slate-200;
+}
 </style>

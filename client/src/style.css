@@ -73,7 +73,7 @@ body {
 .validated .form-input.invalid ~ .input-icons::before {
   font-family: "Font Awesome 5 Free";
   content: "\f071";
-  @apply pe-1 font-black text-2xl text-red-400 pointer-events-none;
+  @apply pe-1 font-black text-2xl text-red-400;
 }
 
 .form-input-label {
