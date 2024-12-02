@@ -27,19 +27,23 @@ const selected = ref('')
         @click="selected = selected === slot.title ? '' : slot.title"
       >
         <h1>
-          <span class="inline-block w-12 text-center"><font-awesome-icon
-            :icon="['fas', slot.icon]"
-            size="xl"
-          /></span>
+          <div class="inline-block w-12 text-center">
+            <font-awesome-icon
+              :icon="['fas', slot.icon]"
+              size="xl"
+            />
+          </div>
           {{ slot.title }}
         </h1>
-        <span
-          class="transition-transform"
+        <div
+          class="text-slate-500 transition-transform"
           :class="{ 'rotate-180': slot.title === selected}"
-        ><font-awesome-icon
-          :icon="['fas', 'angle-down']"
-          size="xl"
-        /></span>
+        >
+          <font-awesome-icon
+            :icon="['fas', 'angle-down']"
+            size="xl"
+          />
+        </div>
       </div>
       <div
         v-if="slot.title === selected"

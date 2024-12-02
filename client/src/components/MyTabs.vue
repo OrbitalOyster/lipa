@@ -9,7 +9,6 @@ interface ISlot {
 const props = defineProps<{
     slots: ISlot[]
   }>(),
-
   // eslint-disable-next-line no-useless-assignment
   selected = ref(props.slots[0].title)
 </script>

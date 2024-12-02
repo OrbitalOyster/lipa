@@ -46,8 +46,8 @@ const props = defineProps<{
       scrollToSelected(false)
     }
   },
-  target = useTemplateRef<HTMLElement>('target'),
-  floating = ref(null),
+  target = useTemplateRef('target'),
+  floating = useTemplateRef('floating'),
   // eslint-disable-next-line no-useless-assignment
   { floatingStyles, isPositioned } = useFloating(target, floating, {
     placement,
@@ -106,7 +106,7 @@ store.inputs[props.name] = ''
     </label>
     <div class="input-icons">
       <div
-        class="angle-icon"
+        class="text-slate-500 transition-transform"
         :class="{ 'rotate-180': active }"
       >
         <font-awesome-icon
@@ -144,14 +144,6 @@ store.inputs[props.name] = ''
  * - select is not empty */
 .select:not(:empty) + .form-input-label {
   transform: translateY(calc(-50%)) scale(.8);
-}
-
-.angle-icon {
-  @apply text-slate-500 cursor-pointer transition-transform;
-  /* Flexbox */
-  @apply inline-flex justify-center items-center;
-  /* Misc */
-  @apply select-none;
 }
 
 li:hover, li.highlighted {

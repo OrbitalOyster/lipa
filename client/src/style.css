@@ -84,7 +84,7 @@ body {
   /* Ignore selection and pointer */
   @apply select-none pointer-events-none;
   /* Animation */
-  @apply duration-200 origin-left;
+  @apply transition-transform origin-left;
 }
 
 /* Icons */

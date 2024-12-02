@@ -9,7 +9,7 @@ defineProps<{
 // eslint-disable-next-line no-useless-assignment
 const emit = defineEmits(['submit']),
   isActive = ref(false),
-  okButton = useTemplateRef<HTMLElement>('okButton'),
+  okButton = useTemplateRef('okButton'),
   show = () => {
     isActive.value = true
     okButton.value?.focus()
