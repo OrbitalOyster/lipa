@@ -34,7 +34,7 @@ store.inputs[props.name] = props.value ?? ''
   <div class="flex flex-col justify-center pb-1 relative">
     <input
       v-model="store.inputs[props.name]"
-      class="form-input focusable transition w-full h-14 p-2 pl-4"
+      class="form-input focusable w-full h-14 p-2 pl-4 placeholder:opacity-0"
       :class="isValid"
       :name
       :title="store.errors[props.name]"
@@ -44,7 +44,7 @@ store.inputs[props.name] = props.value ?? ''
       :type
       @input="store.validate"
     >
-    <label>
+    <label class="form-input-label">
       {{ placeholder }}
     </label>
     <div class="input-icons">
@@ -60,22 +60,6 @@ store.inputs[props.name] = props.value ?? ''
 </template>
 
 <style scoped>
-  label {
-    /* Position */
-    @apply absolute top-4 left-4;
-    /* Color */
-    @apply text-slate-500;
-    /* Ignore pointer */
-    @apply pointer-events-none;
-    /* Animation */
-    @apply duration-200 origin-left;
-  }
-
-  /* Hide original placeholder */
-  input::placeholder {
-    @apply opacity-0;
-  }
-
   /* Inputs with placeholders are bigger */
   input[placeholder] {
     @apply pt-6;
@@ -84,22 +68,13 @@ store.inputs[props.name] = props.value ?? ''
   /* Shrink and translate label if:
    * - input is focused
    * - placeholder not shown */
-  input:focus + label,
-  input:not(:placeholder-shown) + label {
+  input:focus + .form-input-label,
+  input:not(:placeholder-shown) + .form-input-label {
     transform: translateY(calc(-50%)) scale(.8);
   }
 
-  .input-icons {
-    /* Sizing and position */
-    @apply absolute right-3 space-x-2;
-    /* Flexbox */
-    @apply inline-flex justify-center items-center;
-    /* Misc */
-    @apply select-none;
-  }
-
   .password-toggle {
-    @apply w-8 text-slate-500 select-none cursor-pointer;
+    @apply w-8 text-slate-500 cursor-pointer pointer-events-auto;
   }
 
   .password-toggle:hover {

@@ -81,9 +81,15 @@ store.inputs[props.name] = ''
 
 <template>
   <div class="flex flex-col justify-center pb-1 relative">
+    <input
+      v-model="store.inputs[props.name]"
+      class="hidden"
+      :name
+      :placeholder
+    >
     <div
       ref="target"
-      class="select flex flex-col p-2 pl-4 justify-center select-none cursor-pointer form-input focusable transition"
+      class="select flex flex-col p-2 pl-4 pt-6 h-14 justify-center select-none cursor-pointer form-input focusable"
       :class="store.errors[props.name] ? 'invalid' : 'valid'"
       tabindex="0"
       @blur="e => active = active && e.relatedTarget === floating"
@@ -95,25 +101,19 @@ store.inputs[props.name] = ''
     >
       {{ store.inputs[props.name] }}
     </div>
-    <label>
+    <label class="form-input-label">
       {{ placeholder }}
     </label>
     <div class="input-icons">
-      <font-awesome-icon
-        :icon="['fas', 'triangle-exclamation']"
-        size="xl"
-        class="text-red-400 error-triangle hidden"
-        :title="store.errors[props.name]"
-      />
-    </div>
-    <div
-      class="angle-icon"
-      :class="{ 'rotate-180': active }"
-    >
-      <font-awesome-icon
-        :icon="['fas', 'angle-down']"
-        size="xl"
-      />
+      <div
+        class="angle-icon"
+        :class="{ 'rotate-180': active }"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'angle-down']"
+          size="xl"
+        />
+      </div>
     </div>
     <Transition name="fade">
       <ul
@@ -128,6 +128,7 @@ store.inputs[props.name] = ''
           v-for="(option, i) in options"
           ref="optionsRef"
           :key="i"
+          class="p-2 cursor-pointer select-none"
           :class="{ highlighted: selectedIndex === i }"
           @click="setValue(i); active = false"
         >
@@ -139,67 +140,23 @@ store.inputs[props.name] = ''
 </template>
 
 <style scoped>
-  label {
-    /* Position */
-    @apply absolute top-4 left-4;
-    /* Color */
-    @apply text-slate-500;
-    /* Ignore pointer */
-    @apply pointer-events-none;
-    /* Animation */
-    @apply duration-200 origin-left;
-  }
 
-  .select:empty {
-    @apply h-14;
-  }
-
-  .select:not(:empty) {
-    @apply pt-6 h-14;
-  }
-
-  .select:not(:empty) + label {
+  /* Shrink and translate label if:
+   * - select is not empty */
+  .select:not(:empty) + .form-input-label {
     transform: translateY(calc(-50%)) scale(.8);
   }
 
   .angle-icon {
     @apply text-slate-500 cursor-pointer transition-transform;
-    /* Sizing and position */
-    @apply absolute right-3 space-x-2;
     /* Flexbox */
     @apply inline-flex justify-center items-center;
     /* Misc */
-    @apply select-none pointer-events-none;
-  }
-
-  .input-icons {
-    /* Sizing and position */
-    @apply absolute right-10;
-    /* Flexbox */
-    @apply inline-flex justify-center items-center;
-    /* Misc */
-    @apply select-none;
-  }
-
-  /*
-  .validated .select.invalid {
-    @apply border-red-300 bg-pink-100;
-  }
-
-  .validated .select.valid {
-    @apply border-green-300 bg-green-100;
-  }
-
-  .validated .select.invalid ~ .input-icons .error-triangle {
-    @apply block;
-  }
-  */
-
-  li {
-    @apply p-2 cursor-pointer select-none;
+    @apply select-none ;
   }
 
   li:hover, li.highlighted {
     @apply bg-slate-200;
   }
+
 </style>

@@ -16,7 +16,7 @@ body {
 
 /* Animated green outline on focus */
 .focusable {
-  @apply outline-none;
+  @apply outline-none transition-shadow;
 }
 
 .focusable:focus {
@@ -28,6 +28,16 @@ body {
   @apply outline-none border border-slate-300 rounded;
   @apply bg-white;
   @apply drop-shadow;
+}
+
+/* Input icons */
+.input-icons {
+  /* Sizing and position */
+  @apply absolute right-3 space-x-2;
+  /* Flexbox */
+  @apply inline-flex justify-center items-center;
+  /* Misc */
+  @apply pointer-events-none select-none;
 }
 
 /* Basic form field */
@@ -60,15 +70,25 @@ body {
   @apply hover:border-green-400;
 }
 
-/* Alert icon on invalid inputs */
 .validated .form-input.invalid ~ .input-icons::before {
   font-family: "Font Awesome 5 Free";
   content: "\f071";
-  @apply pe-1 font-black text-3xl text-red-400;
+  @apply pe-1 font-black text-2xl text-red-400 pointer-events-none;
+}
+
+.form-input-label {
+  /* Position */
+  @apply absolute top-4 left-4;
+  /* Color */
+  @apply text-slate-500;
+  /* Ignore selection and pointer */
+  @apply select-none pointer-events-none;
+  /* Animation */
+  @apply duration-200 origin-left;
 }
 
 /* Icons */
-.alert-icon::before {
+.alert-iconnn::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   font-size: 1.5rem;
