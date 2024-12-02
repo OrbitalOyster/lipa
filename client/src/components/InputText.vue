@@ -34,7 +34,7 @@ store.inputs[props.name] = props.value ?? ''
   <div class="flex flex-col justify-center pb-1 relative">
     <input
       v-model="store.inputs[props.name]"
-      class="form-input focusable transition"
+      class="form-input focusable transition w-full h-14 p-2 pl-4"
       :class="isValid"
       :name
       :title="store.errors[props.name]"
@@ -60,11 +60,6 @@ store.inputs[props.name] = props.value ?? ''
 </template>
 
 <style scoped>
-  input {
-    /* Sizing */
-    @apply w-full h-14 p-2 pl-4;
-  }
-
   label {
     /* Position */
     @apply absolute top-4 left-4;

@@ -120,7 +120,7 @@ store.inputs[props.name] = ''
         v-if="active"
         ref="floating"
         tabindex="0"
-        class="card floating"
+        class="card absolute top-0 left-0 mt-2 z-50 overflow-auto"
         :style="floatingStyles"
         @focus="target?.focus()"
       >
@@ -139,12 +139,6 @@ store.inputs[props.name] = ''
 </template>
 
 <style scoped>
-
-  .floating {
-    @apply absolute top-0 left-0 mt-2 z-50;
-    @apply overflow-auto;
-  }
-
   label {
     /* Position */
     @apply absolute top-4 left-4;
@@ -187,6 +181,7 @@ store.inputs[props.name] = ''
     @apply select-none;
   }
 
+  /*
   .validated .select.invalid {
     @apply border-red-300 bg-pink-100;
   }
@@ -198,6 +193,7 @@ store.inputs[props.name] = ''
   .validated .select.invalid ~ .input-icons .error-triangle {
     @apply block;
   }
+  */
 
   li {
     @apply p-2 cursor-pointer select-none;

@@ -17,9 +17,9 @@ const selected = ref('')
 <template>
   <ul class="h-full flex flex-col space-y-2">
     <li
-      class="card min-h-12 overflow-hidden transition-all"
       v-for="slot in slots"
       :key="slot.title"
+      class="card min-h-12 overflow-hidden transition-all"
       :class="{grow: slot.title === selected}"
     >
       <div
