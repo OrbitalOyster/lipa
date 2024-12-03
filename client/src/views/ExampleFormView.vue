@@ -41,7 +41,7 @@ const options = [
     >
       <MyForm
         id="mySampleForm"
-        class="space-y-2"
+        class="space-y-4"
       >
         <InputText
           name="from"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import type { MyFormCheck } from '@stores/formStore.ts'
+import { ref } from 'vue'
 import { useFormStore } from '@stores/formStore.ts'
 
 const props = defineProps<{
@@ -22,20 +22,18 @@ const props = defineProps<{
     passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
     type.value = passwordHidden.value ? 'password' : 'text'
   },
-  store = useFormStore(props.storeId),
-  // eslint-disable-next-line no-useless-assignment
-  isValid = computed(() => store.errors[props.name] ? 'invalid' : 'valid')
+  store = useFormStore(props.storeId)
 
 store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = props.value ?? ''
 </script>
 
 <template>
-  <div class="flex flex-col justify-center pb-1 relative">
+  <div class="flex flex-col justify-center relative">
     <input
       v-model="store.inputs[props.name]"
-      class="form-input focusable w-full h-14 p-2 pl-4 placeholder:opacity-0"
-      :class="isValid"
+      class="form-input focusable w-full h-14 pl-4 placeholder:opacity-0"
+      :class="store.errors[props.name] ? 'invalid' : 'valid'"
       :name
       :title="store.errors[props.name]"
       :autofocus
@@ -52,7 +50,7 @@ store.inputs[props.name] = props.value ?? ''
         v-if="password"
         :icon="['fas', passwordIcon]"
         size="xl"
-        class="w-8 text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
+        class="text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
         @click="togglePassword"
       />
     </div>
@@ -62,11 +60,12 @@ store.inputs[props.name] = props.value ?? ''
 <style scoped>
 /* Inputs with placeholders are bigger */
 input[placeholder] {
-  @apply pt-6;
+  @apply pt-4;
 }
 
 /* Shrink and translate label if:
  * - input is focused
+ *   or
  * - placeholder not shown */
 input:focus + .form-input-label,
 input:not(:placeholder-shown) + .form-input-label {

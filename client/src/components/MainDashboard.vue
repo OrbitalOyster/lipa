@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MyLink from '@components/MyLink.vue'
 import MyTabs from '@components/MyTabs.vue'
 
 // eslint-disable-next-line no-useless-assignment
@@ -13,9 +14,10 @@ const slots = [
   <main>
     <MyTabs :slots>
       <template #Исходники>
-        <div class="bg-red-300 border border-black">
-          Bar
-        </div>
+        <MyLink
+          to="/form"
+          title="Sample Form"
+        />
       </template>
       <template #Первичные_отчёты>
         <p>Foo</p>

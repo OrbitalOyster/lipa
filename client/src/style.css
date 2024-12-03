@@ -33,7 +33,7 @@ body {
 /* Input icons */
 .input-icons {
   /* Sizing and position */
-  @apply absolute right-3 space-x-2;
+  @apply absolute right-3;
   /* Flexbox */
   @apply inline-flex justify-center items-center;
   /* Misc */

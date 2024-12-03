@@ -8,28 +8,12 @@ interface IState {
   checks: Record<string, MyFormCheck[]>
 }
 
-interface IGetters {
-  isValid: () => boolean
-  /* Generic getter */
-  [key: string]: () => void
-}
-
-interface IActions {
-  checkInput: (key: string, check: MyFormCheck) => string
-  validate: () => void
-}
-
-export const useFormStore = (id: string) => defineStore<string, IState, IGetters, IActions>(id, {
-  state: () => ({
+export const useFormStore = (id: string) => defineStore(id, {
+  state: (): IState => ({
     errors: {},
     inputs: {},
     checks: {},
   }),
-  getters: {
-    isValid() {
-      return Object.values(this.errors).every(e => e === '')
-    },
-  },
   actions: {
     checkInput(key: string, check: MyFormCheck) {
       const rawValue = this.inputs[key]
@@ -62,6 +46,9 @@ export const useFormStore = (id: string) => defineStore<string, IState, IGetters
           return this.errors[key] === ''
         })
       })
+    },
+    isValid() {
+      return Object.values(this.errors).every(e => e === '')
     },
   },
 })()
