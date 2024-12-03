@@ -52,7 +52,7 @@ body {
   @apply hover:border-slate-300;
   /* Colors */
   @apply bg-slate-200 text-slate-400;
-  @apply cursor-not-allowed;
+  @apply cursor-not-allowed pointer-events-none;
 }
 
 .form-input:hover {

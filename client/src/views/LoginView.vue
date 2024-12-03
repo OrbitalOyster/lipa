@@ -18,15 +18,13 @@ interface ILoginFormCheck {
 
 const router = useRouter(),
   loginStore = useLoginStore(),
-  shakeable = useTemplateRef<typeof MyShakeable>('shakeable'),
-  loading = ref(false),
+  shakeable = useTemplateRef('shakeable'),
   disabled = ref(false),
   // eslint-disable-next-line no-useless-assignment
   auth = async (formCheck: ILoginFormCheck | null) => {
     if (!formCheck) {
       return
     }
-    loading.value = true
     disabled.value = true
     if (await loginStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe)) {
       await router.push('/')
@@ -34,11 +32,8 @@ const router = useRouter(),
     else {
       await shakeable.value?.shake()
     }
-    loading.value = false
     disabled.value = false
-  },
-  // eslint-disable-next-line no-useless-assignment
-  year = new Date().getFullYear()
+  }
 </script>
 
 <template>
@@ -79,19 +74,20 @@ const router = useRouter(),
               title="Запомнить меня"
               name="rememberMe"
               store-id="loginForm"
+              :disabled
             />
             <MyButton
               title="Войти"
               icon="arrow-right-to-bracket"
               submit
-              :loading
+              :loading="disabled"
               :disabled
             />
           </div>
         </MyForm>
       </MyCard>
       <div class="p-2 text-end">
-        (c) {{ year }}
+        (c) {{ new Date().getFullYear() }}
       </div>
     </MyShakeable>
   </div>

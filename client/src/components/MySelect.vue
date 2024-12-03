@@ -13,7 +13,7 @@ const props = defineProps<{
   }>(),
   store = useFormStore(props.storeId),
   active = ref(false),
-  optionsRef = useTemplateRef<HTMLElement[]>('optionsRef'),
+  optionsRef = useTemplateRef('optionsRef'),
   placement = 'bottom',
   maxDistanceToBottom = 32,
   minHeight = 128,

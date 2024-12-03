@@ -13,6 +13,7 @@ const props = defineProps<{
     disabled?: boolean
     placeholder?: string
   }>(),
+  store = useFormStore(props.storeId),
   type = ref(props.password ? 'password' : 'text'),
   passwordHidden = ref(true),
   passwordIcon = ref('eye'),
@@ -21,8 +22,7 @@ const props = defineProps<{
     passwordHidden.value = !passwordHidden.value
     passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
     type.value = passwordHidden.value ? 'password' : 'text'
-  },
-  store = useFormStore(props.storeId)
+  }
 
 store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = props.value ?? ''
@@ -50,7 +50,7 @@ store.inputs[props.name] = props.value ?? ''
         v-if="password"
         :icon="['fas', passwordIcon]"
         size="xl"
-        class="text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
+        class="w-8 text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
         @click="togglePassword"
       />
     </div>

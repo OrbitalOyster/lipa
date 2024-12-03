@@ -5,6 +5,7 @@ import { useFormStore } from '@stores/formStore.ts'
 const props = defineProps<{
     name: string
     title: string
+    disabled?: boolean
     storeId: string
     checks?: MyFormCheck[]
   }>(),
@@ -27,6 +28,7 @@ store.inputs[props.name] = false
     <button
       :id="`${storeId}-${props.name}`"
       type="button"
+      :disabled
       class="w-6 h-6 cursor-pointer relative form-input focusable transition active:bg-emerald-500"
       @click="toggle"
     >
@@ -43,3 +45,9 @@ store.inputs[props.name] = false
     </label>
   </div>
 </template>
+
+<style scoped>
+  button:disabled + label {
+    pointer-events: none;
+  }
+</style>
