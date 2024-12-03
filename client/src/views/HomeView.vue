@@ -17,9 +17,12 @@ const sidepanel = ref(true)
       class="switch-button"
       @click="sidepanel=!sidepanel"
     />
-    <SidePanel class="side-panel" />
+    <SidePanel
+      class="side-panel h-full fixed left-8 pt-24 pb-8 pr-2 w-[32rem] origin-left transition-[transform] ease-in-out duration-100"
+      :style="{ transform: sidepanel ? 'scaleX(1)' : 'scaleX(0)' }"
+    />
     <MainDashboard
-      class="main-dashboard"
+      class="fixed top-0 pb-8 right-8 z-30 pt-20 overflow-y-auto transition-[left] duration-100 ease-in-out"
       :class="{ 'left-[34rem]': sidepanel, 'left-[2rem]': !sidepanel }"
     />
   </main>
@@ -32,17 +35,5 @@ const sidepanel = ref(true)
 
   .switch-button:hover {
     @apply text-slate-500;
-  }
-
-  .side-panel {
-    /* Sizing */
-    @apply w-[32rem] h-full;
-    /* Position */
-    @apply fixed left-8 pt-36 pb-8 pr-2;
-  }
-
-  .main-dashboard {
-    @apply fixed top-0 pb-8 right-[2rem] z-30 pt-20 overflow-y-auto;
-    @apply transition-all duration-200;
   }
 </style>
