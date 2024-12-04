@@ -12,19 +12,17 @@ const confirmModal = useTemplateRef('confirmModal')
     title="Are you sure you want to log out?"
     @submit="console.log('modal ok')"
   />
-  <main>
-    <div>
-      <h1> About page </h1>
-      <MyButton
-        title="Alert"
-        @click="confirmModal?.show"
-      />
-      <img
-        src="/icon.svg"
-      >
-      <RouterLink to="/">
-        back
-      </RouterLink>
-    </div>
-  </main>
+  <div>
+    <h1> About page </h1>
+    <MyButton
+      title="Alert"
+      @click="confirmModal?.show"
+    />
+    <img
+      src="/icon.svg"
+    >
+    <RouterLink to="/">
+      back
+    </RouterLink>
+  </div>
 </template>

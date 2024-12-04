@@ -21,7 +21,7 @@ defineExpose({ focus, blur })
     :type
     class="focusable"
   >
-    <div class="space-x-2 whitespace-nowrap">
+    <div class="space-x-3 whitespace-nowrap">
       <span v-if="title">
         {{ title }}
       </span>
