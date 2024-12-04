@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, ref, useTemplateRef } from 'vue'
 import MyButton from '@components/MyButton.vue'
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 defineProps<{
   title: string
@@ -9,15 +10,21 @@ defineProps<{
 // eslint-disable-next-line no-useless-assignment
 const emit = defineEmits(['submit']),
   isActive = ref(false),
-  okButton = useTemplateRef('okButton'),
+  dialog = useTemplateRef('dialog'),
+  onEsc = () => {
+    isActive.value = false
+    return true
+  },
+  { activate, deactivate } = useFocusTrap(dialog, { escapeDeactivates: onEsc }),
   show = async () => {
     isActive.value = true
     await nextTick()
-    okButton.value?.focus()
+    activate()
   },
   // eslint-disable-next-line no-useless-assignment
   hide = () => {
     isActive.value = false
+    deactivate()
   }
 
 defineExpose({ show })
@@ -28,13 +35,11 @@ defineExpose({ show })
     <Transition name="fade">
       <div
         v-if="isActive"
-        class="flex items-center justify-center w-screen h-screen bg-white/75 fixed z-50"
-        @click="hide"
+        class="fixed flex items-center justify-center w-screen h-screen bg-white/75 z-50"
       >
         <div
+          ref="dialog"
           class="card p-4"
-          @click.stop
-          @keyup.esc="hide"
         >
           <div class="flex flex-row items-center pb-2">
             <font-awesome-icon
@@ -48,7 +53,6 @@ defineExpose({ show })
           </div>
           <footer class="flex justify-end pt-3 space-x-2 border-t">
             <MyButton
-              ref="okButton"
               title="Ok"
               icon="check"
               @click="emit('submit'); hide()"

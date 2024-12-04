@@ -10,8 +10,6 @@ body {
   font-family: "Exo2";
   background-color: #f6f2f0;
   @apply text-slate-800;
-
-  overflow: hidden;
 }
 
 /* Animated green outline on focus */
