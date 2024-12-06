@@ -3,13 +3,13 @@ import { autoUpdate, hide, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import type { MyFormCheck } from '@stores/formStore.ts'
 import { useFormStore } from '@stores/formStore.ts'
-
 const props = defineProps<{
     name: string
     storeId: string
     options: string[]
-    checks: MyFormCheck[]
+    checks?: MyFormCheck[]
     placeholder: string
+    disabled?: boolean
   }>(),
   store = useFormStore(props.storeId),
   active = ref(false),
@@ -18,30 +18,31 @@ const props = defineProps<{
   maxDistanceToBottom = 32,
   minHeight = 128,
   selectedIndex = ref<null | number>(null),
-  scrollToSelected = (fast: boolean) => {
-    if (selectedIndex.value !== null && optionsRef.value !== null) {
-      const highlightedElement = optionsRef.value[selectedIndex.value],
-        behavior = fast ? 'instant' : 'smooth'
-      highlightedElement.scrollIntoView({ behavior, block: 'center' })
+  scrollToSelected = (instant: boolean) => {
+    if (selectedIndex.value !== null) {
+      const highlightedElement = optionsRef.value?.[selectedIndex.value],
+        behavior = instant ? 'instant' : 'smooth'
+      highlightedElement?.scrollIntoView({ behavior, block: 'center' })
     }
   },
-  setValue = (ind: number | null) => {
-    selectedIndex.value = ind
+  setValue = (value: number | null) => {
+    selectedIndex.value = value
     /* Resetting value? */
-    if (ind === null) {
+    if (value === null) {
       store.inputs[props.name] = ''
     }
     else {
-      store.inputs[props.name] = props.options[ind]
+      store.inputs[props.name] = props.options[value]
     }
     store.validate()
   },
-  wrap = (r: number, d: number) => (r + d + props.options.length) % props.options.length,
+  wrap = (value: number, direction: number) =>
+    (value + direction + props.options.length) % props.options.length,
   // eslint-disable-next-line no-useless-assignment
-  keyScroll = (d: number) => {
+  keyScroll = (direction: number) => {
     /* Edge case - nothing selected */
-    selectedIndex.value ??= (d > 0 ? -1 : 0)
-    setValue(wrap(selectedIndex.value, d))
+    selectedIndex.value ??= (direction > 0 ? -1 : 0)
+    setValue(wrap(selectedIndex.value, direction))
     if (active.value) {
       scrollToSelected(false)
     }
@@ -67,20 +68,21 @@ const props = defineProps<{
     ],
     whileElementsMounted: autoUpdate,
   })
-
 watch(isPositioned, (opened) => {
   if (opened) {
     scrollToSelected(true)
   }
 },
 )
-
-store.checks[props.name] = props.checks
+store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = ''
 </script>
 
 <template>
-  <div class="flex flex-col justify-center pb-1 relative">
+  <div
+    class="flex items-center relative"
+    :class="{ 'form-input-disabled': disabled }"
+  >
     <input
       v-model="store.inputs[props.name]"
       class="hidden"
@@ -89,9 +91,9 @@ store.inputs[props.name] = ''
     >
     <div
       ref="target"
-      class="select flex flex-col p-2 pl-4 pt-6 h-14 justify-center select-none cursor-pointer form-input focusable"
+      class="form-input focusable flex items-center w-full px-4 pt-4 h-14 select-none cursor-pointer"
       :class="store.errors[props.name] ? 'invalid' : 'valid'"
-      tabindex="0"
+      :tabindex="disabled ? -1 : 0"
       @blur="e => active = active && e.relatedTarget === floating"
       @click="active = !active"
       @keydown.up="keyScroll(-1)"
@@ -105,8 +107,15 @@ store.inputs[props.name] = ''
       {{ placeholder }}
     </label>
     <div class="input-icons">
+      <font-awesome-icon
+        v-if="store.errors[props.name]"
+        :icon="['fas', 'triangle-exclamation']"
+        :title="store.errors[props.name]"
+        size="xl"
+        class="alert text-rose-400 pointer-events-auto"
+      />
       <div
-        class="text-slate-500 transition-transform"
+        class="text-slate-500 transition-[transform]"
         :class="{ 'rotate-180': active }"
       >
         <font-awesome-icon
@@ -120,7 +129,7 @@ store.inputs[props.name] = ''
         v-if="active"
         ref="floating"
         tabindex="0"
-        class="card absolute top-0 left-0 mt-2 z-50 overflow-auto"
+        class="card absolute mt-2 z-50 overflow-y-auto"
         :style="floatingStyles"
         @focus="target?.focus()"
       >
@@ -129,7 +138,7 @@ store.inputs[props.name] = ''
           ref="optionsRef"
           :key="i"
           class="p-2 cursor-pointer select-none"
-          :class="{ highlighted: selectedIndex === i }"
+          :class="selectedIndex === i && 'bg-slate-200' || 'hover:bg-slate-100'"
           @click="setValue(i); active = false"
         >
           {{ option }}
@@ -138,15 +147,3 @@ store.inputs[props.name] = ''
     </Transition>
   </div>
 </template>
-
-<style scoped>
-/* Shrink and translate label if:
- * - select is not empty */
-.select:not(:empty) + .form-input-label {
-  transform: translateY(calc(-50%)) scale(.8);
-}
-
-li:hover, li.highlighted {
-  @apply bg-slate-200;
-}
-</style>

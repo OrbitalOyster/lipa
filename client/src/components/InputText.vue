@@ -2,7 +2,6 @@
 import type { MyFormCheck } from '@stores/formStore.ts'
 import { ref } from 'vue'
 import { useFormStore } from '@stores/formStore.ts'
-
 const props = defineProps<{
     name: string
     value?: string
@@ -14,32 +13,29 @@ const props = defineProps<{
     placeholder?: string
   }>(),
   store = useFormStore(props.storeId),
-  type = ref(props.password ? 'password' : 'text'),
-  passwordHidden = ref(true),
-  passwordIcon = ref('eye'),
   // eslint-disable-next-line no-useless-assignment
-  togglePassword = () => {
-    passwordHidden.value = !passwordHidden.value
-    passwordIcon.value = passwordHidden.value ? 'eye' : 'eye-slash'
-    type.value = passwordHidden.value ? 'password' : 'text'
-  }
-
+  passwordHidden = ref(true)
 store.checks[props.name] = props.checks ?? []
 store.inputs[props.name] = props.value ?? ''
 </script>
 
 <template>
-  <div class="flex flex-col justify-center relative">
+  <div
+    class="flex items-center relative"
+  >
     <input
       v-model="store.inputs[props.name]"
-      class="form-input focusable w-full h-14 pl-4 placeholder:opacity-0"
-      :class="store.errors[props.name] ? 'invalid' : 'valid'"
+      class="form-input focusable w-full h-14 px-4 placeholder:opacity-0"
+      :class="[
+        store.errors[props.name] ? 'invalid' : 'valid',
+        disabled && 'form-input-disabled',
+        placeholder && 'pt-4'
+      ]"
       :name
-      :title="store.errors[props.name]"
       :autofocus
       :placeholder
       :disabled
-      :type
+      :type="password && passwordHidden ? 'password' : 'text'"
       @input="store.validate"
     >
     <label class="form-input-label">
@@ -47,28 +43,19 @@ store.inputs[props.name] = props.value ?? ''
     </label>
     <div class="input-icons">
       <font-awesome-icon
+        v-if="store.errors[props.name]"
+        :icon="['fas', 'triangle-exclamation']"
+        :title="store.errors[props.name]"
+        size="xl"
+        class="alert text-rose-400 pointer-events-auto"
+      />
+      <font-awesome-icon
         v-if="password"
-        :icon="['fas', passwordIcon]"
+        :icon="['fas', passwordHidden ? 'eye' : 'eye-slash']"
         size="xl"
         class="w-8 text-slate-500 cursor-pointer pointer-events-auto hover:text-slate-400"
-        @click="togglePassword"
+        @click="passwordHidden = !passwordHidden"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Inputs with placeholders are bigger */
-input[placeholder] {
-  @apply pt-4;
-}
-
-/* Shrink and translate label if:
- * - input is focused
- *   or
- * - placeholder not shown */
-input:focus + .form-input-label,
-input:not(:placeholder-shown) + .form-input-label {
-  transform: translateY(calc(-50%)) scale(.8);
-}
-</style>

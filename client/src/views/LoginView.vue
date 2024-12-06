@@ -37,7 +37,7 @@ const router = useRouter(),
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center w-screen h-screen">
+  <div class="flex items-center justify-center w-screen h-screen">
     <MyShakeable
       ref="shakeable"
       class="w-1/3"

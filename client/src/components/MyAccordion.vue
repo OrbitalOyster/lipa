@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-
-interface ISlot {
-  title: string
-  icon: string
-}
-
 defineProps<{
-  slots: ISlot[]
+  slots: {
+    title: string
+    icon: string
+  }[]
 }>()
-
 // eslint-disable-next-line no-useless-assignment
 const selected = ref('')
 </script>
@@ -19,11 +15,11 @@ const selected = ref('')
     <li
       v-for="slot in slots"
       :key="slot.title"
-      class="card min-h-12 overflow-hidden transition-all"
-      :class="{grow: slot.title === selected}"
+      class="card min-h-14 overflow-hidden transition-[flex-grow]"
+      :class="slot.title === selected && 'grow'"
     >
       <div
-        class="toggle"
+        class="pr-3 h-14 text-slate-700 flex justify-between items-center drop-shadow cursor-pointer select-none"
         @click="selected = selected === slot.title ? '' : slot.title"
       >
         <h1>
@@ -56,14 +52,6 @@ const selected = ref('')
 </template>
 
 <style scoped>
-  .toggle {
-    @apply bg-white h-12 p-1 pr-3;
-    @apply text-slate-700;
-    @apply flex justify-between items-center;
-    @apply drop-shadow;
-    @apply cursor-pointer select-none;
-  }
-
   .slot-container {
     /* Substract toggler height */
     height: calc(100% - 3rem);

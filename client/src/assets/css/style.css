@@ -12,9 +12,13 @@ body {
   @apply text-slate-800;
 }
 
+.animated {
+  @apply transition-[background-color,box-shadow] duration-500;
+}
+
 /* Animated green outline on focus */
 .focusable {
-  @apply outline-none transition-shadow;
+  @apply outline-none ;
 }
 
 .focusable:focus {
@@ -31,9 +35,9 @@ body {
 /* Input icons */
 .input-icons {
   /* Sizing and position */
-  @apply absolute right-3;
+  @apply absolute right-4 space-x-2;
   /* Flexbox */
-  @apply inline-flex justify-center items-center;
+  @apply inline-flex justify-center;
   /* Misc */
   @apply pointer-events-none select-none;
 }
@@ -41,16 +45,16 @@ body {
 /* Basic form field */
 .form-input {
   /* Border */
-  @apply border border-slate-300 rounded outline-none;
+  @apply border border-slate-300 rounded;
   /* Colors */
   @apply bg-slate-50;
 }
 
-.form-input:disabled {
-  @apply hover:border-slate-300;
+.form-input-disabled {
   /* Colors */
-  @apply bg-slate-200 text-slate-400;
-  @apply cursor-not-allowed pointer-events-none;
+  @apply bg-slate-200 text-slate-500;
+  /* No mouse interactions */
+  @apply pointer-events-none;
 }
 
 .form-input:hover {
@@ -68,12 +72,16 @@ body {
   @apply hover:border-green-400;
 }
 
-.validated .form-input.invalid ~ .input-icons::before {
-  font-family: "Font Awesome 5 Free";
-  content: "\f071";
-  @apply pe-1 font-black text-2xl text-red-400;
+/* Show alert icons on valdated form inputs, hide otherwise */
+:not(.validated) .input-icons .alert {
+  display: none;
 }
 
+.validated .input-icons .alert {
+  display: block;
+}
+
+/* Shrinkable label */
 .form-input-label {
   /* Position */
   @apply absolute top-4 left-4;
@@ -83,6 +91,16 @@ body {
   @apply select-none pointer-events-none;
   /* Animation */
   @apply transition-transform origin-left;
+}
+
+/* Shrink and translate label if:
+ * - input is focused
+ * - placeholder not shown 
+ * - input is not empty */
+.form-input[placeholder]:focus + .form-input-label,
+.form-input[placeholder]:not(:placeholder-shown) + .form-input-label,
+.form-input:not(:empty) + .form-input-label {
+  transform: translateY(calc(-50%)) scale(.8);
 }
 
 /* Icons */

@@ -18,7 +18,7 @@ const sidepanel = ref(true)
       @click="sidepanel=!sidepanel"
     />
     <SidePanel
-      class="side-panel h-full fixed left-8 pt-24 pb-8 pr-2 w-[32rem] origin-left transition-[transform] ease-in-out duration-100"
+      class="side-panel h-full fixed left-8 pt-20 pb-8 pr-2 w-[32rem] origin-left transition-[transform] ease-in-out duration-100"
       :style="{ transform: sidepanel ? 'scaleX(1)' : 'scaleX(0)' }"
     />
     <MainDashboard

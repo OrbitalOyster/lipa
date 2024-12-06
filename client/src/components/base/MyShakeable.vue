@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { sleep } from '../../utils.ts'
 import { useTemplateRef } from 'vue'
-
-const root = useTemplateRef<HTMLElement>('root'),
+const root = useTemplateRef('root'),
   shakeTime = 250,
-  shake = async () => {
+  shake = () => {
     root.value?.classList.add('shake')
-    await sleep(shakeTime)
-    root.value?.classList.remove('shake')
+    setTimeout(() => root.value?.classList.remove('shake'), shakeTime)
   }
-
 defineExpose({ shake })
 </script>
 

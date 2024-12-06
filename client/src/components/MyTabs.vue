@@ -15,20 +15,20 @@ const props = defineProps<{
 
 <template>
   <main>
-    <ul>
+    <ul class="flex flex-row">
       <li
         v-for="slot in slots"
         :key="slot.title"
+        class="cursor-pointer select-none whitespace-nowrap"
         :class="{'selected': slot.title === selected}"
+        @click="selected = slot.title"
       >
-        <h1
-          class="space-x-2"
-          @click="selected = slot.title"
-        >
-          <span class="inline-block text-center"><font-awesome-icon
+        <h1>
+          <font-awesome-icon
+            class="w-6"
             :icon="['fas', slot.icon]"
             size="lg"
-          /></span>
+          />
           <span>{{ slot.title }}</span>
         </h1>
       </li>
@@ -36,7 +36,7 @@ const props = defineProps<{
     <div
       v-for="slot in slots"
       :key="slot.title"
-      class="tab pt-2"
+      class="card pt-2 h-full"
       :class="{hidden: slot.title !== selected}"
     >
       <slot :name="slot.title" />
@@ -45,36 +45,16 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-  ul {
-    @apply flex flex-row;
-  }
-
   li {
     @apply relative px-2 py-2 pb-2 mt-3;
     @apply bg-white text-slate-400;
     @apply outline-none border-t rounded-t border-l border-r border-slate-200;
-    @apply transition-all duration-100;
+    @apply duration-100;
   }
 
   li.selected {
     @apply mt-0;
     @apply text-slate-600 border-slate-300;
     @apply z-10 translate-y-0.5;
-  }
-
-  h1 {
-    @apply cursor-pointer select-none;
-    @apply underline-offset-4 whitespace-nowrap;
-  }
-
-  .tab {
-    /* Sizing */
-    @apply space-y-4 h-full;
-    /* Border */
-    @apply border border-slate-300 rounded rounded-tl-none;
-    /* Colors */
-    @apply bg-white;
-    /* Effects */
-    @apply drop-shadow;
   }
 </style>

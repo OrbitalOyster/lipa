@@ -3,6 +3,7 @@
 import InputText from '../components/InputText.vue'
 import MyButton from '../components/MyButton.vue'
 import MyCard from '../components/MyCard.vue'
+import MyCheckbox from '../components/MyCheckbox.vue'
 import MyForm from '../components/MyForm.vue'
 import MyLink from '../components/MyLink.vue'
 import MySelect from '../components/MySelect.vue'
@@ -69,6 +70,13 @@ const options = [
           disabled
           value="Disabled input"
           store-id="mySampleForm"
+        />
+        <MyCheckbox
+          name="disabledCheckbox"
+          disabled
+          title="Disabled checkbox"
+          store-id="mySampleForm"
+          checked
         />
 
         <MySelect

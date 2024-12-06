@@ -1,5 +1,5 @@
-import './style.css'
-import './animations.css'
+import './assets/css/style.css'
+import './assets/css/animations.css'
 import App from './App.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createApp } from 'vue'

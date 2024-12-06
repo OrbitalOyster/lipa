@@ -8,18 +8,20 @@ defineProps<{
 
 <template>
   <div class="card p-4 space-y-4">
-    <header>
+    <header class="flex justify-between">
+      <div class="flex flex-col">
+        <h1 class="text-3xl font-bold text-slate-600">
+          {{ title }}
+        </h1>
+        <h2 class="text-lg text-slate-400">
+          {{ subtitle }}
+        </h2>
+      </div>
       <img
         v-if="icon"
         :src="icon"
-        class="float-right w-16 h-16 rounded-full"
+        class="w-16 h-16 rounded-full"
       >
-      <h1 class="text-3xl font-bold text-slate-600">
-        {{ title }}
-      </h1>
-      <h2 class="text-lg text-slate-400">
-        {{ subtitle }}
-      </h2>
     </header>
     <slot />
   </div>
