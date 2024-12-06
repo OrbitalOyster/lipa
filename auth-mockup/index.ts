@@ -6,8 +6,9 @@ import { setTimeout as sleep } from 'node:timers/promises'
 
 import {
   getSignedCookie,
+  setCookie,
   setSignedCookie,
-  deleteCookie,
+//  deleteCookie,
 } from 'hono/cookie'
 
 // Config
@@ -87,7 +88,17 @@ app.get('/check', async (c) => {
 })
 
 app.get('/logout', (c) => {
-  deleteCookie(c, cookieName)
+  setCookie(
+    c,
+    cookieName,
+    '',
+    {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'Strict',
+    }
+  )
+  // deleteCookie(c, cookieName)
   return c.json("logout")
 })
 
