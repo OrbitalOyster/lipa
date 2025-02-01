@@ -8,7 +8,6 @@ import {
   getSignedCookie,
   setCookie,
   setSignedCookie,
-//  deleteCookie,
 } from 'hono/cookie'
 
 // Config
@@ -98,7 +97,6 @@ app.get('/logout', (c) => {
       sameSite: 'Strict',
     }
   )
-  // deleteCookie(c, cookieName)
   return c.json("logout")
 })
 
