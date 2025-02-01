@@ -1,0 +1,78 @@
+@use 'colors'
+@use 'borders'
+
+body
+  background-color: #F6F2F0
+  color: colors.$text
+  font-family: 'Exo 2 Variable'
+
+/* Fullscreen div */
+.fs
+  height: 100vh
+  position: fixed
+  width: 100vw
+
+.centered
+  align-items: center
+  display: flex
+  justify-content: center
+
+.backdrop
+  background-color: rgba(255, 255, 255, .8)
+  z-index: 100
+
+/* Cards */
+.card
+  background-color: colors.$card
+  border-radius: borders.$radius
+  border: borders.$card
+  filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
+  margin-bottom: .25rem
+
+.info
+  color: colors.$info-text
+  background-color: colors.$info
+  border: 1px solid colors.$info-border
+
+/* Focusable */
+$outline-width: .25rem
+$outline-style: solid
+
+.focusable
+  border-color: colors.$outline
+  outline: colors.$outline $outline-style 0px
+
+.focusable:focus
+  @extend .focusable
+  outline-width: $outline-width
+
+/* Form inputs */
+.form-input
+  background-color: colors.$input-background
+  border-radius: borders.$radius
+  border: 1px solid colors.$input-border
+
+.form-input:disabled
+  background-color: colors.$input-disabled
+  border: 1px solid colors.$input-disabled
+
+/* Alert icons are hidden by default */
+.alert-icon
+  display: none
+  color: colors.$alert
+  width: 2rem
+  cursor: help
+
+/* Validation formatting only shows up in validated elements */
+.validated
+  .alert-icon
+    display: flex
+    justify-content: center
+
+  .form-input.valid:not(:disabled)
+    background-color: colors.$input-valid-background 
+    border: 1px solid colors.$input-valid-border
+
+  .form-input.invalid:not(:disabled)
+    background-color: colors.$input-invalid-background
+    border: 1px solid colors.$input-invalid-border

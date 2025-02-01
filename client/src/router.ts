@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AboutView from '@views/AboutView.vue'
-import ErrorView from '@views/ErrorView.vue'
-import ExampleFormView from '@views/ExampleFormView.vue'
-import HomeView from '@views/HomeView.vue'
-import LoginView from '@views/LoginView.vue'
-import TestingGrounds from '@views/TestingGrounds.vue'
-import { useLoginStore } from '@stores/loginStore.ts'
+import ClientError from '#views/ClientError.vue'
+import HomeView from '#views/HomeView.vue'
+import LoginView from '#views/LoginView.vue'
+import TestView from '#views/TestView.vue'
+import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Typings */
 declare module 'vue-router' {
@@ -16,41 +14,31 @@ declare module 'vue-router' {
 
 /* Routes */
 const routes = [{
-    component: LoginView,
-    name: 'Login',
-    path: '/login',
-    meta: { title: 'Вход' },
-  }, {
-    component: HomeView,
-    name: 'Home',
-    path: '/',
-    meta: { title: 'Главная' },
-  }, {
-    component: AboutView,
-    name: 'About',
-    path: '/about',
-    meta: { title: 'О программе' },
-  }, {
-    component: ExampleFormView,
-    name: 'ExampleForm',
-    path: '/form',
-    meta: { title: 'Example Form' },
-  }, {
-    component: ErrorView,
-    name: 'Error',
-    path: '/error',
-    meta: { title: 'Ошибка' },
-  }, {
-    component: TestingGrounds,
-    name: 'Test',
-    path: '/test',
-    meta: { title: 'Test' },
-  },
-  ],
-  router = createRouter({
-    history: createWebHistory(),
-    routes,
-  })
+  component: LoginView,
+  name: 'Login',
+  path: '/login',
+  meta: { title: 'Вход' },
+}, {
+  component: HomeView,
+  name: 'Home',
+  path: '/',
+  meta: { title: 'Главная' },
+}, {
+  component: TestView,
+  name: 'Test',
+  path: '/test',
+  meta: { title: 'Test' },
+}, {
+  component: ClientError,
+  name: 'Error',
+  path: '/error',
+  meta: { title: 'Ошибка' },
+}]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
 
 /* Error handler */
 router.onError(async (err, to) => {
@@ -62,22 +50,18 @@ router.onError(async (err, to) => {
 router.beforeEach(async (to, from) => {
   console.log(`Navigating from ${from.path} to ${to.path}`)
   /* Error page */
-  if (to.name === 'Error') {
+  if (to.name === 'Error')
     return true
-  }
-  /* Login page */
-  const loggedIn = await useLoginStore().check()
-  if (to.name === 'Login') {
-    /* Logged in users get redirected to home page */
+  /* Log in status */
+  const loggedIn = await useUserStore().check()
+  if (to.name === 'Login')
+    /* Logged in users get redirected from login page to home page */
     return loggedIn ? { name: 'Home' } : true
-  }
   /* Default handler */
   return loggedIn ? true : { name: 'Login' }
 })
 
-router.afterEach((to) => {
-  /* Set document title */
-  document.title = `Lipa / ${to.meta.title}`
-})
+/* Set document title */
+router.afterEach(to => document.title = `${to.meta.title} - Gooseberry.js`)
 
 export default router
