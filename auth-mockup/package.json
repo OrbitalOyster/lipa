@@ -2,8 +2,12 @@
   "name": "auth",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "typecheck": "tsc -noEmit"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "5.7.3"
   },
   "dependencies": {
     "hono": "^4.6.3"

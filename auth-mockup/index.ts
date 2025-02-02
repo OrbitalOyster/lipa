@@ -1,6 +1,7 @@
 import { decode, sign, verify } from 'hono/jwt'
 import { cors } from 'hono/cors'
 import { Hono } from 'hono'
+import type { Context } from 'hono'
 
 import { setTimeout as sleep } from 'node:timers/promises'
 
@@ -18,6 +19,10 @@ const tokenSecret = process.env.TOKEN_SECRET
 const port = process.env.PORT
 const origin = process.env.ALLOWED_ORIGIN
 
+// Check config
+if (!cookieName || !cookieLifetimeSec || !cookieSecret || !tokenSecret || !port || !origin)
+  throw new Error('Missing .env config')
+
 const sample_username = 'orbital'
 const sample_password = 'password'
 const sample_role = 'admin'
@@ -27,13 +32,17 @@ const app = new Hono()
 // Allow cross-origin resource sharing
 app.use('*', cors({ origin, credentials: true }))
 
-async function updateCookie(c, username, role) {
+async function updateCookie(c: Context, username: string, role: string) {
   const payload = {
     username,
     role,
     exp: Math.floor(Date.now() / 1000) + cookieLifetimeSec,
   }
+  if (!tokenSecret)
+    throw new Error('Major screwup')
   const token = await sign(payload, tokenSecret)
+  if (!cookieName || !cookieSecret)
+    throw new Error('Major screwup')
   await setSignedCookie(
     c,
     cookieName,
@@ -69,7 +78,7 @@ app.post('/auth', async (c) => {
   return c.json({username, role})
 })
 
-app.get('/check', async (c) => {
+app.get('/check', async (c: Context) => {
   const cookie = await getSignedCookie(
     c,
     cookieSecret,
@@ -82,7 +91,9 @@ app.get('/check', async (c) => {
   if (!decoded)
     return c.json(null)
   const {username, role} = {...decoded}
-  await updateCookie(c, username, role)
+  if (!username || !role)
+    throw new Error('Major screwup');
+  await updateCookie(c, username as string, role as string)
   return c.json({username, role})
 })
 
