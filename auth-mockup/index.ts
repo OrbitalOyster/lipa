@@ -1,4 +1,4 @@
-import { decode, sign, verify } from 'hono/jwt'
+import { sign, verify } from 'hono/jwt'
 import { cors } from 'hono/cors'
 import { Hono } from 'hono'
 import type { Context } from 'hono'
@@ -12,12 +12,12 @@ import {
 } from 'hono/cookie'
 
 // Config
-const cookieName = process.env.COOKIE_NAME
-const cookieLifetimeSec = Number(process.env.COOKIE_LIFETIME_SEC)
-const cookieSecret = process.env.COOKIE_SECRET
-const tokenSecret = process.env.TOKEN_SECRET
-const port = process.env.PORT
-const origin = process.env.ALLOWED_ORIGIN
+const cookieName = process.env['COOKIE_NAME']
+const cookieLifetimeSec = Number(process.env['COOKIE_LIFETIME_SEC'])
+const cookieSecret = process.env['COOKIE_SECRET']
+const tokenSecret = process.env['TOKEN_SECRET']
+const port = process.env['PORT']
+const origin = process.env['ALLOWED_ORIGIN']
 
 // Check config
 if (!cookieName || !cookieLifetimeSec || !cookieSecret || !tokenSecret || !port || !origin)
