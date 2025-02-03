@@ -1,9 +1,9 @@
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import importPlugin from 'eslint-plugin-import'
 import pluginVue from 'eslint-plugin-vue'
 import stylistic from '@stylistic/eslint-plugin'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
 
-export default [
+export default defineConfigWithVueTs(
   { ignores: ['dist'] }, /* Ignore output folder */
   importPlugin.flatConfigs.recommended, /* Imports */
   ...pluginVue.configs['flat/recommended'], /* Vue */
@@ -13,12 +13,8 @@ export default [
       'sort-imports': 'error',
     },
   },
-  ...vueTsEslintConfig({ /* Main config */
-    extends: [
-      'recommendedTypeChecked',
-      'stylisticTypeChecked',
-    ],
-  }),
+  vueTsConfigs.recommendedTypeChecked,
+  vueTsConfigs.stylisticTypeChecked,
   {
     rules: { /* Disable rules here */
       /* Replaced by typecheck */
@@ -34,4 +30,4 @@ export default [
       },
     },
   },
-]
+)
