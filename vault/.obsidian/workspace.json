@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "e520f55a40ebc526",
+        "id": "7250a9cc3447064e",
         "type": "tabs",
         "children": [
           {
-            "id": "00c8e6ef5bf83567",
+            "id": "2cf83a2944c316e8",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Cookbook.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Cookbook"
             }
           }
         ]
@@ -36,7 +40,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -158,7 +163,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "00c8e6ef5bf83567",
+  "active": "2cf83a2944c316e8",
   "lastOpenFiles": [
     "Cookbook.md",
     "3.png",

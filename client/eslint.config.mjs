@@ -1,31 +1,24 @@
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import importPlugin from 'eslint-plugin-import'
+import eslintPluginImportX from 'eslint-plugin-import-x'
 import pluginVue from 'eslint-plugin-vue'
 import stylistic from '@stylistic/eslint-plugin'
 
 export default defineConfigWithVueTs(
   { ignores: ['dist'] }, /* Ignore output folder */
-  importPlugin.flatConfigs.recommended, /* Imports */
-  pluginVue.configs['flat/recommended'],
+  eslintPluginImportX.flatConfigs.recommended, /* Import plugin */
+  pluginVue.configs['flat/recommended'], /* Vue plugin */
   stylistic.configs['recommended-flat'], /* Formatting */
-  vueTsConfigs.recommendedTypeChecked,
+  vueTsConfigs.recommendedTypeChecked, /* Main config */
   vueTsConfigs.stylisticTypeChecked,
   {
-    rules: { /* Enable rules here */
+    rules: {
       'sort-imports': 'error',
-    },
-  },
-  {
-    rules: { /* Disable rules here */
       /* Replaced by typecheck */
-      '@typescript-eslint/no-unused-vars': 'off',
       'no-unreachable': 'off',
       'no-unused-vars': 'off',
     },
-  },
-  {
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: {},
       },
     },
