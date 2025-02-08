@@ -1,8 +1,8 @@
-*Date: 7/02/2025*
+*Date: 9/02/2025*
 
 Prerequisites:
-- node.js (v23.4.0)
-- npm (v11.0.0)
+- node.js (v23.7.0)
+- npm (v11.1.0)
 
 ## Table of contents
 
@@ -26,6 +26,10 @@ cd potato
 ```
 
 2. Create `package.json` file
+```bash
+touch package.json
+```
+
 ```json
 {
   "name": "potato",
@@ -47,6 +51,10 @@ npm add vite@6.1.0 -ED
 [Vite docs](https://vite.dev/guide/)
 
 4. Create `index.html` file
+```bash
+touch index.html
+```
+
 ```html
 <!doctype html>
 <html>
@@ -60,7 +68,11 @@ npm add vite@6.1.0 -ED
 </html>
 ```
 
-5. Create `vite.config.ts` file, fill in ports
+1. Create `vite.config.ts` file, define http ports for development and previewing
+```bash
+touch vite.config.ts
+```
+
 ```typescript
 import { defineConfig } from 'vite'
 
@@ -74,7 +86,7 @@ export default defineConfig({
 })
 ```
 
-6. Add `scripts` property to `package.json`, add vite scripts
+2. Add `scripts` property to `package.json`, add vite scripts
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -83,7 +95,7 @@ export default defineConfig({
 }
 ```
 
-7. Try running
+3. Try running
 ```bash
 npm run dev
 ```
@@ -92,52 +104,63 @@ npm run dev
 
 ## Vue
 
-8. Install vue and vite plugin for vue
+4. Install vue and vite plugin for vue
 ```bash
 npm add vue@3.5.13 @vitejs/plugin-vue@5.2.1 -ED
 ```
 
 [Vue docs](https://vuejs.org/guide/introduction.html)
+[@vitejs/vite-plugin-vue github](https://github.com/vitejs/vite-plugin-vue/)
 
-9. Add vue plugin to `vite.config.ts`
+5. Add vue plugin to `vite.config.ts`
 ```typescript
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue' /* New line */
 
 export default defineConfig({
-    server: {
+  server: {
     port: 8080,
   },
   preview: {
-	port: 8080,
+    port: 8080,
   },
   plugins: [vue()], /* New line */
 })
 ```
 
-10. Create `src` folder
+6. Create `src` folder
 ```bash
 mkdir src
 ```
 
-11. Create `src/App.vue` file
+7. Create `src/App.vue` file
+```bash
+touch src/App.vue
+```
+
 ```html
 <script setup lang="ts">
-  import { ref } from 'vue'
-  const count = ref(0)
+import { ref } from 'vue'
+const count = ref(0)
 </script>
 
 <template>
   <h1>Hello, World!</h1>
-  <button @click="count++">Click me</button>
-  <p>{{count}}</p>
+  <button @click="count++">
+    Click me
+  </button>
+  <p>{{ count }}</p>
 </template>
 
 <style scoped>
 </style>
 ```
 
-12. Create `src/main.ts` file
+8. Create `src/main.ts` file
+```bash
+touch src/main.ts
+```
+
 ```typescript
 import App from './App.vue'
 import { createApp } from 'vue'
@@ -146,7 +169,7 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-13. Modify `index.html` to include `src/main.ts` and mount point
+9. Modify `index.html` to include `src/main.ts` and mount point
 ```html
 <!doctype html>
 <html>
@@ -163,20 +186,24 @@ app.mount('#app')
 
 ## Typescript
 
-1. Install typescript, vue type checking tool and recommended typescript config for vue
+10. Install typescript, vue type checking tool and recommended typescript config for vue
 ```bash
 npm add typescript@5.7.3 vue-tsc@2.2.0 @vue/tsconfig@0.7.0 -ED
 ```
 
+[vue-tsc github](https://github.com/vuejs/language-tools/tree/master/packages/tsc)
 [@vue/tsconfig github](https://github.com/vuejs/tsconfig)
 
-2. Create `tsconfig.json` file, extend it from recommended config, enable rules for linting
+11. Create `tsconfig.json` file, extend it from recommended config, enable rules for linting
+```bash
+touch tsconfig.json
+```
+
 ```json
 {
   "extends": [
-    "@tsconfig/node22/tsconfig.json",
     "@vue/tsconfig/tsconfig.json"
-],
+  ],
   "compilerOptions": {
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -202,7 +229,7 @@ npm add typescript@5.7.3 vue-tsc@2.2.0 @vue/tsconfig@0.7.0 -ED
 }
 ```
 
-3. Add npm script for type checking
+12. Add npm script for type checking
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -214,7 +241,7 @@ npm add typescript@5.7.3 vue-tsc@2.2.0 @vue/tsconfig@0.7.0 -ED
 
 ## Path aliases
 
-4. Add ``imports`` section to `package.json`
+13. Add ``imports`` section to `package.json`
 ```json
 "imports": {
   "#*": "./src/*"
@@ -234,12 +261,12 @@ import MyButton from '#components/MyButton.vue'
 
 Vite handles .env files automatically
 
-5. Create `.env` file, add environment variables
+14. Create `.env` file, add environment variables
 ```
 VITE_FOO=Hello
 ```
 
-6. Create `src/vite-env.d.ts` file
+15. Create `src/vite-env.d.ts` file
 ```typescript
 /// <reference types="vite/client" />
 
@@ -258,7 +285,7 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
 ```
 ## ESLint
 
-7. Install: 
+16. Install: 
   * eslint ([docs](https://eslint.org/docs/latest/use/getting-started))
   * Official config for eslint + typescript + vue ([github](https://github.com/vuejs/eslint-config-typescript))
   * eslint vue plugin ([github](https://github.com/vuejs/eslint-plugin-vue))
@@ -267,10 +294,14 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
   * eslint stylistic plugin ([github](https://github.com/eslint-stylistic/eslint-stylistic))
 
 ```bash
-npm add eslint@9.19.0 @vue/eslint-config-typescript@14.3.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.0.1 -ED
+npm add eslint@9.20.0 @vue/eslint-config-typescript@14.3.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
 ```
 
-8. Create `eslint.config.mjs` file, enable recommended rules
+17. Create `eslint.config.mjs` file, enable recommended rules
+```bash
+touch eslint.config.mjs
+```
+
 ```js
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import eslintPluginImportX from 'eslint-plugin-import-x'
@@ -300,7 +331,7 @@ export default defineConfigWithVueTs(
 )
 ```
 
-9. Add npm scripts for linting
+18. Add npm scripts for linting
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -319,14 +350,14 @@ Results so far:
 
 Vite supports sass out-of-the-box
 
-10. Install sass
+19. Install sass
 ```bash
 npm add sass@1.83.4 -ED
 ```
 
 [Sass docs](https://sass-lang.com/documentation/)
 
-11. Set `<style>` lang to "sass"
+20. Set `<style>` lang to "sass"
 ```html
 <style scoped lang="sass">
 $primary-color: blue
@@ -336,12 +367,12 @@ h1
 </style>
 ```
 
-12. Install CSS normalizer
+21. Install CSS normalizer
 ```bash
 npm add normalize.css@8.0.1 -ED
 ```
 
-13. Import it to `src/main.ts` file
+22. Import it to `src/main.ts` file
 ```typescript
 import 'normalize.css'
 ```
@@ -350,7 +381,7 @@ import 'normalize.css'
 
 Vite exposes `public` folder
 
-14. Create public folder, copy `favicon.ico` to it
+23. Create public folder, copy `favicon.ico` to it
 ```bash
 mkdir public
 ```
@@ -360,19 +391,19 @@ Results so far:
 
 ## Fonts
 
-15. To install sample font:
+24. To install sample font:
 ```bash
 npm install @fontsource-variable/exo-2
 ```
 
 ([github](https://github.com/fontsource/fontsource))
 
-16. To import it:
+25. To import it:
 ```typescript
 import '@fontsource-variable/exo-2'
 ```
 
-17. To use it:
+26. To use it:
 ```html
 <style lang="sass">
 p
@@ -382,12 +413,12 @@ p
 
 ## Font Awesome
 
-18. Install free SVG icons and vue component
+27. Install free SVG icons and vue component
 ```bash
 npm add @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome -D
 ```
 
-19. Import Font Awesome Icon component and required icons
+28. Import Font Awesome Icon component and required icons
 ```typescript
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -395,7 +426,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser'
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse'
 ```
 
-20. To use:
+29. To use:
 ```html
 <FontAwesomeIcon :icon="faUser" />
 ```

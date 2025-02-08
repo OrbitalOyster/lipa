@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "7250a9cc3447064e",
+        "id": "80c709c1105ed56f",
         "type": "tabs",
         "children": [
           {
-            "id": "2cf83a2944c316e8",
+            "id": "479f8359fd8a3456",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -163,7 +163,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2cf83a2944c316e8",
+  "active": "479f8359fd8a3456",
   "lastOpenFiles": [
     "Cookbook.md",
     "3.png",
