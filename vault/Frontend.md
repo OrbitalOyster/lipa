@@ -286,12 +286,12 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
 ## ESLint
 
 16. Install: 
-  * eslint ([docs](https://eslint.org/docs/latest/use/getting-started))
+  * ESLint ([docs](https://eslint.org/docs/latest/use/getting-started))
   * Official config for eslint + typescript + vue ([github](https://github.com/vuejs/eslint-config-typescript))
-  * eslint vue plugin ([github](https://github.com/vuejs/eslint-plugin-vue))
-  * eslint import/export plugin ([github](https://github.com/un-ts/eslint-plugin-import-x))
-  * eslint import resolver ([github](https://github.com/import-js/eslint-import-resolver-typescript))
-  * eslint stylistic plugin ([github](https://github.com/eslint-stylistic/eslint-stylistic))
+  * ESLint vue plugin ([github](https://github.com/vuejs/eslint-plugin-vue))
+  * ESLint import/export plugin ([github](https://github.com/un-ts/eslint-plugin-import-x))
+  * ESLint import resolver ([github](https://github.com/import-js/eslint-import-resolver-typescript))
+  * ESLint stylistic plugin ([github](https://github.com/eslint-stylistic/eslint-stylistic))
 
 ```bash
 npm add eslint@9.20.0 @vue/eslint-config-typescript@14.3.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
@@ -352,7 +352,7 @@ Vite supports sass out-of-the-box
 
 19. Install sass
 ```bash
-npm add sass@1.83.4 -ED
+npm add sass@1.84.0 -ED
 ```
 
 [Sass docs](https://sass-lang.com/documentation/)

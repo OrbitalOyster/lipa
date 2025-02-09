@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Cookbook.md",
+                "file": "Frontend.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cookbook"
+              "title": "Frontend"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "bb7d68ccd01aac28",
@@ -163,9 +162,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "479f8359fd8a3456",
+  "active": "20981a5b2ac1cfef",
   "lastOpenFiles": [
-    "Cookbook.md",
+    "Frontend.md",
     "3.png",
     "2.png",
     "1.png",
