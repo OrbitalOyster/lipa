@@ -68,7 +68,7 @@ touch index.html
 </html>
 ```
 
-1. Create `vite.config.ts` file, define http ports for development and previewing
+5. Create `vite.config.ts` file, define http ports for development and previewing
 ```bash
 touch vite.config.ts
 ```
@@ -86,7 +86,7 @@ export default defineConfig({
 })
 ```
 
-2. Add `scripts` property to `package.json`, add vite scripts
+6. Add `scripts` property to `package.json`, add vite scripts
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -95,7 +95,7 @@ export default defineConfig({
 }
 ```
 
-3. Try running
+7. Try running
 ```bash
 npm run dev
 ```
@@ -104,7 +104,7 @@ npm run dev
 
 ## Vue
 
-4. Install vue and vite plugin for vue
+8. Install vue and vite plugin for vue
 ```bash
 npm add vue@3.5.13 @vitejs/plugin-vue@5.2.1 -ED
 ```
@@ -112,7 +112,7 @@ npm add vue@3.5.13 @vitejs/plugin-vue@5.2.1 -ED
 [Vue docs](https://vuejs.org/guide/introduction.html)
 [@vitejs/vite-plugin-vue github](https://github.com/vitejs/vite-plugin-vue/)
 
-5. Add vue plugin to `vite.config.ts`
+9. Add vue plugin to `vite.config.ts`
 ```typescript
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue' /* New line */
@@ -128,12 +128,12 @@ export default defineConfig({
 })
 ```
 
-6. Create `src` folder
+10. Create `src` folder
 ```bash
 mkdir src
 ```
 
-7. Create `src/App.vue` file
+11. Create `src/App.vue` file
 ```bash
 touch src/App.vue
 ```
@@ -156,7 +156,7 @@ const count = ref(0)
 </style>
 ```
 
-8. Create `src/main.ts` file
+12. Create `src/main.ts` file
 ```bash
 touch src/main.ts
 ```
@@ -169,7 +169,7 @@ const app = createApp(App)
 app.mount('#app')
 ```
 
-9. Modify `index.html` to include `src/main.ts` and mount point
+13. Modify `index.html` to include `src/main.ts` and mount point
 ```html
 <!doctype html>
 <html>
@@ -186,7 +186,7 @@ app.mount('#app')
 
 ## Typescript
 
-10. Install typescript, vue type checking tool and recommended typescript config for vue
+14. Install typescript, vue type checking tool and recommended typescript config for vue
 ```bash
 npm add typescript@5.7.3 vue-tsc@2.2.0 @vue/tsconfig@0.7.0 -ED
 ```
@@ -194,7 +194,7 @@ npm add typescript@5.7.3 vue-tsc@2.2.0 @vue/tsconfig@0.7.0 -ED
 [vue-tsc github](https://github.com/vuejs/language-tools/tree/master/packages/tsc)
 [@vue/tsconfig github](https://github.com/vuejs/tsconfig)
 
-11. Create `tsconfig.json` file, extend it from recommended config, enable rules for linting
+15. Create `tsconfig.json` file, extend it from recommended config, enable rules for linting
 ```bash
 touch tsconfig.json
 ```
@@ -229,7 +229,7 @@ touch tsconfig.json
 }
 ```
 
-12. Add npm script for type checking
+16. Add npm script for type checking
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -241,7 +241,7 @@ touch tsconfig.json
 
 ## Path aliases
 
-13. Add ``imports`` section to `package.json`
+17. Add ``imports`` section to `package.json`
 ```json
 "imports": {
   "#*": "./src/*"
@@ -261,12 +261,12 @@ import MyButton from '#components/MyButton.vue'
 
 Vite handles .env files automatically
 
-14. Create `.env` file, add environment variables
+18. Create `.env` file, add environment variables
 ```
 VITE_FOO=Hello
 ```
 
-15. Create `src/vite-env.d.ts` file
+19. Create `src/vite-env.d.ts` file
 ```typescript
 /// <reference types="vite/client" />
 
@@ -285,7 +285,7 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
 ```
 ## ESLint
 
-16. Install: 
+20. Install: 
   * ESLint ([docs](https://eslint.org/docs/latest/use/getting-started))
   * Official config for eslint + typescript + vue ([github](https://github.com/vuejs/eslint-config-typescript))
   * ESLint vue plugin ([github](https://github.com/vuejs/eslint-plugin-vue))
@@ -297,7 +297,7 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
 npm add eslint@9.20.0 @vue/eslint-config-typescript@14.3.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
 ```
 
-17. Create `eslint.config.mjs` file, enable recommended rules
+21. Create `eslint.config.mjs` file, enable recommended rules
 ```bash
 touch eslint.config.mjs
 ```
@@ -331,7 +331,7 @@ export default defineConfigWithVueTs(
 )
 ```
 
-18. Add npm scripts for linting
+22. Add npm scripts for linting
 ```json
 "scripts": {
   "dev": "vite --host",
@@ -350,14 +350,14 @@ Results so far:
 
 Vite supports sass out-of-the-box
 
-19. Install sass
+23. Install sass
 ```bash
 npm add sass@1.84.0 -ED
 ```
 
 [Sass docs](https://sass-lang.com/documentation/)
 
-20. Set `<style>` lang to "sass"
+24. Set `<style>` lang to "sass"
 ```html
 <style scoped lang="sass">
 $primary-color: blue
@@ -367,12 +367,12 @@ h1
 </style>
 ```
 
-21. Install CSS normalizer
+25. Install CSS normalizer
 ```bash
 npm add normalize.css@8.0.1 -ED
 ```
 
-22. Import it to `src/main.ts` file
+26. Import it to `src/main.ts` file
 ```typescript
 import 'normalize.css'
 ```
@@ -381,7 +381,7 @@ import 'normalize.css'
 
 Vite exposes `public` folder
 
-23. Create public folder, copy `favicon.ico` to it
+27. Create public folder, copy `favicon.ico` to it
 ```bash
 mkdir public
 ```
@@ -391,19 +391,19 @@ Results so far:
 
 ## Fonts
 
-24. To install sample font:
+28. To install sample font:
 ```bash
 npm install @fontsource-variable/exo-2
 ```
 
 ([github](https://github.com/fontsource/fontsource))
 
-25. To import it:
+29. To import it:
 ```typescript
 import '@fontsource-variable/exo-2'
 ```
 
-26. To use it:
+30. To use it:
 ```html
 <style lang="sass">
 p
@@ -413,12 +413,12 @@ p
 
 ## Font Awesome
 
-27. Install free SVG icons and vue component
+31. Install free SVG icons and vue component
 ```bash
 npm add @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome -D
 ```
 
-28. Import Font Awesome Icon component and required icons
+32. Import Font Awesome Icon component and required icons
 ```typescript
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -426,7 +426,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser'
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse'
 ```
 
-29. To use:
+33. To use:
 ```html
 <FontAwesomeIcon :icon="faUser" />
 ```

@@ -14,11 +14,25 @@
               "type": "markdown",
               "state": {
                 "file": "Frontend.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Frontend"
+            }
+          },
+          {
+            "id": "420ef07e4e8098ee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Backend.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Backend"
             }
           }
         ]
@@ -40,8 +54,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
+                "sortOrder": "alphabetical"
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -78,7 +91,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "bb7d68ccd01aac28",
@@ -162,8 +176,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "20981a5b2ac1cfef",
+  "active": "479f8359fd8a3456",
   "lastOpenFiles": [
+    "Backend.md",
     "Frontend.md",
     "3.png",
     "2.png",
