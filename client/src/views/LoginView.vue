@@ -33,7 +33,9 @@ async function auth(formCheck: LoginFormCheck | null) {
 }
 
 onMounted(() =>
-  loginFormRef.value?.reset(),
+  loginFormRef.value?.setInputs({
+    username: '', password: '', rememberMe: false,
+  }),
 )
 </script>
 

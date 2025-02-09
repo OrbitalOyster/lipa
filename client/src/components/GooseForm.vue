@@ -13,10 +13,7 @@ const props = defineProps<{
 function setInputs(inputs: Inputs) {
   for (const [key, value] of Object.entries(inputs))
     store.inputs[key] = value
-}
-
-function reset() {
-  store.reset()
+  store.validate()
 }
 
 function onSubmit() {
@@ -25,7 +22,7 @@ function onSubmit() {
 }
 
 onMounted(() => store.validate())
-defineExpose({ setInputs, reset })
+defineExpose({ setInputs })
 </script>
 
 <template>

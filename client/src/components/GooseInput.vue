@@ -73,15 +73,6 @@ const model = defineModel<string>({ default: '' }),
         :icon="passwordHidden ? faEye : faEyeSlash"
         @click="passwordHidden = !passwordHidden"
       />
-      <!--
-      <FontAwesomeIcon
-        v-if="password"
-        :icon="passwordHidden ? faEye : faEyeSlash"
-        size="xl"
-        class="eye"
-        @click="passwordHidden = !passwordHidden"
-      />
-      -->
     </div>
   </div>
 </template>
