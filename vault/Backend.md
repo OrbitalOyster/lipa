@@ -8,6 +8,7 @@ Prerequisites:
 - [[#Initial setup]]
 - [[#Typescript]]
 - [[#ESLint]]
+- [[#.env]]
 ## Initial setup
 
 Create:
@@ -48,16 +49,10 @@ bun run src
 
 ## Typescript
 
-Bun supports typescript out of the box. To run type checks:
+Install typescript and recommended bun config for typescript
 
 ```bash
-bun run tsc
-```
-
-Install recommended bun config for typescript
-
-```bash
-bun add @tsconfig/bun@1.0.7 -ED
+bun add typescript@5.7.3 @tsconfig/bun@1.0.7 -ED
 ```
 
 Create `tsconfig.json` file, extend it from recommended config, enable all rules
@@ -95,6 +90,11 @@ touch tsconfig.json
 }
 ```
 
+To typecheck:
+
+```bash
+bun run tsc
+```
 ## ESLint
 
 Install:
@@ -147,3 +147,7 @@ To lint:
 ```bash
 bun run eslint
 ```
+
+# .env
+
+Bun supports .env files out of the box
