@@ -1,12 +1,10 @@
 import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
-
 import eslintPluginImportX from 'eslint-plugin-import-x'
 import stylistic from '@stylistic/eslint-plugin'
+import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist'] }, /* Ignore output folder */
-  eslint.configs.recommended,
+  eslint.configs.recommended, /* Main config */
   tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {

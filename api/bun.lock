@@ -5,11 +5,12 @@
       "name": "api",
       "devDependencies": {
         "@eslint/js": "9.20.0",
-        "@stylistic/eslint-plugin": "^3.1.0",
-        "@types/bun": "^1.2.2",
+        "@stylistic/eslint-plugin": "3.1.0",
+        "@tsconfig/bun": "1.0.7",
+        "@types/bun": "1.2.2",
         "eslint": "9.20.0",
-        "eslint-import-resolver-typescript": "^3.7.0",
-        "eslint-plugin-import-x": "^4.6.1",
+        "eslint-import-resolver-typescript": "3.7.0",
+        "eslint-plugin-import-x": "4.6.1",
         "typescript": "5.7.3",
         "typescript-eslint": "8.24.0",
       },
@@ -49,6 +50,8 @@
     "@nolyfill/is-core-module": ["@nolyfill/is-core-module@1.0.39", "", {}, "sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA=="],
 
     "@stylistic/eslint-plugin": ["@stylistic/eslint-plugin@3.1.0", "", { "dependencies": { "@typescript-eslint/utils": "^8.13.0", "eslint-visitor-keys": "^4.2.0", "espree": "^10.3.0", "estraverse": "^5.3.0", "picomatch": "^4.0.2" }, "peerDependencies": { "eslint": ">=8.40.0" } }, "sha512-pA6VOrOqk0+S8toJYhQGv2MWpQQR0QpeUo9AhNkC49Y26nxBQ/nH1rta9bUU1rPw2fJ1zZEMV5oCX5AazT7J2g=="],
+
+    "@tsconfig/bun": ["@tsconfig/bun@1.0.7", "", {}, "sha512-udGrGJBNQdXGVulehc1aWT73wkR9wdaGBtB6yL70RJsqwW/yJhIg6ZbRlPOfIUiFNrnBuYLBi9CSmMKfDC7dvA=="],
 
     "@types/bun": ["@types/bun@1.2.2", "", { "dependencies": { "bun-types": "1.2.2" } }, "sha512-tr74gdku+AEDN5ergNiBnplr7hpDp3V1h7fqI2GcR/rsUaM39jpSeKH0TFibRvU0KwniRx5POgaYnaXbk0hU+w=="],
 

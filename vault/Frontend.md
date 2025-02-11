@@ -6,7 +6,7 @@ Prerequisites:
 
 ## Table of contents
 
-* [[#Basic setup]]
+* [[#Initial setup]]
 * [[#Vite]]
 * [[#Vue]]
 * [[#Typescript]]
@@ -17,7 +17,7 @@ Prerequisites:
 * [[#Favicon]]
 * [[#Fonts]]
 * [[#Font Awesome]]
-## Basic setup
+## Initial setup
 
 1. Create root folder
 ```bash
@@ -86,7 +86,7 @@ export default defineConfig({
 })
 ```
 
-6. Add `scripts` property to `package.json`, add vite scripts
+6. Add `scripts` section to `package.json`, add vite scripts
 ```json
 "scripts": {
   "dev": "vite --host",
