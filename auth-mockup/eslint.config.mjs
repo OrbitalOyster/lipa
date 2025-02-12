@@ -1,16 +1,11 @@
-import importPlugin from 'eslint-plugin-import'
+import eslint from '@eslint/js'
+import eslintPluginImportX from 'eslint-plugin-import-x'
 import stylistic from '@stylistic/eslint-plugin'
 import tseslint from 'typescript-eslint'
 
-export default [
-  importPlugin.flatConfigs.recommended, /* Imports */
-  stylistic.configs['recommended-flat'], /* Formatting */
-  {
-    rules: { /* Enable rules here */
-      'sort-imports': 'error',
-    },
-  },
-  ...tseslint.configs.recommendedTypeChecked, /* Main config */
+export default tseslint.config(
+  eslint.configs.recommended, /* Main config */
+  tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
       parserOptions: {
@@ -19,19 +14,19 @@ export default [
       },
     },
   },
+  eslintPluginImportX.flatConfigs.recommended, /* Import plugin */
+  stylistic.configs['recommended-flat'], /* Formatting */
   {
-    rules: { /* Disable rules here */
+    rules: {
+      'sort-imports': 'error',
       /* Replaced by typecheck */
-      '@typescript-eslint/no-unused-vars': 'off',
       'no-unreachable': 'off',
       'no-unused-vars': 'off',
     },
-  },
-  {
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: {},
       },
     },
   },
-]
+)

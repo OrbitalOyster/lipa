@@ -294,7 +294,7 @@ console.log(import.meta.env.VITE_FOO) /* Hello */
   * ESLint stylistic plugin ([github](https://github.com/eslint-stylistic/eslint-stylistic))
 
 ```bash
-npm add eslint@9.20.0 @vue/eslint-config-typescript@14.3.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
+npm add eslint@9.20.1 @vue/eslint-config-typescript@14.4.0 eslint-plugin-vue@9.32.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
 ```
 
 21. Create `eslint.config.mjs` file, enable recommended rules

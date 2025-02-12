@@ -1,4 +1,4 @@
-_Date: 11/02/2025_
+_Date: 12/02/2025_
 
 Prerequisites:
 - bun (v1.2.2)
@@ -99,12 +99,13 @@ bun run tsc
 
 Install:
   * ESLint ([docs](https://eslint.org/docs/latest/use/getting-started))
+  * ESLint for typescript ([docs](https://typescript-eslint.io/getting-started))
   * ESLint import/export plugin ([github](https://github.com/un-ts/eslint-plugin-import-x))
   * ESLint import resolver ([github](https://github.com/import-js/eslint-import-resolver-typescript))
   * ESLint stylistic plugin ([github](https://github.com/eslint-stylistic/eslint-stylistic))
 
 ```bash
-bun add eslint@9.20.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
+bun add eslint@9.20.1 typescript-eslint@8.24.0 eslint-plugin-import-x@4.6.1 eslint-import-resolver-typescript@3.7.0 @stylistic/eslint-plugin@3.1.0 -ED
 ```
 
 Create `eslint.config.mjs` file

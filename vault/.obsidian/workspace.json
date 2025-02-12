@@ -28,14 +28,15 @@
               "type": "markdown",
               "state": {
                 "file": "Frontend.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Frontend"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -176,10 +177,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "420ef07e4e8098ee",
+  "active": "479f8359fd8a3456",
   "lastOpenFiles": [
-    "Frontend.md",
     "Backend.md",
+    "Frontend.md",
     "3.png",
     "2.png",
     "1.png",
