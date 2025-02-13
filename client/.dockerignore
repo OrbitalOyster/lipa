@@ -1,0 +1,12 @@
+.dockerignore
+.env
+.git
+.gitignore
+Dockerfile*
+eslint.config.mjs
+index.html
+node_modules
+public
+src
+tsconfig.json
+vite.config.ts
