@@ -5,7 +5,9 @@
     "dev": "bun --hot src",
     "typecheck": "tsc -noEmit",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "docker:build": "docker build --pull -t lipa-auth .",
+    "docker:run": "docker run -d -p 3000:3000 --env-file .env --name lipa-auth lipa-auth"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "3.1.0",
