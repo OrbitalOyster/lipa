@@ -1,12 +1,13 @@
 .dockerignore
 .env
 .env.example
-.git
 .gitignore
 Dockerfile
 eslint.config.mjs
 index.html
 node_modules
+package-lock.json
+package.json
 public
 src
 tsconfig.json
