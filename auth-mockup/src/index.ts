@@ -5,52 +5,31 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { setTimeout as sleep } from 'node:timers/promises'
 
-// Types
-interface AuthRequest {
-  username: string
-  password: string
-}
-
-interface UserPayload {
-  username?: string
-  role?: string
-}
-
-declare module 'bun' {
-  interface Env {
-    COOKIE_NAME: string
-    COOKIE_LIFETIME_SEC: number
-    COOKIE_SECRET: string
-    TOKEN_SECRET: string
-    PORT: number
-    ALLOWED_ORIGIN: string
-  }
-}
-
 // Config
-const cookieName = Bun.env['COOKIE_NAME']
-const cookieLifetimeSec = Bun.env['COOKIE_LIFETIME_SEC']
-const cookieSecret = Bun.env['COOKIE_SECRET']
-const tokenSecret = Bun.env['TOKEN_SECRET']
-const port = Bun.env['PORT']
-const origin = Bun.env['ALLOWED_ORIGIN']
+const cookieName = Bun.env['COOKIE_NAME'],
+  cookieLifetimeSec = Bun.env['COOKIE_LIFETIME_SEC'],
+  cookieSecret = Bun.env['COOKIE_SECRET'],
+  tokenSecret = Bun.env['TOKEN_SECRET'],
+  port = Bun.env['PORT'],
+  origin = Bun.env['ALLOWED_ORIGIN'].split(' ')
 
 // Check config
 if (!cookieName || !cookieLifetimeSec || !cookieSecret || !tokenSecret || !port || !origin)
   throw new Error('Missing .env config')
 
+// Placeholder credentials
 const sampleUsername = 'orbital',
   samplePassword = 'password',
   sampleRole = 'admin'
+
+const authDelay = 2000
 
 const app = new Hono()
 
 // Allow cross-origin resource sharing
 app.use('*', cors({ origin, credentials: true }))
-
-app.get('/', (c) => {
-  return c.text('You\'re doing it wrong')
-})
+// Default response
+app.get('/', c => c.text('You\'re doing it wrong\n'))
 
 async function updateCookie(c: Context, username: string, role: string) {
   const payload = {
@@ -75,7 +54,7 @@ async function updateCookie(c: Context, username: string, role: string) {
 
 // Auth attempt
 app.post('/auth', async (c) => {
-  await sleep(2500)
+  await sleep(authDelay)
   const { username, password } = await c.req.json<AuthRequest>()
   // DB check mock up
   if (username !== sampleUsername || samplePassword !== password) {

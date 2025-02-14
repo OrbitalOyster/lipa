@@ -12,8 +12,8 @@
     "typecheck": "vue-tsc",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "docker:build": "vite build && docker build --pull -t client .",
-    "docker:run": "docker run -d -p 8080:8080 --name client client"
+    "docker:build": "docker build --pull -t lipa-client .",
+    "docker:run": "docker run -d -p 8080:8080 --name lipa-client lipa-client"
   },
   "devDependencies": {
     "@floating-ui/vue": "1.1.6",

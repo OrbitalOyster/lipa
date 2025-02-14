@@ -64,6 +64,9 @@ async function onClick() {
   button:active:enabled
     background-color: colors.$active
 
+  button:disabled
+    cursor: not-allowed
+
   .mark
     background-color: colors.$primary
     border-radius: borders.$radius
@@ -79,6 +82,6 @@ async function onClick() {
     background-color: colors.$disabled-primary
 
   label
-    cursor: pointer
+    cursor: v-bind("disabled ? 'not-allowed' : 'pointer'")
     user-select: none
 </style>

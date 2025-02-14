@@ -70,6 +70,7 @@ const model = defineModel<string>({ default: '' }),
         v-if="password"
         transparent
         tooltip="Показать/скрыть пароль"
+        :disabled
         :icon="passwordHidden ? faEye : faEyeSlash"
         @click="passwordHidden = !passwordHidden"
       />
@@ -90,6 +91,7 @@ const model = defineModel<string>({ default: '' }),
 
   input:disabled
     color: colors.$disabled-primary
+    cursor: not-allowed
 
   input[placeholder]
     padding-top: 1.5rem

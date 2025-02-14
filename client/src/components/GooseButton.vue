@@ -76,8 +76,16 @@ const props = defineProps<{
     background-color: colors.$alert
 
   .transparent:enabled, .transparent:active
-    color: colors.$text
     background-color: transparent
+    color: colors.$text
+    outline: none
+    padding-left: 0rem
+    padding-right: 0rem
+
+  .transparent:disabled
+    background-color: transparent
+    color: colors.$text-inactive
+    cursor: not-allowed
     outline: none
     padding-left: 0rem
     padding-right: 0rem
@@ -119,4 +127,5 @@ const props = defineProps<{
   button:disabled
     background-color: colors.$disabled-primary
     color: colors.$disabled
+    cursor: not-allowed
 </style>

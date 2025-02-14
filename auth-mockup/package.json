@@ -1,9 +1,8 @@
 {
   "name": "auth",
-  "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun --hot index.ts",
+    "dev": "bun --hot src",
     "typecheck": "tsc -noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
@@ -19,6 +18,6 @@
     "typescript-eslint": "8.24.0"
   },
   "dependencies": {
-    "hono": "4.6.20"
+    "hono": "4.7.1"
   }
 }
