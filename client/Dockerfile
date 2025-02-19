@@ -1,4 +1,5 @@
 FROM oven/bun AS build
+ARG VITE_AUTH_API
 WORKDIR /usr/src/app
 
 COPY . .
