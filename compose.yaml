@@ -1,24 +1,26 @@
 services:
   db:
     image: mariadb
-    restart: always
     environment:
-      MARIADB_USER: sample_user
+      MARIADB_USER: lipa_user
       MARIADB_PASSWORD: 12345
-      MARIADB_ROOT_PASSWORD: 12345
-      MARIADB_DATABASE: lipa_db
+      MARIADB_ROOT_PASSWORD: 12345678
+      MARIADB_DATABASE: lipa
     volumes:
-      - /home/user/maria-data:/var/lib/mysql
+      - ~/lipa-db:/var/lib/mysql
     ports:
       - 3306:3306
+
+  auth:
+    build: auth-mockup/
+    ports: 
+      - 3000:3000
+    depends_on:
+      - db
 
   client:
     build: client/
     ports:
       - 80:80
-
-  auth:
-    build: auth-mockup/
-    command: bun run src
-    ports: 
-      - 3000:3000
+    depends_on:
+      - auth
