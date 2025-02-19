@@ -2,24 +2,33 @@ services:
   db:
     image: mariadb
     environment:
-      MARIADB_USER: lipa_user
-      MARIADB_PASSWORD: 12345
-      MARIADB_ROOT_PASSWORD: 12345678
-      MARIADB_DATABASE: lipa
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
     volumes:
-      - ~/lipa-db:/var/lib/mysql
+      - ${DB_STORAGE}:/var/lib/mysql
     ports:
       - 3306:3306
 
   auth:
     build: auth-mockup/
+    environment:
+      ALLOWED_ORIGIN: http://${SERVER}:8080 http://${SERVER}
+      PORT: ${AUTH_PORT}
+      COOKIE_NAME: token
+      COOKIE_LIFETIME_SEC: 86400
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      TOKEN_SECRET: ${TOKEN_SECRET}
     ports: 
-      - 3000:3000
+      - ${AUTH_PORT}:${AUTH_PORT}
     depends_on:
       - db
 
   client:
     build: client/
+    environment:
+      VITE_AUTH_API: http://${SERVER}:${AUTH_PORT}
     ports:
       - 80:80
     depends_on:

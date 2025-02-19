@@ -1,6 +1,4 @@
 .dockerignore
-.env.example
-.git
 .gitignore
 Dockerfile
 eslint.config.mjs
