@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN bun install
+RUN bun install --production --frozen-lockfile
 RUN bun run build
 
 FROM nginx
