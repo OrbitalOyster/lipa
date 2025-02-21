@@ -58,6 +58,10 @@ const cb = ref(null)
 
 const confirmModal = useTemplateRef('confirmModal')
 
+function throwError() {
+  throw new Error('Test Error')
+}
+
 </script>
 
 <template>
@@ -120,6 +124,10 @@ const confirmModal = useTemplateRef('confirmModal')
         <GooseButton
           title="Hover me"
           tooltip="This is tooltip"
+        />
+        <GooseButton
+          title="Error"
+          @click="throwError"
         />
       </div>
       <hr>
