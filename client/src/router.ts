@@ -41,7 +41,7 @@ const router = createRouter({
 })
 
 /* Error handler */
-router.onError(async (err, to) => {
+router.onError(async (err) => {
   await router.push({ name: 'Error', state: { err } })
 })
 
@@ -49,8 +49,10 @@ router.onError(async (err, to) => {
 router.beforeEach(async (to, from) => {
   console.log(`Navigating from ${from.path} to ${to.path}`)
   /* Error page */
-  if (to.name === 'Error')
+  if (to.name === 'Error') {
+    document.title = `Ошибка`
     return true
+  }
   /* Set document title */
   document.title = `${to.meta.title} - Gooseberry.js`
   /* Log in status */

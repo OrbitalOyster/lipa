@@ -39,7 +39,7 @@ const useUserStore = defineStore('user', {
         this.role = res.data.role
         return true
       } catch (err) {
-        throw new Error(`Auth service unavailable: ${err.message}`)
+        throw new Error(`Auth service unavailable: ${err}`)
       }
     },
     /* Logs user in */
