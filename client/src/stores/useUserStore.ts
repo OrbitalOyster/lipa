@@ -29,14 +29,18 @@ const useUserStore = defineStore('user', {
       /* Already logged in */
       if (this.username)
         return true
-      const res: AxiosResponse<AuthResponse | null>
-        = await axios.get(`${authEndpoint}/check`, axiosOptions)
-      /* Invalid token */
-      if (res.data === null)
-        return false
-      this.username = res.data.username
-      this.role = res.data.role
-      return true
+      try {
+        const res: AxiosResponse<AuthResponse | null>
+          = await axios.get(`${authEndpoint}/check`, axiosOptions)
+        /* Invalid token */
+        if (res.data === null)
+          return false
+        this.username = res.data.username
+        this.role = res.data.role
+        return true
+      } catch (err) {
+        throw new Error(`Auth service unavailable: ${err.message}`)
+      }
     },
     /* Logs user in */
     async auth(username: string, password: string, rememberMe: boolean) {

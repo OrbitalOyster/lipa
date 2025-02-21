@@ -42,8 +42,7 @@ const router = createRouter({
 
 /* Error handler */
 router.onError(async (err, to) => {
-  console.log('Router error', err, to)
-  await router.push({ name: 'Error' })
+  await router.push({ name: 'Error', state: { err } })
 })
 
 /* Auth guards */
@@ -52,6 +51,8 @@ router.beforeEach(async (to, from) => {
   /* Error page */
   if (to.name === 'Error')
     return true
+  /* Set document title */
+  document.title = `${to.meta.title} - Gooseberry.js`
   /* Log in status */
   const loggedIn = await useUserStore().check()
   if (to.name === 'Login')
@@ -60,8 +61,5 @@ router.beforeEach(async (to, from) => {
   /* Default handler */
   return loggedIn ? true : { name: 'Login' }
 })
-
-/* Set document title */
-router.afterEach(to => document.title = `${to.meta.title} - Gooseberry.js`)
 
 export default router
