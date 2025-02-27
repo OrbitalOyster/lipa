@@ -7,10 +7,10 @@ import { setTimeout as sleep } from 'node:timers/promises'
 
 // Config
 const cookieName = Bun.env['COOKIE_NAME'],
-  cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
   cookieSecret = Bun.env['COOKIE_SECRET'],
+  cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
   tokenSecret = Bun.env['TOKEN_SECRET'],
-  port = Number(Bun.env['PORT']),
+  port = Number(Bun.env['API_PORT']),
   origin = Bun.env['ALLOWED_ORIGIN'].split(' ')
 
 // Check config

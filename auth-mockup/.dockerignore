@@ -1,4 +1,5 @@
 .dockerignore
+.env.development
 .gitignore
 Dockerfile
 eslint.config.mjs
