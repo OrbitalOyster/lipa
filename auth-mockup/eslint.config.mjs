@@ -22,6 +22,7 @@ export default tseslint.config(
       /* Replaced by typecheck */
       'no-unreachable': 'off',
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
     settings: {
       'import-x/resolver': {
