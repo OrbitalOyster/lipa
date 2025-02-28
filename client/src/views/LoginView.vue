@@ -53,7 +53,7 @@ onMounted(() =>
               <h1>Gooseberry.js</h1>
               <h2>Последний шанс снять бахилы</h2>
             </div>
-            <img src="/goose.png">
+            <img src="/goose.webp">
           </header>
           <GooseFormInput
             :checks="['required']"

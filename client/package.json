@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "dev": "NODE_ENV=development vite --host",
+    "dev": "vite --host",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "typecheck": "vue-tsc"
