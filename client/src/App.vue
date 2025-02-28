@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import './assets/style.sass'
 
-import { getCurrentInstance } from "vue"
+import { getCurrentInstance } from 'vue'
 const app = getCurrentInstance().appContext.app
-console.log(app)
 
 app.config.errorHandler = (err, vm, info) => {
-  console.error("Error:", err)
-  console.error("Vue component:", vm)
-  console.error("Additional info:", info)
+  console.error('Error:', err)
+  console.error('Vue component:', vm)
+  console.error('Additional info:', info)
 }
 
 </script>
