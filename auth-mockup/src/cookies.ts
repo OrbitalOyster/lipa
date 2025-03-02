@@ -2,13 +2,6 @@ import { getSignedCookie, setCookie, setSignedCookie } from 'hono/cookie'
 import { sign, verify } from 'hono/jwt'
 import type { Context } from 'hono'
 
-const cookieSettings = {
-  path: '/',
-  httpOnly: true,
-  maxAge: cookieLifetimeSec,
-  sameSite: 'Strict',
-}
-
 const getCookie = async (context: Context) => {
   const cookieName = Bun.env['COOKIE_NAME'],
     cookieSecret = Bun.env['COOKIE_SECRET'],
