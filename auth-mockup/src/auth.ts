@@ -18,8 +18,10 @@ export const auth = async (context: Context) => {
   }
   const role = sampleRole
   console.log('Auth OK', username)
-  // exp will be updated either way
-  await updateCookie(context, { username, role, exp: 0 })
+  const payload = await getPayload(context)
+  payload.username = username
+  payload.role = role
+  await updateCookie(context, payload)
   return context.json({ username, role })
 }
 

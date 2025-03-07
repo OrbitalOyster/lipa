@@ -12,7 +12,7 @@ export const getPayload = async (context: Context) => {
     cookieName,
   )
   if (!cookie)
-    return null
+    return {}
   return <UserPayload> await verify(cookie, tokenSecret)
 }
 
