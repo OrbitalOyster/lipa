@@ -6,6 +6,7 @@ interface AuthRequest {
 interface UserPayload {
   username?: string
   role?: string
+  exp: number
 }
 
 declare module 'bun' {

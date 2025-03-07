@@ -1,6 +1,6 @@
-import { checkCookie, clearCookie } from './cookies'
+import { auth, logout } from './auth'
 import { Hono } from 'hono'
-import { auth } from './auth'
+import { checkCookie } from './cookies'
 import { cors } from 'hono/cors'
 
 // Config
@@ -27,7 +27,7 @@ app.get('/', c => c.text('You\'re doing it wrong\n'))
 app.get('/check', checkCookie)
 // Auth
 app.post('/auth', auth)
-app.get('/logout', clearCookie)
+app.get('/logout', logout)
 
 export default {
   fetch: app.fetch,
