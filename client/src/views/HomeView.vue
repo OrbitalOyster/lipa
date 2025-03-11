@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 'splitpanes/dist/splitpanes.css'
 import { Pane, Splitpanes } from 'splitpanes'
+import axios from 'axios'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -9,6 +10,7 @@ import GooseTabs from '#components/GooseTabs.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
+import { useUserStore } from '#stores/useUserStore.ts'
 
 const accordionModel = ref([
   { id: 'orgs', title: 'Организации', icon: faBuilding },
@@ -21,25 +23,30 @@ const slots = [
   { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
+
+const userStore = useUserStore()
+
+async function onSideBarResize(e) {
+  userStore.setPayload({ sideBarWidth: e[0].size })
+  // const res = await axios.post('http://192.168.7.204:3000/payload', {sideBarWidth: e[0].size})
+  // userStore.sideBarWidth = res.data.sideBarWidth
+}
+
 </script>
 
 <template>
   <div class="fs layout">
     <TopBar />
-    <Splitpanes vertical>
+    <Splitpanes 
+      @resized=onSideBarResize
+      vertical
+    >
       <Pane
         max-size="50"
-        size="25"
+        :size="userStore.sideBarWidth"
       >
         <aside>
-          <GooseAccordion v-model="accordionModel">
-            <template #Организации>
-              <p>LoremIpsum</p>
-            </template>
-            <template #Формы>
-              <p>Bar</p>
-            </template>
-          </GooseAccordion>
+          <GooseAccordion v-model="accordionModel" />
         </aside>
       </Pane>
       <Pane>

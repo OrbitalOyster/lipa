@@ -3,9 +3,14 @@ interface AuthRequest {
   password: string
 }
 
+interface UserOptions {
+  sideBarWidth?: number
+}
+
 interface UserPayload {
   username?: string
   role?: string
+  options?: UserOptions
   exp?: number
 }
 

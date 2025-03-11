@@ -2,7 +2,7 @@ import { getPayload, updateCookie } from './cookies'
 import type { Context } from 'hono'
 import { setTimeout as sleep } from 'node:timers/promises'
 
-// Placeholder credentials
+/* Placeholder credentials */
 const sampleUsername = 'orbital',
   samplePassword = 'password',
   sampleRole = 'admin',
@@ -11,26 +11,18 @@ const sampleUsername = 'orbital',
 export const auth = async (context: Context) => {
   await sleep(authDelay)
   const { username, password } = await context.req.json<AuthRequest>()
-  // DB check mock up
+  /* DB check mock up */
   if (username !== sampleUsername || samplePassword !== password) {
     console.log('Auth failed')
-    return context.json(null)
+    return context.json(false)
   }
-  const role = sampleRole
   console.log('Auth OK', username)
-  const payload = await getPayload(context)
-  payload.username = username
-  payload.role = role
-  await updateCookie(context, payload)
-  return context.json({ username, role })
+  /* Update cookie and return ok */
+  await updateCookie(context, {username, role: sampleRole})
+  return context.json(true)
 }
 
 export const logout = async (context: Context) => {
-  const payload = await getPayload(context)
-  if (payload) {
-    delete payload.username
-    delete payload.role
-    await updateCookie(context, payload)
-  }
+  await updateCookie(context, {username: null, role: null})
   return context.text('logout')
 }

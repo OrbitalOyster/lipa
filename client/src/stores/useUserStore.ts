@@ -5,15 +5,10 @@ import { defineStore } from 'pinia'
 interface UserStore {
   username: null | string
   role: null | string
+  sideBarWidth: number
 }
 
-interface AuthResponse {
-  username: string
-  role: string
-}
-
-const authEndpoint = import.meta.env.VITE_AUTH_API,
-  axiosOptions = { withCredentials: true }
+const authEndpoint = import.meta.env.VITE_AUTH_API
 
 if (!authEndpoint)
   throw new Error('Missing auth endpoint')
@@ -22,45 +17,50 @@ const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     username: null,
     role: null,
+    sideBarWidth: 25
   }),
   actions: {
+    async getPayload() {
+      const res = await axios.get(`${authEndpoint}/payload`)
+      if (res.data)
+        Object.assign(this, res.data)
+    },
+    async setPayload(payload) {
+      const res = await axios.post(`${authEndpoint}/payload`, payload)
+      if (res.data)
+        Object.assign(this, res.data)
+    },
     /* Checks if user's logged in */
     async check() {
       /* Already logged in */
       if (this.username)
         return true
       try {
-        const res: AxiosResponse<AuthResponse | null>
-          = await axios.get(`${authEndpoint}/check`, axiosOptions)
-        /* Invalid token */
-        if (res.data === null)
-          return false
-        this.username = res.data.username
-        this.role = res.data.role
-        return true
+        const res: AxiosResponse<boolean>
+          = await axios.get(`${authEndpoint}/check`)
+        return (res.data)
       }
       catch (err) {
-        throw new Error(`Auth service unavailable: ${err.toString()}`)
+        throw new Error(`Auth service error: ${err.toString()}`)
       }
     },
     /* Logs user in */
     async auth(username: string, password: string, rememberMe: boolean) {
-      const res: AxiosResponse<AuthResponse | null> = await axios.post(
+      const res: AxiosResponse<boolean> = await axios.post(
         `${authEndpoint}/auth`, {
           username,
           password,
           rememberMe,
-        }, axiosOptions,
+        },
       )
       /* Failed login */
-      if (res.data === null)
+      if (!res.data)
         return false
-      this.username = res.data.username
-      this.role = res.data.role
+      await this.getPayload()
       return true
     },
     async logout() {
-      await axios.get(`${authEndpoint}/logout`, axiosOptions)
+      await axios.get(`${authEndpoint}/logout`)
       this.username = null
       this.role = null
     },
