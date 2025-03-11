@@ -1,21 +1,23 @@
 {
   "name": "api",
-  "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "bun src --hot",
+    "dev": "bun --hot src",
+    "typecheck": "tsc -noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@stylistic/eslint-plugin": "3.1.0",
+    "@stylistic/eslint-plugin": "4.1.0",
     "@tsconfig/bun": "1.0.7",
-    "@types/bun": "1.2.2",
-    "eslint": "9.20.1",
-    "eslint-import-resolver-typescript": "3.7.0",
+    "@types/bun": "1.2.4",
+    "eslint": "9.21.0",
+    "eslint-import-resolver-typescript": "3.8.3",
     "eslint-plugin-import-x": "4.6.1",
     "typescript": "5.7.3",
-    "typescript-eslint": "8.24.0"
+    "typescript-eslint": "8.25.0"
+  },
+  "dependencies": {
+    "hono": "4.7.2"
   }
 }

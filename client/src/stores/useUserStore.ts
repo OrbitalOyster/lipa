@@ -8,10 +8,10 @@ interface UserStore {
   sideBarWidth: number
 }
 
-const authEndpoint = import.meta.env.VITE_AUTH_API
+const apiEndpoint = import.meta.env.VITE_API_URI
 
-if (!authEndpoint)
-  throw new Error('Missing auth endpoint')
+if (!apiEndpoint)
+  throw new Error('Missing api endpoint')
 
 const useUserStore = defineStore('user', {
   state: (): UserStore => ({
@@ -21,12 +21,12 @@ const useUserStore = defineStore('user', {
   }),
   actions: {
     async getPayload() {
-      const res = await axios.get(`${authEndpoint}/payload`)
+      const res = await axios.get(`${apiEndpoint}/payload`)
       if (res.data)
         Object.assign(this, res.data)
     },
     async setPayload(payload) {
-      const res = await axios.post(`${authEndpoint}/payload`, payload)
+      const res = await axios.post(`${apiEndpoint}/payload`, payload)
       if (res.data)
         Object.assign(this, res.data)
     },
@@ -37,7 +37,7 @@ const useUserStore = defineStore('user', {
         return true
       try {
         const res: AxiosResponse<boolean>
-          = await axios.get(`${authEndpoint}/check`)
+          = await axios.get(`${apiEndpoint}/check`)
         return (res.data)
       }
       catch (err) {
@@ -47,7 +47,7 @@ const useUserStore = defineStore('user', {
     /* Logs user in */
     async auth(username: string, password: string, rememberMe: boolean) {
       const res: AxiosResponse<boolean> = await axios.post(
-        `${authEndpoint}/auth`, {
+        `${apiEndpoint}/auth`, {
           username,
           password,
           rememberMe,
@@ -60,7 +60,7 @@ const useUserStore = defineStore('user', {
       return true
     },
     async logout() {
-      await axios.get(`${authEndpoint}/logout`)
+      await axios.get(`${apiEndpoint}/logout`)
       this.username = null
       this.role = null
     },
