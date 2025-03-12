@@ -24,8 +24,8 @@ const router = useRouter(),
           Чтобы ускорить процесс, сообщите следующие страшные слова ответственным лицам:
         </p>
       </strong>
-      <pre>{{ err?.message }}</pre>
-      <pre>{{ err?.stack }}</pre>
+      <pre>{{ err.message }}</pre>
+      <pre>{{ err.stack }}</pre>
       <strong>Для облегчения боли бытия был вызван танцующий гусь</strong>
       <div class="centered">
         <img src="/error.gif">

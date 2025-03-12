@@ -1,6 +1,6 @@
 import { auth, logout } from './auth'
-import { Hono } from 'hono'
 import { check, getPayload, setPayload } from './cookies'
+import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 
 /* Config */
@@ -25,7 +25,7 @@ app.use('*', cors({ origin, credentials: true }))
 app.get('/', c => c.text('You\'re doing it wrong\n'))
 
 /* User data */
-app.get('/payload', async (c) => c.json(await getPayload(c)))
+app.get('/payload', async c => c.json(await getPayload(c)))
 
 app.post('/payload', setPayload)
 

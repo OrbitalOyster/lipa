@@ -1,6 +1,6 @@
-import { getPayload, updateCookie } from './cookies'
 import type { Context } from 'hono'
 import { setTimeout as sleep } from 'node:timers/promises'
+import { updateCookie } from './cookies'
 
 /* Placeholder credentials */
 const sampleUsername = 'orbital',
@@ -18,11 +18,11 @@ export const auth = async (context: Context) => {
   }
   console.log('Auth OK', username)
   /* Update cookie and return ok */
-  await updateCookie(context, {username, role: sampleRole})
+  await updateCookie(context, { username, role: sampleRole })
   return context.json(true)
 }
 
 export const logout = async (context: Context) => {
-  await updateCookie(context, {username: null, role: null})
+  await updateCookie(context, { username: null, role: null })
   return context.text('logout')
 }

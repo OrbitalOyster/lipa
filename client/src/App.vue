@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import './assets/style.sass'
-
 import { getCurrentInstance } from 'vue'
+
 const app = getCurrentInstance().appContext.app
 
 app.config.errorHandler = (err, vm, info) => {

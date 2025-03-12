@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import 'splitpanes/dist/splitpanes.css'
 import { Pane, Splitpanes } from 'splitpanes'
-import axios from 'axios'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -26,20 +25,14 @@ const slots = [
 
 const userStore = useUserStore()
 
-async function onSideBarResize(e) {
-  userStore.setPayload({ sideBarWidth: e[0].size })
-  // const res = await axios.post('http://192.168.7.204:3000/payload', {sideBarWidth: e[0].size})
-  // userStore.sideBarWidth = res.data.sideBarWidth
-}
-
 </script>
 
 <template>
   <div class="fs layout">
     <TopBar />
-    <Splitpanes 
-      @resized=onSideBarResize
+    <Splitpanes
       vertical
+        @resized="async e => await userStore.setPayload({ sideBarWidth: e[0].size })"
     >
       <Pane
         max-size="50"

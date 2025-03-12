@@ -17,7 +17,7 @@ const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     username: null,
     role: null,
-    sideBarWidth: 25
+    sideBarWidth: 25,
   }),
   actions: {
     async getPayload() {
@@ -41,7 +41,7 @@ const useUserStore = defineStore('user', {
         return (res.data)
       }
       catch (err) {
-        throw new Error(`Auth service error: ${err.toString()}`)
+        throw new Error(`Auth service error: ${(<Error>err).toString()}`)
       }
     },
     /* Logs user in */
