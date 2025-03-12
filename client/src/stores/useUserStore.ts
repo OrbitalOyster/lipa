@@ -41,7 +41,7 @@ const useUserStore = defineStore('user', {
         return (res.data)
       }
       catch (err) {
-        throw new Error(`Auth service error: ${(<Error>err).toString()}`)
+        throw new Error(`Auth service error: ${(err as Error).toString()}`)
       }
     },
     /* Logs user in */

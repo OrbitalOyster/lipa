@@ -10,20 +10,24 @@ interface AccordionItem {
   icon: IconDefinition
 }
 
-const model = defineModel<AccordionItem[]>(),
-  toggled = ref('')
+interface Accordion {
+  items: AccordionItem[]
+  toggled: string
+}
+
+const model = defineModel<Accordion>()
 </script>
 
 <template>
   <ul>
     <li
-      v-for="item in model"
+      v-for="item in model.items"
       :key="item.id"
-      :class="{ card: true, toggled: toggled === item.id }"
+      :class="{ card: true, toggled: model.toggled === item.id }"
     >
       <div
         class="title"
-        @click="toggled = toggled === item.id ? '' : item.id"
+        @click="model.toggled = model.toggled === item.id ? '' : item.id"
       >
         <div style="display: flex; align-items: center">
           <div class="icon">
@@ -40,11 +44,11 @@ const model = defineModel<AccordionItem[]>(),
           class="chevron"
           :icon="faChevronDown"
           size="xl"
-          :style="{ transform: toggled === item.id ? 'rotate(180deg)' : 'none'}"
+          :style="{ transform: model.toggled === item.id ? 'rotate(180deg)' : 'none'}"
         />
       </div>
       <div
-        v-if="item.title === toggled"
+        v-if="item.title === model.toggled"
         class="item-container"
       >
         <slot :name="item.id" />

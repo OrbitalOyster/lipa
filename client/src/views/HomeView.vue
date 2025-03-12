@@ -9,13 +9,19 @@ import GooseTabs from '#components/GooseTabs.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { useUserStore } from '#stores/useUserStore.ts'
 
-const accordionModel = ref([
-  { id: 'orgs', title: 'Организации', icon: faBuilding },
-  { id: 'forms', title: 'Формы', icon: faClipboard },
-  { id: 'statuses', title: 'Статусы', icon: faPencil },
-])
+/* Nothing is toggled by default */
+useLocalStorage('sideBarToggled', '')
+
+const accordionModel = ref({
+  toggled: useLocalStorage('sideBarToggled'),
+  items: [
+    { id: 'orgs', title: 'Организации', icon: faBuilding },
+    { id: 'forms', title: 'Формы', icon: faClipboard },
+    { id: 'statuses', title: 'Статусы', icon: faPencil },
+]})
 
 const slots = [
   { id: 'xlsx', title: 'Исходники', icon: faFileExcel },
@@ -32,7 +38,7 @@ const userStore = useUserStore()
     <TopBar />
     <Splitpanes
       vertical
-        @resized="async e => await userStore.setPayload({ sideBarWidth: e[0].size })"
+      @resized="async e => await userStore.setPayload({ sideBarWidth: e[0].size })"
     >
       <Pane
         max-size="50"
