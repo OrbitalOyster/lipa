@@ -13,15 +13,15 @@ import { useLocalStorage } from '@vueuse/core'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Nothing is toggled by default */
-useLocalStorage('sideBarToggled', '')
+useLocalStorage('sideBarToggled', '', {})
 
 const accordionModel = ref({
-  toggled: useLocalStorage('sideBarToggled'),
+  toggled: useLocalStorage('sideBarToggled', ''),
   items: [
     { id: 'orgs', title: 'Организации', icon: faBuilding },
     { id: 'forms', title: 'Формы', icon: faClipboard },
     { id: 'statuses', title: 'Статусы', icon: faPencil },
-]})
+  ] })
 
 const slots = [
   { id: 'xlsx', title: 'Исходники', icon: faFileExcel },

@@ -13,7 +13,7 @@ defineProps<{
 
 const checked = ref(false),
   search = ref(''),
-  model = defineModel<Leaf[]>()
+  model = defineModel<Leaf[]>({ required: true })
 
 </script>
 

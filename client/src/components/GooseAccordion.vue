@@ -2,7 +2,6 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { ref } from 'vue'
 
 interface AccordionItem {
   id: string
@@ -15,7 +14,7 @@ interface Accordion {
   toggled: string
 }
 
-const model = defineModel<Accordion>()
+const model = defineModel<Accordion>({ required: true })
 </script>
 
 <template>

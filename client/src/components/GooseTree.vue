@@ -20,14 +20,11 @@ const props = defineProps<{
   }>(),
   emit = defineEmits(['match', 'check', 'select'])
 
-const model = defineModel<Leaf[]>()
-
-if (!model.value)
-  throw new Error('Major screwup')
+const model = defineModel<Leaf[]>({ required: true })
 
 function onMatch(i: number, value: boolean) {
   /* TODO: Clunky */
-  if (!model.value?.[i])
+  if (!model.value[i])
     throw new Error('Major screwup')
 
   model.value[i].match = value
@@ -46,11 +43,7 @@ function onSelect(leaf: Leaf) {
 }
 
 /* Emit up */
-watch(() => model.value?.map(l => l.checked), (after) => {
-  /* TODO: Clunky */
-  if (!after)
-    throw new Error('Major screwup')
-
+watch(() => model.value.map(l => l.checked), (after) => {
   /* Everything checked */
   if (after.every(e => e === true))
     emit('check', true)
@@ -64,10 +57,6 @@ watch(() => model.value?.map(l => l.checked), (after) => {
 
 /* Emit down */
 watch(() => props.checked, (value: boolean | null) => {
-  /* TODO: Clunky */
-  if (!model.value)
-    throw new Error('Major screwup')
-
   if (value !== null)
     model.value.forEach(e => e.checked = value)
 })
