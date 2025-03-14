@@ -24,16 +24,21 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
     cookieSecret = Bun.env['COOKIE_SECRET'],
     cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
     tokenSecret = Bun.env['TOKEN_SECRET']
-  const oldPayload = await getPayload(context),
-    newPayload = Object.assign(oldPayload, payload || {})
-  newPayload.exp = Math.floor(Date.now() / 1000) + cookieLifetimeSec
-  const token = await sign(newPayload, tokenSecret)
-  await setSignedCookie(context, cookieName, token, cookieSecret, {
-    path: '/',
-    httpOnly: true,
-    maxAge: cookieLifetimeSec,
-    sameSite: 'Strict',
-  })
+  const oldPayload = await getPayload(context)
+  if (payload)
+    Object.assign(oldPayload, payload)
+  /* Update expiration date */
+  oldPayload['exp'] = Math.floor(Date.now() / 1000) + cookieLifetimeSec
+  await setSignedCookie(
+    context,
+    cookieName,
+    await sign(oldPayload, tokenSecret),
+    cookieSecret, {
+      path: '/',
+      httpOnly: true,
+      maxAge: cookieLifetimeSec,
+      sameSite: 'Strict',
+    })
 }
 
 export const setPayload = async (context: Context) => {
