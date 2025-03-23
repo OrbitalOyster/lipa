@@ -18,6 +18,7 @@
     "typescript-eslint": "8.25.0"
   },
   "dependencies": {
-    "hono": "4.7.2"
+    "hono": "4.7.2",
+    "mysql": "^2.18.1"
   }
 }

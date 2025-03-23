@@ -1,5 +1,6 @@
 import { auth, logout } from './auth'
 import { check, getPayload, setPayload } from './cookies'
+import { orgs } from './orgs'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 
@@ -35,6 +36,9 @@ app.get('/check', check)
 app.post('/auth', auth)
 /* Logout */
 app.get('/logout', logout)
+
+/* Orgs */
+app.get('/orgs', orgs)
 
 export default {
   fetch: app.fetch,

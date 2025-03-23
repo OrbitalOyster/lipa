@@ -17,6 +17,6 @@ axios.defaults.withCredentials = true
 app.use(router)
 app.use(pinia)
 
-await useUserStore().getPayload()
+await useUserStore().getPayload().catch(err => err)
 
 app.mount('#app')
