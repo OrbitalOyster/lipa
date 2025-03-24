@@ -2,24 +2,25 @@ import type { Context } from 'hono'
 import type { RowDataPacket } from 'mysql2/promise'
 import mysql from 'mysql2/promise'
 
-const dbUser = Bun.env['DB_USER'],
-  dbPassword = Bun.env['DB_PASSWORD'],
-  dbPort = Bun.env['DB_PORT'],
-  dbName = Bun.env['DB_NAME']
-
 interface Org extends RowDataPacket {
   id: string
   ord: string
   name: string
 }
 
+const dbUser = Bun.env['DB_USER'],
+  dbPassword = Bun.env['DB_PASSWORD'],
+  dbPort = Bun.env['DB_PORT'],
+  dbName = Bun.env['DB_NAME'],
+  dbHost = Bun.env['DB_HOST'],
+  connectionString = `mysql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`
+
 export const orgs = async (context: Context) => {
-  const connectionString = `mysql://${dbUser}:${dbPassword}@db:${dbPort}/${dbName}`
   try {
-    const connection = await mysql.createConnection(connectionString)
-    const sql = 'SELECT * FROM orgs ORDER BY ord'
-    const [rows] = await connection.query<Org[]>(sql)
-    const parsedRows = rows.map(org => ({ id: org.id, ord: org.ord, name: org.name }))
+    const connection = await mysql.createConnection(connectionString),
+      [rows] = await connection.query<Org[]>('SELECT * FROM orgs ORDER BY ord'),
+      parsedRows = rows.map(org => ({ id: org.id, ord: org.ord, name: org.name }))
+    await connection.end()
     return context.json(parsedRows)
   } catch (error) {
     console.log(error)
