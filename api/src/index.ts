@@ -1,8 +1,8 @@
 import { auth, logout } from './auth'
 import { check, getPayload, setPayload } from './cookies'
-import { orgs } from './orgs'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { orgs } from './orgs'
 
 /* Config */
 const port = Number(Bun.env['API_PORT']),
