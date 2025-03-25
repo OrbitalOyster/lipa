@@ -46,10 +46,7 @@ const model = defineModel<Accordion>({ required: true })
           :style="{ transform: model.toggled === item.id ? 'rotate(180deg)' : 'none'}"
         />
       </div>
-      <div
-        v-if="item.title === model.toggled"
-        class="item-container"
-      >
+      <div class="item-container">
         <slot :name="item.id" />
       </div>
     </li>
@@ -67,22 +64,27 @@ const model = defineModel<Accordion>({ required: true })
     height: 100%
 
   li
+    display: flex
+    flex-direction: column
+    flex-grow: 0
+    height: 3rem
+    margin-bottom: .25rem
+    margin-top: .25rem
     overflow: hidden
     transition: 100ms flex-grow ease-in-out
-    flex-grow: 0
-    margin-top: .25rem
-    margin-bottom: .25rem
 
   li.toggled
     flex-grow: 1
 
   .title
     display: flex
+    flex-shrink: 0
     justify-content: space-between
     align-items: center
     cursor: pointer
     user-select: none
     height: 3rem
+    padding-left: .5rem
     padding-right: .5rem
 
   .chevron
@@ -90,7 +92,7 @@ const model = defineModel<Accordion>({ required: true })
 
   .icon
     display: inline-flex
-    width: 2rem
+    width: 1.5rem
     justify-content: center
 
   h1

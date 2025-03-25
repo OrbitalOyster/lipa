@@ -2,13 +2,15 @@
 import 'splitpanes/dist/splitpanes.css'
 import { Pane, Splitpanes } from 'splitpanes'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { onMounted, ref } from 'vue'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
+import GooseTreeRoot from '#components/GooseTreeRoot.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
-import { ref } from 'vue'
+import axios from 'axios'
 import { useLocalStorage } from '@vueuse/core'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -30,6 +32,15 @@ const slots = [
 ]
 
 const userStore = useUserStore()
+const orgs = ref([])
+
+onMounted(async () => {
+  const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
+    res = await axiosInstance.get('/orgs')
+    orgs.value = res.data.map(i => ({ title: i.name, id: i.id }))
+  
+  // console.log(orgs.data)
+})
 
 </script>
 
@@ -45,7 +56,16 @@ const userStore = useUserStore()
         :size="userStore.sideBarWidth"
       >
         <aside>
-          <GooseAccordion v-model="accordionModel" />
+          <GooseAccordion v-model="accordionModel">
+            <template #orgs>
+              <GooseTreeRoot
+                v-model="orgs"
+                searchable
+                :checkable="false"
+                :selectable="false"
+              />
+            </template>
+          </GooseAccordion>
         </aside>
       </Pane>
       <Pane>

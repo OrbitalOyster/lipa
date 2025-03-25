@@ -47,9 +47,7 @@ const selected = ref(props.slots[0].id)
       v-for="slot in slots"
       :key="slot.id"
     >
-      <div
-        v-if="slot.id === selected"
-      >
+      <div v-if="slot.id === selected">
         <slot :name="slot.id" />
       </div>
     </div>
