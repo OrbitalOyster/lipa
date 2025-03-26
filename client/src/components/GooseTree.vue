@@ -36,6 +36,7 @@ function onMatch(i: number, value: boolean) {
 }
 
 function onSelect(leaf: Leaf) {
+  return 0
   if (!leaf.sub)
     emit('select', leaf.title)
   else
@@ -100,10 +101,12 @@ watch(() => props.checked, (value: boolean | null) => {
             />
           </div>
 
+          <!--
           <FontAwesomeIcon
             icon="fa-umbrella"
             size="lg"
           />
+          -->
 
           <GooseMarkable
             :needle="search || ''"
@@ -148,8 +151,8 @@ watch(() => props.checked, (value: boolean | null) => {
     align-items: center
     display: flex
     gap: .5rem
-    height: 3rem
-    border-radius: borders.$radius
+    height: fit-content
+    min-height: 2.5rem
 
   .selectable-title
     cursor: pointer

@@ -8,7 +8,6 @@ import { ref } from 'vue'
 defineProps<{
   checkable?: boolean
   searchable?: boolean
-  selectable?: boolean
 }>()
 
 const checked = ref(false),

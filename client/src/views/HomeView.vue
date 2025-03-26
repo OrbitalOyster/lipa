@@ -74,7 +74,6 @@ onMounted(async () => {
                 v-model="orgs"
                 :searchable="false"
                 :checkable="true"
-                :selectable="false"
               />
             </template>
           </GooseAccordion>
