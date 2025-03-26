@@ -71,7 +71,7 @@ watch(() => props.checked, (value: boolean | null) => {
     >
       <div :style="{ display: leaf.match ? 'block' : 'none' }">
         <div
-          class="title selectable-title"
+          :class="['title', '_selectable-title']"
           :style="{ 'padding-left': leaf.sub ? 0 : '2.5rem' }"
           @click="onSelect(leaf)"
         >
@@ -95,7 +95,7 @@ watch(() => props.checked, (value: boolean | null) => {
             <GooseCheckbox
               v-if="!leaf.sub"
               v-model="leaf.checked"
-              name="leaf.id"
+              :name="leaf.id"
               @update="value => leaf.checked = value"
             />
           </div>

@@ -19,7 +19,7 @@ export const orgs = async (context: Context) => {
   try {
     const connection = await mysql.createConnection(connectionString),
       [rows] = await connection.query<Org[]>('SELECT * FROM orgs ORDER BY ord'),
-      parsedRows = rows.map(org => ({ id: org.id, ord: org.ord, name: org.name }))
+      parsedRows = rows.map(org => ({ id: org.id, ord: org.ord, name: org.name, parent: org.parent }))
     await connection.end()
     return context.json(parsedRows)
   } catch (error) {

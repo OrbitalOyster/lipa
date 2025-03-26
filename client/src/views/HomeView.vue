@@ -35,11 +35,23 @@ const userStore = useUserStore()
 const orgs = ref([])
 
 onMounted(async () => {
+  function toTree(arr, parent) {
+    const children = arr.filter(i => i.parent === parent)
+    return children.length
+      ? children.map(i => (
+          {
+            title: `${i.id} - ${i.name}`,
+            id: i.id,
+            checked: false,
+            sub: toTree(arr, i.id),
+          }
+        ))
+      : null
+  }
+
   const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
     res = await axiosInstance.get('/orgs')
-    orgs.value = res.data.map(i => ({ title: i.name, id: i.id }))
-  
-  // console.log(orgs.data)
+    orgs.value = toTree(res.data, null)
 })
 
 </script>
@@ -60,8 +72,8 @@ onMounted(async () => {
             <template #orgs>
               <GooseTreeRoot
                 v-model="orgs"
-                searchable
-                :checkable="false"
+                :searchable="false"
+                :checkable="true"
                 :selectable="false"
               />
             </template>
