@@ -88,7 +88,7 @@ watch(() => props.checked, (value: boolean | null) => {
             <GooseCheckbox
               v-if="leaf.sub"
               v-model="leaf.checked"
-              name="branch"
+              :name="leaf.id"
               @update="value => leaf.checked = value"
             />
 
@@ -111,6 +111,7 @@ watch(() => props.checked, (value: boolean | null) => {
           <GooseMarkable
             :needle="search || ''"
             :title="leaf.title"
+            tag="label"
             @update="value => onMatch(i, value)"
           />
         </div>

@@ -4,6 +4,7 @@ import { watch } from 'vue'
 const props = defineProps<{
   title: string
   needle: string
+  tag: string
 }>()
 
 const emit = defineEmits(['update'])
@@ -31,7 +32,7 @@ update(props.needle)
 </script>
 
 <template>
-  <div>
+  <component :is="tag">
     {{ s1 }}<mark v-if="status">{{ p }}</mark>{{ s2 }}
-  </div>
+  </component>
 </template>

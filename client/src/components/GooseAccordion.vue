@@ -57,11 +57,11 @@ const model = defineModel<Accordion>({ required: true })
   @use '../assets/transitions'
 
   ul
-    padding: 0
-    margin: 0
     display: flex
     flex-direction: column
     height: 100%
+    margin: 0
+    padding: 0
 
   li
     display: flex
@@ -71,35 +71,35 @@ const model = defineModel<Accordion>({ required: true })
     margin-bottom: .25rem
     margin-top: .25rem
     overflow: hidden
-    transition: 100ms flex-grow ease-in-out
+    transition: 50ms flex-grow ease-in-out
 
   li.toggled
     flex-grow: 1
 
   .title
-    display: flex
-    flex-shrink: 0
-    justify-content: space-between
     align-items: center
     cursor: pointer
-    user-select: none
+    display: flex
+    flex-shrink: 0
     height: 3rem
+    justify-content: space-between
     padding-left: .5rem
     padding-right: .5rem
+    user-select: none
 
   .chevron
     transition: transitions.$transform
 
   .icon
     display: inline-flex
-    width: 1.5rem
     justify-content: center
+    width: 1.5rem
 
   h1
-    padding: 0
-    margin: 0
-    font-weight: normal
     font-size: 1rem
+    font-weight: normal
+    margin: 0
+    padding: 0
 
   .item-container
     overflow: auto
