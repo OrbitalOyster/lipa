@@ -4,7 +4,6 @@ import { nextTick } from 'vue'
 defineProps<{
   disabled?: boolean
   name: string
-  title?: string
 }>()
 
 const model = defineModel<boolean | null>({ default: false }),
@@ -31,7 +30,7 @@ async function onClick() {
       type="button"
       @click.stop="onClick"
     >
-      <span
+      <div
         class="mark"
         :style="{ 
           height: model === null ? '.4rem' : '1rem',
@@ -40,12 +39,8 @@ async function onClick() {
         }"
       />
     </button>
-    <label
-      v-if="title"
-      :for="name"
-      :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
-    >
-      {{ title }}
+    <label :for="name" :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }">
+      <slot/>
     </label>
   </div>
 </template>

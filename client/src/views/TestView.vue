@@ -134,8 +134,9 @@ function throwError() {
       <GooseCheckbox
         v-model="cb"
         name="testCheckbox"
-        title="click me"
-      />
+      >
+        <i>Click me!</i>
+      </GooseCheckbox>
       <hr>
       <div
         class="card"

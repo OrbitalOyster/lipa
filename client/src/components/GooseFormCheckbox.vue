@@ -8,7 +8,6 @@ const props = defineProps<{
     disabled?: boolean
     form: string
     name: string
-    title?: string
   }>(),
   store = useFormStore(props.form)
 
@@ -20,6 +19,7 @@ store.checks[props.name] = props.checks ?? []
     v-model="store.inputs[props.name] as boolean | null"
     :disabled
     :name
-    :title
-  />
+  >
+    <slot />
+  </GooseCheckbox>
 </template>

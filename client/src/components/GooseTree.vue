@@ -83,37 +83,30 @@ watch(() => props.checked, (value: boolean | null) => {
             @click.stop="leaf.toggled = !leaf.toggled"
           />
 
+          <!-- Checkbox -->
           <div v-if="checkable">
-            <!-- Branch -->
             <GooseCheckbox
-              v-if="leaf.sub"
               v-model="leaf.checked"
               :name="leaf.id"
               @update="value => leaf.checked = value"
-            />
-
-            <!-- Leaf -->
-            <GooseCheckbox
-              v-if="!leaf.sub"
-              v-model="leaf.checked"
-              :name="leaf.id"
-              @update="value => leaf.checked = value"
+            >
+              <GooseMarkable
+                :needle="search || ''"
+                :title="leaf.title"
+                tag="div"
+                @update="value => onMatch(i, value)"
+              />
+            </GooseCheckbox>
+          </div>
+          <div v-else>
+            <GooseMarkable
+              :needle="search || ''"
+              :title="leaf.title"
+              tag="div"
+              @update="value => onMatch(i, value)"
             />
           </div>
 
-          <!--
-          <FontAwesomeIcon
-            icon="fa-umbrella"
-            size="lg"
-          />
-          -->
-
-          <GooseMarkable
-            :needle="search || ''"
-            :title="leaf.title"
-            tag="label"
-            @update="value => onMatch(i, value)"
-          />
         </div>
         <div :style="{ display: leaf.toggled ? 'block': 'none' }">
           <GooseTree

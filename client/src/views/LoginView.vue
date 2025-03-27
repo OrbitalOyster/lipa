@@ -78,8 +78,9 @@ onMounted(() =>
               :disabled
               form="loginForm"
               name="rememberMe"
-              title="Запомнить меня"
-            />
+            >
+              <div>Запомнить меня</div>
+            </GooseFormCheckbox>
             <GooseButton
               :disabled
               :loading="disabled"
