@@ -5,12 +5,13 @@ import GooseMarkable from '#components/GooseMarkable.vue'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { watch } from 'vue'
 
-export interface Leaf {
+export interface GooseTreeLeaf {
+  id: string
   title: string
   checked: boolean
   toggled?: boolean
   match?: boolean
-  sub?: Leaf[]
+  sub?: GooseTreeLeaf[]
 }
 
 const props = defineProps<{
@@ -20,22 +21,21 @@ const props = defineProps<{
   }>(),
   emit = defineEmits(['match', 'check', 'select'])
 
-const model = defineModel<Leaf[]>({ required: true })
+const model = defineModel<GooseTreeLeaf[]>({ required: true })
 
-function onMatch(i: number, value: boolean) {
+function onMatchChildren(i: number) {
   /* TODO: Clunky */
-  if (!model.value[i])
+  if (!model.value[i]?.sub)
     throw new Error('Major screwup')
 
-  model.value[i].match = value
-  /* Toggle leaf on match */
-  if (props.search && value)
-    model.value[i].toggled = true
-
-  emit('match', !!Object.values(model.value).filter(l => l.match).length)
+  /* Any children matches search string */
+  if (Object.values(model.value[i].sub).filter(l => l.match).length) {
+    model.value[i].match = model.value[i].toggled = true
+    emit('match', true)
+  }
 }
 
-function onSelect(leaf: Leaf) {
+function onSelect(leaf: GooseTreeLeaf) {
   return 0
   if (!leaf.sub)
     emit('select', leaf.title)
@@ -70,6 +70,7 @@ watch(() => props.checked, (value: boolean | null) => {
       v-for="(leaf, i) in model"
       :key="i"
     >
+      <!-- Root node -->
       <div :style="{ display: leaf.match ? 'block' : 'none' }">
         <div
           :class="['title', '_selectable-title']"
@@ -82,7 +83,6 @@ watch(() => props.checked, (value: boolean | null) => {
             :icon="faChevronRight"
             @click.stop="leaf.toggled = !leaf.toggled"
           />
-
           <!-- Checkbox -->
           <div v-if="checkable">
             <GooseCheckbox
@@ -94,28 +94,20 @@ watch(() => props.checked, (value: boolean | null) => {
                 :needle="search || ''"
                 :title="leaf.title"
                 tag="div"
-                @update="value => onMatch(i, value)"
+                @update="value => {leaf.match = value; emit('match', value)}"
               />
             </GooseCheckbox>
           </div>
-          <div v-else>
-            <GooseMarkable
-              :needle="search || ''"
-              :title="leaf.title"
-              tag="div"
-              @update="value => onMatch(i, value)"
-            />
-          </div>
-
         </div>
-        <div :style="{ display: leaf.toggled ? 'block': 'none' }">
+        <!-- Children nodes -->
+        <div :style="{ display: leaf.toggled ? 'block': 'none'}">
           <GooseTree
             v-if="leaf.sub"
             v-model="leaf.sub"
             :search
             :checkable
             :checked="leaf.checked"
-            @match="value => onMatch(i, value)"
+            @match="onMatchChildren(i)"
             @check="value => leaf.checked = value"
             @select="title => emit('select', title)"
           />
@@ -146,7 +138,7 @@ watch(() => props.checked, (value: boolean | null) => {
     display: flex
     gap: .5rem
     height: fit-content
-    min-height: 2.5rem
+    min-height: 3rem
 
   .selectable-title
     cursor: pointer

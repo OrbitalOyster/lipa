@@ -7,7 +7,9 @@ import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
+import type { GooseTreeLeaf } from '#components/GooseTree.vue'
 import GooseTreeRoot from '#components/GooseTreeRoot.vue'
+import type { Ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import axios from 'axios'
@@ -32,26 +34,36 @@ const slots = [
 ]
 
 const userStore = useUserStore()
-const orgs = ref([])
+const orgs: Ref<GooseTreeLeaf[]> = ref([])
+
+/* TODO: Shared types */
+interface ApiOrg {
+  id: string
+  name: string
+  parent: string | null
+}
 
 onMounted(async () => {
-  function toTree(arr, parent) {
-    const children = arr.filter(i => i.parent === parent)
-    return children.length
-      ? children.map(i => (
+  function toTree(arr: ApiOrg[], parent: string | null): GooseTreeLeaf[] | null {
+    const filtered = arr.filter(i => i.parent === parent)
+    return filtered.length
+      ? filtered.map(i => (
           {
             title: `${i.id} - ${i.name}`,
             id: i.id,
             checked: false,
-            sub: toTree(arr, i.id),
+            sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
           }
         ))
       : null
   }
 
   const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
-    res = await axiosInstance.get('/orgs')
-    orgs.value = toTree(res.data, null)
+    res = await axiosInstance.get('/orgs'),
+    apiOrgs: ApiOrg[] = res.data,
+    leafs = toTree(apiOrgs, null)
+  if (leafs !== null)
+    orgs.value = leafs
 })
 
 </script>
@@ -72,7 +84,7 @@ onMounted(async () => {
             <template #orgs>
               <GooseTreeRoot
                 v-model="orgs"
-                :searchable="false"
+                :searchable="true"
                 :checkable="true"
               />
             </template>

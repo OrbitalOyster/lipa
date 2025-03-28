@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
-import type { Leaf } from '#components/GooseTree.vue'
+import type { GooseTreeLeaf } from '#components/GooseTree.vue'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 
@@ -12,7 +12,7 @@ defineProps<{
 
 const checked = ref(false),
   search = ref(''),
-  model = defineModel<Leaf[]>({ required: true })
+  model = defineModel<GooseTreeLeaf[]>({ required: true })
 
 </script>
 

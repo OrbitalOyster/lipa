@@ -32,15 +32,18 @@ async function onClick() {
     >
       <div
         class="mark"
-        :style="{ 
+        :style="{
           height: model === null ? '.4rem' : '1rem',
           scale: model === false ? '0%' : '100%',
           top: model === null ? '.8rem' : '.5rem'
         }"
       />
     </button>
-    <label :for="name" :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }">
-      <slot/>
+    <label
+      :for="name"
+      :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
+    >
+      <slot />
     </label>
   </div>
 </template>
@@ -56,11 +59,11 @@ async function onClick() {
   button
     box-sizing: content-box
     cursor: pointer
-    height: 2rem
+    min-height: 2rem
     padding: 0
     position: relative
     transition: transitions.$focusable, transitions.$colors
-    width: 2rem
+    min-width: 2rem
 
   button:active:enabled
     background-color: colors.$active
