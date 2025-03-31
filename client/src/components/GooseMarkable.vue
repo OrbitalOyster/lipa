@@ -7,24 +7,19 @@ const props = defineProps<{
   tag: string
 }>()
 
-const emit = defineEmits(['update'])
-
-let s1 = '', p = '', s2 = '', status = false
+let s1 = '', p = '', s2 = ''
 
 function update(needle: string) {
   const found = props.title.indexOf(needle)
   if (found !== -1) {
-    status = true
     s1 = props.title.slice(0, found)
     p = needle
     s2 = props.title.slice(found + needle.length)
   }
   else {
-    status = false
     s1 = props.title
     p = s2 = ''
   }
-  emit('update', status)
 }
 
 watch(props, newProps => update(newProps.needle))
@@ -33,6 +28,6 @@ update(props.needle)
 
 <template>
   <component :is="tag">
-    {{ s1 }}<mark v-if="status">{{ p }}</mark>{{ s2 }}
+    {{ s1 }}<mark>{{ p }}</mark>{{ s2 }}
   </component>
 </template>
