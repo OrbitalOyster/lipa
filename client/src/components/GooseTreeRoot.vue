@@ -21,7 +21,6 @@ const checked = ref(false),
     v-if="searchable"
     v-model="search"
     :icon="faMagnifyingGlass"
-    style="padding-bottom: 1rem"
   />
   <GooseTree
     v-model="model"

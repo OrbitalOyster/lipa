@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseMarkable from '#components/GooseMarkable.vue'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 
 export interface GooseTreeLeaf {
   id: string
@@ -19,20 +19,33 @@ const props = defineProps<{
     checked: boolean | null
     search?: string
   }>(),
-  emit = defineEmits(['match', 'check', 'select'])
+  emit = defineEmits(['match', 'check', 'select']),
+  model = defineModel<GooseTreeLeaf[]>({ required: true })
 
-const model = defineModel<GooseTreeLeaf[]>({ required: true })
-
-function onMatchChildren(i: number) {
-  /* TODO: Clunky */
+function onMatchChildren(i: number, value: boolean) {
+  const childrenMatch = Object.values(model.value[i].sub).filter(l => l.match).length
+  console.log('childrenMatch', childrenMatch)
+  if (childrenMatch)
+    model.value[i].match = childrenMatch
+/*
   if (!model.value[i]?.sub)
     throw new Error('Major screwup')
 
-  /* Any children matches search string */
-  if (Object.values(model.value[i].sub).filter(l => l.match).length) {
-    model.value[i].match = model.value[i].toggled = true
+  const childrenMatch = Object.values(model.value[i].sub).filter(l => l.match).length
+  console.log('match children', model.value[i].title, { childrenMatch, value })
+
+  if (childrenMatch) {
+     model.value[i].match = model.value[i].toggled = true
     emit('match', true)
+    console.log('children emit', model.value[i].title, childrenMatch)
   }
+*/
+}
+
+function onMatchParent(i: number, value) {
+  model.value[i].match = value
+  emit('match', value)
+  console.log('parent emit', model.value[i].title, value)
 }
 
 function onSelect(leaf: GooseTreeLeaf) {
@@ -94,7 +107,7 @@ watch(() => props.checked, (value: boolean | null) => {
                 :needle="search || ''"
                 :title="leaf.title"
                 tag="div"
-                @update="value => {leaf.match = value; emit('match', value)}"
+                @update="value => onMatchParent(i, value)"
               />
             </GooseCheckbox>
           </div>
@@ -107,8 +120,8 @@ watch(() => props.checked, (value: boolean | null) => {
             :search
             :checkable
             :checked="leaf.checked"
-            @match="onMatchChildren(i)"
             @check="value => leaf.checked = value"
+            @match="value => onMatchChildren(i, value)"
             @select="title => emit('select', title)"
           />
         </div>
