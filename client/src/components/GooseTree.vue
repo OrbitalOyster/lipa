@@ -8,8 +8,8 @@ import { ref, watch } from 'vue'
 export interface GooseTreeLeaf {
   id: string
   title: string
+  checked?: boolean
   matched?: boolean
-  checked: boolean
   toggled?: boolean
   sub?: GooseTreeLeaf[]
 }
@@ -23,7 +23,7 @@ const props = defineProps<{
   model = defineModel<GooseTreeLeaf[]>({ required: true })
 
 function onSelect(leaf: GooseTreeLeaf) {
-  return 0
+  return
   if (!leaf.sub)
     emit('select', leaf.title)
   else
@@ -45,9 +45,15 @@ watch(() => model.value.map(l => l.checked), (after) => {
 
 /* Emit down */
 watch(() => props.checked, (value: boolean | null) => {
-  if (value !== null)
+  /* Check/uncheck all leaves when root is checked/unchecked */
+  if (value !== null) /* Ignore the middle ground */
     model.value.forEach(e => e.checked = value)
 })
+
+function leafMatched(leaf: GooseTreeLeaf) {
+  /* Show leaf if any children matched (recursive) or leaf title itself */
+  return leaf.sub?.some(leafMatched) || leaf.title.includes(props.search)
+}
 
 </script>
 
@@ -58,7 +64,7 @@ watch(() => props.checked, (value: boolean | null) => {
       :key="i"
     >
       <!-- Root node -->
-      <div v-if="leaf.matched">
+      <div v-if="leafMatched(leaf)">
         <div
           :class="['title', '_selectable-title']"
           :style="{ 'padding-left': leaf.sub ? 0 : '2.5rem' }"
