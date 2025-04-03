@@ -2,6 +2,7 @@
 import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref, useTemplateRef } from 'vue'
 import type { Placement } from '@floating-ui/utils'
+import { refDebounced } from '@vueuse/core'
 
 const props = defineProps<{
     hasArrow?: boolean
@@ -10,6 +11,7 @@ const props = defineProps<{
     placement?: Placement
   }>(),
   active = ref(false),
+  debounced = refDebounced(active, 500),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
   arrowRef = useTemplateRef('arrowRef')
@@ -84,7 +86,7 @@ defineExpose({ toggle, active })
   </div>
   <Transition name="fade">
     <div
-      v-if="active"
+      v-if="debounced"
       ref="floating"
       class="card floating info"
       :style="{

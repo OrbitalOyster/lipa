@@ -103,5 +103,4 @@ const model = defineModel<Accordion>({ required: true })
 
   .item-container
     overflow: auto
-    height: 100%
 </style>

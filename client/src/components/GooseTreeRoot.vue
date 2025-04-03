@@ -3,7 +3,7 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { GooseTreeLeaf } from '#components/GooseTree.vue'
-import { faCheckDouble, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faSquareCheck, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 import { refDebounced } from '@vueuse/core'
 
@@ -28,7 +28,12 @@ const checked = ref(false),
         style="flex-grow: 1"
       />
       <GooseButton
-        :icon="faCheckDouble"
+        :icon="faXmark"
+        transparent
+        tooltip="Toggle checks"
+      />
+      <GooseButton
+        :icon="faSquareCheck"
         transparent
         tooltip="Toggle checks"
       />
@@ -69,7 +74,7 @@ const checked = ref(false),
 
   .search-bar-wrapper
     display: flex
-    gap: 1rem
+    gap: .5rem
     justify-content: space-between
 
 </style>

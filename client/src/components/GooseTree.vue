@@ -116,9 +116,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
   @use '../assets/transitions'
 
   ul
-    position: relative
     margin: .0rem
-    overflow-y: auto
     padding: .0rem .0rem .0rem 1.75rem
 
   li
