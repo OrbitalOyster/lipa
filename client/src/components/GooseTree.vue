@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseMarkable from '#components/GooseMarkable.vue'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 
 export interface GooseTreeLeaf {
   id: string
@@ -44,7 +44,7 @@ watch(() => model.value.map(l => l.checked), (after) => {
 })
 
 /* Emit down */
-watch(() => props.checked, (value: boolean | null) => {
+watch(() => props.checked, (value?: boolean | null) => {
   /* Check/uncheck all leaves when root is checked/unchecked */
   if (value !== null) /* Ignore the middle ground */
     model.value.forEach(e => e.checked = value)
@@ -52,10 +52,10 @@ watch(() => props.checked, (value: boolean | null) => {
 
 /* Show leaf if any children matched (recursive) or leaf title itself */
 function leafMatched(leaf: GooseTreeLeaf) {
-  const matched = leaf.sub?.some(leafMatched) || props.search && leaf.title.includes(props.search)
-  leaf.toggled = matched
+  const matched = leaf.sub?.some(leafMatched) ?? (props.search && leaf.title.includes(props.search))
+  leaf.toggled = matched as boolean
   return matched
-}  
+}
 
 </script>
 
