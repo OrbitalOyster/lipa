@@ -6,6 +6,7 @@ interface UserStore {
   username: null | string
   role: null | string
   sideBarWidth: number
+  selectedOrgs: string[]
 }
 
 const apiEndpoint = import.meta.env.VITE_API_URI
@@ -18,6 +19,7 @@ const useUserStore = defineStore('user', {
     username: null,
     role: null,
     sideBarWidth: 25,
+    selectedOrgs: [],
   }),
   actions: {
     async getPayload() {

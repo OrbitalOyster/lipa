@@ -16,7 +16,7 @@ export interface GooseTreeLeaf {
 
 const props = defineProps<{
     checkable?: boolean
-    checked: boolean | null
+    checked?: boolean | null
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
@@ -50,10 +50,12 @@ watch(() => props.checked, (value: boolean | null) => {
     model.value.forEach(e => e.checked = value)
 })
 
+/* Show leaf if any children matched (recursive) or leaf title itself */
 function leafMatched(leaf: GooseTreeLeaf) {
-  /* Show leaf if any children matched (recursive) or leaf title itself */
-  return leaf.sub?.some(leafMatched) || leaf.title.includes(props.search)
-}
+  const matched = leaf.sub?.some(leafMatched) || props.search && leaf.title.includes(props.search)
+  leaf.toggled = matched
+  return matched
+}  
 
 </script>
 
@@ -64,7 +66,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
       :key="i"
     >
       <!-- Root node -->
-      <div v-if="leafMatched(leaf)">
+      <div v-if="search === '' || leafMatched(leaf)">
         <div
           :class="['title', '_selectable-title']"
           :style="{ 'padding-left': leaf.sub ? 0 : '2.5rem' }"

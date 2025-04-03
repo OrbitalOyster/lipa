@@ -51,8 +51,6 @@ onMounted(async () => {
           {
             title: `${i.id} - ${i.name}`,
             id: i.id,
-            matched: true,
-            checked: false,
             sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
           }
         ))
@@ -65,6 +63,9 @@ onMounted(async () => {
     leafs = toTree(apiOrgs, null)
   if (leafs !== null)
     orgs.value = leafs
+
+  // await userStore.setPayload({selectedOrgs: [10000]})
+  // console.log(userStore.selectedOrgs)
 })
 
 </script>
