@@ -51,6 +51,7 @@ onMounted(async () => {
           {
             title: `${i.id} - ${i.name}`,
             id: i.id,
+            checked: false,
             sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
           }
         ))
@@ -75,7 +76,7 @@ onMounted(async () => {
     <TopBar />
     <Splitpanes
       vertical
-      @resized="async e => await userStore.setPayload({ sideBarWidth: e[0].size })"
+      @resized="async e => await userStore.setPayload({ sideBarWidth: e.panes[0].size })"
     >
       <Pane
         max-size="50"
