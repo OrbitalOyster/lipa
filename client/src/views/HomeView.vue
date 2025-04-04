@@ -51,7 +51,6 @@ onMounted(async () => {
           {
             title: `${i.id} - ${i.name}`,
             id: i.id,
-            checked: false,
             sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
           }
         ))
