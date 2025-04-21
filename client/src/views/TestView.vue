@@ -123,10 +123,12 @@ function throwError() {
         />
         <GooseButton
           title="Hover me"
+          disabled
           tooltip="This is tooltip"
         />
         <GooseButton
           title="Error"
+          danger
           @click="throwError"
         />
       </div>

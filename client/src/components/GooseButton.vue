@@ -6,6 +6,7 @@ import type { Placement } from '@floating-ui/utils'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
+    danger?: boolean
     disabled?: boolean
     icon?: IconDefinition
     loading?: boolean
@@ -31,7 +32,7 @@ const props = defineProps<{
       :disabled
       :type
       class="focusable"
-      :class="{ primary: !transparent, warning, small, transparent }"
+      :class="{ primary: !transparent, warning, danger, small, transparent }"
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
@@ -60,20 +61,20 @@ const props = defineProps<{
   .primary
     background-color: colors.$primary
 
-  .primary:active:enabled
+  .primary:active
     background-color: colors.$active
 
   .warning
     background-color: colors.$warning
 
-  .warning:active:enabled
+  .warning:active
     background-color: colors.$warning-active
 
-  .alert
-    background-color: colors.$alert
+  .danger
+    background-color: colors.$danger
 
-  .alert:active:enabled
-    background-color: colors.$alert
+  .danger:active
+    background-color: colors.$danger-active
 
   .transparent:enabled, .transparent:active
     background-color: transparent
@@ -102,30 +103,29 @@ const props = defineProps<{
     color: colors.$button
     cursor: pointer
     display: inline-flex
-    filter: drop-shadow(colors.$button-shadow 0 0 .1rem)
+    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
     font-size: 1.25rem
     font-weight: 500
-    gap: .8rem
+    gap: .75rem
     height: 3.5rem
-    padding-left: .8rem
-    padding-right: .8rem
+    padding-left: .75rem
+    padding-right: .75rem
     transform: translateY(0)
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
 
-  button:enabled
-    filter: drop-shadow(colors.$button-shadow 0 .16rem .1rem)
+  button:hover
+    filter: drop-shadow(colors.$button-shadow 0 .25rem .25rem)
+    transform: translateY(-.0625rem)
 
-  button:hover:enabled
-    filter: drop-shadow(colors.$button-shadow 0 .28rem .2rem)
-    transform: translateY(-.1rem)
-
-  button:active:enabled
-    filter: drop-shadow(colors.$button-shadow 0 .16rem .1rem)
+  button:active
+    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
     transform: translateY(0)
 
-  button:disabled
+  button:disabled, button:disabled:active
     background-color: colors.$disabled-primary
     color: colors.$disabled
     cursor: not-allowed
+    filter: none
+    transform: none
 </style>

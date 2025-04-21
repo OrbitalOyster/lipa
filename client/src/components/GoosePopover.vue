@@ -110,11 +110,6 @@ defineExpose({ toggle, active })
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders.sass'
-  @use '../assets/colors.sass'
-  @use '../assets/style.sass'
-  @use '../assets/transitions.sass'
-
   .arrow
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%)
     height: 16px
@@ -122,9 +117,7 @@ defineExpose({ toggle, active })
     width: 16px
 
   .floating
-    left: 0
     position: absolute
-    top: 0
     z-index: 99
 
   .popover
