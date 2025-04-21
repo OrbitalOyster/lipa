@@ -46,7 +46,7 @@ const props = defineProps<{
       />
     </button>
     <template #popover>
-      <div style="padding: 1rem; white-space: nowrap">
+      <div class="tooltip">
         {{ tooltip }}
       </div>
     </template>
@@ -128,4 +128,8 @@ const props = defineProps<{
     cursor: not-allowed
     filter: none
     transform: none
+
+  .tooltip
+    padding: 1rem
+    white-space: nowrap
 </style>
