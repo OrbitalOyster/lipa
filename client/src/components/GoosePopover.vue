@@ -48,22 +48,14 @@ const { floatingStyles, middlewareData } = useFloating(target, floating, {
 const arrowStyle = computed(
   () => {
     const side = middlewareData.value.offset?.placement.split('-')[0] ?? 'top',
-      /* Rotate rectangle, shape it into an arrow */
+      staticSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side] ?? 'bottom',
       rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] ?? 0,
-      floatingWidth = floating.value?.offsetWidth ?? 0,
-      floatingHeight = floating.value?.offsetHeight ?? 0,
-      leftOffset = side === 'left' ? 1 : 0,
-      topOffset = side === 'top' ? 1 : 0,
-      middlewareArrow = middlewareData.value.arrow,
-      arrowOffset = side === 'right' || side === 'bottom' ? 9 : 11
+      middlewareArrow = middlewareData.value.arrow
     return {
-      transform: `rotate(${rotation.toString()}deg)`,
-      left: middlewareArrow?.x || middlewareArrow?.x === 0
-        ? `${middlewareArrow.x.toString()}px`
-        : `${(floatingWidth * leftOffset - arrowOffset).toString()}px`,
-      top: middlewareArrow?.y || middlewareArrow?.y === 0
-        ? (`${middlewareArrow.y.toString()}px`)
-        : `${(floatingHeight * topOffset - arrowOffset).toString()}px`,
+      transform: `rotate(${rotation}deg)`,
+      top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
+      left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
+      [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
     }
   })
 
@@ -75,6 +67,7 @@ defineExpose({ toggle, active })
 </script>
 
 <template>
+  <!-- Target element -->
   <div
     ref="target"
     style="display: inline"
@@ -84,6 +77,7 @@ defineExpose({ toggle, active })
   >
     <slot />
   </div>
+  <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
       v-if="debounced"
@@ -96,15 +90,15 @@ defineExpose({ toggle, active })
           : 'visible'
       }"
     >
+      <!-- Arrow -->
       <div
         v-if="hasArrow"
         ref="arrowRef"
         :style="arrowStyle"
         class="arrow info"
       />
-      <div class="popover">
-        <slot name="popover" />
-      </div>
+      <!-- Actual popover -->
+      <slot name="popover" />
     </div>
   </Transition>
 </template>
@@ -115,16 +109,11 @@ defineExpose({ toggle, active })
 
   .arrow
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%)
-    height: 16px
+    height: 1rem
     position: absolute
-    width: 16px
+    width: 1rem
 
   .floating
     position: absolute
     z-index: 99
-
-  .popover
-    height: inherit
-    overflow: auto
-    width: inherit
 </style>
