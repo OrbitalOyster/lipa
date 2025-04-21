@@ -110,6 +110,9 @@ defineExpose({ toggle, active })
 </template>
 
 <style lang="sass" scoped>
+  /* Do not remove this line, needed for transition effect */
+  @use '../assets/transitions.sass'
+
   .arrow
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%)
     height: 16px
