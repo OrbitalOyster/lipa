@@ -40,8 +40,8 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
         const maxHeight = Math.max(minHeight, availableHeight - maxDistanceToEdge),
           { width } = rects.reference
         Object.assign(elements.floating.style, {
-          maxHeight: `${maxHeight.toString()}px`,
-          width: `${width.toString()}px`,
+          maxHeight: `${maxHeight}px`,
+          width: `${width}px`,
         })
       },
     }),
@@ -95,7 +95,8 @@ store.inputs[props.name] = ''
     >
     <div
       ref="target"
-      :class="['focusable', 'form-input', 'target', store.errors[props.name] ? 'invalid' : 'valid']"
+      class="focusable form-input target"
+      :class="store.errors[props.name] ? 'invalid' : 'valid'"
       :tabindex="disabled ? -1 : 0"
       @blur="e => active = active && e.relatedTarget === floating"
       @click="active = !active"
@@ -123,9 +124,7 @@ store.inputs[props.name] = ''
         tabindex="0"
         :style="{
           ...floatingStyles,
-          visibility: middlewareData.hide?.referenceHidden
-            ? 'hidden'
-            : 'visible'
+          visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'
         }"
         @focus="target?.focus()"
       >

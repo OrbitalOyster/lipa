@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref, useTemplateRef } from 'vue'
+import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Placement } from '@floating-ui/utils'
 import { refDebounced } from '@vueuse/core'
+
+/* Look and feel */
+const debounceDelay = 500,
+  minSize = 256,
+  arrowSize = 16,
+  rotations = {
+    top: -135,
+    right: -45,
+    bottom: 45,
+    left: 135,
+  }
 
 const props = defineProps<{
     hasArrow?: boolean
@@ -11,16 +23,15 @@ const props = defineProps<{
     placement?: Placement
   }>(),
   active = ref(false),
-  debounced = refDebounced(active, 500),
+  debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
   arrowRef = useTemplateRef('arrowRef')
 
-const minSize = 256,
-  offsetValue = props.hasArrow ? 14 : 2,
+const offsetValue = props.hasArrow ? arrowSize : 2,
   autoPlacementOptions = props.placement ? { allowedPlacements: [props.placement] } : {},
-  shiftOptions = { padding: 8 },
-  arrowOptions = { element: arrowRef, padding: 8 }
+  shiftOptions = { padding: arrowSize },
+  arrowOptions = { element: arrowRef, padding: arrowSize }
 
 /* Floating UI */
 const { floatingStyles, middlewareData } = useFloating(target, floating, {
@@ -34,8 +45,8 @@ const { floatingStyles, middlewareData } = useFloating(target, floating, {
     size({
       apply({ availableWidth, availableHeight, elements }) {
         Object.assign(elements.floating.style, {
-          maxWidth: `${Math.max(minSize, availableWidth).toString()}px`,
-          maxHeight: `${Math.max(minSize, availableHeight).toString()}px`,
+          maxWidth: `${Math.max(minSize, availableWidth)}px`,
+          maxHeight: `${Math.max(minSize, availableHeight)}px`,
         })
       },
     }),
@@ -47,11 +58,13 @@ const { floatingStyles, middlewareData } = useFloating(target, floating, {
 /* Arrow */
 const arrowStyle = computed(
   () => {
-    const side = middlewareData.value.offset?.placement.split('-')[0] ?? 'top',
-      staticSide = { top: 'bottom', right: 'left', bottom: 'top', left: 'right' }[side] ?? 'bottom',
-      rotation = { top: -135, right: -45, bottom: 45, left: 135 }[side] ?? 0,
+    const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
+      staticSide = getOppositePlacement(side),
+      rotation = rotations[side],
       middlewareArrow = middlewareData.value.arrow
     return {
+      width: `${arrowSize}px`,
+      height: `${arrowSize}px`,
       transform: `rotate(${rotation}deg)`,
       top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
       left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
@@ -85,9 +98,7 @@ defineExpose({ toggle, active })
       class="card floating info"
       :style="{
         ...floatingStyles,
-        visibility: middlewareData.hide?.referenceHidden
-          ? 'hidden'
-          : 'visible'
+        visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'
       }"
     >
       <!-- Arrow -->
@@ -109,9 +120,7 @@ defineExpose({ toggle, active })
 
   .arrow
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%)
-    height: 1rem
     position: absolute
-    width: 1rem
 
   .floating
     position: absolute
