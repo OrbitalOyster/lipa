@@ -5,15 +5,6 @@ import GooseMarkable from '#components/GooseMarkable.vue'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { watch } from 'vue'
 
-export interface GooseTreeLeaf {
-  id: string
-  title: string
-  checked?: boolean
-  matched?: boolean
-  toggled?: boolean
-  sub?: GooseTreeLeaf[]
-}
-
 const props = defineProps<{
     checkable?: boolean
     checked?: boolean | null

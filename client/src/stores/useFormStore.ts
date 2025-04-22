@@ -1,14 +1,5 @@
 import { defineStore } from 'pinia'
 
-export type FormCheck = 'required' | 'lessThanTo' | 'moreThanFrom'
-export type Inputs = Record<string, string | boolean | null>
-
-interface StoreState {
-  errors: Record<string, string>
-  inputs: Inputs
-  checks: Record<string, FormCheck[]>
-}
-
 export const useFormStore = (id: string) => defineStore(id, {
   state: (): StoreState => ({
     errors: {},

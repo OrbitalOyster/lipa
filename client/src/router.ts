@@ -5,13 +5,6 @@ import LoginView from '#views/LoginView.vue'
 import TestView from '#views/TestView.vue'
 import { useUserStore } from '#stores/useUserStore.ts'
 
-/* Typings */
-declare module 'vue-router' {
-  interface RouteMeta {
-    title: string
-  }
-}
-
 /* Routes */
 const routes = [{
   component: LoginView,

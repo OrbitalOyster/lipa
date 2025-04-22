@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import { ref } from 'vue'
-
-interface TabSlot {
-  id: string
-  title: string
-  icon: IconDefinition
-}
 
 const props = defineProps<{
   slots: TabSlot[]

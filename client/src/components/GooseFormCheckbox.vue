@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { FormCheck } from '#stores/useFormStore.ts'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import { useFormStore } from '#stores/useFormStore.ts'
 

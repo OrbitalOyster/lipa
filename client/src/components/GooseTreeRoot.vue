@@ -3,7 +3,6 @@ import { faMagnifyingGlass, faSquareCheck, faXmark } from '@fortawesome/free-sol
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
-import type { GooseTreeLeaf } from '#components/GooseTree.vue'
 import { ref } from 'vue'
 import { refDebounced } from '@vueuse/core'
 

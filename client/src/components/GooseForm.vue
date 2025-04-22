@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { Inputs } from '#stores/useFormStore.ts'
 import { useFormStore } from '#stores/useFormStore.ts'
 
 const props = defineProps<{
@@ -10,7 +9,7 @@ const props = defineProps<{
   store = useFormStore(props.id),
   validated = ref(false)
 
-function setInputs(inputs: Inputs) {
+function setInputs(inputs: FormInputs) {
   for (const [key, value] of Object.entries(inputs))
     store.inputs[key] = value
   store.validate()

@@ -2,7 +2,6 @@
 import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import type { FormCheck } from '#stores/useFormStore.ts'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useFormStore } from '#stores/useFormStore.ts'
 

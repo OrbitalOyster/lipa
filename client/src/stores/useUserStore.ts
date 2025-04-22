@@ -2,13 +2,6 @@ import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-interface UserStore {
-  username: null | string
-  role: null | string
-  sideBarWidth: number
-  selectedOrgs: string[]
-}
-
 const apiEndpoint = import.meta.env.VITE_API_URI
 
 if (!apiEndpoint)
