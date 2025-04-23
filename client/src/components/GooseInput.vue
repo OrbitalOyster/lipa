@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GoosePopover from '#components/GoosePopover.vue'
+import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 
 defineProps<{
@@ -34,11 +33,18 @@ const model = defineModel<string>({ default: '' }),
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
     >
-    <label class="shrinkable" v-if="placeholder">
+    <label
+      v-if="placeholder"
+      class="shrinkable"
+    >
       {{ placeholder }}
     </label>
     <div class="icons">
+      <GooseErrorIcon
+        :message="error"
+      />
       <!-- Validation error icon -->
+      <!--
       <GoosePopover
         has-arrow
         hover-toggle
@@ -58,6 +64,7 @@ const model = defineModel<string>({ default: '' }),
           </p>
         </template>
       </GoosePopover>
+      -->
       <!-- Custom icon -->
       <FontAwesomeIcon
         v-if="icon"
@@ -100,8 +107,4 @@ const model = defineModel<string>({ default: '' }),
     display: flex
     position: absolute
     right: .5rem
-
-  .validation-message
-    padding: .5rem
-    margin: .5rem
 </style>

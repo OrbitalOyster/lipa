@@ -74,6 +74,7 @@ function throwError() {
   <div style="padding: 2rem">
     <GooseForm
       id="mySampleForm"
+      class="validated"
     >
       <GooseFormInput
         placeholder="From"

@@ -6,7 +6,7 @@ import type { Placement } from '@floating-ui/utils'
 import { refDebounced } from '@vueuse/core'
 
 /* Look and feel */
-const debounceDelay = 500,
+const debounceDelay = 1000,
   minSize = 256,
   arrowSize = 16,
   rotations = {
@@ -123,6 +123,9 @@ defineExpose({ toggle, active })
     position: absolute
 
   .floating
+    left: 0
     position: absolute
+    top: 0
+    width: max-content
     z-index: 99
 </style>
