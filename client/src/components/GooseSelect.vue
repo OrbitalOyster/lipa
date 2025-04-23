@@ -109,7 +109,7 @@ store.inputs[props.name] = ''
       {{ store.inputs[props.name] }}
     </div>
     <!-- "Enter something here" -->
-    <label>
+    <label class="shrinkable">
       {{ placeholder }}
     </label>
     <!-- Icons -->
@@ -165,24 +165,6 @@ store.inputs[props.name] = ''
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     width: 100%
-
-  label
-    color: colors.$input-label
-    left: 1rem
-    pointer-events: none
-    position: absolute
-    transform-origin: left
-    transition: transitions.$transform
-    user-select: none
-
-  /* Shrink and translate label if:
-   * - input is focused
-   * - placeholder not shown
-   * - input is not empty */
-  .target[placeholder]:focus + label,
-  .target[placeholder]:not(:placeholder-shown) + label,
-  .target:not(:empty) + label
-    transform: translateY(calc(-70%)) scale(.9)
 
   .input-icons
     align-items: center

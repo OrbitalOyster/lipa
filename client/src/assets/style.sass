@@ -1,5 +1,6 @@
 @use 'colors'
 @use 'borders'
+@use 'transitions'
 
 body
   background-color: #F6F2F0
@@ -45,6 +46,25 @@ $outline-style: solid
 .focusable:focus
   @extend .focusable
   outline-width: $outline-width
+
+/* Shrinkable 'placeholder' label */
+label.shrinkable
+  color: colors.$input-label
+  left: 1rem
+  pointer-events: none
+  position: absolute
+  transform-origin: left
+  transition: transitions.$transform
+  user-select: none
+
+/* Shrink and translate label if:
+ * - input is focused
+ * - placeholder not shown
+ * - input is not empty */
+* [placeholder]:focus + label.shrinkable,
+* [placeholder]:not(:placeholder-shown) + label.shrinkable,
+* :not(:empty) + label.shrinkable
+  transform: translateY(calc(-70%)) scale(.9)
 
 /* Form inputs */
 .form-input

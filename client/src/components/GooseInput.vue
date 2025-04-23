@@ -34,7 +34,7 @@ const model = defineModel<string>({ default: '' }),
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
     >
-    <label v-if="placeholder">
+    <label class="shrinkable" v-if="placeholder">
       {{ placeholder }}
     </label>
     <div class="icons">
@@ -94,25 +94,6 @@ const model = defineModel<string>({ default: '' }),
 
   input::placeholder
     opacity: 0
-
-  /* Shrinkable label */
-  label
-    color: colors.$input-label
-    left: 1rem
-    pointer-events: none
-    position: absolute
-    transform-origin: left
-    transition: transitions.$transform
-    user-select: none
-
-  /* Shrink and translate label if:
-   * - input is focused
-   * - placeholder not shown
-   * - input is not empty */
-  input[placeholder]:focus + label,
-  input[placeholder]:not(:placeholder-shown) + label,
-  input:not(:empty) + label
-    transform: translateY(calc(-70%)) scale(.9)
 
   .icons
     align-items: center
