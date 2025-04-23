@@ -43,7 +43,7 @@ watch(() => props.checked, (value?: boolean | null) => {
 
 /* Show leaf if any children matched (recursive) or leaf title itself */
 function leafMatched(leaf: GooseTreeLeaf) {
-  const matched = leaf.sub?.some(leafMatched) || leaf.title.includes(props.search ?? '')
+  const matched = leaf.sub?.some(leafMatched) ?? leaf.title.includes(props.search ?? '')
   leaf.toggled = matched
   return matched
 }

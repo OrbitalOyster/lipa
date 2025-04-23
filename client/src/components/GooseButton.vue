@@ -83,7 +83,7 @@ const props = defineProps<{
     padding-left: 0rem
     padding-right: 0rem
 
-  .transparent:disabled
+  .transparent:disabled, .transparent:disabled:active
     background-color: transparent
     color: colors.$text-inactive
     cursor: not-allowed
@@ -105,7 +105,6 @@ const props = defineProps<{
     display: inline-flex
     filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
     font-size: 1.25rem
-    font-weight: 500
     gap: .75rem
     height: 3.5rem
     padding-left: .75rem

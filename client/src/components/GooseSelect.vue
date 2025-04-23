@@ -87,11 +87,13 @@ store.inputs[props.name] = ''
 
 <template>
   <div style="align-items: center; display: flex; position: relative">
+    <!-- Actual input element (hidden) -->
     <input
       v-model="store.inputs[props.name]"
       :name
       :placeholder
     >
+    <!-- Pseudo-input -->
     <div
       ref="target"
       class="focusable form-input target"
@@ -106,17 +108,22 @@ store.inputs[props.name] = ''
     >
       {{ store.inputs[props.name] }}
     </div>
+    <!-- "Enter something here" -->
     <label>
       {{ placeholder }}
     </label>
+    <!-- Icons -->
     <div class="input-icons">
       <FontAwesomeIcon
         class="chevron"
+        :style="{transform: active ? 'rotate(180deg)' : 'rotate(0)'}"
         :icon="faChevronDown"
         size="xl"
       />
     </div>
+    <!-- Pretty transition -->
     <Transition name="fade">
+      <!-- Drop-down list -->
       <ul
         v-if="active"
         ref="floating"
@@ -187,7 +194,6 @@ store.inputs[props.name] = ''
     user-select: none
 
   .chevron
-    transform: v-bind("active ? 'rotate(180deg)' : 'rotate(0)'")
     transition: transitions.$transform
 
   ul

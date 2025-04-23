@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { faEye, faEyeSlash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseButton from '#components/GooseButton.vue'
 import GoosePopover from '#components/GoosePopover.vue'
+import GooseTogglePassword from '#components/GooseTogglePassword.vue'
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
-
-type Validity = 'valid' | 'invalid'
 
 defineProps<{
   autocomplete?: string
@@ -16,7 +14,7 @@ defineProps<{
   name?: string
   password?: boolean
   placeholder?: string
-  validity?: Validity
+  validity?: FormInputValidity
 }>()
 
 const model = defineModel<string>({ default: '' }),
@@ -29,7 +27,8 @@ const model = defineModel<string>({ default: '' }),
       v-model="model"
       :autocomplete
       :autofocus
-      :class="['focusable', 'form-input', validity]"
+      class="focusable form-input"
+      :class="[validity]"
       :disabled
       :name
       :placeholder
@@ -66,13 +65,10 @@ const model = defineModel<string>({ default: '' }),
         size="lg"
       />
       <!-- Password show/hide icon -->
-      <GooseButton
+      <GooseTogglePassword
         v-if="password"
-        transparent
-        tooltip="Показать/скрыть пароль"
+        v-model="passwordHidden"
         :disabled
-        :icon="passwordHidden ? faEye : faEyeSlash"
-        @click="passwordHidden = !passwordHidden"
       />
     </div>
   </div>
