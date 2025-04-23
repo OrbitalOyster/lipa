@@ -8,10 +8,10 @@ import { useFormStore } from '#stores/useFormStore.ts'
 const props = defineProps<{
     checks?: FormCheck[]
     disabled?: boolean
-    name: string
-    items: string[]
-    placeholder: string
     form: string
+    items: string[]
+    name: string
+    placeholder: string
   }>(),
   store = useFormStore(props.form),
   active = ref(false),

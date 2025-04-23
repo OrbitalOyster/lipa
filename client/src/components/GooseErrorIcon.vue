@@ -13,11 +13,9 @@ defineProps<{
   <GoosePopover
     has-arrow
     hover-toggle
+    v-if="message"
   >
-    <div
-      v-if="message"
-      class="alert-icon"
-    >
+    <div class="alert-icon">
       <FontAwesomeIcon
         :icon="faTriangleExclamation"
         size="2xl"

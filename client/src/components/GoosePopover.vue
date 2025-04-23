@@ -37,6 +37,7 @@ const offsetValue = props.hasArrow ? arrowSize : 2,
 const { floatingStyles, middlewareData } = useFloating(target, floating, {
   open: active,
   placement: props.placement,
+  strategy: 'fixed',
   middleware: [
     offset({ mainAxis: offsetValue }),
     autoPlacement(autoPlacementOptions),

@@ -51,7 +51,7 @@ declare global {
   interface GooseTreeLeaf {
     id: string
     title: string
-    checked?: boolean
+    checked: boolean | null
     matched?: boolean
     toggled?: boolean
     sub?: GooseTreeLeaf[]

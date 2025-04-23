@@ -109,7 +109,6 @@ function throwError() {
         <GoosePopover
           has-arrow
           click-toggle
-          placement="bottom"
         >
           <GooseButton title="Click me" />
           <template #popover>

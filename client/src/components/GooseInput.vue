@@ -22,6 +22,7 @@ const model = defineModel<string>({ default: '' }),
 
 <template>
   <div style="align-items: center; display: flex; position: relative">
+    <!-- Actual input -->
     <input
       v-model="model"
       :autocomplete
@@ -33,6 +34,7 @@ const model = defineModel<string>({ default: '' }),
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
     >
+    <!-- Placeholde -->
     <label
       v-if="placeholder"
       class="shrinkable"
@@ -40,31 +42,10 @@ const model = defineModel<string>({ default: '' }),
       {{ placeholder }}
     </label>
     <div class="icons">
+      <!-- Validation icon -->
       <GooseErrorIcon
         :message="error"
       />
-      <!-- Validation error icon -->
-      <!--
-      <GoosePopover
-        has-arrow
-        hover-toggle
-      >
-        <div
-          v-if="validity === 'invalid'"
-          class="alert-icon"
-        >
-          <FontAwesomeIcon
-            :icon="faTriangleExclamation"
-            size="xl"
-          />
-        </div>
-        <template #popover>
-          <p class="validation-message">
-            {{ error }}
-          </p>
-        </template>
-      </GoosePopover>
-      -->
       <!-- Custom icon -->
       <FontAwesomeIcon
         v-if="icon"
@@ -105,6 +86,7 @@ const model = defineModel<string>({ default: '' }),
   .icons
     align-items: center
     display: flex
+    gap: .25rem
     position: absolute
     right: .5rem
 </style>
