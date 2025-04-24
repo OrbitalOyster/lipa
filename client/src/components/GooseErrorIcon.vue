@@ -11,9 +11,9 @@ defineProps<{
 <template>
   <!-- Validation error icon -->
   <GoosePopover
+    v-if="message"
     has-arrow
     hover-toggle
-    v-if="message"
   >
     <div class="alert-icon">
       <FontAwesomeIcon

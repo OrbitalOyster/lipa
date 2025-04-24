@@ -6,6 +6,7 @@ interface Org extends RowDataPacket {
   id: string
   ord: string
   name: string
+  parent: string | null
 }
 
 const dbUser = Bun.env['DB_USER'],
@@ -19,10 +20,16 @@ export const orgs = async (context: Context) => {
   try {
     const connection = await mysql.createConnection(connectionString),
       [rows] = await connection.query<Org[]>('SELECT * FROM orgs ORDER BY ord'),
-      parsedRows = rows.map(org => ({ id: org.id, ord: org.ord, name: org.name, parent: org.parent }))
+      parsedRows = rows.map(org => ({
+        id: org.id,
+        ord: org.ord,
+        name: org.name,
+        parent: org.parent ?? undefined, /* Ignore 'null' parent */
+      }))
     await connection.end()
     return context.json(parsedRows)
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error)
     return context.json(null)
   }

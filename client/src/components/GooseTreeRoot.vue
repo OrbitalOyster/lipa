@@ -75,5 +75,4 @@ const checked = ref(false),
     display: flex
     gap: .5rem
     justify-content: space-between
-
 </style>

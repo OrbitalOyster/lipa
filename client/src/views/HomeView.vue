@@ -15,9 +15,6 @@ import axios from 'axios'
 import { useLocalStorage } from '@vueuse/core'
 import { useUserStore } from '#stores/useUserStore.ts'
 
-/* Nothing is toggled by default */
-useLocalStorage('sideBarToggled', '', {})
-
 const accordionModel = ref({
   toggled: useLocalStorage('sideBarToggled', ''),
   items: [
@@ -39,17 +36,21 @@ const orgs: Ref<GooseTreeLeaf[]> = ref([])
 interface ApiOrg {
   id: string
   name: string
-  parent: string | null
+  parent?: string
 }
 
 onMounted(async () => {
-  function toTree(arr: ApiOrg[], parent: string | null): GooseTreeLeaf[] | null {
+  function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] | null {
     const filtered = arr.filter(i => i.parent === parent)
     return filtered.length
       ? filtered.map(i => (
           {
             title: `${i.id} - ${i.name}`,
             id: i.id,
+            checked: false,
+            // checked: useLocalStorage(`org-${i.id}-selected`, false).value,
+            toggled: false,
+            // toggled: useLocalStorage(`org-${i.id}-toggled`, false),
             sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
           }
         ))
@@ -59,7 +60,7 @@ onMounted(async () => {
   const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
     res = await axiosInstance.get('/orgs'),
     apiOrgs: ApiOrg[] = res.data,
-    leafs = toTree(apiOrgs, null)
+    leafs = toTree(apiOrgs)
   if (leafs !== null)
     orgs.value = leafs
 

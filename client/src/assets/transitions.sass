@@ -12,3 +12,17 @@ $transform: transform $time $function
 
 .fade-enter-from, .fade-leave-to
   opacity: 0
+
+.bounce-enter-active
+  transform-origin: top
+  animation: bounce-in $time
+
+.bounce-leave-active
+  transform-origin: top
+  animation: bounce-in $time reverse
+
+@keyframes bounce-in
+  0%
+    transform: scaleY(0)
+  100%
+    transform: scaleY(1)

@@ -53,7 +53,7 @@ declare global {
     title: string
     checked: boolean | null
     matched?: boolean
-    toggled?: boolean
+    toggled: boolean
     sub?: GooseTreeLeaf[]
   }
 }

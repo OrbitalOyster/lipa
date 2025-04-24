@@ -7,7 +7,7 @@ import { watch } from 'vue'
 
 const props = defineProps<{
     checkable?: boolean
-    checked?: boolean | null
+    checked: boolean | null
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
@@ -35,7 +35,7 @@ watch(() => model.value.map(l => l.checked), (after) => {
 })
 
 /* Emit down */
-watch(() => props.checked, (value?: boolean | null) => {
+watch(() => props.checked, (value: boolean | null) => {
   /* Check/uncheck all leaves when root is checked/unchecked */
   if (value !== null) /* Ignore the middle ground */
     model.value.forEach(e => e.checked = value)
@@ -85,9 +85,9 @@ function leafMatched(leaf: GooseTreeLeaf) {
           </div>
         </div>
         <!-- Children nodes -->
-        <div :style="{ display: leaf.toggled ? 'block': 'none'}">
+        <Transition name="bounce">
           <GooseTree
-            v-if="leaf.sub"
+            v-if="leaf.sub && leaf.toggled"
             v-model="leaf.sub"
             :search
             :checkable
@@ -95,7 +95,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
             @check="value => leaf.checked = value"
             @select="title => emit('select', title)"
           />
-        </div>
+        </Transition>
       </div>
     </li>
   </ul>
