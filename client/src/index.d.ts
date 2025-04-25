@@ -8,17 +8,11 @@ declare module 'vue-router' {
 
 declare global {
   /* Forms */
-  type FormInputValidity = 'valid' | 'invalid'
+  /* type FormInputValidity = 'valid' | 'invalid' */
 
   /* Form store */
-  type FormCheck = 'required' | 'lessThanTo' | 'moreThanFrom'
-  type FormInputs = Record<string, string | boolean | null>
-
-  interface StoreState {
-    errors: Record<string, string>
-    inputs: FormInputs
-    checks: Record<string, FormCheck[]>
-  }
+  type FormCheck = 'required' | 'lessThanTo' | 'moreThanFrom' | 'notBogus'
+  type FormInput = string | boolean | null
 
   /* User store */
   interface UserStore {

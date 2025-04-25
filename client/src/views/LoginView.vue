@@ -56,7 +56,7 @@ onMounted(() =>
             <img src="/goose.webp">
           </header>
           <GooseFormInput
-            :checks="['required']"
+            :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
             autofocus

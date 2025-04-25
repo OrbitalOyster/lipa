@@ -13,7 +13,6 @@ defineProps<{
   name?: string
   password?: boolean
   placeholder?: string
-  validity?: FormInputValidity
 }>()
 
 const model = defineModel<string>({ default: '' }),
@@ -28,7 +27,7 @@ const model = defineModel<string>({ default: '' }),
       :autocomplete
       :autofocus
       class="focusable form-input"
-      :class="[validity]"
+      :class="[ error === '' ? 'valid' : 'invalid' ]"
       :disabled
       :name
       :placeholder
