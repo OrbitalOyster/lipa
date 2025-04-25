@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
-import { ref, useTemplateRef, watch } from 'vue'
+import { inject, ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { useFormStore } from '#stores/useFormStore.ts'
+// import { useFormStore } from '#stores/useFormStore.ts'
+import type { Ref } from 'vue'
 
 const props = defineProps<{
     checks?: FormCheck[]
@@ -13,12 +14,15 @@ const props = defineProps<{
     name: string
     placeholder: string
   }>(),
-  store = useFormStore(props.form),
   active = ref(false),
+  inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs'),
   selectedIndex = ref<null | number>(null),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
+
+if (!inputs)
+  throw new Error('Major fuck up')
 
 /* Fine tuning */
 const placement = 'bottom',
@@ -53,14 +57,14 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
-function setValue(value: number | null) {
+const setValue = (value: number | null) => {
   selectedIndex.value = value
   /* Resetting value? */
   if (value === null || !props.items[value] /* Should not happen */)
-    store.inputs[props.name] = ''
+    inputs.value[props.name] = ''
   else
-    store.inputs[props.name] = props.items[value]
-  store.validate()
+    inputs.value[props.name] = props.items[value]
+  // store.validate()
 }
 
 function keyScroll(direction: number) {
@@ -81,15 +85,17 @@ function scrollToSelected(instant: boolean) {
 
 watch(isPositioned, opened => opened && scrollToSelected(true))
 
-store.checks[props.name] = props.checks ?? []
-store.inputs[props.name] = ''
+// store.checks[props.name] = props.checks ?? []
+// store.inputs[props.name] = ''
+
+const error = ''
 </script>
 
 <template>
   <div style="align-items: center; display: flex; position: relative">
     <!-- Actual input element (hidden) -->
     <input
-      v-model="store.inputs[props.name]"
+      v-model="inputs[props.name]"
       :name
       :placeholder
     >
@@ -97,7 +103,7 @@ store.inputs[props.name] = ''
     <div
       ref="target"
       class="focusable form-input target"
-      :class="store.errors[props.name] ? 'invalid' : 'valid'"
+      :class="error ? 'invalid' : 'valid'"
       :tabindex="disabled ? -1 : 0"
       @blur="e => active = active && e.relatedTarget === floating"
       @click="active = !active"
@@ -106,7 +112,7 @@ store.inputs[props.name] = ''
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ store.inputs[props.name] }}
+      {{ inputs[props.name] }}
     </div>
     <!-- "Enter something here" -->
     <label class="shrinkable">

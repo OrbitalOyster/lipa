@@ -1,21 +1,26 @@
 <script setup lang="ts">
 import GooseCheckbox from '#components/GooseCheckbox.vue'
-import { useFormStore } from '#stores/useFormStore.ts'
+import { inject } from 'vue'
+import type { Ref } from 'vue'
 
-const props = defineProps<{
-    checks?: FormCheck[]
-    disabled?: boolean
-    form: string
-    name: string
-  }>(),
-  store = useFormStore(props.form)
+defineProps<{
+  checks?: FormCheck[]
+  disabled?: boolean
+  form: string
+  name: string
+}>()
 
-store.checks[props.name] = props.checks ?? []
+const inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs')
+
+if (!inputs)
+  throw new Error('Major fuck up')
+
+// store.checks[props.name] = props.checks ?? []
 </script>
 
 <template>
   <GooseCheckbox
-    v-model="store.inputs[props.name] as boolean | null"
+    v-model="inputs[name] as boolean | null"
     :disabled
     :name
   >

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import GooseInput from '#components/GooseInput.vue'
-import { computed,inject } from 'vue'
+import { computed, inject } from 'vue'
 import type { Ref } from 'vue'
 
 const props = defineProps<{
