@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, useId } from 'vue'
+import { useId } from 'vue'
 
 defineProps<{
   disabled?: boolean
@@ -8,13 +8,6 @@ defineProps<{
 const model = defineModel<boolean | null>({ default: false }),
   emit = defineEmits(['update']),
   id = useId()
-
-async function onClick() {
-  model.value = !model.value
-  await nextTick() /* Gotta wait for DOM */
-  emit('update', model.value)
-}
-
 </script>
 
 <template>
@@ -22,13 +15,14 @@ async function onClick() {
     v-model="model"
     type="checkbox"
   >
-  <div style="align-items: center; display: flex; gap: .5rem">
+  <div class="wrapper">
     <button
-      :disabled
       :id
+      :disabled
+      :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
       class="focusable form-input"
       type="button"
-      @click.stop="onClick"
+      @click.stop="model = !model; emit('update', model)"
     >
       <div
         class="mark"
@@ -53,12 +47,16 @@ async function onClick() {
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  .wrapper
+    align-items: center
+    display: flex
+    gap: .5rem
+
   input
     display: none
 
   button
     box-sizing: content-box
-    cursor: pointer
     min-height: 2rem
     padding: 0
     position: relative
@@ -67,9 +65,6 @@ async function onClick() {
 
   button:active:enabled
     background-color: colors.$active
-
-  button:disabled
-    cursor: not-allowed
 
   .mark
     background-color: colors.$primary
