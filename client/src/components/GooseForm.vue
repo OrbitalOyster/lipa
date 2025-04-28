@@ -9,8 +9,8 @@ defineProps<{
 const emits = defineEmits(['submit']),
   validated = ref(false)
 
-const errors:Record<string, string> = {},
-  inputs:Ref<Record<string, FormInput>> = ref({})
+const errors: Record<string, string> = {},
+  inputs: Ref<Record<string, FormInput>> = ref({})
 
 provide('inputs', inputs)
 provide('setFormError', (key: string, err: string) => errors[key] = err)

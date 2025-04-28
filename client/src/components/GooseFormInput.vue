@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import GooseInput from '#components/GooseInput.vue'
 import { computed, inject } from 'vue'
+import GooseInput from '#components/GooseInput.vue'
 import type { Ref } from 'vue'
 
 const props = defineProps<{
-    checks?: FormCheck[]
-    name: string
-  }>()
+  checks?: FormCheck[]
+  name: string
+}>()
 
 const inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs'),
   setFormError: ((key: string, err: string) => void) | undefined = inject('setFormError')
@@ -19,8 +19,8 @@ const checkInput = () => {
 
   const value = inputs.value[props.name]
   if (props.checks)
-    for (let i = 0; i < props.checks.length; i++)
-      switch (props.checks[i]) {
+    for (const check of props.checks)
+      switch (check) {
         case 'required':
           if (!value)
             result = 'Required'
@@ -37,9 +37,6 @@ const checkInput = () => {
           if (value === 'bogus')
             result = 'Must not be bogus'
           break
-        default:
-          /* Should not get here */
-          throw new Error(`Invalid check: ${props.checks[i]}`)
       }
   setFormError(props.name, result)
   return result

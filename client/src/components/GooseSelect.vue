@@ -2,9 +2,8 @@
 import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
 import { inject, ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-// import { useFormStore } from '#stores/useFormStore.ts'
 import type { Ref } from 'vue'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
     checks?: FormCheck[]

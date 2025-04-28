@@ -7,9 +7,6 @@ declare module 'vue-router' {
 }
 
 declare global {
-  /* Forms */
-  /* type FormInputValidity = 'valid' | 'invalid' */
-
   /* Form store */
   type FormCheck = 'required' | 'lessThanTo' | 'moreThanFrom' | 'notBogus'
   type FormInput = string | boolean | null
