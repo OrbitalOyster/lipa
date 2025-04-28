@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { nextTick } from 'vue'
+import { nextTick, useId } from 'vue'
 
 defineProps<{
   disabled?: boolean
-  name: string
 }>()
 
 const model = defineModel<boolean | null>({ default: false }),
-  emit = defineEmits(['update'])
+  emit = defineEmits(['update']),
+  id = useId()
 
 async function onClick() {
   model.value = !model.value
   await nextTick() /* Gotta wait for DOM */
   emit('update', model.value)
 }
+
 </script>
 
 <template>
   <input
     v-model="model"
-    :name
     type="checkbox"
   >
   <div style="align-items: center; display: flex; gap: .5rem">
     <button
-      :id="name"
       :disabled
+      :id
       class="focusable form-input"
       type="button"
       @click.stop="onClick"
@@ -40,7 +40,7 @@ async function onClick() {
       />
     </button>
     <label
-      :for="name"
+      :for="id"
       :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
     >
       <slot />

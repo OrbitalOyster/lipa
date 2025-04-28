@@ -47,4 +47,11 @@ declare global {
     toggled: boolean
     sub?: GooseTreeLeaf[]
   }
+
+  /* Login form */
+  interface LoginFormCheck {
+    username: string
+    password: string
+    rememberMe: boolean
+  }
 }

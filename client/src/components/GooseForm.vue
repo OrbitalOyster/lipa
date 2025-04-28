@@ -2,22 +2,13 @@
 import { provide, ref } from 'vue'
 import type { Ref } from 'vue'
 
-defineProps<{
-  id: string
-}>()
-
-const emits = defineEmits(['submit']),
+const inputs: Ref<Record<string, FormInput>> = ref({}),
+  errors: Record<string, string> = {},
+  emits = defineEmits(['submit']),
   validated = ref(false)
 
-const errors: Record<string, string> = {},
-  inputs: Ref<Record<string, FormInput>> = ref({})
-
 provide('inputs', inputs)
-provide('setFormError', (key: string, err: string) => errors[key] = err)
-
-function isValid() {
-  return Object.values(errors).every(e => e === '')
-}
+provide('setFormError', (key: string, msg: string) => errors[key] = msg)
 
 function setInputs(newInputs: Record<string, FormInput>) {
   for (const [key, value] of Object.entries(newInputs))
@@ -25,7 +16,8 @@ function setInputs(newInputs: Record<string, FormInput>) {
 }
 
 function onSubmit() {
-  emits('submit', isValid() ? inputs.value : null)
+  const isValid = Object.values(errors).every(e => e === '')
+  emits('submit', isValid ? inputs.value : null)
   validated.value = true
 }
 

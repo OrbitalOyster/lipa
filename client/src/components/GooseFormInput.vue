@@ -16,7 +16,6 @@ if (!inputs || !setFormError)
 
 const checkInput = () => {
   let result = ''
-
   const value = inputs.value[props.name]
   if (props.checks)
     for (const check of props.checks)
@@ -43,8 +42,6 @@ const checkInput = () => {
 }
 
 const error = computed(checkInput)
-
-// formChecks.value[props.name] = props.checks || []
 </script>
 
 <template>

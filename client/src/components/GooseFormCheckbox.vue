@@ -5,8 +5,6 @@ import { inject } from 'vue'
 
 defineProps<{
   checks?: FormCheck[]
-  disabled?: boolean
-  form: string
   name: string
 }>()
 
@@ -14,15 +12,11 @@ const inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs')
 
 if (!inputs)
   throw new Error('Major fuck up')
-
-// store.checks[props.name] = props.checks ?? []
 </script>
 
 <template>
   <GooseCheckbox
     v-model="inputs[name] as boolean | null"
-    :disabled
-    :name
   >
     <slot />
   </GooseCheckbox>

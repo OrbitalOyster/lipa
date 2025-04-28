@@ -10,12 +10,6 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
-interface LoginFormCheck {
-  username: string
-  password: string
-  rememberMe: boolean
-}
-
 const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
@@ -43,7 +37,6 @@ onMounted(() =>
   <div class="fs centered">
     <div>
       <GooseForm
-        id="loginForm"
         ref="loginForm"
         @submit="auth"
       >
@@ -60,7 +53,6 @@ onMounted(() =>
             :disabled
             autocomplete="username"
             autofocus
-            form="loginForm"
             name="username"
             placeholder="Имя пользователя"
           />
@@ -68,7 +60,6 @@ onMounted(() =>
             :checks="['required']"
             :disabled
             autocomplete="password"
-            form="loginForm"
             name="password"
             password
             placeholder="Пароль"
@@ -76,7 +67,6 @@ onMounted(() =>
           <footer>
             <GooseFormCheckbox
               :disabled
-              form="loginForm"
               name="rememberMe"
             >
               <div>Запомнить меня</div>
