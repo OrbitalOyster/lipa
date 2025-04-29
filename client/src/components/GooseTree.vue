@@ -134,9 +134,9 @@ function leafMatched(leaf: GooseTreeLeaf) {
   .chevron
     cursor: pointer
     height: 1rem
-    padding: .0rem
-    margin-right: .5rem
     margin-left: .5rem
+    margin-right: .5rem
+    padding: .0rem
     transition: transform 100ms
     width: 1rem
 
