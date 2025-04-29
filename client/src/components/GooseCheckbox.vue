@@ -26,7 +26,7 @@ const model = defineModel<boolean | null>({ default: false }),
     >
       <div
         class="mark"
-        :class="{ partially: model === null, checked: model === true }"
+        :class="{ partially: model === null, checked: model !== false }"
       />
     </button>
     <label
@@ -43,6 +43,11 @@ const model = defineModel<boolean | null>({ default: false }),
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  /* Checkbox sizings */
+  $button-size: 2rem
+  $mark-size: 1rem
+  $mark-partial-height: .5rem
+
   .wrapper
     align-items: center
     display: flex
@@ -53,11 +58,11 @@ const model = defineModel<boolean | null>({ default: false }),
 
   button
     box-sizing: content-box
-    min-height: 2rem
+    height: $button-size
     padding: 0
     position: relative
     transition: transitions.$focusable, transitions.$colors
-    min-width: 2rem
+    width: $button-size
 
   button:active:enabled
     background-color: colors.$active
@@ -65,21 +70,20 @@ const model = defineModel<boolean | null>({ default: false }),
   .mark
     background-color: colors.$primary
     border-radius: borders.$radius
-    height: 1rem
-    left: .5rem
+    height: $mark-size
+    left: calc(($button-size - $mark-size) / 2)
     position: absolute
     scale: 0%
-    top: .5rem
+    top: calc(($button-size - $mark-size) / 2)
     transition: height .1s ease-in-out, top .1s ease-in-out, scale .1s ease-in-out
-    width: 1rem
+    width: $mark-size
 
   .checked
     scale: 100%
 
   .partially
-    height: .4rem
-    scale: 100%
-    top: .8rem
+    height: $mark-partial-height
+    top: calc(($button-size - $mark-partial-height) / 2)
 
   button:disabled .mark
     background-color: colors.$disabled-primary
