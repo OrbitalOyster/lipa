@@ -22,15 +22,11 @@ const model = defineModel<boolean | null>({ default: false }),
       :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
       class="focusable form-input"
       type="button"
-      @click.stop="model = !model; emit('update', model)"
+      @click.stop="model = !model; $nextTick(() => emit('update', model))"
     >
       <div
         class="mark"
-        :style="{
-          height: model === null ? '.4rem' : '1rem',
-          scale: model === false ? '0%' : '100%',
-          top: model === null ? '.8rem' : '.5rem'
-        }"
+        :class="{ partially: model === null, checked: model === true }"
       />
     </button>
     <label
@@ -69,10 +65,21 @@ const model = defineModel<boolean | null>({ default: false }),
   .mark
     background-color: colors.$primary
     border-radius: borders.$radius
+    height: 1rem
     left: .5rem
     position: absolute
+    scale: 0%
+    top: .5rem
     transition: height .1s ease-in-out, top .1s ease-in-out, scale .1s ease-in-out
     width: 1rem
+
+  .checked
+    scale: 100%
+
+  .partially
+    height: .4rem
+    scale: 100%
+    top: .8rem
 
   button:disabled .mark
     background-color: colors.$disabled-primary
