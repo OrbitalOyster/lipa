@@ -28,7 +28,7 @@ async function auth(formCheck: LoginFormCheck | null) {
 
 onMounted(() =>
   loginFormRef.value?.setInputs({
-    username: '', password: '', rememberMe: false,
+    username: 'foo', password: 'bar', rememberMe: false,
   }),
 )
 </script>
@@ -38,6 +38,7 @@ onMounted(() =>
     <div>
       <GooseForm
         ref="loginForm"
+        :inputs="['username', 'password']"
         @submit="auth"
       >
         <main class="card">

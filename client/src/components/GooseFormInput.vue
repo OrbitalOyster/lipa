@@ -8,15 +8,18 @@ const props = defineProps<{
   name: string
 }>()
 
-const inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs'),
+const inputs: Record<string, FormInput> | undefined = inject('inputs'),
   setFormError: ((key: string, err: string) => void) | undefined = inject('setFormError')
+
+let myInput = inject(`${props.name}-input`)
+console.log(myInput)
 
 if (!inputs || !setFormError)
   throw new Error('Major fuck up')
 
 const checkInput = () => {
   let result = ''
-  const value = inputs.value[props.name]
+  const value = inputs[props.name]
   if (props.checks)
     for (const check of props.checks)
       switch (check) {
@@ -25,11 +28,11 @@ const checkInput = () => {
             result = 'Required'
           break
         case 'lessThanTo':
-          if (Number(value) >= Number(inputs.value['to']))
+          if (Number(value) >= Number(inputs['to']))
             result = 'Must be less than to'
           break
         case 'moreThanFrom':
-          if (Number(value) <= Number(inputs.value['from']))
+          if (Number(value) <= Number(inputs['from']))
             result = 'Must be more than from'
           break
         case 'notBogus':
@@ -46,7 +49,7 @@ const error = computed(checkInput)
 
 <template>
   <GooseInput
-    v-model="inputs[name] as string"
+    v-model="myInput"
     :error
     :name
   />
