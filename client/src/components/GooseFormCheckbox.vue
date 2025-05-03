@@ -5,18 +5,14 @@ import { inject } from 'vue'
 
 defineProps<{
   checks?: FormCheck[]
-  name: string
 }>()
 
-const inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs')
-
-if (!inputs)
-  throw new Error('Major fuck up')
+const model = defineModel<boolean>()
 </script>
 
 <template>
   <GooseCheckbox
-    v-model="inputs[name] as boolean | null"
+    v-model="model"
   >
     <slot />
   </GooseCheckbox>

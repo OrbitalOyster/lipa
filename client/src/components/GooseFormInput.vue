@@ -5,21 +5,15 @@ import type { Ref } from 'vue'
 
 const props = defineProps<{
   checks?: FormCheck[]
-  name: string
 }>()
 
-const inputs: Record<string, FormInput> | undefined = inject('inputs'),
-  setFormError: ((key: string, err: string) => void) | undefined = inject('setFormError')
+const model = defineModel<string>(),
+  error = validate()
 
-let myInput = inject(`${props.name}-input`)
-console.log(myInput)
-
-if (!inputs || !setFormError)
-  throw new Error('Major fuck up')
-
-const checkInput = () => {
+function validate() {
+console.log('validating...', model.value)
+  const value = model.value
   let result = ''
-  const value = inputs[props.name]
   if (props.checks)
     for (const check of props.checks)
       switch (check) {
@@ -40,17 +34,16 @@ const checkInput = () => {
             result = 'Must not be bogus'
           break
       }
-  setFormError(props.name, result)
   return result
 }
 
-const error = computed(checkInput)
+defineExpose({error})
 </script>
 
 <template>
   <GooseInput
-    v-model="myInput"
+    v-model="model"
+    @input="async e => {await $nextTick(); error = validate()}"
     :error
-    :name
   />
 </template>

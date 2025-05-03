@@ -10,7 +10,6 @@ defineProps<{
   disabled?: boolean
   error?: string
   icon?: object
-  name?: string
   password?: boolean
   placeholder?: string
 }>()
@@ -29,7 +28,6 @@ const model = defineModel<string>({ default: '' }),
       class="focusable form-input"
       :class="[ error === '' ? 'valid' : 'invalid' ]"
       :disabled
-      :name
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
     >

@@ -13,32 +13,32 @@ import { useUserStore } from '#stores/useUserStore.ts'
 const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
-  loginFormRef = useTemplateRef('loginForm')
+  username = ref('222'),
+  password = ref('333'),
+  rememberMe = ref(false),
+  usernameRef = useTemplateRef('usernameRef'),
+  passwordRef = useTemplateRef('passwordRef'),
+  rememberMeRef = useTemplateRef('rememberMeRef')
 
-async function auth(formCheck: LoginFormCheck | null) {
-  if (!formCheck)
+async function auth() {
+  console.log(usernameRef.value)
+  if (usernameRef.value.error || passwordRef.value.error)
     return
   disabled.value = true
-  if (await userStore.auth(formCheck.username, formCheck.password, formCheck.rememberMe))
+  if (await userStore.auth(username.value, password.value, rememberMe.value))
     await router.push('/')
   else
     console.log('failed')
   disabled.value = false
 }
 
-onMounted(() =>
-  loginFormRef.value?.setInputs({
-    username: 'foo', password: 'bar', rememberMe: false,
-  }),
-)
+onMounted(() =>{})
 </script>
 
 <template>
   <div class="fs centered">
     <div>
       <GooseForm
-        ref="loginForm"
-        :inputs="['username', 'password']"
         @submit="auth"
       >
         <main class="card">
@@ -50,25 +50,28 @@ onMounted(() =>
             <img src="/goose.webp">
           </header>
           <GooseFormInput
+            ref="usernameRef"
+            v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
             autofocus
-            name="username"
             placeholder="Имя пользователя"
           />
           <GooseFormInput
+            ref="passwordRef"
+            v-model="password"
             :checks="['required']"
             :disabled
             autocomplete="password"
-            name="password"
             password
             placeholder="Пароль"
           />
           <footer>
             <GooseFormCheckbox
+              ref="rememberMeRef"
+              v-model="rememberMe"
               :disabled
-              name="rememberMe"
             >
               <div>Запомнить меня</div>
             </GooseFormCheckbox>
