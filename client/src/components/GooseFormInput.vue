@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import GooseInput from '#components/GooseInput.vue'
 
 const props = defineProps<{
     checks?: FormCheck[]
   }>(),
-  model = defineModel<string>({ default: '' }),
-  error = ref(validate(model.value))
-
-watch(model, (newValue) => {
-  error.value = validate(newValue)
-})
-
-defineExpose({ error })
+  emit = defineEmits(['validated']),
+  model = defineModel<string>({ default: '' })
 
 function validate(value: string) {
   let result = ''
@@ -28,6 +21,7 @@ function validate(value: string) {
             result = 'Must not be bogus'
           break
       }
+  emit('validated', result)
   return result
 }
 
@@ -36,6 +30,6 @@ function validate(value: string) {
 <template>
   <GooseInput
     v-model="model"
-    :error
+    :error="validate(model)"
   />
 </template>

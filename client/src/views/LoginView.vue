@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
@@ -7,6 +6,7 @@ import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -16,15 +16,10 @@ const router = useRouter(),
   username = ref(''),
   password = ref(''),
   rememberMe = ref(false),
-  usernameRef = useTemplateRef('usernameRef'),
-  passwordRef = useTemplateRef('passwordRef')
+  usernameError = ref(''),
+  passwordError = ref('')
 
 async function auth() {
-  console.log(usernameRef.value)
-  if (!usernameRef.value || !passwordRef.value)
-    throw new Error('Major screw up')
-  // if (usernameRef.value.error || passwordRef.value.error)
-  //   return
   disabled.value = true
   if (await userStore.auth(username.value, password.value, rememberMe.value))
     await router.push('/')
@@ -39,7 +34,7 @@ async function auth() {
   <div class="fs centered">
     <div>
       <GooseForm
-        @submit="auth"
+        @submit="!usernameError && !passwordError && auth()"
       >
         <main class="card">
           <header>
@@ -50,22 +45,22 @@ async function auth() {
             <img src="/goose.webp">
           </header>
           <GooseFormInput
-            ref="usernameRef"
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
             autofocus
             placeholder="Имя пользователя"
+            @validated="err => usernameError = err"
           />
           <GooseFormInput
-            ref="passwordRef"
             v-model="password"
             :checks="['required']"
             :disabled
             autocomplete="password"
             password
             placeholder="Пароль"
+            @validated="err => passwordError = err"
           />
           <footer>
             <GooseCheckbox
