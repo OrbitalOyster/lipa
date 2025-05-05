@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { provide, ref } from 'vue'
-import type { Ref } from 'vue'
+import { ref } from 'vue'
 
 const emit = defineEmits(['submit']),
   validated = ref(false)

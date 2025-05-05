@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseForm from '#components/GooseForm.vue'
@@ -13,15 +13,16 @@ import { useUserStore } from '#stores/useUserStore.ts'
 const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
-  username = ref('222'),
-  password = ref('333'),
+  username = ref(''),
+  password = ref(''),
   rememberMe = ref(false),
   usernameRef = useTemplateRef('usernameRef'),
-  passwordRef = useTemplateRef('passwordRef'),
-  rememberMeRef = useTemplateRef('rememberMeRef')
+  passwordRef = useTemplateRef('passwordRef')
 
 async function auth() {
   console.log(usernameRef.value)
+  if (!usernameRef.value || !passwordRef.value)
+    throw new Error('Major screw up')
   if (usernameRef.value.error || passwordRef.value.error)
     return
   disabled.value = true
@@ -32,7 +33,6 @@ async function auth() {
   disabled.value = false
 }
 
-onMounted(() =>{})
 </script>
 
 <template>

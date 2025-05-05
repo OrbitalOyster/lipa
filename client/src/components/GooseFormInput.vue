@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { ref, watch } from 'vue'
 import GooseInput from '#components/GooseInput.vue'
-import type { Ref } from 'vue'
 
 const props = defineProps<{
-  checks?: FormCheck[]
-}>()
+    checks?: FormCheck[]
+  }>(),
+  model = defineModel<string>({ default: '' }),
+  error = ref(validate(model.value))
 
-const model = defineModel<string>(),
-  error = validate()
+watch(model, (newValue) => {
+  error.value = validate(newValue)
+})
 
-function validate() {
-console.log('validating...', model.value)
-  const value = model.value
+defineExpose({ error })
+
+function validate(value: string) {
   let result = ''
   if (props.checks)
     for (const check of props.checks)
@@ -20,14 +22,6 @@ console.log('validating...', model.value)
         case 'required':
           if (!value)
             result = 'Required'
-          break
-        case 'lessThanTo':
-          if (Number(value) >= Number(inputs['to']))
-            result = 'Must be less than to'
-          break
-        case 'moreThanFrom':
-          if (Number(value) <= Number(inputs['from']))
-            result = 'Must be more than from'
           break
         case 'notBogus':
           if (value === 'bogus')
@@ -37,13 +31,11 @@ console.log('validating...', model.value)
   return result
 }
 
-defineExpose({error})
 </script>
 
 <template>
   <GooseInput
     v-model="model"
-    @input="async e => {await $nextTick(); error = validate()}"
     :error
   />
 </template>

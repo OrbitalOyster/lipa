@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import GooseCheckbox from '#components/GooseCheckbox.vue'
-import type { Ref } from 'vue'
-import { inject } from 'vue'
 
 defineProps<{
   checks?: FormCheck[]
