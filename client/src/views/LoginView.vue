@@ -2,8 +2,8 @@
 import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
+import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseForm from '#components/GooseForm.vue'
-import GooseFormCheckbox from '#components/GooseFormCheckbox.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
@@ -23,8 +23,8 @@ async function auth() {
   console.log(usernameRef.value)
   if (!usernameRef.value || !passwordRef.value)
     throw new Error('Major screw up')
-  if (usernameRef.value.error || passwordRef.value.error)
-    return
+  // if (usernameRef.value.error || passwordRef.value.error)
+  //   return
   disabled.value = true
   if (await userStore.auth(username.value, password.value, rememberMe.value))
     await router.push('/')
@@ -68,13 +68,12 @@ async function auth() {
             placeholder="Пароль"
           />
           <footer>
-            <GooseFormCheckbox
-              ref="rememberMeRef"
+            <GooseCheckbox
               v-model="rememberMe"
               :disabled
             >
               <div>Запомнить меня</div>
-            </GooseFormCheckbox>
+            </GooseCheckbox>
             <GooseButton
               :disabled
               :loading="disabled"
