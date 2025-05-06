@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { useId, watch } from 'vue'
+import { useId } from 'vue'
 
 defineProps<{
   disabled?: boolean
 }>()
 
 const model = defineModel<boolean | null>({ default: false }),
-  emit = defineEmits(['update']),
   id = useId()
-
-watch(model, (newValue) => {
-  emit('update', newValue)
-})
 </script>
 
 <template>

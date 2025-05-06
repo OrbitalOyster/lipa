@@ -74,7 +74,6 @@ function leafMatched(leaf: GooseTreeLeaf) {
           <div v-if="checkable">
             <GooseCheckbox
               v-model="leaf.checked"
-              @update="value => leaf.checked = value"
             >
               <GooseMarkable
                 :needle="search || ''"
