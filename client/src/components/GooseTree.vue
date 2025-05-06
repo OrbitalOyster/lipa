@@ -90,7 +90,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
           </div>
         </div>
         <!-- Children nodes -->
-        <Transition name="bounce">
+        <Transition name="slide">
           <GooseTree
             v-if="leaf.sub && leaf.toggled"
             v-model="leaf.sub"
