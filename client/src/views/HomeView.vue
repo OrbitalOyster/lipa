@@ -2,16 +2,14 @@
 import 'splitpanes/dist/splitpanes.css'
 import { Pane, Splitpanes } from 'splitpanes'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
-import { onMounted, ref } from 'vue'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
-import GooseTreeRoot from '#components/GooseTreeRoot.vue'
-import type { Ref } from 'vue'
+import OrgTree from '#shared/OrgTree.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
-import axios from 'axios'
+import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -30,44 +28,6 @@ const slots = [
 ]
 
 const userStore = useUserStore()
-const orgs: Ref<GooseTreeLeaf[]> = ref([])
-
-/* TODO: Shared types */
-interface ApiOrg {
-  id: string
-  name: string
-  parent?: string
-}
-
-onMounted(async () => {
-  function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] | null {
-    const filtered = arr.filter(i => i.parent === parent)
-    return filtered.length
-      ? filtered.map(i => (
-          {
-            title: `${i.id} - ${i.name}`,
-            id: i.id,
-            checked: false,
-            // checked: useLocalStorage(`org-${i.id}-selected`, false).value,
-            toggled: false,
-            // toggled: useLocalStorage(`org-${i.id}-toggled`, false),
-            sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
-          }
-        ))
-      : null
-  }
-
-  const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
-    res = await axiosInstance.get('/orgs'),
-    apiOrgs: ApiOrg[] = res.data,
-    leafs = toTree(apiOrgs)
-  if (leafs !== null)
-    orgs.value = leafs
-
-  // await userStore.setPayload({selectedOrgs: [10000]})
-  // console.log(userStore.selectedOrgs)
-})
-
 </script>
 
 <template>
@@ -84,11 +44,9 @@ onMounted(async () => {
         <aside>
           <GooseAccordion v-model="accordionModel">
             <template #orgs>
-              <GooseTreeRoot
-                v-model="orgs"
-                :searchable="true"
-                :checkable="true"
-              />
+              <Suspense>
+                <OrgTree />
+              </Suspense>
             </template>
           </GooseAccordion>
         </aside>

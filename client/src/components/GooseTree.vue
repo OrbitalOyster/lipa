@@ -7,11 +7,12 @@ import { watch } from 'vue'
 
 const props = defineProps<{
     checkable?: boolean
-    checked: boolean | null
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
-  model = defineModel<GooseTreeLeaf[]>({ required: true })
+  model = defineModel<GooseTreeLeaf[]>({ required: true }),
+  branch = model.value
+
 
 function onSelect(leaf: GooseTreeLeaf) {
   return
@@ -21,25 +22,30 @@ function onSelect(leaf: GooseTreeLeaf) {
     leaf.toggled = !leaf.toggled
 }
 
-/* Emit up */
-watch(() => model.value.map(l => l.checked), (after) => {
-  /* Everything checked */
-  if (after.every(e => e === true))
-    emit('check', true)
-  /* Nothing checked */
-  else if (after.every(e => e === false))
-    emit('check', false)
-  /* So-so */
-  else
-    emit('check', null)
-})
+function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
+  branch.forEach((leaf) => {
+    leaf.checked = value
+    if (leaf.sub)
+      checkBranch(leaf.sub, value)
+  })
+}
 
-/* Emit down */
-watch(() => props.checked, (value: boolean | null) => {
-  /* Check/uncheck all leaves when root is checked/unchecked */
-  if (value !== null) /* Ignore the middle ground */
-    model.value.forEach(e => e.checked = value)
-})
+branch.forEach(leaf =>
+  watch(() => leaf.checked, () => {
+    /* Check/uncheck all leaves when root is checked/unchecked */
+    if (leaf.sub && leaf.checked !== null)
+      checkBranch(leaf.sub, leaf.checked)
+    /* Everything checked */
+    if (branch.every(l => l.checked === true))
+      emit('check', true)
+    /* Nothing checked */
+    else if (branch.every(l => l.checked === false))
+      emit('check', false)
+    /* So-so */
+    else emit('check', null)
+  },
+  ),
+)
 
 /* Show leaf if any children matched (recursive) or leaf title itself */
 function leafMatched(leaf: GooseTreeLeaf) {
@@ -90,7 +96,6 @@ function leafMatched(leaf: GooseTreeLeaf) {
             v-model="leaf.sub"
             :search
             :checkable
-            :checked="leaf.checked"
             @check="value => leaf.checked = value"
             @select="title => emit('select', title)"
           />
