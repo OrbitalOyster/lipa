@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useId } from 'vue'
+import { useId, watch } from 'vue'
 
 defineProps<{
   disabled?: boolean
@@ -8,6 +8,10 @@ defineProps<{
 const model = defineModel<boolean | null>({ default: false }),
   emit = defineEmits(['update']),
   id = useId()
+
+watch(model, (newValue) => {
+  emit('update', newValue)
+})
 </script>
 
 <template>
@@ -22,7 +26,7 @@ const model = defineModel<boolean | null>({ default: false }),
       :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
       class="focusable form-input"
       type="button"
-      @click.stop="model = !model; $nextTick(() => emit('update', model))"
+      @click.stop="model = !model"
     >
       <div
         class="mark"

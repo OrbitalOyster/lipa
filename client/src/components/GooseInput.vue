@@ -26,7 +26,7 @@ const model = defineModel<string>({ default: '' }),
       :autocomplete
       :autofocus
       class="focusable form-input"
-      :class="[ error === '' ? 'valid' : 'invalid' ]"
+      :class="error ? 'invalid' : 'valid'"
       :disabled
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"

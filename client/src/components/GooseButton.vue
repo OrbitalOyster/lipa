@@ -40,7 +40,7 @@ const props = defineProps<{
       <FontAwesomeIcon
         v-if="icon || loading"
         style="width: 2rem"
-        :class="{ 'fa-pulse': loading }"
+        :class="loading && 'fa-pulse'"
         :icon="loading ? faSpinner : icon!"
         size="xl"
       />
@@ -126,7 +126,7 @@ const props = defineProps<{
     color: colors.$disabled
     cursor: not-allowed
     filter: none
-    transform: none
+    transform: translateY(0)
 
   .tooltip
     padding: 1rem
