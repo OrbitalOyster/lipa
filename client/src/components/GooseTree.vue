@@ -32,7 +32,7 @@ function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
 branch.forEach(leaf =>
   watch(() => leaf.checked, () => {
     /* Check/uncheck all leaves when root is checked/unchecked */
-    if (leaf.sub && leaf.checked !== null)
+    if (leaf.sub && leaf.checked !== 'indeterminate')
       checkBranch(leaf.sub, leaf.checked)
     /* Everything checked */
     if (branch.every(l => l.checked === true))
@@ -41,7 +41,7 @@ branch.forEach(leaf =>
     else if (branch.every(l => l.checked === false))
       emit('check', false)
     /* So-so */
-    else emit('check', null)
+    else emit('check', 'indeterminate')
   },
   ),
 )

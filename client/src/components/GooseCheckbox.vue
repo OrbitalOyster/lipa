@@ -5,7 +5,7 @@ defineProps<{
   disabled?: boolean
 }>()
 
-const model = defineModel<boolean | null>({ default: false }),
+const model = defineModel<boolean | 'indeterminate'>({ default: false }),
   id = useId()
 </script>
 
@@ -25,7 +25,7 @@ const model = defineModel<boolean | null>({ default: false }),
     >
       <div
         class="mark"
-        :class="{ partially: model === null, checked: model !== false }"
+        :class="{ indeterminate: model === 'indeterminate', checked: model !== false }"
       />
     </button>
     <label
@@ -45,7 +45,7 @@ const model = defineModel<boolean | null>({ default: false }),
   /* Checkbox sizings */
   $button-size: 2rem
   $mark-size: 1rem
-  $mark-partial-height: .5rem
+  $mark-indeterminate-height: .5rem
 
   .wrapper
     align-items: center
@@ -81,9 +81,9 @@ const model = defineModel<boolean | null>({ default: false }),
   .checked
     scale: 100%
 
-  .partially
-    height: $mark-partial-height
-    top: calc(($button-size - $mark-partial-height) / 2)
+  .indeterminate
+    height: $mark-indeterminate-height
+    top: calc(($button-size - $mark-indeterminate-height) / 2)
 
   button:disabled .mark
     background-color: colors.$disabled-primary
