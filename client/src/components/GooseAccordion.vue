@@ -10,7 +10,8 @@ const model = defineModel<Accordion>({ required: true })
     <li
       v-for="item in model.items"
       :key="item.id"
-      :class="{ card: true, toggled: model.toggled === item.id }"
+      class="card"
+      :class="model.toggled === item.id && 'toggled'"
     >
       <div
         class="title"
@@ -29,9 +30,9 @@ const model = defineModel<Accordion>({ required: true })
         </div>
         <FontAwesomeIcon
           class="chevron"
+          :class="model.toggled === item.id && 'chevron-toggled'"
           :icon="faChevronDown"
           size="xl"
-          :style="{ transform: model.toggled === item.id ? 'rotate(180deg)' : 'none'}"
         />
       </div>
       <div class="item-container">
@@ -77,6 +78,9 @@ const model = defineModel<Accordion>({ required: true })
 
   .chevron
     transition: transitions.$transform
+
+  .chevron-toggled
+    transform: rotate(180deg)
 
   .icon
     display: inline-flex
