@@ -137,12 +137,10 @@ function leafMatched(leaf: GooseTreeLeaf) {
 
   .chevron
     cursor: pointer
+    flex-shrink: 0
     height: 1rem
-    margin-left: .5rem
-    margin-right: .5rem
-    padding: .0rem
     transition: transform 100ms
-    width: 1rem
+    width: 2rem
 
   .toggled
     transform: rotate(90deg)

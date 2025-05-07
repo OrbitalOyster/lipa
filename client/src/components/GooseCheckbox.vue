@@ -10,11 +10,11 @@ const model = defineModel<boolean | null>({ default: false }),
 </script>
 
 <template>
-  <input
-    v-model="model"
-    type="checkbox"
-  >
   <div class="wrapper">
+    <input
+      v-model="model"
+      type="checkbox"
+    >
     <button
       :id
       :disabled
@@ -57,6 +57,7 @@ const model = defineModel<boolean | null>({ default: false }),
 
   button
     box-sizing: content-box
+    flex-shrink: 0
     height: $button-size
     padding: 0
     position: relative
