@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import 'splitpanes/dist/splitpanes.css'
-import { Pane, Splitpanes } from 'splitpanes'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -11,7 +9,6 @@ import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { useUserStore } from '#stores/useUserStore.ts'
 
 const accordionModel = ref({
   toggled: useLocalStorage('sideBarToggled', ''),
@@ -26,57 +23,45 @@ const slots = [
   { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
-
-const userStore = useUserStore()
 </script>
 
 <template>
   <div class="fs layout">
     <TopBar />
-    <Splitpanes
-      vertical
-      @resized="async e => await userStore.setPayload({ sideBarWidth: e.panes[0].size })"
-    >
-      <Pane
-        max-size="50"
-        :size="userStore.sideBarWidth"
-      >
-        <aside>
-          <GooseAccordion v-model="accordionModel">
-            <template #orgs>
-              <Suspense>
-                <OrgTree />
-              </Suspense>
-            </template>
-          </GooseAccordion>
-        </aside>
-      </Pane>
-      <Pane>
-        <main>
-          <GooseTabs :slots>
-            <template #xlsx>
-              <div style="padding: 1rem">
-                <RouterLink to="/test">
-                  Form
-                </RouterLink>
-                <GooseButton
-                  :icon="faUpload"
-                  transparent
-                  tooltip="Загрузить .xlsx файл"
-                />
-              </div>
-            </template>
-            <template #initial>
-              <p>Bar</p>
-              <GooseTable style="width: 100%" />
-            </template>
-            <template #complex>
-              <p>Baz</p>
-            </template>
-          </GooseTabs>
-        </main>
-      </Pane>
-    </Splitpanes>
+    <div style="display: flex; flex-direction: row; flex-grow: 1; gap: .5rem">
+      <aside>
+        <GooseAccordion v-model="accordionModel">
+          <template #orgs>
+            <Suspense>
+              <OrgTree />
+            </Suspense>
+          </template>
+        </GooseAccordion>
+      </aside>
+      <main>
+        <GooseTabs :slots>
+          <template #xlsx>
+            <div style="padding: 1rem">
+              <RouterLink to="/test">
+                Form
+              </RouterLink>
+              <GooseButton
+                :icon="faUpload"
+                transparent
+                tooltip="Загрузить .xlsx файл"
+              />
+            </div>
+          </template>
+          <template #initial>
+            <p>Bar</p>
+            <GooseTable style="width: 100%" />
+          </template>
+          <template #complex>
+            <p>Baz</p>
+          </template>
+        </GooseTabs>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -91,11 +76,14 @@ const userStore = useUserStore()
   aside
     background-color: transparent
     height: 100%
+    flex-shrink: 0
+    flex-basis: 32rem
 
   main
-    height: 100%
     display: flex
     flex-direction: column
+    flex-grow: 1
+    height: 100%
 
   .splitpanes
     box-sizing: border-box

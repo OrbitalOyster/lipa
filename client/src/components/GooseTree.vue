@@ -13,7 +13,6 @@ const props = defineProps<{
   model = defineModel<GooseTreeLeaf[]>({ required: true }),
   branch = model.value
 
-
 function onSelect(leaf: GooseTreeLeaf) {
   return
   if (!leaf.sub)

@@ -4,22 +4,21 @@ import type { Ref } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
-
-function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] | null {
-  const filtered = arr.filter(i => i.parent === parent)
-  return filtered.length
-    ? filtered.map(i => (
-        {
-          title: `${i.id} - ${i.name}`,
-          id: i.id,
-          checked: false,
-          // checked: useLocalStorage(`org-${i.id}-selected`, false).value,
-          toggled: false,
-          // toggled: useLocalStorage(`org-${i.id}-toggled`, false),
-          sub: toTree(arr, i.id) ?? undefined, /* TODO: Lunacy */
-        }
-      ))
-    : null
+function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] {
+  return arr.filter(i => i.parent === parent).map(i => {
+    const sub = toTree(arr, i.id),
+    result =  {
+      title: `${i.id} - ${i.name}`,
+      id: i.id,
+      checked: false,
+      // checked: useLocalStorage(`org-${i.id}-selected`, false).value,
+      toggled: false,
+      // toggled: useLocalStorage(`org-${i.id}-toggled`, false),
+    }
+    if (sub.length)
+      result.sub = sub
+    return result
+  })
 }
 
 const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),

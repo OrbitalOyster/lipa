@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "4.2.0",
-    "@types/splitpanes": "2.2.6",
     "@vue/eslint-config-typescript": "14.5.0",
     "eslint": "9.23.0",
     "eslint-import-resolver-typescript": "4.3.1",
@@ -40,7 +39,6 @@
     "normalize.css": "8.0.1",
     "pinia": "3.0.1",
     "sass": "1.86.2",
-    "splitpanes": "4.0.3",
     "vite": "6.2.5",
     "vue": "3.5.13",
     "vue-router": "4.5.0"
