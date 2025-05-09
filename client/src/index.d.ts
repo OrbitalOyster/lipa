@@ -40,12 +40,12 @@ declare global {
 
   /* Tree */
   interface GooseTreeLeaf {
+    checked: RemovableRef<boolean>
     id: string
-    title: string
-    checked: boolean
     matched?: boolean
-    toggled: boolean
     sub?: GooseTreeLeaf[]
+    title: string
+    toggled: RemovableRef<boolean>
   }
 
   /* Login form */
