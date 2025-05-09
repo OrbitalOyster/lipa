@@ -13,19 +13,11 @@ const props = defineProps<{
   model = defineModel<GooseTreeLeaf[]>({ required: true }),
   branch = model.value
 
+/* Check if branch has mixed check states */
 function branchIsIndetermitate(b) {
-  const f = b[0]
-//  console.log(b, b[0])
-  for (let i = 1; i < b.length; i++) {
-    const leaf = b[i]
-    if (leaf.checked !== f.checked) {
+  for (let i = 1; i < b.length; i++)
+    if (b[i].checked !== b[0].checked || b[i].sub && branchIsIndetermitate(b[i].sub))
       return true
-    }
-    if (leaf.sub && branchIsIndetermitate(leaf.sub)) {
-      return true
-    }
-
-  }
   return false
 }
 
@@ -48,16 +40,13 @@ function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
 branch.forEach(leaf =>
   watch(() => leaf.checked, () => {
     /* Check/uncheck all leaves when root is checked/unchecked */
-    if (leaf.sub && !branchIsIndetermitate(leaf.sub))
-      checkBranch(leaf.sub, leaf.checked)
-    /* Everything checked */
-    if (branch.some(l => l.checked === true))
-      emit('check', true)
-    /* Nothing checked */
-    else if (branch.every(l => l.checked === false))
-      emit('check', false)
-    /* So-so */
-    // else emit('check', 'indeterminate')
+    if (leaf.sub) {
+      /* TODO: Make sence of it */
+      if (!leaf.checked || !branchIsIndetermitate(leaf.sub))
+        checkBranch(leaf.sub, leaf.checked)
+    }
+    /* Emit up */
+    emit('check', branch.some(l => l.checked))
   },
   ),
 )
