@@ -13,6 +13,22 @@ const props = defineProps<{
   model = defineModel<GooseTreeLeaf[]>({ required: true }),
   branch = model.value
 
+function branchIsIndetermitate(b) {
+  const f = b[0]
+//  console.log(b, b[0])
+  for (let i = 1; i < b.length; i++) {
+    const leaf = b[i]
+    if (leaf.checked !== f.checked) {
+      return true
+    }
+    if (leaf.sub && branchIsIndetermitate(leaf.sub)) {
+      return true
+    }
+
+  }
+  return false
+}
+
 function onSelect(leaf: GooseTreeLeaf) {
   return
   if (!leaf.sub)
@@ -32,16 +48,16 @@ function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
 branch.forEach(leaf =>
   watch(() => leaf.checked, () => {
     /* Check/uncheck all leaves when root is checked/unchecked */
-    if (leaf.sub && leaf.checked !== 'indeterminate')
+    if (leaf.sub && !branchIsIndetermitate(leaf.sub))
       checkBranch(leaf.sub, leaf.checked)
     /* Everything checked */
-    if (branch.every(l => l.checked === true))
+    if (branch.some(l => l.checked === true))
       emit('check', true)
     /* Nothing checked */
     else if (branch.every(l => l.checked === false))
       emit('check', false)
     /* So-so */
-    else emit('check', 'indeterminate')
+    // else emit('check', 'indeterminate')
   },
   ),
 )
@@ -79,6 +95,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
           <div v-if="checkable">
             <GooseCheckbox
               v-model="leaf.checked"
+              :indeterminate="leaf.sub && branchIsIndetermitate(leaf.sub)"
             >
               <GooseMarkable
                 :needle="search || ''"

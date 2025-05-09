@@ -10,12 +10,13 @@ function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] {
     const result: GooseTreeLeaf = {
         title: `${i.id} - ${i.name}`,
         id: i.id,
-//        checked: false,
+        checked: false,
         toggled: useLocalStorage(`org-${i.id}-toggled`, false),
       },
       checked = useLocalStorage(`org-${i.id}-selected`),
       sub: GooseTreeLeaf[] = toTree(arr, i.id)
 
+/*
     switch (checked) {
       case 'true':
         sub.checked = true
@@ -27,6 +28,7 @@ function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] {
         sub.checked = 'indeterminate'
         break
     }
+*/
 
     if (sub.length)
       result.sub = sub

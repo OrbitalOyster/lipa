@@ -3,16 +3,17 @@ import { useId } from 'vue'
 
 defineProps<{
   disabled?: boolean
+  indeterminate?: boolean
 }>()
 
-const model = defineModel<boolean | 'indeterminate'>({ default: false }),
+const checked = defineModel<boolean>({ default: false }),
   id = useId()
 </script>
 
 <template>
   <div class="wrapper">
     <input
-      v-model="model"
+      v-model="checked"
       type="checkbox"
     >
     <button
@@ -21,11 +22,11 @@ const model = defineModel<boolean | 'indeterminate'>({ default: false }),
       :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
       class="focusable form-input"
       type="button"
-      @click.stop="model = !model"
+      @click.stop="checked = !checked"
     >
       <div
         class="mark"
-        :class="{ indeterminate: model === 'indeterminate', checked: model !== false }"
+        :class="{ checked, indeterminate }"
       />
     </button>
     <label
