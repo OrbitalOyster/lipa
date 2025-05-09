@@ -13,12 +13,13 @@ const props = defineProps<{
   model = defineModel<GooseTreeLeaf[]>({ required: true }),
   branch = model.value
 
-/* Check if branch has mixed check states */
-function branchIsIndetermitate(b) {
-  for (let i = 1; i < b.length; i++)
-    if (b[i].checked !== b[0].checked || b[i].sub && branchIsIndetermitate(b[i].sub))
-      return true
-  return false
+/* Check if leaf children has mixed check states */
+function leafIsIndetermitate(leaf: GooseTreeLeaf): boolean {
+  /* Not a branch / empty branch for some reason */
+  if (!leaf.sub || !leaf.sub[0])
+    return false
+  const first = leaf.sub[0].checked
+  return leaf.sub.some(l => l.checked !== first || leafIsIndetermitate(l))
 }
 
 function onSelect(leaf: GooseTreeLeaf) {
@@ -42,7 +43,7 @@ branch.forEach(leaf =>
     /* Check/uncheck all leaves when root is checked/unchecked */
     if (leaf.sub) {
       /* TODO: Make sence of it */
-      if (!leaf.checked || !branchIsIndetermitate(leaf.sub))
+      if (!leaf.checked || !leafIsIndetermitate(leaf))
         checkBranch(leaf.sub, leaf.checked)
     }
     /* Emit up */
@@ -84,7 +85,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
           <div v-if="checkable">
             <GooseCheckbox
               v-model="leaf.checked"
-              :indeterminate="leaf.sub && branchIsIndetermitate(leaf.sub)"
+              :indeterminate="leafIsIndetermitate(leaf)"
             >
               <GooseMarkable
                 :needle="search || ''"
