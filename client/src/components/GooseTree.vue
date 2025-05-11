@@ -16,7 +16,7 @@ const props = defineProps<{
 /* Check if leaf children has mixed check states */
 function leafIsIndetermitate(leaf: GooseTreeLeaf): boolean {
   /* Not a branch / empty branch for some reason */
-  if (!leaf.sub || !leaf.sub[0])
+  if (!leaf.sub?.[0])
     return false
   const first = leaf.sub[0].checked
   return leaf.sub.some(l => l.checked !== first || leafIsIndetermitate(l))

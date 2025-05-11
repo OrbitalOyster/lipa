@@ -8,7 +8,7 @@ import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
 import GooseSelect from '#components/GooseSelect.vue'
-import GooseTreeRoot from '#components/GooseTreeRoot.vue'
+/* import GooseTreeRoot from '#components/GooseTreeRoot.vue' */
 
 const items = [
   '1 Macao',
@@ -168,11 +168,13 @@ function throwError() {
         class="card"
         style="padding: 1rem"
       >
+      <!--
         <GooseTreeRoot
           v-model="tree"
           searchable
           :checkable="false"
         />
+      -->
       </div>
     </GooseForm>
   </div>
