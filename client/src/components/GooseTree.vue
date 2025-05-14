@@ -10,8 +10,7 @@ const props = defineProps<{
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
-  model = defineModel<GooseTreeLeaf[]>({ required: true }),
-  branch = model.value
+  branch = defineModel<GooseTreeLeaf[]>({ required: true })
 
 /* Check if leaf children has mixed check states */
 function leafIsIndetermitate(leaf: GooseTreeLeaf): boolean {
@@ -38,7 +37,7 @@ function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
   })
 }
 
-branch.forEach(leaf =>
+branch.value.forEach(leaf =>
   watch(() => leaf.checked, () => {
     /* Check/uncheck all leaves when root is checked/unchecked */
     if (leaf.sub) {
@@ -47,7 +46,7 @@ branch.forEach(leaf =>
         checkBranch(leaf.sub, leaf.checked)
     }
     /* Emit up */
-    emit('check', branch.some(l => l.checked))
+    emit('check', branch.value.some(l => l.checked))
   },
   ),
 )
@@ -65,38 +64,47 @@ function leafMatched(leaf: GooseTreeLeaf) {
 <template>
   <ul>
     <li
-      v-for="(leaf, i) in model"
+      v-for="(leaf, i) in branch"
       :key="i"
     >
       <!-- Root node -->
       <div v-if="search === '' || leafMatched(leaf)">
         <div
-          :class="['title', '_selectable-title']"
-          :style="{ 'padding-left': leaf.sub ? 0 : '2.5rem' }"
+          class="title"
+          :class="['_selectable-title']"
+          :style="{ 'padding-left': leaf.sub ? 0 : '2.0rem' }"
           @click="onSelect(leaf)"
         >
+          <!-- Toggle icon (disabled when searching) -->
           <FontAwesomeIcon
             v-if="leaf.sub"
-            :class="{ chevron: true, toggled: leaf.toggled }"
+            class="chevron"
+            :class="{ toggled: leaf.toggled }"
             :icon="faChevronRight"
-            @click.stop="leaf.toggled = !leaf.toggled"
+            @click.stop="search === '' && (leaf.toggled = !leaf.toggled)"
           />
           <!-- Checkbox -->
-          <div v-if="checkable">
-            <GooseCheckbox
-              v-model="leaf.checked"
-              :indeterminate="leafIsIndetermitate(leaf)"
-            >
-              <GooseMarkable
-                :needle="search || ''"
-                :title="leaf.title"
-                tag="div"
-              />
-            </GooseCheckbox>
-          </div>
+          <GooseCheckbox
+            v-if="checkable"
+            v-model="leaf.checked"
+            :indeterminate="leafIsIndetermitate(leaf)"
+          >
+            <GooseMarkable
+              :needle="search || ''"
+              :title="leaf.title"
+              tag="div"
+            />
+          </GooseCheckbox>
+          <!-- Regular title -->
+          <GooseMarkable
+            v-else
+            :needle="search || ''"
+            :title="leaf.title"
+            tag="div"
+          />
         </div>
         <!-- Children nodes -->
-        <Transition name="slide">
+        <Transition _name="slide">
           <GooseTree
             v-if="leaf.sub && leaf.toggled"
             v-model="leaf.sub"
@@ -128,7 +136,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
   .title
     align-items: center
     display: flex
-    gap: .5rem
+    gap: .0rem
     height: fit-content
     min-height: 3rem
 
