@@ -7,6 +7,7 @@ import { watch } from 'vue'
 
 const props = defineProps<{
     checkable?: boolean
+    selectable?: boolean
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
@@ -22,7 +23,6 @@ function leafIsIndetermitate(leaf: GooseTreeLeaf): boolean {
 }
 
 function onSelect(leaf: GooseTreeLeaf) {
-  return
   if (!leaf.sub)
     emit('select', leaf.title)
   else
@@ -71,9 +71,9 @@ function leafMatched(leaf: GooseTreeLeaf) {
       <div v-if="search === '' || leafMatched(leaf)">
         <div
           class="title"
-          :class="['_selectable-title']"
+          :class="{ 'selectable-title': selectable }"
           :style="{ 'padding-left': leaf.sub ? 0 : '2.0rem' }"
-          @click="onSelect(leaf)"
+          @click="selectable && onSelect(leaf)"
         >
           <!-- Toggle icon (disabled when searching) -->
           <FontAwesomeIcon
@@ -110,6 +110,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
             v-model="leaf.sub"
             :search
             :checkable
+            :selectable
             @check="value => leaf.checked = value"
             @select="title => emit('select', title)"
           />
@@ -152,7 +153,6 @@ function leafMatched(leaf: GooseTreeLeaf) {
   .chevron
     cursor: pointer
     flex-shrink: 0
-    height: 1rem
     transition: transform 100ms
     width: 2rem
 

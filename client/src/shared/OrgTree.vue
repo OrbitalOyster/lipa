@@ -63,7 +63,8 @@ const search = ref(''),
   </div>
   <GooseTree
     v-model="orgs"
-    :checkable="true"
+    :checkable="false"
+    :selectable="true"
     :checked="checked || false"
     :search="debounced"
     style="padding-left: 0"
