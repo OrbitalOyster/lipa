@@ -8,20 +8,16 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 const props = defineProps<{
     checks?: FormCheck[]
     disabled?: boolean
-    form: string
     items: string[]
-    name: string
     placeholder: string
   }>(),
   active = ref(false),
-  inputs: Ref<Record<string, FormInput>> | undefined = inject('inputs'),
   selectedIndex = ref<null | number>(null),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
 
-if (!inputs)
-  throw new Error('Major fuck up')
+const model = defineModel<string>({ default: '' })
 
 /* Fine tuning */
 const placement = 'bottom',
@@ -60,9 +56,9 @@ const setValue = (value: number | null) => {
   selectedIndex.value = value
   /* Resetting value? */
   if (value === null || !props.items[value] /* Should not happen */)
-    inputs.value[props.name] = ''
+    model.value = ''
   else
-    inputs.value[props.name] = props.items[value]
+    model.value = props.items[value]
   // store.validate()
 }
 
@@ -84,8 +80,6 @@ function scrollToSelected(instant: boolean) {
 
 watch(isPositioned, opened => opened && scrollToSelected(true))
 
-// store.checks[props.name] = props.checks ?? []
-// store.inputs[props.name] = ''
 
 const error = ''
 </script>
@@ -94,8 +88,7 @@ const error = ''
   <div style="align-items: center; display: flex; position: relative">
     <!-- Actual input element (hidden) -->
     <input
-      v-model="inputs[props.name]"
-      :name
+      v-model="model"
       :placeholder
     >
     <!-- Pseudo-input -->
@@ -111,7 +104,7 @@ const error = ''
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ inputs[props.name] }}
+      {{ model }}
     </div>
     <!-- "Enter something here" -->
     <label class="shrinkable">

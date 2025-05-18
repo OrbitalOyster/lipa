@@ -31,27 +31,8 @@ const items = [
   '18 Montenegro',
   '19 Montserrat',
   '20 Morocco',
-]
-
-const tree = ref([{
-  title: 'Org1', id: '1', checked: false, toggled: true, sub: [
-    { title: 'Org1.1', id: '1-1', checked: false, sub: [
-      { title: 'Org1.1.1', id: '1-1-1', checked: false },
-    ] },
-  ] }, {
-  title: 'Org2', id: '2', checked: false }, {
-  title: 'Org3', id: '3', checked: false, sub: [
-    { title: 'Org3.1', id: '3-1', checked: false },
-    { title: 'Org3.2', id: '3-2', checked: false },
-    { title: 'Org3.3', id: '3-3', checked: false, sub: [ // TODO: Remove 'checked' here
-      { title: 'Org3.3.1', id: '3-3-1', checked: false },
-      { title: 'Org3.3.2', id: '3-3-2', checked: false },
-      { title: 'Org3.3.3', id: '3-3-3', checked: false },
-      { title: 'Org3.3.4', id: '3-3-4', checked: false },
-    ] },
-    { title: 'Org3.4', id: '3-4', checked: false },
-  ] },
-])
+],
+selectedItem = ref('')
 
 const s0 = ref('foo')
 const cb = ref(null)
@@ -98,12 +79,11 @@ function throwError() {
       <p>{{ s0 }}</p>
       <hr>
       <GooseSelect
-        name="selectInput"
-        form="mySampleForm"
         placeholder="Select something"
-        :checks="['required']"
         :items
+        v-model="selectedItem"
       />
+      {{ selectedItem }}
       <hr>
       <div style="display: flex; gap: 1rem">
         <GoosePopover
@@ -168,13 +148,6 @@ function throwError() {
         class="card"
         style="padding: 1rem"
       >
-      <!--
-        <GooseTreeRoot
-          v-model="tree"
-          searchable
-          :checkable="false"
-        />
-      -->
       </div>
     </GooseForm>
   </div>
