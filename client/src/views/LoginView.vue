@@ -4,6 +4,7 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
+import GooseToggle from '#components/GooseToggle.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
@@ -17,7 +18,8 @@ const router = useRouter(),
   password = ref(''),
   rememberMe = ref(false),
   usernameError = ref(''),
-  passwordError = ref('')
+  passwordError = ref(''),
+  loginAsUser = ref(false)
 
 async function auth() {
   disabled.value = true
@@ -63,12 +65,17 @@ async function auth() {
             @validated="err => passwordError = err"
           />
           <footer>
-            <GooseCheckbox
-              v-model="rememberMe"
-              :disabled
-            >
-              <div>Запомнить меня</div>
-            </GooseCheckbox>
+            <div style="display: flex; flex-direction: column; gap: 1rem">
+              <GooseCheckbox
+                v-model="rememberMe"
+                :disabled
+              >
+                <div>Запомнить меня</div>
+              </GooseCheckbox>
+              <GooseToggle>
+                <div>Вход с логином</div>
+              </GooseToggle>
+            </div>
             <GooseButton
               :disabled
               :loading="disabled"

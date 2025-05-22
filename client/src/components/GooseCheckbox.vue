@@ -19,8 +19,8 @@ const checked = defineModel<boolean>({ default: false }),
     <button
       :id
       :disabled
-      :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
       class="focusable form-input"
+      :class="{ disabled }"
       type="button"
       @click.stop="checked = !checked"
     >
@@ -31,7 +31,7 @@ const checked = defineModel<boolean>({ default: false }),
     </button>
     <label
       :for="id"
-      :style="{ cursor: disabled ? 'not-allowed' : 'pointer' }"
+      :class="{ disabled }"
     >
       <slot />
     </label>
@@ -58,6 +58,7 @@ const checked = defineModel<boolean>({ default: false }),
 
   button
     box-sizing: content-box
+    cursor: pointer
     flex-shrink: 0
     height: $button-size
     padding: 0
@@ -67,6 +68,9 @@ const checked = defineModel<boolean>({ default: false }),
 
   button:active:enabled
     background-color: colors.$active
+
+  .disabled
+    cursor: not-allowed
 
   .mark
     background-color: colors.$primary
@@ -79,10 +83,10 @@ const checked = defineModel<boolean>({ default: false }),
     transition: height .1s ease-in-out, top .1s ease-in-out, scale .1s ease-in-out
     width: $mark-size
 
-  .checked
+  .mark.checked
     scale: 100%
 
-  .indeterminate
+  .mark.indeterminate
     height: $mark-indeterminate-height
     top: calc(($button-size - $mark-indeterminate-height) / 2)
 
@@ -90,5 +94,6 @@ const checked = defineModel<boolean>({ default: false }),
     background-color: colors.$disabled-primary
 
   label
+    cursor: pointer
     user-select: none
 </style>
