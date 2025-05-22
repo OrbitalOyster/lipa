@@ -8,6 +8,7 @@ import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
 import GooseSelect from '#components/GooseSelect.vue'
+import GooseToggle from '#components/GooseToggle.vue'
 /* import GooseTreeRoot from '#components/GooseTreeRoot.vue' */
 
 const items = [
@@ -43,6 +44,7 @@ function throwError() {
   throw new Error('Test Error')
 }
 
+const toggleChecked = ref(false) 
 </script>
 
 <template>
@@ -143,6 +145,7 @@ function throwError() {
       >
         <i>Click me!</i>
       </GooseCheckbox>
+      <GooseToggle v-model="toggleChecked"/>
       <hr>
       <div
         class="card"
