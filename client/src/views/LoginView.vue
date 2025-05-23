@@ -72,7 +72,10 @@ async function auth() {
               >
                 <div>Запомнить меня</div>
               </GooseCheckbox>
-              <GooseToggle>
+              <GooseToggle
+                v-model="loginAsUser"
+                :disabled
+              >
                 <div>Вход с логином</div>
               </GooseToggle>
             </div>
