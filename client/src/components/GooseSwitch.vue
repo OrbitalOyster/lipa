@@ -11,7 +11,6 @@ const toggled = defineModel<boolean>({ default: false }),
 
 <template>
   <div class="wrapper">
-    <input type="checkbox" :toggled>
     <button
       :id
       :disabled
@@ -20,10 +19,7 @@ const toggled = defineModel<boolean>({ default: false }),
       @click="toggled = !toggled"
     >
     </button>
-    <label
-      :for="id"
-      :class="{ disabled }"
-    >
+    <label :for="id">
       <slot />
     </label>
   </div>
@@ -70,6 +66,7 @@ const toggled = defineModel<boolean>({ default: false }),
   button:disabled
     background-color: colors.$input-disabled
     border: 1px solid colors.$input-disabled
+    cursor: not-allowed
 
   /* Mark */
   button::after
@@ -97,6 +94,9 @@ const toggled = defineModel<boolean>({ default: false }),
     background-color: colors.$disabled-primary
 
   label
-    cursor: pointer
     user-select: none
+
+  button:disabled ~ label
+    cursor: not-allowed
+
 </style>

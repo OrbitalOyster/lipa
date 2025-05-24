@@ -6,33 +6,21 @@ defineProps<{
   indeterminate?: boolean
 }>()
 
-const checked = defineModel<boolean>({ default: false }),
+const toggled = defineModel<boolean>({ default: false }),
   id = useId()
 </script>
 
 <template>
   <div class="wrapper">
-    <input
-      v-model="checked"
-      type="checkbox"
-    >
     <button
       :id
       :disabled
-      class="focusable form-input"
-      :class="{ disabled }"
+      :class="{ toggled, disabled, indeterminate }"
       type="button"
-      @click.stop="checked = !checked"
+      @click.stop="toggled = !toggled"
     >
-      <div
-        class="mark"
-        :class="{ checked, indeterminate }"
-      />
     </button>
-    <label
-      :for="id"
-      :class="{ disabled }"
-    >
+    <label :for="id">
       <slot />
     </label>
   </div>
@@ -53,28 +41,42 @@ const checked = defineModel<boolean>({ default: false }),
     display: flex
     gap: .5rem
 
-  input
-    display: none
-
+  /* Base */
   button
+    background-color: colors.$input-background
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
     box-sizing: content-box
     cursor: pointer
     flex-shrink: 0
     height: $button-size
+    outline: colors.$outline solid 0px
     padding: 0
     position: relative
     transition: transitions.$focusable, transitions.$colors
     width: $button-size
 
+  /* On focus */
+  button:focus
+    @extend button
+    border-color: colors.$outline
+    outline-width: borders.$focus-outline-width
+
+  /* On active */
   button:active:enabled
     background-color: colors.$active
 
-  .disabled
+  /* On disabled */
+  button:disabled
+    background-color: colors.$input-disabled
+    border: 1px solid colors.$input-disabled
     cursor: not-allowed
 
-  .mark
+  /* Mark */
+  button::after
     background-color: colors.$primary
     border-radius: borders.$radius
+    content: ""
     height: $mark-size
     left: calc(($button-size - $mark-size) / 2)
     position: absolute
@@ -83,17 +85,24 @@ const checked = defineModel<boolean>({ default: false }),
     transition: height .1s ease-in-out, top .1s ease-in-out, scale .1s ease-in-out
     width: $mark-size
 
-  .mark.checked
+  /* On toggled */
+  button.toggled::after
     scale: 100%
 
-  .mark.indeterminate
+  button.indeterminate::after
     height: $mark-indeterminate-height
     top: calc(($button-size - $mark-indeterminate-height) / 2)
 
-  button:disabled .mark
+  /* On disabled */
+  button:disabled::after
     background-color: colors.$disabled-primary
 
+  /* Label */
   label
     cursor: pointer
     user-select: none
+
+  /* Label */
+  button:disabled ~ label
+    cursor: not-allowed
 </style>
