@@ -15,14 +15,14 @@ defineProps<{
     has-arrow
     hover-toggle
   >
-    <div class="alert-icon">
+    <div class="error-icon">
       <FontAwesomeIcon
         :icon="faTriangleExclamation"
         size="2xl"
       />
     </div>
     <template #popover>
-      <p class="validation-message">
+      <p>
         {{ message }}
       </p>
     </template>
@@ -30,7 +30,14 @@ defineProps<{
 </template>
 
 <style scoped lang="sass">
-  .validation-message
+  @use '../assets/colors'
+
+  .error-icon
+    color: colors.$danger
+    cursor: help
+    width: 2.5rem
+
+  p
     padding: .5rem
     margin: .5rem
     white-space: nowrap

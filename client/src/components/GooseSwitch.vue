@@ -94,6 +94,7 @@ const toggled = defineModel<boolean>({ default: false }),
     background-color: colors.$disabled-primary
 
   label
+    cursor: pointer
     user-select: none
 
   button:disabled ~ label

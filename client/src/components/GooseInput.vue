@@ -19,19 +19,18 @@ const model = defineModel<string>({ default: '' }),
 </script>
 
 <template>
-  <div style="align-items: center; display: flex; position: relative">
+  <div class="wrapper">
     <!-- Actual input -->
     <input
       v-model="model"
       :autocomplete
       :autofocus
-      class="focusable form-input"
       :class="error ? 'invalid' : 'valid'"
       :disabled
       :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
     >
-    <!-- Placeholde -->
+    <!-- Placeholder -->
     <label
       v-if="placeholder"
       class="shrinkable"
@@ -60,17 +59,37 @@ const model = defineModel<string>({ default: '' }),
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  .wrapper
+    align-items: center
+    display: flex
+    position: relative
+
+  /* Base */
   input
+    background-color: colors.$input-background
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
     color: colors.$text
     height: 2rem
+    outline: colors.$outline solid 0px
     padding: .25rem 1rem .25rem 1rem
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 
+  /* On focus */
+  input:focus
+    @extend input
+    border-color: colors.$outline
+    outline-width: borders.$focus-outline-width
+
+  /* On disabled */
   input:disabled
+    background-color: colors.$input-disabled
+    border-color: colors.$input-disabled
     color: colors.$disabled-primary
     cursor: not-allowed
 

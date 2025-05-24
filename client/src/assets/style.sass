@@ -66,29 +66,8 @@ label.shrinkable
 * :not(:empty) + label.shrinkable
   transform: translateY(calc(-70%)) scale(.9)
 
-/* Form inputs */
-.form-input
-  background-color: colors.$input-background
-  border-radius: borders.$radius
-  border: 1px solid colors.$input-border
-
-.form-input:disabled
-  background-color: colors.$input-disabled
-  border: 1px solid colors.$input-disabled
-
-/* Alert icons are hidden by default */
-.alert-icon
-  display: none
-  color: colors.$danger
-  width: 2.5rem
-  cursor: help
-
 /* Validation formatting only shows up in validated elements */
 .validated
-  .alert-icon
-    display: flex
-    justify-content: center
-
   .form-input.valid:not(:disabled)
     background-color: colors.$input-valid-background 
     border: 1px solid colors.$input-valid-border
