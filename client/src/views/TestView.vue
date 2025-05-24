@@ -8,7 +8,7 @@ import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
 import GooseSelect from '#components/GooseSelect.vue'
-import GooseToggle from '#components/GooseToggle.vue'
+import GooseSwitch from '#components/GooseSwitch.vue'
 /* import GooseTreeRoot from '#components/GooseTreeRoot.vue' */
 
 const items = [
@@ -145,7 +145,7 @@ const toggleChecked = ref(false)
       >
         <i>Click me!</i>
       </GooseCheckbox>
-      <GooseToggle v-model="toggleChecked"/>
+      <GooseSwitch v-model="toggleChecked"/>
       <hr>
       <div
         class="card"

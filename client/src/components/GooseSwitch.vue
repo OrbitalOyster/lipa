@@ -17,12 +17,9 @@ const checked = defineModel<boolean>({ default: false }),
       :disabled
       type="button"
       class="focusable form-input"
+      :class="{ checked }"
       @click="checked = !checked"
     >
-      <div 
-        class="mark"
-        :class="{ checked }"
-      />
     </button>
     <label
       :for="id"
@@ -60,26 +57,27 @@ const checked = defineModel<boolean>({ default: false }),
     transition: transitions.$focusable, transitions.$colors
     width: $toggle-width
 
-  button:active:enabled
-    background-color: colors.$active
-
-  .mark
+  button::after
     border-radius: 1rem
+    content: ""
     height: $mark-size
     position: absolute
     top: calc($toggle-height / 2 - $mark-size / 2)
     transition: left transitions.$time transitions.$function
     width: $mark-size
 
-  .mark.checked
+  button:active:enabled::after
+    background-color: colors.$active
+
+  button.checked::after
     background-color: colors.$primary
     left: calc($toggle-width - $toggle-height / 2 - $mark-size / 2)
 
-  .mark:not(.checked)
+  button:not(.checked)::after
     background-color: colors.$disabled
     left: calc($toggle-height / 2 - $mark-size / 2)
 
-  button:disabled .mark
+  button:disabled::after
     background-color: colors.$disabled-primary
 
   label

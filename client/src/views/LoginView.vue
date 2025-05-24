@@ -4,7 +4,7 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
-import GooseToggle from '#components/GooseToggle.vue'
+import GooseSwitch from '#components/GooseSwitch.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
@@ -72,12 +72,12 @@ async function auth() {
               >
                 <div>Запомнить меня</div>
               </GooseCheckbox>
-              <GooseToggle
+              <GooseSwitch
                 v-model="loginAsUser"
                 :disabled
               >
                 <div>Вход с логином</div>
-              </GooseToggle>
+              </GooseSwitch>
             </div>
             <GooseButton
               :disabled
