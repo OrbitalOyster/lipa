@@ -31,7 +31,6 @@ const props = defineProps<{
     <button
       :disabled
       :type
-      class="focusable"
       :class="{ primary: !transparent, warning, danger, small, transparent }"
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
@@ -63,6 +62,9 @@ const props = defineProps<{
 
   .primary:active
     background-color: colors.$active
+
+  .primary:disabled
+    background-color: colors.$disabled-primary
 
   .warning
     background-color: colors.$warning
@@ -96,8 +98,10 @@ const props = defineProps<{
     padding-left: .5rem
     padding-right: .5rem
 
+  /* Base */
   button
     align-items: center
+    border-color: colors.$outline
     border-radius: borders.$radius
     border: none
     color: colors.$button
@@ -107,22 +111,30 @@ const props = defineProps<{
     font-size: 1.25rem
     gap: .75rem
     height: 3.5rem
+    outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
     transform: translateY(0)
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
 
+  /* On hover */
   button:hover
     filter: drop-shadow(colors.$button-shadow 0 .25rem .25rem)
     transform: translateY(-.0625rem)
 
+  /* On focus */
+  button:focus
+    @extend button
+    outline-width: .25rem
+
+  /* On active */
   button:active
     filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
     transform: translateY(0)
 
-  button:disabled, button:disabled:active
-    background-color: colors.$disabled-primary
+  /* On disabled */
+  button:disabled
     color: colors.$disabled
     cursor: not-allowed
     filter: none

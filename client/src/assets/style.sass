@@ -2,10 +2,6 @@
 @use 'borders'
 @use 'transitions'
 
-body
-  background-color: #F6F2F0
-  color: colors.$text
-  font-family: 'Exo 2 Variable'
 
 /* Fullscreen div */
 .fs
@@ -34,44 +30,3 @@ body
   color: colors.$info-text
   background-color: colors.$info
   border: 1px solid colors.$info-border
-
-/* Focusable */
-$outline-width: .25rem
-$outline-style: solid
-
-.focusable
-  border-color: colors.$outline
-  outline: colors.$outline $outline-style 0px
-
-.focusable:focus
-  @extend .focusable
-  outline-width: $outline-width
-
-/* Shrinkable 'placeholder' label */
-label.shrinkable
-  color: colors.$input-label
-  left: 1rem
-  pointer-events: none
-  position: absolute
-  transform-origin: left
-  transition: transitions.$transform
-  user-select: none
-
-/* Shrink and translate label if:
- * - input is focused
- * - placeholder not shown
- * - input is not empty */
-* [placeholder]:focus + label.shrinkable,
-* [placeholder]:not(:placeholder-shown) + label.shrinkable,
-* :not(:empty) + label.shrinkable
-  transform: translateY(calc(-70%)) scale(.9)
-
-/* Validation formatting only shows up in validated elements */
-.validated
-  .form-input.valid:not(:disabled)
-    background-color: colors.$input-valid-background 
-    border: 1px solid colors.$input-valid-border
-
-  .form-input.invalid:not(:disabled)
-    background-color: colors.$input-invalid-background
-    border: 1px solid colors.$input-invalid-border

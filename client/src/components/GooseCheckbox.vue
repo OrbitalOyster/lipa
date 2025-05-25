@@ -26,7 +26,7 @@ const toggled = defineModel<boolean>({ default: false }),
   </div>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/transitions'
@@ -63,7 +63,7 @@ const toggled = defineModel<boolean>({ default: false }),
     outline-width: borders.$focus-outline-width
 
   /* On active */
-  button:active:enabled
+  button:active
     background-color: colors.$active
 
   /* On disabled */

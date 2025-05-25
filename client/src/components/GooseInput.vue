@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
+import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
 import { ref } from 'vue'
 
@@ -31,12 +32,9 @@ const model = defineModel<string>({ default: '' }),
       :type="password && passwordHidden ? 'password' : 'text'"
     >
     <!-- Placeholder -->
-    <label
-      v-if="placeholder"
-      class="shrinkable"
-    >
+    <GooseInputPlaceholder v-if="placeholder">
       {{ placeholder }}
-    </label>
+    </GooseInputPlaceholder>
     <div class="icons">
       <!-- Validation icon -->
       <GooseErrorIcon

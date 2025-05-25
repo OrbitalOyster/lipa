@@ -16,3 +16,12 @@ app.config.errorHandler = (err, vm, info) => {
   <div id="modals" />
   <RouterView />
 </template>
+
+<style lang="sass">
+  @use 'assets/colors'
+
+  body
+    background-color: #F6F2F0
+    color: colors.$text
+    font-family: 'Exo 2 Variable'
+</style>

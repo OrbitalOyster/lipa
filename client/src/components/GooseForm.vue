@@ -16,9 +16,10 @@ const emit = defineEmits(['submit']),
 </template>
 
 <style lang="sass">
+  /* Rare non-scoped style block */
   @use '../assets/colors'
 
-  /* Hide error-icon's */
+  /* Hide error icons */
   .unvalidated
     .error-icon
       display: none

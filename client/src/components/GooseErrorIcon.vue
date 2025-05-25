@@ -29,7 +29,7 @@ defineProps<{
   </GoosePopover>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass" scoped>
   @use '../assets/colors'
 
   .error-icon

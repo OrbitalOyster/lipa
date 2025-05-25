@@ -25,7 +25,7 @@ const toggled = defineModel<boolean>({ default: false }),
   </div>
 </template>
 
-<style scoped lang="sass">
+<style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/transitions'
@@ -80,14 +80,14 @@ const toggled = defineModel<boolean>({ default: false }),
     transition: left transitions.$time transitions.$function
     width: $mark-size
 
-  /* On active */
-  button:active:enabled::after
-    background-color: colors.$active
-
   /* On toggled */
   button.toggled::after
     background-color: colors.$primary
     left: calc($width - $height / 2 - $mark-size / 2)
+
+  /* On active */
+  button:active::after
+    background-color: colors.$active
 
   /* On disabled */
   button:disabled::after
