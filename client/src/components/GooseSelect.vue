@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
-import { inject, ref, useTemplateRef, watch } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import type { Ref } from 'vue'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
@@ -79,7 +78,6 @@ function scrollToSelected(instant: boolean) {
 }
 
 watch(isPositioned, opened => opened && scrollToSelected(true))
-
 
 const error = ''
 </script>

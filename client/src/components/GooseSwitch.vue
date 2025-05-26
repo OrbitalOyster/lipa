@@ -17,8 +17,7 @@ const toggled = defineModel<boolean>({ default: false }),
       type="button"
       :class="{ toggled }"
       @click="toggled = !toggled"
-    >
-    </button>
+    />
     <label :for="id">
       <slot />
     </label>

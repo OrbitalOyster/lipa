@@ -12,28 +12,28 @@ import GooseSwitch from '#components/GooseSwitch.vue'
 /* import GooseTreeRoot from '#components/GooseTreeRoot.vue' */
 
 const items = [
-  '1 Macao',
-  '2 Madagascar',
-  '3 Malawi',
-  '4 Malaysia',
-  '5 Maldives',
-  '6 Mali',
-  '7 Malta',
-  '8 Marshall Islands (the)',
-  '9 Martinique',
-  '10 Mauritania',
-  '11 Mauritius',
-  '12 Mayotte',
-  '13 Mexico',
-  '14 Micronesia (Federated States of)',
-  '15 Moldova (the Republic of)',
-  '16 Monaco',
-  '17 Mongolia',
-  '18 Montenegro',
-  '19 Montserrat',
-  '20 Morocco',
-],
-selectedItem = ref('')
+    '1 Macao',
+    '2 Madagascar',
+    '3 Malawi',
+    '4 Malaysia',
+    '5 Maldives',
+    '6 Mali',
+    '7 Malta',
+    '8 Marshall Islands (the)',
+    '9 Martinique',
+    '10 Mauritania',
+    '11 Mauritius',
+    '12 Mayotte',
+    '13 Mexico',
+    '14 Micronesia (Federated States of)',
+    '15 Moldova (the Republic of)',
+    '16 Monaco',
+    '17 Mongolia',
+    '18 Montenegro',
+    '19 Montserrat',
+    '20 Morocco',
+  ],
+  selectedItem = ref('')
 
 const s0 = ref('foo')
 const cb = ref(null)
@@ -44,7 +44,7 @@ function throwError() {
   throw new Error('Test Error')
 }
 
-const toggleChecked = ref(false) 
+const toggleChecked = ref(false)
 </script>
 
 <template>
@@ -81,9 +81,9 @@ const toggleChecked = ref(false)
       <p>{{ s0 }}</p>
       <hr>
       <GooseSelect
+        v-model="selectedItem"
         placeholder="Select something"
         :items
-        v-model="selectedItem"
       />
       {{ selectedItem }}
       <hr>
@@ -145,13 +145,12 @@ const toggleChecked = ref(false)
       >
         <i>Click me!</i>
       </GooseCheckbox>
-      <GooseSwitch v-model="toggleChecked"/>
+      <GooseSwitch v-model="toggleChecked" />
       <hr>
       <div
         class="card"
         style="padding: 1rem"
-      >
-      </div>
+      />
     </GooseForm>
   </div>
   <!--

@@ -18,8 +18,7 @@ const toggled = defineModel<boolean>({ default: false }),
       :class="{ toggled, disabled, indeterminate }"
       type="button"
       @click.stop="toggled = !toggled"
-    >
-    </button>
+    />
     <label :for="id">
       <slot />
     </label>
