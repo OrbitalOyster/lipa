@@ -101,13 +101,12 @@ const props = defineProps<{
 
   .transparent
     background-color: transparent
+    color: colors.$text
     outline: none
     padding-left: 0
     padding-right: 0
 
-  .transparent:enabled, .transparent:active
-    color: colors.$text
-  .transparent:disabled, .transparent:disabled:active
+  .transparent:disabled
     color: colors.$text-inactive
     cursor: not-allowed
 
