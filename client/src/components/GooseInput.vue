@@ -68,6 +68,7 @@ const model = defineModel<string>({ default: '' }),
 
   /* Base */
   input
+    font: inherit
     background-color: colors.$input-background
     border-radius: borders.$radius
     border: 1px solid colors.$input-border
@@ -80,7 +81,6 @@ const model = defineModel<string>({ default: '' }),
 
   /* On focus */
   input:focus
-    @extend input
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 

@@ -58,7 +58,6 @@ const toggled = defineModel<boolean>({ default: false }),
 
   /* On focus */
   button:focus
-    @extend button
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 

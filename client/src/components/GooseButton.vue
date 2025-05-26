@@ -57,6 +57,27 @@ const props = defineProps<{
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  /* Base */
+  button
+    align-items: center
+    border-color: colors.$outline
+    border-radius: borders.$radius
+    border: none
+    color: colors.$button
+    cursor: pointer
+    display: inline-flex
+    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
+    font-family: inherit
+    font-size: 1.25rem
+    gap: .75rem
+    height: 3.5rem
+    outline: colors.$outline solid 0px
+    padding-left: .75rem
+    padding-right: .75rem
+    transform: translateY(0)
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
+    user-select: none
+
   .primary
     background-color: colors.$primary
 
@@ -78,45 +99,22 @@ const props = defineProps<{
   .danger:active
     background-color: colors.$danger-active
 
-  .transparent:enabled, .transparent:active
+  .transparent
     background-color: transparent
-    color: colors.$text
     outline: none
-    padding-left: 0rem
-    padding-right: 0rem
+    padding-left: 0
+    padding-right: 0
 
+  .transparent:enabled, .transparent:active
+    color: colors.$text
   .transparent:disabled, .transparent:disabled:active
-    background-color: transparent
     color: colors.$text-inactive
     cursor: not-allowed
-    outline: none
-    padding-left: 0rem
-    padding-right: 0rem
 
   .small
     height: 3rem
     padding-left: .5rem
     padding-right: .5rem
-
-  /* Base */
-  button
-    align-items: center
-    border-color: colors.$outline
-    border-radius: borders.$radius
-    border: none
-    color: colors.$button
-    cursor: pointer
-    display: inline-flex
-    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
-    font-size: 1.25rem
-    gap: .75rem
-    height: 3.5rem
-    outline: colors.$outline solid 0px
-    padding-left: .75rem
-    padding-right: .75rem
-    transform: translateY(0)
-    transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
-    user-select: none
 
   /* On hover */
   button:hover
@@ -125,7 +123,6 @@ const props = defineProps<{
 
   /* On focus */
   button:focus
-    @extend button
     outline-width: .25rem
 
   /* On active */

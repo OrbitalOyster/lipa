@@ -33,12 +33,12 @@ async function auth() {
 </script>
 
 <template>
-  <div class="fs centered">
+  <div class="fullscreen">
     <div>
       <GooseForm
         @submit="!usernameError && !passwordError && auth()"
       >
-        <main class="card">
+        <main>
           <header>
             <div class="title">
               <h1>Gooseberry.js</h1>
@@ -65,20 +65,18 @@ async function auth() {
             @validated="err => passwordError = err"
           />
           <footer>
-            <div style="display: flex; flex-direction: column; gap: 1rem">
-              <GooseCheckbox
-                v-model="rememberMe"
-                :disabled
-              >
-                <div>Запомнить меня</div>
-              </GooseCheckbox>
-              <GooseSwitch
-                v-model="loginAsUser"
-                :disabled
-              >
-                <div>Вход с логином</div>
-              </GooseSwitch>
-            </div>
+            <GooseCheckbox
+              v-model="rememberMe"
+              :disabled
+            >
+              <div>Запомнить меня</div>
+            </GooseCheckbox>
+            <GooseSwitch
+              v-model="loginAsUser"
+              :disabled
+            >
+              <div>Вход с логином</div>
+            </GooseSwitch>
             <GooseButton
               :disabled
               :loading="disabled"
@@ -99,12 +97,28 @@ async function auth() {
   </div>
 </template>
 
-<style scoped lang="sass">
-  main
+<style lang="sass" scoped>
+  @use '../assets/borders'
+  @use '../assets/colors'
+
+  .fullscreen
+    align-items: center
     display: flex
+    height: 100vh
+    justify-content: center
+    position: fixed
+    width: 100vw
+
+  main
+    background-color: colors.$card
+    border-radius: borders.$radius
+    border: borders.$card
+    display: flex
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
     gap: 1rem
     height: fit-content
+    margin-bottom: .25rem
     min-width: 32rem
     padding: 1rem
     width: fit-content
@@ -123,22 +137,15 @@ async function auth() {
   h1
     font-size: 2rem
     font-weight: 500
-    margin: .0rem
 
   h2
     font-size: 1rem
     font-weight: 500
-    margin: .0rem
 
   img
     border-radius: 100%
     height: 4rem
     width: 4rem
-
-  .inputs
-    display: flex
-    flex-direction: column
-    gap: 1rem
 
   footer
     align-items: center
@@ -148,5 +155,5 @@ async function auth() {
   .copyright
     display: flex
     justify-content: end
-    padding: .75rem
+    padding: .5rem
 </style>

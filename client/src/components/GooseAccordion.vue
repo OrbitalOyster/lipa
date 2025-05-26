@@ -49,8 +49,6 @@ const model = defineModel<Accordion>({ required: true })
     display: flex
     flex-direction: column
     height: 100%
-    margin: 0
-    padding: 0
 
   li
     display: flex
@@ -90,8 +88,6 @@ const model = defineModel<Accordion>({ required: true })
   h1
     font-size: 1rem
     font-weight: normal
-    margin: 0
-    padding: 0
 
   .item-container
     overflow: auto
