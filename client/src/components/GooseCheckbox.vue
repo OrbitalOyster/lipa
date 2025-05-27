@@ -19,7 +19,10 @@ const toggled = defineModel<boolean>({ default: false }),
       type="button"
       @click.stop="toggled = !toggled"
     />
-    <label :for="id">
+    <label
+      :for="id"
+      @mousedown="e => e.preventDefault()"
+    >
       <slot />
     </label>
   </div>
