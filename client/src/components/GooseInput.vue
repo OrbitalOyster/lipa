@@ -20,7 +20,7 @@ const model = defineModel<string>({ default: '' }),
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="input-wrapper">
     <!-- Actual input -->
     <input
       v-model="model"
@@ -38,6 +38,7 @@ const model = defineModel<string>({ default: '' }),
     <div class="icons">
       <!-- Validation icon -->
       <GooseErrorIcon
+        v-if="error"
         :message="error"
       />
       <!-- Custom icon -->
@@ -61,7 +62,7 @@ const model = defineModel<string>({ default: '' }),
   @use '../assets/colors'
   @use '../assets/transitions'
 
-  .wrapper
+  .input-wrapper
     align-items: center
     display: flex
     position: relative

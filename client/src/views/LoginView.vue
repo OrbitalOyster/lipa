@@ -33,17 +33,17 @@ async function auth() {
 </script>
 
 <template>
-  <div class="fullscreen">
+  <div class="login-view-wrapper">
     <div>
       <GooseForm
         @submit="!usernameError && !passwordError && auth()"
       >
         <main>
           <header>
-            <div class="title">
+            <hgroup>
               <h1>Gooseberry.js</h1>
               <h2>Последний шанс снять бахилы</h2>
-            </div>
+            </hgroup>
             <img src="/goose.webp">
           </header>
           <GooseFormInput
@@ -101,7 +101,7 @@ async function auth() {
   @use '../assets/borders'
   @use '../assets/colors'
 
-  .fullscreen
+  .login-view-wrapper
     align-items: center
     display: flex
     height: 100vh
@@ -129,7 +129,7 @@ async function auth() {
     gap: 1rem
     justify-content: space-between
 
-  .title
+  hgroup
     display: flex
     flex-direction: column
     gap: .5rem

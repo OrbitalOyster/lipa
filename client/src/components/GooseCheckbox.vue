@@ -11,7 +11,7 @@ const toggled = defineModel<boolean>({ default: false }),
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="checkbox-wrapper">
     <button
       :id
       :disabled
@@ -38,7 +38,7 @@ const toggled = defineModel<boolean>({ default: false }),
   $mark-size: 1rem
   $mark-indeterminate-height: .5rem
 
-  .wrapper
+  .checkbox-wrapper
     align-items: center
     display: flex
     gap: .5rem

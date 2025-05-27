@@ -10,7 +10,7 @@ const toggled = defineModel<boolean>({ default: false }),
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="switch-wrapper">
     <button
       :id
       :disabled
@@ -37,7 +37,7 @@ const toggled = defineModel<boolean>({ default: false }),
   $width: 3rem
   $mark-size: 1.5rem
 
-  .wrapper
+  .switch-wrapper
     align-items: center
     display: flex
     gap: .5rem
@@ -95,6 +95,7 @@ const toggled = defineModel<boolean>({ default: false }),
   button:disabled::after
     background-color: colors.$disabled-primary
 
+  /* Label */
   label
     cursor: pointer
     user-select: none
