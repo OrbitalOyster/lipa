@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { AlignedPlacement } from '@floating-ui/utils'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GoosePopover from '#components/GoosePopover.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
-import type { AlignedPlacement } from '@floating-ui/utils'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
