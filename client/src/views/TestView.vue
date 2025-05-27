@@ -36,7 +36,7 @@ const items = [
   selectedItem = ref('')
 
 const s0 = ref('foo')
-const cb = ref(null)
+const cb = ref(true)
 
 const confirmModal = useTemplateRef('confirmModal')
 
@@ -142,6 +142,7 @@ const toggleChecked = ref(false)
       <GooseCheckbox
         v-model="cb"
         name="testCheckbox"
+        indeterminate
       >
         <i>Click me!</i>
       </GooseCheckbox>

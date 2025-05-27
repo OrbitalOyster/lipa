@@ -26,7 +26,7 @@ const slots = [
 </script>
 
 <template>
-  <div class="fs layout">
+  <div class="home-view-wrapper">
     <TopBar />
     <div style="display: flex; flex-direction: row; flex-grow: 1; gap: .5rem">
       <aside>
@@ -66,12 +66,15 @@ const slots = [
 </template>
 
 <style lang="sass" scoped>
-  .layout
+  .home-view-wrapper
     box-sizing: border-box
     display: flex
     flex-direction: column
     gap: .5rem
+    height: 100vh
     padding: .5rem
+    position: fixed
+    width: 100vw
 
   aside
     background-color: transparent
@@ -84,13 +87,4 @@ const slots = [
     flex-direction: column
     flex-grow: 1
     height: 100%
-
-  .splitpanes
-    box-sizing: border-box
-
-  :deep(.splitpanes__splitter)
-    min-width: 8px
-
-  :deep(.splitpanes__pane)
-    min-width: 16rem
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import './assets/style.sass'
+// import './assets/style.sass'
 import './assets/reset.css'
 import { getCurrentInstance } from 'vue'
 

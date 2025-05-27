@@ -24,11 +24,11 @@ async function logout() {
   />
   <header>
     <div class="logo">
-      <img src="/goose.png">
+      <img src="/goose.webp">
       <h1>
         <RouterLink
           to="/"
-          style="color: inherit"
+          class="main-title"
         >
           Gooseberry.js
         </RouterLink>
@@ -69,6 +69,10 @@ async function logout() {
     display: flex
     align-items: center
     gap: 1rem
+
+  .main-title
+    color: inherit
+    font-size: 2rem
 
   img
     border-radius: 100%

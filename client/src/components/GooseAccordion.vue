@@ -10,8 +10,7 @@ const model = defineModel<Accordion>({ required: true })
     <li
       v-for="item in model.items"
       :key="item.id"
-      class="card"
-      :class="model.toggled === item.id && 'toggled'"
+      :class="{ toggled: model.toggled === item.id }"
     >
       <div
         class="title"
@@ -43,6 +42,8 @@ const model = defineModel<Accordion>({ required: true })
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders'
+  @use '../assets/colors'
   @use '../assets/transitions'
 
   ul
@@ -51,10 +52,15 @@ const model = defineModel<Accordion>({ required: true })
     height: 100%
 
   li
+    background-color: colors.$card
+    border-radius: borders.$radius
+    border: borders.$card
     display: flex
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
     flex-grow: 0
     height: 3rem
+    margin-bottom: .25rem
     margin-bottom: .25rem
     margin-top: .25rem
     overflow: hidden

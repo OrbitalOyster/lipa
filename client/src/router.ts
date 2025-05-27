@@ -31,6 +31,8 @@ const routes = [{
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  linkActiveClass: 'border-indigo-500',
+  linkExactActiveClass: 'border-indigo-700'
 })
 
 /* Error handler */
