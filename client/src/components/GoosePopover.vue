@@ -5,6 +5,9 @@ import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Placement } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
+import { foo } from '#useFloatingUI'
+foo()
+
 /* Look and feel */
 const debounceDelay = 1000,
   minSize = 256,
