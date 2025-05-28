@@ -8,17 +8,17 @@
     "lint:fix": "eslint --fix"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "4.2.0",
+    "@stylistic/eslint-plugin": "4.4.0",
     "@tsconfig/bun": "1.0.7",
-    "@types/bun": "1.2.10",
-    "eslint": "9.25.1",
-    "eslint-import-resolver-typescript": "4.3.4",
-    "eslint-plugin-import-x": "4.10.6",
+    "@types/bun": "1.2.14",
+    "eslint": "9.27.0",
+    "eslint-import-resolver-typescript": "4.4.1",
+    "eslint-plugin-import-x": "4.13.3",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.31.0"
+    "typescript-eslint": "8.33.0"
   },
   "dependencies": {
-    "hono": "4.7.7",
-    "mysql2": "^3.14.0"
+    "hono": "4.7.10",
+    "mysql2": "3.14.1"
   }
 }
