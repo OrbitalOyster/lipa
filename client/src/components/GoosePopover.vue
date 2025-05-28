@@ -5,7 +5,7 @@ import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Placement } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
-import { foo } from '#useFloatingUI'
+import { foo } from '#composables/useFloatingUI.ts'
 foo()
 
 /* Look and feel */

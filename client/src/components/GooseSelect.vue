@@ -2,6 +2,7 @@
 import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
@@ -92,7 +93,7 @@ const error = ''
     <!-- Pseudo-input -->
     <div
       ref="target"
-      class="focusable form-input target"
+      class="target"
       :class="error ? 'invalid' : 'valid'"
       :tabindex="disabled ? -1 : 0"
       @blur="e => active = active && e.relatedTarget === floating"
@@ -104,10 +105,10 @@ const error = ''
     >
       {{ model }}
     </div>
-    <!-- "Enter something here" -->
-    <label class="shrinkable">
+    <!-- Placeholder -->
+    <GooseInputPlaceholder v-if="placeholder">
       {{ placeholder }}
-    </label>
+    </GooseInputPlaceholder>
     <!-- Icons -->
     <div class="input-icons">
       <FontAwesomeIcon
@@ -145,6 +146,7 @@ const error = ''
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/style'
   @use '../assets/transitions'
@@ -161,6 +163,14 @@ const error = ''
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     width: 100%
+    border-color: colors.$outline
+    outline: colors.$outline solid 0px
+    background-color: colors.$input-background
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
+
+  .target:focus
+    outline-width: borders.$focus-outline-width
 
   .input-icons
     align-items: center
@@ -175,11 +185,15 @@ const error = ''
     transition: transitions.$transform
 
   ul
-    @extend .card
+    background-color: colors.$card
+    border-radius: borders.$radius
+    border: borders.$card
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
+    margin-bottom: .25rem
+    margin: 0
     overflow-y: auto
     overscroll-behavior: none
     padding: 0
-    margin: 0
     position: absolute
     z-index: 99
 

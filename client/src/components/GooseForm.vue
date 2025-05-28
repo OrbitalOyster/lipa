@@ -7,7 +7,7 @@ const emit = defineEmits(['submit']),
 
 function focusInvalidInput() {
   const invalid = form.value?.querySelector('.invalid') as HTMLElement
-  invalid?.select()
+  invalid?.focus()
 }
 
 function onSubmit() {
