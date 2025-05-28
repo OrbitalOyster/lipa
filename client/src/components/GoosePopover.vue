@@ -2,7 +2,7 @@
 import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref, useTemplateRef } from 'vue'
 import { getOppositePlacement, getSide } from '@floating-ui/utils'
-import type { AlignedPlacement } from '@floating-ui/utils'
+import type { Placement } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
 /* Look and feel */
@@ -20,7 +20,7 @@ const props = defineProps<{
     hasArrow?: boolean
     clickToggle?: boolean
     hoverToggle?: boolean
-    placement?: AlignedPlacement
+    placement?: Placement
   }>(),
   active = ref(false),
   debounced = refDebounced(active, debounceDelay),
