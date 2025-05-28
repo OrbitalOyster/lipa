@@ -74,7 +74,6 @@ const props = defineProps<{
     outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
-    transform: translateY(0)
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
 

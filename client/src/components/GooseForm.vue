@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 
 const emit = defineEmits(['submit']),
-  validated = ref(false)
+  validated = ref(false),
+  form = useTemplateRef('form')
+
+function focusInvalidInput() {
+  const invalid = form.value?.querySelector('.invalid') as HTMLElement
+  invalid?.select()
+}
+
+function onSubmit() {
+  validated.value = true
+  emit('submit')
+  focusInvalidInput()
+}
 </script>
 
 <template>
   <form
+    ref="form"
     novalidate
     :class="validated ? 'validated' : 'unvalidated'"
-    @submit.prevent="validated = true; emit('submit')"
+    @submit.prevent="onSubmit"
   >
     <slot />
   </form>
