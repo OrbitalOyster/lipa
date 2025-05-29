@@ -50,7 +50,7 @@ async function logout() {
       <GooseButton
         :icon="faRightFromBracket"
         tooltip="Выйти из системы"
-        tooltip-placement="bottom"
+        tooltip-side="bottom"
         small
         warning
         @click="logoutConfirm?.show()"

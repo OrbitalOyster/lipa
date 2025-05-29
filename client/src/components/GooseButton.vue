@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GoosePopover from '#components/GoosePopover.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
-import type { Placement } from '@floating-ui/core'
+import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
@@ -14,7 +14,7 @@ const props = defineProps<{
     submit?: boolean
     title?: string
     tooltip?: string
-    tooltipPlacement?: Placement
+    tooltipSide?: Side
     transparent?: boolean
     warning?: boolean
   }>(),
@@ -26,7 +26,7 @@ const props = defineProps<{
   <GoosePopover
     has-arrow
     :hover-toggle="!!tooltip"
-    :placement="tooltipPlacement"
+    :side="tooltipSide"
   >
     <button
       :disabled

@@ -2,7 +2,7 @@
 import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref, useTemplateRef } from 'vue'
 import { getOppositePlacement, getSide } from '@floating-ui/utils'
-import type { Placement } from '@floating-ui/core'
+import type { Side } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
 import { foo } from '#composables/useFloatingUI.ts'
@@ -23,7 +23,7 @@ const props = defineProps<{
     hasArrow?: boolean
     clickToggle?: boolean
     hoverToggle?: boolean
-    placement?: Placement
+    side?: Side
   }>(),
   active = ref(false),
   debounced = refDebounced(active, debounceDelay),
@@ -32,14 +32,14 @@ const props = defineProps<{
   arrowRef = useTemplateRef('arrowRef')
 
 const offsetValue = props.hasArrow ? arrowSize : 2,
-  autoPlacementOptions = props.placement ? { allowedPlacements: [props.placement] } : {},
+  autoPlacementOptions = props.side ? { allowedPlacements: [props.side] } : {},
   shiftOptions = { padding: arrowSize },
   arrowOptions = { element: arrowRef, padding: arrowSize }
 
 /* Floating UI */
 const { floatingStyles, middlewareData } = useFloating(target, floating, {
   open: active,
-  placement: props.placement,
+  placement: props.side,
   strategy: 'fixed',
   middleware: [
     offset({ mainAxis: offsetValue }),
