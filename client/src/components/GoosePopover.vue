@@ -110,7 +110,7 @@ defineExpose({ toggle, active })
         v-if="hasArrow"
         ref="arrowRef"
         :style="arrowStyle"
-        class="arrow info"
+        class="arrow"
       />
       <!-- Actual popover -->
       <slot name="popover" />
@@ -119,15 +119,26 @@ defineExpose({ toggle, active })
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders.sass'
+  @use '../assets/colors.sass'
   /* Do not remove this line, needed for transition effect */
   @use '../assets/transitions.sass'
 
   .arrow
+    background-color: colors.$info
+    border: 1px solid colors.$info-border
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%, 0% 0%)
+    color: colors.$info-text
     position: absolute
 
   .floating
+    background-color: colors.$info
+    border-radius: borders.$radius
+    border: 1px solid colors.$info-border
+    color: colors.$info-text
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     left: 0
+    margin-bottom: .25rem
     position: absolute
     top: 0
     width: max-content

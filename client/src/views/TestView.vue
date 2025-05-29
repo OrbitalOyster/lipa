@@ -116,22 +116,22 @@ const toggleChecked = ref(false)
         <GooseButton
           title="Ы"
           tooltip="top"
-          tooltip-placement="top"
+          tooltip-side="top"
         />
         <GooseButton
           title="Ы"
           tooltip="left"
-          tooltip-placement="left"
+          tooltip-side="left"
         />
         <GooseButton
           title="Ы"
           tooltip="bottom"
-          tooltip-placement="bottom"
+          tooltip-side="bottom"
         />
         <GooseButton
           title="Ы"
           tooltip="right"
-          tooltip-placement="right"
+          tooltip-side="right"
         />
         <GooseButton
           title="Ы"
