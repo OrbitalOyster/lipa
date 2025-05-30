@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoPlacement, autoUpdate, hide, flip, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { computed, ref, useTemplateRef } from 'vue'
 import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Side } from '@floating-ui/core'
@@ -10,7 +10,8 @@ foo()
 
 /* Look and feel */
 const debounceDelay = 1000,
-  minSize = 256,
+  minWidth = 32,
+  minHeight = 32,
   arrowSize = 16,
   rotations = {
     top: -135,
@@ -32,25 +33,30 @@ const props = defineProps<{
   arrowRef = useTemplateRef('arrowRef')
 
 const offsetValue = props.hasArrow ? arrowSize : 2,
-  autoPlacementOptions = props.side ? { allowedPlacements: [props.side] } : {},
+  placement = props.side,
+  autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
   shiftOptions = { padding: arrowSize },
-  arrowOptions = { element: arrowRef, padding: arrowSize }
+  maxDistanceToEdge = 16,
+  arrowOptions = { element: arrowRef, padding: arrowSize },
+  fitTargetWidth = false
 
 /* Floating UI */
-const { floatingStyles, middlewareData } = useFloating(target, floating, {
+const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
   open: active,
-  placement: props.side,
+  placement,
   strategy: 'fixed',
   middleware: [
     offset({ mainAxis: offsetValue }),
     autoPlacement(autoPlacementOptions),
     shift(shiftOptions),
     arrow(arrowOptions),
+    /* flip(), */
     size({
-      apply({ availableWidth, availableHeight, elements }) {
+      apply({ availableWidth, availableHeight, rects, elements }) {
         Object.assign(elements.floating.style, {
-          maxWidth: `${Math.max(minSize, availableWidth)}px`,
-          maxHeight: `${Math.max(minSize, availableHeight)}px`,
+          minWidth: `${fitTargetWidth ? rects.reference.width : minWidth}px`,
+          maxWidth: `${Math.max(minWidth, availableWidth - maxDistanceToEdge)}px`,
+          maxHeight: `${Math.max(minHeight, availableHeight - maxDistanceToEdge)}px`,
         })
       },
     }),

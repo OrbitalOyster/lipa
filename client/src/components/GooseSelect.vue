@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { autoUpdate, flip, hide, offset, size, useFloating } from '@floating-ui/vue'
+import { arrow, autoUpdate, autoPlacement, flip, hide, offset, size, shift, useFloating } from '@floating-ui/vue'
 import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
@@ -10,6 +10,7 @@ const props = defineProps<{
     disabled?: boolean
     items: string[]
     placeholder: string
+    side?: Side
   }>(),
   active = ref(false),
   selectedIndex = ref<null | number>(null),
@@ -20,10 +21,18 @@ const props = defineProps<{
 const model = defineModel<string>({ default: '' })
 
 /* Fine tuning */
-const placement = 'bottom',
+const 
+  arrowSize = 16,
+  // placement = props.side,
+  placement = 'bottom',
+  autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
+  shiftOptions = { padding: arrowSize },
   maxDistanceToEdge = 16,
+  minWidth = 128,
   minHeight = 128,
-  offsetValue = 8
+  offsetValue = 8,
+  arrowOptions = {},
+  fitTargetWidth = true
 
 /* Floating UI bollocks */
 const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
@@ -32,14 +41,16 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
   strategy: 'fixed',
   middleware: [
     offset({ mainAxis: offsetValue }),
-    flip(),
+    autoPlacement(autoPlacementOptions),
+    shift(shiftOptions),
+    arrow(arrowOptions),
+    /* flip(), */
     size({
-      apply({ availableHeight, rects, elements }) {
-        const maxHeight = Math.max(minHeight, availableHeight - maxDistanceToEdge),
-          { width } = rects.reference
+      apply({ availableWidth, availableHeight, rects, elements }) {
         Object.assign(elements.floating.style, {
-          maxHeight: `${maxHeight}px`,
-          width: `${width}px`,
+          minWidth: `${fitTargetWidth ? rects.reference.width : minWidth}px`,
+          maxWidth: `${Math.max(minWidth, availableWidth - maxDistanceToEdge)}px`,
+          maxHeight: `${Math.max(minHeight, availableHeight - maxDistanceToEdge)}px`,
         })
       },
     }),
