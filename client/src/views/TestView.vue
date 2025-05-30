@@ -89,7 +89,6 @@ const toggleChecked = ref(false)
       <hr>
       <div style="display: flex; gap: 1rem">
         <GoosePopover
-          has-arrow
           click-toggle
         >
           <GooseButton title="Click me" />

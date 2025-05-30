@@ -5,20 +5,14 @@ import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Side } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
-import { foo } from '#composables/useFloatingUI.ts'
-foo()
+import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 /* Look and feel */
-const debounceDelay = 1000,
+const debounceDelay = 1000/* ,
   minWidth = 32,
   minHeight = 32,
-  arrowSize = 16,
-  rotations = {
-    top: -135,
-    right: -45,
-    bottom: 45,
-    left: 135,
-  }
+  arrowSize = 16
+  */
 
 const props = defineProps<{
     hasArrow?: boolean
@@ -30,9 +24,14 @@ const props = defineProps<{
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
-  arrowRef = useTemplateRef('arrowRef')
+  arrowRef = useTemplateRef('arrowRef'),
+  fitTargetWidth = false
 
-const offsetValue = props.hasArrow ? arrowSize : 2,
+const { floatingStyles, middlewareData, arrowStyle } = 
+  useFloatingUI(target, floating, arrowRef, active, props.side, props.hasArrow, fitTargetWidth)
+
+/*
+const offsetValue = props.hasArrow ? arrowSize : 8,
   placement = props.side,
   autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
   shiftOptions = { padding: arrowSize },
@@ -40,7 +39,6 @@ const offsetValue = props.hasArrow ? arrowSize : 2,
   arrowOptions = { element: arrowRef, padding: arrowSize },
   fitTargetWidth = false
 
-/* Floating UI */
 const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
   open: active,
   placement,
@@ -50,7 +48,6 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
     autoPlacement(autoPlacementOptions),
     shift(shiftOptions),
     arrow(arrowOptions),
-    /* flip(), */
     size({
       apply({ availableWidth, availableHeight, rects, elements }) {
         Object.assign(elements.floating.style, {
@@ -65,7 +62,6 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
   whileElementsMounted: autoUpdate,
 })
 
-/* Arrow */
 const arrowStyle = computed(
   () => {
     const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
@@ -81,12 +77,14 @@ const arrowStyle = computed(
       [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
     }
   })
+*/
 
 function toggle() {
   active.value = !active.value
 }
 
 defineExpose({ toggle, active })
+
 </script>
 
 <template>
@@ -105,7 +103,7 @@ defineExpose({ toggle, active })
     <div
       v-if="debounced"
       ref="floating"
-      class="card floating info"
+      class="floating"
       :style="{
         ...floatingStyles,
         visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'

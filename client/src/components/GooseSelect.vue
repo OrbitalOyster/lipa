@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { arrow, autoUpdate, autoPlacement, flip, hide, offset, size, shift, useFloating } from '@floating-ui/vue'
-import { ref, useTemplateRef, watch } from 'vue'
+import { nextTick, ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+
+import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
     checks?: FormCheck[]
@@ -16,25 +18,29 @@ const props = defineProps<{
   selectedIndex = ref<null | number>(null),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
-  floating = useTemplateRef('floating')
+  floating = useTemplateRef('floating'),
+  arrowRef = ref(null)
 
 const model = defineModel<string>({ default: '' })
 
 /* Fine tuning */
-const 
-  arrowSize = 16,
+const // arrowSize = 16,
   // placement = props.side,
   placement = 'bottom',
-  autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
-  shiftOptions = { padding: arrowSize },
-  maxDistanceToEdge = 16,
-  minWidth = 128,
-  minHeight = 128,
-  offsetValue = 8,
-  arrowOptions = {},
+  // autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
+  // shiftOptions = { padding: arrowSize },
+  // maxDistanceToEdge = 16,
+  // minWidth = 128,
+  // minHeight = 128,
+  // offsetValue = 8,
+  // arrowOptions = {},
+  // arrowOptions = { element: arrowRef, padding: arrowSize },
   fitTargetWidth = true
 
-/* Floating UI bollocks */
+const { floatingStyles, isPositioned, middlewareData, arrowStyle } = 
+  useFloatingUI(target, floating, arrowRef, active, props.side, props.hasArrow, fitTargetWidth)
+
+/*
 const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
   open: active,
   placement,
@@ -44,7 +50,6 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
     autoPlacement(autoPlacementOptions),
     shift(shiftOptions),
     arrow(arrowOptions),
-    /* flip(), */
     size({
       apply({ availableWidth, availableHeight, rects, elements }) {
         Object.assign(elements.floating.style, {
@@ -58,6 +63,7 @@ const { floatingStyles, isPositioned, middlewareData } = useFloating(target, flo
   ],
   whileElementsMounted: autoUpdate,
 })
+*/
 
 function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
@@ -85,11 +91,11 @@ function scrollToSelected(instant: boolean) {
   if (selectedIndex.value !== null) {
     const highlightedElement = itemsRef.value?.[selectedIndex.value],
       behavior = instant ? 'instant' : 'smooth'
-    highlightedElement?.scrollIntoView({ behavior, block: 'center' })
+    highlightedElement?.scrollIntoView()
   }
 }
 
-watch(isPositioned, opened => opened && scrollToSelected(true))
+watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
 
 const error = ''
 </script>
