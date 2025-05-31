@@ -18,41 +18,14 @@ const props = defineProps<{
   selectedIndex = ref<null | number>(null),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
-  floating = useTemplateRef('floating'),
-  arrowRef = ref(null)
+  floating = useTemplateRef('floating')
 
 const model = defineModel<string>({ default: '' })
 
 const fitTargetWidth = true,
-  placement = props.side || 'bottom'
-
-const { floatingStyles, isPositioned, middlewareData, arrowStyle } = 
-  useFloatingUI(target, floating, arrowRef, active, placement, false, fitTargetWidth)
-
-/*
-const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
-  open: active,
-  placement,
-  strategy: 'fixed',
-  middleware: [
-    offset({ mainAxis: offsetValue }),
-    autoPlacement(autoPlacementOptions),
-    shift(shiftOptions),
-    arrow(arrowOptions),
-    size({
-      apply({ availableWidth, availableHeight, rects, elements }) {
-        Object.assign(elements.floating.style, {
-          minWidth: `${fitTargetWidth ? rects.reference.width : minWidth}px`,
-          maxWidth: `${Math.max(minWidth, availableWidth - maxDistanceToEdge)}px`,
-          maxHeight: `${Math.max(minHeight, availableHeight - maxDistanceToEdge)}px`,
-        })
-      },
-    }),
-    hide(),
-  ],
-  whileElementsMounted: autoUpdate,
-})
-*/
+  side = props.side || 'bottom',
+  { floatingStyles, isPositioned, middlewareData, arrowStyle } = 
+    useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
 
 function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
@@ -80,7 +53,7 @@ function scrollToSelected(instant: boolean) {
   if (selectedIndex.value !== null) {
     const highlightedElement = itemsRef.value?.[selectedIndex.value],
       behavior = instant ? 'instant' : 'smooth'
-    highlightedElement?.scrollIntoView()
+    highlightedElement?.scrollIntoView({ behavior, block: 'center' })
   }
 }
 

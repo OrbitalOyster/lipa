@@ -8,11 +8,7 @@ import { refDebounced } from '@vueuse/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 /* Look and feel */
-const debounceDelay = 1000/* ,
-  minWidth = 32,
-  minHeight = 32,
-  arrowSize = 16
-  */
+const debounceDelay = 1000
 
 const props = defineProps<{
     hasArrow?: boolean
@@ -28,56 +24,7 @@ const props = defineProps<{
   fitTargetWidth = false
 
 const { floatingStyles, middlewareData, arrowStyle } = 
-  useFloatingUI(target, floating, arrowRef, active, props.side, props.hasArrow, fitTargetWidth)
-
-/*
-const offsetValue = props.hasArrow ? arrowSize : 8,
-  placement = props.side,
-  autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
-  shiftOptions = { padding: arrowSize },
-  maxDistanceToEdge = 16,
-  arrowOptions = { element: arrowRef, padding: arrowSize },
-  fitTargetWidth = false
-
-const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
-  open: active,
-  placement,
-  strategy: 'fixed',
-  middleware: [
-    offset({ mainAxis: offsetValue }),
-    autoPlacement(autoPlacementOptions),
-    shift(shiftOptions),
-    arrow(arrowOptions),
-    size({
-      apply({ availableWidth, availableHeight, rects, elements }) {
-        Object.assign(elements.floating.style, {
-          minWidth: `${fitTargetWidth ? rects.reference.width : minWidth}px`,
-          maxWidth: `${Math.max(minWidth, availableWidth - maxDistanceToEdge)}px`,
-          maxHeight: `${Math.max(minHeight, availableHeight - maxDistanceToEdge)}px`,
-        })
-      },
-    }),
-    hide(),
-  ],
-  whileElementsMounted: autoUpdate,
-})
-
-const arrowStyle = computed(
-  () => {
-    const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
-      staticSide = getOppositePlacement(side),
-      rotation = rotations[side],
-      middlewareArrow = middlewareData.value.arrow
-    return {
-      width: `${arrowSize}px`,
-      height: `${arrowSize}px`,
-      transform: `rotate(${rotation}deg)`,
-      top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
-      left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
-      [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
-    }
-  })
-*/
+  useFloatingUI(target, floating, arrowRef, {active, side: props.side, fitTargetWidth})
 
 function toggle() {
   active.value = !active.value
