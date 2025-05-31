@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{

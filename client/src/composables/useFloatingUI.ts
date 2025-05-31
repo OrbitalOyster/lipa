@@ -1,7 +1,6 @@
-import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
+import { arrow as arrowMiddleware, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { getOppositePlacement, getSide } from '@floating-ui/utils'
 import type { Ref } from 'vue'
-import type { Side } from '@floating-ui/core'
 import { computed } from 'vue'
 
 const arrowAngles = {
@@ -11,22 +10,16 @@ const arrowAngles = {
   left: 135,
 }
 
-interface FloatingUIOptions {
-  active: Ref<boolean>
-  side?: Side
-  fitTargetWidth?: boolean
-}
-
-const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElement | null>, arrowRef: Ref<HTMLElement | null> | null, options: FloatingUIOptions) => {
+const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElement | null>, arrow: Ref<HTMLElement | null> | null, options: FloatingUIOptions) => {
   const { active, side, fitTargetWidth } = options,
     arrowSize = 16,
     minWidth = 32,
     minHeight = 32,
     maxDistanceToEdge = 16,
-    offsetValue = arrowRef?.value ? arrowSize : 8,
+    offsetValue = arrow?.value ? arrowSize : 8,
     autoPlacementOptions = side ? { allowedPlacements: [side] } : {},
     shiftOptions = { padding: arrowSize },
-    arrowOptions = { element: arrowRef, padding: arrowSize }
+    arrowOptions = { element: arrow, padding: arrowSize }
 
   /* Floating UI */
   const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {
@@ -37,7 +30,7 @@ const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElemen
       offset({ mainAxis: offsetValue }),
       autoPlacement(autoPlacementOptions),
       shift(shiftOptions),
-      arrow(arrowOptions),
+      arrowMiddleware(arrowOptions),
       size({
         apply({ availableWidth, availableHeight, rects, elements }) {
           Object.assign(elements.floating.style, {
@@ -53,7 +46,7 @@ const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElemen
   })
 
   /* Arrow */
-  const arrowStyle = arrowRef
+  const arrowStyle = arrow
     ? computed(() => {
         const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
           staticSide = getOppositePlacement(side),
@@ -65,7 +58,7 @@ const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElemen
           transform: `rotate(${angle}deg)`,
           top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
           left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
-          [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
+          [staticSide]: `-${(arrow.value?.offsetWidth ?? 0) / 2}px`,
         }
       })
     : null

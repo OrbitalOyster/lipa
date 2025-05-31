@@ -48,6 +48,13 @@ declare global {
     toggled: RemovableRef<boolean>
   }
 
+  /* FloatingUI options */
+  interface FloatingUIOptions {
+    active: Ref<boolean>
+    side?: Side
+    fitTargetWidth?: boolean
+  }
+
   /* Login form */
   interface LoginFormCheck {
     username: string

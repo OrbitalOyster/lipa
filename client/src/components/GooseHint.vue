@@ -2,34 +2,27 @@
 import { ref, useTemplateRef } from 'vue'
 import type { Side } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
-
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
-/* Look and feel */
-const debounceDelay = 1000
-
 const props = defineProps<{
-    hasArrow?: boolean
-    clickToggle?: boolean
     hoverToggle?: boolean
     side?: Side
   }>(),
   active = ref(false),
+  debounceDelay = 1000,
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
-  arrow = useTemplateRef('arrow'),
-  fitTargetWidth = false
+  arrow = useTemplateRef('arrow')
 
 const { floatingStyles, middlewareData, arrowStyle }
-  = useFloatingUI(target, floating, arrow, { active, side: props.side, fitTargetWidth })
+  = useFloatingUI(target, floating, arrow, { active, side: props.side })
 
 function toggle() {
   active.value = !active.value
 }
 
 defineExpose({ toggle, active })
-
 </script>
 
 <template>
@@ -37,7 +30,6 @@ defineExpose({ toggle, active })
   <div
     ref="target"
     style="display: inline"
-    @click="clickToggle && toggle()"
     @mouseover="hoverToggle && (active = true)"
     @mouseleave="hoverToggle && (active = false)"
   >
@@ -56,7 +48,6 @@ defineExpose({ toggle, active })
     >
       <!-- Arrow -->
       <div
-        v-if="hasArrow"
         ref="arrow"
         :style="arrowStyle"
         class="arrow"
