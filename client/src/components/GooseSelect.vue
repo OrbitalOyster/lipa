@@ -23,22 +23,11 @@ const props = defineProps<{
 
 const model = defineModel<string>({ default: '' })
 
-/* Fine tuning */
-const // arrowSize = 16,
-  // placement = props.side,
-  placement = 'bottom',
-  // autoPlacementOptions = placement ? { allowedPlacements: [placement] } : {},
-  // shiftOptions = { padding: arrowSize },
-  // maxDistanceToEdge = 16,
-  // minWidth = 128,
-  // minHeight = 128,
-  // offsetValue = 8,
-  // arrowOptions = {},
-  // arrowOptions = { element: arrowRef, padding: arrowSize },
-  fitTargetWidth = true
+const fitTargetWidth = true,
+  placement = props.side || 'bottom'
 
 const { floatingStyles, isPositioned, middlewareData, arrowStyle } = 
-  useFloatingUI(target, floating, arrowRef, active, props.side, props.hasArrow, fitTargetWidth)
+  useFloatingUI(target, floating, arrowRef, active, placement, false, fitTargetWidth)
 
 /*
 const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {

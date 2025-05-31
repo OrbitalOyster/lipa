@@ -32,7 +32,6 @@ const useFloatingUI = (target, floating, arrowRef, active, placement, hasArrow, 
       autoPlacement(autoPlacementOptions),
       shift(shiftOptions),
       arrow(arrowOptions),
-      /* flip(), */
       size({
         apply({ availableWidth, availableHeight, rects, elements }) {
           Object.assign(elements.floating.style, {
