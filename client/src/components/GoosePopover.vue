@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { arrow, autoPlacement, autoUpdate, hide, flip, offset, shift, size, useFloating } from '@floating-ui/vue'
-import { computed, ref, useTemplateRef } from 'vue'
-import { getOppositePlacement, getSide } from '@floating-ui/utils'
+import { ref, useTemplateRef } from 'vue'
 import type { Side } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
 
@@ -23,8 +21,8 @@ const props = defineProps<{
   arrowRef = useTemplateRef('arrowRef'),
   fitTargetWidth = false
 
-const { floatingStyles, middlewareData, arrowStyle } = 
-  useFloatingUI(target, floating, arrowRef, {active, side: props.side, fitTargetWidth})
+const { floatingStyles, middlewareData, arrowStyle }
+  = useFloatingUI(target, floating, arrowRef, { active, side: props.side, fitTargetWidth })
 
 function toggle() {
   active.value = !active.value

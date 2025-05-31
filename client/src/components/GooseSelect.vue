@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { arrow, autoUpdate, autoPlacement, flip, hide, offset, size, shift, useFloating } from '@floating-ui/vue'
-import { nextTick, ref, useTemplateRef, watch } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
+import type { Side } from '@floating-ui/core'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
@@ -23,9 +23,9 @@ const props = defineProps<{
 const model = defineModel<string>({ default: '' })
 
 const fitTargetWidth = true,
-  side = props.side || 'bottom',
-  { floatingStyles, isPositioned, middlewareData, arrowStyle } = 
-    useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
+  side = props.side ?? 'bottom',
+  { floatingStyles, isPositioned, middlewareData }
+    = useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
 
 function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length

@@ -1,17 +1,23 @@
-import { arrow, autoPlacement, autoUpdate, hide, flip, offset, shift, size, useFloating } from '@floating-ui/vue'
-import { computed, ref } from 'vue'
+import { arrow, autoPlacement, autoUpdate, hide, offset, shift, size, useFloating } from '@floating-ui/vue'
 import { getOppositePlacement, getSide } from '@floating-ui/utils'
+import type { Ref } from 'vue'
 import type { Side } from '@floating-ui/core'
-import { refDebounced } from '@vueuse/core'
+import { computed } from 'vue'
 
-const rotations = {
+const arrowAngles = {
   top: -135,
   right: -45,
   bottom: 45,
   left: 135,
 }
 
-const useFloatingUI = (target, floating, arrowRef, options) => {
+interface FloatingUIOptions {
+  active: Ref<boolean>
+  side?: Side
+  fitTargetWidth?: boolean
+}
+
+const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElement | null>, arrowRef: Ref<HTMLElement | null> | null, options: FloatingUIOptions) => {
   const { active, side, fitTargetWidth } = options,
     arrowSize = 16,
     minWidth = 32,
@@ -47,22 +53,24 @@ const useFloatingUI = (target, floating, arrowRef, options) => {
   })
 
   /* Arrow */
-  const arrowStyle = computed(() => {
-    const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
-      staticSide = getOppositePlacement(side),
-      rotation = rotations[side],
-      middlewareArrow = middlewareData.value.arrow
-    return {
-      width: `${arrowSize}px`,
-      height: `${arrowSize}px`,
-      transform: `rotate(${rotation}deg)`,
-      top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
-      left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
-      [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
-    }
-  })
+  const arrowStyle = arrowRef
+    ? computed(() => {
+        const side = getSide(middlewareData.value.offset?.placement ?? 'top'),
+          staticSide = getOppositePlacement(side),
+          angle = arrowAngles[side],
+          middlewareArrow = middlewareData.value.arrow
+        return {
+          width: `${arrowSize}px`,
+          height: `${arrowSize}px`,
+          transform: `rotate(${angle}deg)`,
+          top: middlewareArrow?.y != null ? `${middlewareArrow?.y}px` : '',
+          left: middlewareArrow?.x != null ? `${middlewareArrow?.x}px` : '',
+          [staticSide]: `-${(arrowRef.value?.offsetWidth ?? 0) / 2}px`,
+        }
+      })
+    : null
 
-  return { floatingStyles, middlewareData, isPositioned, arrowStyle } 
+  return { floatingStyles, middlewareData, isPositioned, arrowStyle }
 }
 
 export { useFloatingUI }
