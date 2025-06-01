@@ -1,13 +1,24 @@
-interface AuthRequest {
-  username: string
-  password: string
-}
+import type { RowDataPacket } from 'mysql2/promise'
 
-interface UserPayload {
-  username?: string | null
-  role?: string | null
-  sideBarWidth?: number
-  exp?: number
+declare global {
+  interface AuthRequest {
+    username: string
+    password: string
+  }
+
+  interface UserPayload {
+    username?: string | null
+    role?: string | null
+    sideBarWidth?: number
+    exp?: number
+  }
+
+  interface Org extends RowDataPacket {
+    id: string
+    ord: string
+    name: string
+    parent: string | null
+  }
 }
 
 declare module 'bun' {

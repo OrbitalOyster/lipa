@@ -1,13 +1,6 @@
 import type { Context } from 'hono'
-import type { RowDataPacket } from 'mysql2/promise'
 import mysql from 'mysql2/promise'
-
-interface Org extends RowDataPacket {
-  id: string
-  ord: string
-  name: string
-  parent: string | null
-}
+import { setTimeout as sleep } from 'node:timers/promises'
 
 const dbUser = Bun.env['DB_USER'],
   dbPassword = Bun.env['DB_PASSWORD'],
@@ -17,6 +10,7 @@ const dbUser = Bun.env['DB_USER'],
   connectionString = `mysql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`
 
 export const orgs = async (context: Context) => {
+  await sleep(2000)
   try {
     const connection = await mysql.createConnection(connectionString),
       [rows] = await connection.query<Org[]>('SELECT * FROM orgs ORDER BY ord'),
