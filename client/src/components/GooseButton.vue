@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseHint from '#components/GooseHint.vue'
+import GooseTooltip from '#components/GooseTooltip.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -23,9 +23,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <GooseHint
-    :hover-toggle="!!tooltip"
+  <GooseTooltip
     :side="tooltipSide"
+    :text="tooltip"
   >
     <button
       :disabled
@@ -43,12 +43,7 @@ const props = defineProps<{
         size="xl"
       />
     </button>
-    <template #popover>
-      <div class="tooltip">
-        {{ tooltip }}
-      </div>
-    </template>
-  </GooseHint>
+  </GooseTooltip>
 </template>
 
 <style scoped lang="sass">
@@ -133,8 +128,4 @@ const props = defineProps<{
     cursor: not-allowed
     filter: none
     transform: translateY(0)
-
-  .tooltip
-    padding: 1rem
-    white-space: nowrap
 </style>

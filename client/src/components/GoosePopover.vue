@@ -18,11 +18,10 @@ const props = defineProps<{
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
-  arrow = useTemplateRef('arrow'),
-  fitTargetWidth = false
+  arrow = useTemplateRef('arrow')
 
 const { floatingStyles, middlewareData, arrowStyle }
-  = useFloatingUI(target, floating, arrow, { active, side: props.side, fitTargetWidth })
+  = useFloatingUI(target, floating, arrow, { active, side: props.side })
 
 function toggle() {
   active.value = !active.value

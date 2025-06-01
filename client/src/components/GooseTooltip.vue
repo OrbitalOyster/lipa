@@ -5,8 +5,8 @@ import { refDebounced } from '@vueuse/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
-    hoverToggle?: boolean
     side?: Side
+    text?: string
   }>(),
   active = ref(false),
   debounceDelay = 1000,
@@ -17,28 +17,21 @@ const props = defineProps<{
 
 const { floatingStyles, middlewareData, arrowStyle }
   = useFloatingUI(target, floating, arrow, { active, side: props.side })
-
-function toggle() {
-  active.value = !active.value
-}
-
-defineExpose({ toggle, active })
 </script>
 
 <template>
   <!-- Target element -->
   <div
     ref="target"
-    style="display: inline"
-    @mouseover="hoverToggle && (active = true)"
-    @mouseleave="hoverToggle && (active = false)"
+    @mouseover="active = true"
+    @mouseleave="active = false"
   >
     <slot />
   </div>
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
-      v-if="debounced"
+      v-if="text && debounced"
       ref="floating"
       class="floating"
       :style="{
@@ -52,8 +45,10 @@ defineExpose({ toggle, active })
         :style="arrowStyle"
         class="arrow"
       />
-      <!-- Actual popover -->
-      <slot name="popover" />
+      <!-- Actual hint -->
+      <div class="tooltip">
+        {{ text }}
+      </div>
     </div>
   </Transition>
 </template>
@@ -83,4 +78,8 @@ defineExpose({ toggle, active })
     top: 0
     width: max-content
     z-index: 99
+
+  .tooltip
+    padding: 1rem
+    white-space: nowrap
 </style>

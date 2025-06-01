@@ -9,7 +9,6 @@ import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
-/* import GooseTreeRoot from '#components/GooseTreeRoot.vue' */
 
 const items = [
     '1 Macao',
