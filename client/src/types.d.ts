@@ -28,7 +28,7 @@ declare global {
 
   interface Accordion {
     items: AccordionItem[]
-    toggled: string
+    opened: string
   }
 
   /* Tabs */
@@ -45,7 +45,7 @@ declare global {
     matched?: boolean
     sub: TreeLeaf[]
     title: string
-    toggled: Ref<boolean>
+    opened: Ref<boolean>
   }
 
   /* FloatingUI options */

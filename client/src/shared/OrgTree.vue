@@ -21,7 +21,7 @@ const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
     title: `${i.id} - ${i.name}`,
     id: i.id,
     checked: useLocalStorage(`org-${i.id}-selected`, false),
-    toggled: useLocalStorage(`org-${i.id}-toggled`, false),
+    opened: useLocalStorage(`org-${i.id}-opened`, false),
     sub: toTree(arr, i.id),
   }))
 

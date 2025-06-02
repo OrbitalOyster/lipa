@@ -10,11 +10,11 @@ const model = defineModel<Accordion>({ required: true })
     <li
       v-for="item in model.items"
       :key="item.id"
-      :class="{ toggled: model.toggled === item.id }"
+      :class="{ opened: model.opened === item.id }"
     >
       <div
         class="title"
-        @click="model.toggled = model.toggled === item.id ? '' : item.id"
+        @click="model.opened = model.opened === item.id ? '' : item.id"
       >
         <div style="display: flex; align-items: center">
           <div class="icon">
@@ -29,7 +29,7 @@ const model = defineModel<Accordion>({ required: true })
         </div>
         <FontAwesomeIcon
           class="chevron"
-          :class="model.toggled === item.id && 'chevron-toggled'"
+          :class="model.opened === item.id && 'chevron-opened'"
           :icon="faChevronDown"
           size="xl"
         />
@@ -66,7 +66,7 @@ const model = defineModel<Accordion>({ required: true })
     overflow: hidden
     transition: 50ms flex-grow ease-in-out
 
-  li.toggled
+  li.opened
     flex-grow: 1
 
   .title
@@ -83,7 +83,7 @@ const model = defineModel<Accordion>({ required: true })
   .chevron
     transition: transitions.$transform
 
-  .chevron-toggled
+  .chevron-opened
     transform: rotate(180deg)
 
   .icon

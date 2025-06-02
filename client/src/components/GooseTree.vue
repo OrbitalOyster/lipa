@@ -26,7 +26,7 @@ function onSelect(leaf: TreeLeaf) {
   if (!leaf.sub.length)
     emit('select', leaf.title)
   else
-    leaf.toggled = !leaf.toggled
+    leaf.opened = !leaf.opened
 }
 
 function checkBranch(branch: TreeLeaf[], value: boolean) {
@@ -55,7 +55,7 @@ branch.value.forEach(leaf =>
 function leafMatched(leaf: TreeLeaf) {
   const titleMatched = leaf.title.includes(props.search ?? ''),
     childrenMatched = leaf.sub.some(leafMatched)
-  leaf.toggled = childrenMatched!
+  leaf.opened = childrenMatched!
   return titleMatched || childrenMatched
 }
 
@@ -75,13 +75,13 @@ function leafMatched(leaf: TreeLeaf) {
           :style="{ 'padding-left': leaf.sub.length ? 0 : '2.0rem' }"
           @click="selectable && onSelect(leaf)"
         >
-          <!-- Toggle icon (disabled when searching) -->
+          <!-- Open/close leaf icon (disabled when searching) -->
           <FontAwesomeIcon
             v-if="leaf.sub.length"
             class="chevron"
-            :class="{ toggled: leaf.toggled }"
+            :class="{ opened: leaf.opened }"
             :icon="faChevronRight"
-            @click.stop="search === '' && (leaf.toggled = !leaf.toggled)"
+            @click.stop="search === '' && (leaf.opened = !leaf.opened)"
           />
           <!-- Checkbox -->
           <GooseCheckbox
@@ -106,7 +106,7 @@ function leafMatched(leaf: TreeLeaf) {
         <!-- Children nodes -->
         <Transition _name="slide">
           <GooseTree
-            v-if="leaf.sub.length && leaf.toggled"
+            v-if="leaf.sub.length && leaf.opened"
             v-model="leaf.sub"
             :search
             :checkable
@@ -156,6 +156,6 @@ function leafMatched(leaf: TreeLeaf) {
     transition: transform 100ms
     width: 2rem
 
-  .toggled
+  .opened
     transform: rotate(90deg)
 </style>

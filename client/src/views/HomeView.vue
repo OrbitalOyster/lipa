@@ -11,7 +11,7 @@ import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
 const accordionModel = ref({
-  toggled: useLocalStorage('sideBarToggled', ''),
+  opened: useLocalStorage('sideBar', ''),
   items: [
     { id: 'orgs', title: 'Организации', icon: faBuilding },
     { id: 'forms', title: 'Формы', icon: faClipboard },
