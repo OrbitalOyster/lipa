@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
@@ -7,13 +8,14 @@ import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
-import { ref } from 'vue'
+import { useAnimate } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
+  main = useTemplateRef('main'),
   username = ref(''),
   password = ref(''),
   rememberMe = ref(false),
@@ -21,12 +23,26 @@ const router = useRouter(),
   passwordError = ref(''),
   loginAsUser = ref(false)
 
+const { play: shake } = useAnimate(main, [
+  { transform: 'translate(1px, 1px) rotate(0deg)' },
+  { transform: 'translate(-1px, -2px) rotate(-1deg)' },
+  { transform: 'translate(-3px, 0px) rotate(1deg)' },
+  { transform: 'translate(3px, 2px) rotate(0deg)' },
+  { transform: 'translate(1px, -1px) rotate(1deg)' },
+  { transform: 'translate(-1px, 2px) rotate(-1deg)' },
+  { transform: 'translate(-3px, 1px) rotate(0deg)' },
+  { transform: 'translate(3px, 1px) rotate(-1deg)' },
+  { transform: 'translate(-1px, -1px) rotate(1deg)' },
+  { transform: 'translate(1px, 2px) rotate(0deg)' },
+  { transform: 'translate(1px, -2px) rotate(-1deg)' },
+], { immediate: false, duration: 400 })
+
 async function auth() {
   disabled.value = true
   if (await userStore.auth(username.value, password.value, rememberMe.value))
     await router.push('/')
   else
-    console.log('failed')
+    shake()
   disabled.value = false
 }
 
@@ -38,7 +54,7 @@ async function auth() {
       <GooseForm
         @submit="!usernameError && !passwordError && auth()"
       >
-        <main>
+        <main ref="main">
           <header>
             <hgroup>
               <h1>Gooseberry.js</h1>
