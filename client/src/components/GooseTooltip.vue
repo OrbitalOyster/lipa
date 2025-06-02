@@ -21,13 +21,13 @@ const { floatingStyles, middlewareData, arrowStyle }
 
 <template>
   <!-- Target element -->
-  <div
+  <span
     ref="target"
     @mouseover="active = true"
     @mouseleave="active = false"
   >
     <slot />
-  </div>
+  </span>
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
@@ -45,7 +45,7 @@ const { floatingStyles, middlewareData, arrowStyle }
         :style="arrowStyle"
         class="arrow"
       />
-      <!-- Actual hint -->
+      <!-- Actual tooltip -->
       <div class="tooltip">
         {{ text }}
       </div>

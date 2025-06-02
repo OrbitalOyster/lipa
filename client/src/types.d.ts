@@ -13,17 +13,17 @@ declare global {
 
   /* User store */
   interface UserStore {
-    username: null | string
     role: null | string
-    sideBarWidth: number
     selectedOrgs: string[]
+    sideBarWidth: number
+    username: null | string
   }
 
   /* Accordion */
   interface AccordionItem {
+    icon: IconDefinition
     id: string
     title: string
-    icon: IconDefinition
   }
 
   interface Accordion {
@@ -33,32 +33,32 @@ declare global {
 
   /* Tabs */
   interface TabSlot {
+    icon: IconDefinition
     id: string
     title: string
-    icon: IconDefinition
   }
 
   /* Tree */
-  interface GooseTreeLeaf {
-    checked: RemovableRef<boolean>
+  interface TreeLeaf {
+    checked: Ref<boolean>
     id: string
     matched?: boolean
-    sub?: GooseTreeLeaf[]
+    sub: TreeLeaf[]
     title: string
-    toggled: RemovableRef<boolean>
+    toggled: Ref<boolean>
   }
 
   /* FloatingUI options */
   interface FloatingUIOptions {
     active: Ref<boolean>
-    side?: Side
     fitTargetWidth?: boolean
+    side?: Side
   }
 
   /* Login form */
   interface LoginFormCheck {
-    username: string
     password: string
     rememberMe: boolean
+    username: string
   }
 }

@@ -15,21 +15,15 @@ interface ApiOrg {
   parent?: string
 }
 
-function toTree(arr: ApiOrg[], parent?: string): GooseTreeLeaf[] {
-  return arr.filter(i => i.parent === parent).map((i) => {
-    const result: GooseTreeLeaf = {
-        title: `${i.id} - ${i.name}`,
-        id: i.id,
-        checked: useLocalStorage(`org-${i.id}-selected`, false),
-        toggled: useLocalStorage(`org-${i.id}-toggled`, false),
-      },
-      sub: GooseTreeLeaf[] = toTree(arr, i.id)
-
-    if (sub.length)
-      result.sub = sub
-    return result
-  })
-}
+/* Converts api array to object */
+const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
+  arr.filter(i => i.parent === parent).map(i => ({
+    title: `${i.id} - ${i.name}`,
+    id: i.id,
+    checked: useLocalStorage(`org-${i.id}-selected`, false),
+    toggled: useLocalStorage(`org-${i.id}-toggled`, false),
+    sub: toTree(arr, i.id),
+  }))
 
 const search = ref(''),
   debounced = refDebounced(search, 500),
@@ -37,8 +31,7 @@ const search = ref(''),
   axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
   axiosRes = await axiosInstance.get('/orgs'),
   apiOrgs: ApiOrg[] = axiosRes.data,
-  orgs: Ref<GooseTreeLeaf[]> = ref(toTree(apiOrgs))
-
+  orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs))
 </script>
 
 <template>

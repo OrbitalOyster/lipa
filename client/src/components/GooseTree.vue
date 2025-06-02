@@ -11,28 +11,28 @@ const props = defineProps<{
     search?: string
   }>(),
   emit = defineEmits(['check', 'select']),
-  branch = defineModel<GooseTreeLeaf[]>({ required: true })
+  branch = defineModel<TreeLeaf[]>({ required: true })
 
 /* Check if leaf children has mixed check states */
-function leafIsIndetermitate(leaf: GooseTreeLeaf): boolean {
-  /* Not a branch / empty branch for some reason */
-  if (!leaf.sub?.[0])
+function leafIsIndetermitate(leaf: TreeLeaf): boolean {
+  /* Not a branch */
+  if (!leaf.sub[0])
     return false
   const first = leaf.sub[0].checked
   return leaf.sub.some(l => l.checked !== first || leafIsIndetermitate(l))
 }
 
-function onSelect(leaf: GooseTreeLeaf) {
-  if (!leaf.sub)
+function onSelect(leaf: TreeLeaf) {
+  if (!leaf.sub.length)
     emit('select', leaf.title)
   else
     leaf.toggled = !leaf.toggled
 }
 
-function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
+function checkBranch(branch: TreeLeaf[], value: boolean) {
   branch.forEach((leaf) => {
     leaf.checked = value
-    if (leaf.sub)
+    if (leaf.sub.length)
       checkBranch(leaf.sub, value)
   })
 }
@@ -40,7 +40,7 @@ function checkBranch(branch: GooseTreeLeaf[], value: boolean) {
 branch.value.forEach(leaf =>
   watch(() => leaf.checked, () => {
     /* Check/uncheck all leaves when root is checked/unchecked */
-    if (leaf.sub) {
+    if (leaf.sub.length) {
       /* TODO: Make sence of it */
       if (!leaf.checked || !leafIsIndetermitate(leaf))
         checkBranch(leaf.sub, leaf.checked)
@@ -52,9 +52,9 @@ branch.value.forEach(leaf =>
 )
 
 /* Show leaf if any children matched (recursive) or leaf title itself */
-function leafMatched(leaf: GooseTreeLeaf) {
+function leafMatched(leaf: TreeLeaf) {
   const titleMatched = leaf.title.includes(props.search ?? ''),
-    childrenMatched = leaf.sub?.some(leafMatched)
+    childrenMatched = leaf.sub.some(leafMatched)
   leaf.toggled = childrenMatched!
   return titleMatched || childrenMatched
 }
@@ -72,12 +72,12 @@ function leafMatched(leaf: GooseTreeLeaf) {
         <div
           class="title"
           :class="{ 'selectable-title': selectable }"
-          :style="{ 'padding-left': leaf.sub ? 0 : '2.0rem' }"
+          :style="{ 'padding-left': leaf.sub.length ? 0 : '2.0rem' }"
           @click="selectable && onSelect(leaf)"
         >
           <!-- Toggle icon (disabled when searching) -->
           <FontAwesomeIcon
-            v-if="leaf.sub"
+            v-if="leaf.sub.length"
             class="chevron"
             :class="{ toggled: leaf.toggled }"
             :icon="faChevronRight"
@@ -106,7 +106,7 @@ function leafMatched(leaf: GooseTreeLeaf) {
         <!-- Children nodes -->
         <Transition _name="slide">
           <GooseTree
-            v-if="leaf.sub && leaf.toggled"
+            v-if="leaf.sub.length && leaf.toggled"
             v-model="leaf.sub"
             :search
             :checkable
