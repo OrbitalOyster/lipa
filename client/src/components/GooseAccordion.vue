@@ -96,5 +96,8 @@ const model = defineModel<Accordion>({ required: true })
     font-weight: normal
 
   .item-container
+    display: flex
+    height: 100%
     overflow: auto
+    width: 100%
 </style>

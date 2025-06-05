@@ -13,7 +13,7 @@ const props = defineProps<{
   emit = defineEmits(['check', 'select']),
   branch = defineModel<TreeLeaf[]>({ required: true })
 
-/* Check if leaf children has mixed check states */
+/* Check if leaf children have mixed check states */
 function leafIsIndetermitate(leaf: TreeLeaf): boolean {
   /* Not a branch */
   if (!leaf.sub[0])

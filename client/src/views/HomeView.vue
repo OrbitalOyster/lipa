@@ -33,7 +33,12 @@ const slots = [
         <GooseAccordion v-model="accordionModel">
           <template #orgs>
             <Suspense>
-              <OrgTree />
+            <!-- <OrgTree /> -->
+              <template #default>
+                <div class="loading">
+                  loading...
+                </div>
+              </template>
             </Suspense>
           </template>
         </GooseAccordion>
@@ -77,8 +82,6 @@ const slots = [
     width: 100vw
 
   aside
-    background-color: transparent
-    height: 100%
     flex-shrink: 0
     flex-basis: 32rem
 
@@ -87,4 +90,7 @@ const slots = [
     flex-direction: column
     flex-grow: 1
     height: 100%
+
+  .loading
+    background-color: salmon
 </style>
