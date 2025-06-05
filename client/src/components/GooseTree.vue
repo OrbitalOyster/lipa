@@ -121,7 +121,6 @@ function leafMatched(leaf: TreeLeaf) {
 
 <style lang="sass" scoped>
   @use '../assets/borders'
-  @use '../assets/style'
   @use '../assets/transitions'
 
   ul

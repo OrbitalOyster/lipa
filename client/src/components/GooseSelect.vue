@@ -126,7 +126,6 @@ const error = ''
 <style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
-  @use '../assets/style'
   @use '../assets/transitions'
 
   input
