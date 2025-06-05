@@ -10,7 +10,7 @@ function focusInvalidInput() {
   invalid?.focus()
 }
 
-function onSubmit() {
+function submit() {
   validated.value = true
   emit('submit')
   focusInvalidInput()
@@ -22,7 +22,7 @@ function onSubmit() {
     ref="form"
     novalidate
     :class="validated ? 'validated' : 'unvalidated'"
-    @submit.prevent="onSubmit"
+    @submit.prevent="submit"
   >
     <slot />
   </form>
@@ -46,5 +46,4 @@ function onSubmit() {
     input.invalid:not(:disabled)
       background-color: colors.$input-invalid-background
       border: 1px solid colors.$input-invalid-border
-
 </style>

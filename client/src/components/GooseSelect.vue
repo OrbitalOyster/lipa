@@ -19,7 +19,7 @@ const props = defineProps<{
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
 
-const model = defineModel<string>({ default: '' })
+const selected = defineModel<string>({ default: '' })
 
 const fitTargetWidth = true,
   side = props.side ?? 'bottom',
@@ -34,9 +34,9 @@ const setValue = (value: number | null) => {
   selectedIndex.value = value
   /* Resetting value? */
   if (value === null || !props.items[value] /* Should not happen */)
-    model.value = ''
+    selected.value = ''
   else
-    model.value = props.items[value]
+    selected.value = props.items[value]
   // store.validate()
 }
 
@@ -65,7 +65,7 @@ const error = ''
   <div style="align-items: center; display: flex; position: relative">
     <!-- Actual input element (hidden) -->
     <input
-      v-model="model"
+      v-model="selected"
       :placeholder
     >
     <!-- Pseudo-input -->
@@ -81,7 +81,7 @@ const error = ''
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ model }}
+      {{ selected }}
     </div>
     <!-- Placeholder -->
     <GooseInputPlaceholder v-if="placeholder">

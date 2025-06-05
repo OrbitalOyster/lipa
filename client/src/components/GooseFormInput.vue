@@ -1,35 +1,41 @@
 <script setup lang="ts">
 import GooseInput from '#components/GooseInput.vue'
+import { ref } from 'vue'
+
+const messages = {
+  required: 'Обязательное поле',
+  notBogus: 'bogus',
+}
 
 const props = defineProps<{
     checks?: FormCheck[]
   }>(),
-  emit = defineEmits(['validated']),
-  model = defineModel<string>({ default: '' })
+  text = defineModel<string>({ default: '' }),
+  error = ref('')
 
-function validate(value: string) {
-  let result = ''
+function validate() {
+  error.value = ''
   if (props.checks)
     for (const check of props.checks)
       switch (check) {
         case 'required':
-          if (!value)
-            result = 'Required'
+          if (!text.value)
+            error.value = messages.required
           break
         case 'notBogus':
-          if (value === 'bogus')
-            result = 'Must not be bogus'
+          if (text.value === 'bogus')
+            error.value = messages.notBogus
           break
       }
-  emit('validated', result)
-  return result
+  return error.value
 }
 
+defineExpose({ error })
 </script>
 
 <template>
   <GooseInput
-    v-model="model"
-    :error="validate(model)"
+    v-model="text"
+    :error="validate()"
   />
 </template>

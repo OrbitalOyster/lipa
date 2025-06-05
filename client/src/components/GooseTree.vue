@@ -58,7 +58,6 @@ function leafMatched(leaf: TreeLeaf) {
   leaf.opened = childrenMatched!
   return titleMatched || childrenMatched
 }
-
 </script>
 
 <template>

@@ -15,7 +15,7 @@ defineProps<{
   placeholder?: string
 }>()
 
-const model = defineModel<string>({ default: '' }),
+const text = defineModel<string>({ default: '' }),
   passwordHidden = ref(true)
 </script>
 
@@ -23,7 +23,7 @@ const model = defineModel<string>({ default: '' }),
   <div class="input-wrapper">
     <!-- Actual input -->
     <input
-      v-model="model"
+      v-model="text"
       :autocomplete
       :autofocus
       :class="error ? 'invalid' : 'valid'"

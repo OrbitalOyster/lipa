@@ -28,7 +28,6 @@ function toggle() {
 }
 
 defineExpose({ toggle, active })
-
 </script>
 
 <template>

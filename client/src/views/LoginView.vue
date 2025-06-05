@@ -16,11 +16,11 @@ const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
   main = useTemplateRef('main'),
+  usernameRef = useTemplateRef('usernameRef'),
+  passwordRef = useTemplateRef('passwordRef'),
   username = ref(''),
   password = ref(''),
   rememberMe = ref(false),
-  usernameError = ref(''),
-  passwordError = ref(''),
   loginAsUser = ref(false)
 
 /* Auth fail animation */
@@ -44,14 +44,13 @@ async function auth() {
     shake()
   disabled.value = false
 }
-
 </script>
 
 <template>
   <div class="login-view-wrapper">
     <div>
       <GooseForm
-        @submit="!usernameError && !passwordError && auth()"
+        @submit="!usernameRef?.error && !passwordRef?.error && auth()"
       >
         <main ref="main">
           <header>
@@ -62,22 +61,22 @@ async function auth() {
             <img src="/goose.webp">
           </header>
           <GooseFormInput
+            ref="usernameRef"
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
             autofocus
             placeholder="Имя пользователя"
-            @validated="err => usernameError = err"
           />
           <GooseFormInput
+            ref="passwordRef"
             v-model="password"
             :checks="['required']"
             :disabled
             autocomplete="password"
             password
             placeholder="Пароль"
-            @validated="err => passwordError = err"
           />
           <footer>
             <GooseCheckbox
