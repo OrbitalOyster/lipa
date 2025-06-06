@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
     checks?: FormCheck[]
     disabled?: boolean
+    loading?: boolean
     items: string[]
     placeholder: string
     side?: Side
@@ -88,6 +90,15 @@ const error = ''
     </GooseInputPlaceholder>
     <!-- Icons -->
     <div class="input-icons">
+      <!-- Loading -->
+      <FontAwesomeIcon
+        v-if="loading"
+        class="fa-pulse"
+        style="width: 2rem"
+        :icon="faSpinner"
+        size="xl"
+      />
+      <!-- Chevron -->
       <FontAwesomeIcon
         class="chevron"
         :style="{transform: active ? 'rotate(180deg)' : 'rotate(0)'}"
@@ -166,6 +177,7 @@ const error = ''
   .input-icons
     align-items: center
     display: inline-flex
+    gap: .25rem
     height: 100%
     pointer-events: none
     position: absolute
