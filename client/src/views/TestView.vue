@@ -83,6 +83,7 @@ const toggleChecked = ref(false)
         v-model="selectedItem"
         placeholder="Select something"
         :items
+        disabled
       />
       {{ selectedItem }}
       <hr>

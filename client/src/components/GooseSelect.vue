@@ -62,18 +62,17 @@ const error = ''
 </script>
 
 <template>
-  <div style="align-items: center; display: flex; position: relative">
-    <!-- Actual input element (hidden) -->
-    <input
-      v-model="selected"
-      :placeholder
-    >
+  <div
+    class="select-wrapper"
+    :class="{ disabled }"
+  >
     <!-- Pseudo-input -->
     <div
       ref="target"
       class="target"
       :class="error ? 'invalid' : 'valid'"
       :tabindex="disabled ? -1 : 0"
+      :style="{ pointerEvents: disabled ? 'none' : 'all' }"
       @blur="e => active = active && e.relatedTarget === floating"
       @click="active = !active"
       @keydown.up.prevent="keyScroll(-1)"
@@ -128,26 +127,41 @@ const error = ''
   @use '../assets/colors'
   @use '../assets/transitions'
 
-  input
-    display: none
-
-  .target
+  .select-wrapper
     align-items: center
     cursor: pointer
     display: flex
+    position: relative
+
+  .select-wrapper.disabled
+    cursor: not-allowed
+
+  .target
+    align-items: center
+    background-color: colors.$input-background
+    border-color: colors.$outline
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
+    display: flex
     height: 2rem
+    outline: colors.$outline solid 0px
     padding: 1.5rem 1rem .25rem 1rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     width: 100%
-    border-color: colors.$outline
-    outline: colors.$outline solid 0px
-    background-color: colors.$input-background
-    border-radius: borders.$radius
-    border: 1px solid colors.$input-border
 
+  /* On focus */
   .target:focus
     outline-width: borders.$focus-outline-width
+
+  /* On disabled */
+  .disabled .target
+    background-color: colors.$input-disabled
+    border-color: colors.$input-disabled
+    color: colors.$disabled-primary
+
+  .disabled .input-icons .chevron
+    color: colors.$disabled-primary
 
   .input-icons
     align-items: center

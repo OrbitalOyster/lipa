@@ -21,7 +21,7 @@ const toggled = defineModel<boolean>({ default: false }),
     <!-- preventDefault() to keep focus on button -->
     <label
       :for="id"
-      @mousedown="e => e.preventDefault()"
+      @mousedown.prevent
     >
       <slot />
     </label>
