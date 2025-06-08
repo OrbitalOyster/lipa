@@ -3,18 +3,22 @@ import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
+import GooseSelect from '#components/GooseSelect.vue'
 import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { onMounted } from 'vue'
 import { useAnimate } from '@vueuse/core'
+import useFetchOrgs from '#composables/useFetchOrgs'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 const router = useRouter(),
   userStore = useUserStore(),
   disabled = ref(false),
+  loadingOrgs = ref(true),
   main = useTemplateRef('main'),
   usernameRef = useTemplateRef('usernameRef'),
   passwordRef = useTemplateRef('passwordRef'),
@@ -36,6 +40,10 @@ const { play: shake } = useAnimate(main, [
   { transform: 'translate(0, 0) rotate(0deg)' },
 ], { immediate: false, duration: 400 })
 
+
+const orgs = ref([]),
+  org = ref(null)
+
 async function auth() {
   disabled.value = true
   if (await userStore.auth(username.value, password.value, rememberMe.value))
@@ -44,6 +52,13 @@ async function auth() {
     shake()
   disabled.value = false
 }
+
+onMounted(async () => {
+  const apiOrgs = await useFetchOrgs()
+  orgs.value = apiOrgs.map(o => `${o.id} - ${o.name}`)
+  loadingOrgs.value = false
+})
+
 </script>
 
 <template>
@@ -62,12 +77,21 @@ async function auth() {
           </header>
           <GooseFormInput
             ref="usernameRef"
+            v-if="loginAsUser"
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
             autofocus
             placeholder="Имя пользователя"
+          />
+          <GooseSelect
+            v-else
+            v-model="org"
+            placeholder="Организация"
+            :items="orgs"
+            :disabled="disabled || loadingOrgs"
+            :loading="loadingOrgs"
           />
           <GooseFormInput
             ref="passwordRef"
