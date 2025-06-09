@@ -69,11 +69,11 @@ const text = defineModel<string>({ default: '' }),
 
   /* Base */
   input
-    font: inherit
     background-color: colors.$input-background
     border-radius: borders.$radius
     border: 1px solid colors.$input-border
     color: colors.$text
+    font: inherit
     height: 2rem
     outline: colors.$outline solid 0px
     padding: .25rem 1rem .25rem 1rem

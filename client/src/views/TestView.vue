@@ -62,11 +62,13 @@ const toggleChecked = ref(false)
         placeholder="From"
         name="sampleInput1"
         form="mySampleForm"
+        tag="input"
       />
       <hr>
       <GooseFormInput
         name="sampleInput2"
         form="mySampleForm"
+        tag="input"
         password
       />
       <hr>

@@ -69,4 +69,10 @@ declare global {
     parent?: string
   }
 
+  /* Select item */
+  interface SelectItem {
+    id: string
+    title: string
+  }
+
 }

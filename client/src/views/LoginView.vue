@@ -5,7 +5,6 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
-import GooseSelect from '#components/GooseSelect.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
 import type { Ref } from 'vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
@@ -22,6 +21,8 @@ const router = useRouter(),
   main = useTemplateRef('main'),
   usernameRef = useTemplateRef('usernameRef'),
   orgRef = useTemplateRef('orgRef'),
+  orgs: Ref<SelectItem[]> = ref([]),
+  org = ref(''),
   passwordRef = useTemplateRef('passwordRef'),
   username = ref(''),
   password = ref(''),
@@ -41,12 +42,10 @@ const { play: shake } = useAnimate(main, [
   { transform: 'translate(0, 0) rotate(0deg)' },
 ], { immediate: false, duration: 400 })
 
-const orgs: Ref<string[]> = ref([]),
-  org = ref('')
-
 async function auth() {
   disabled.value = true
-  if (await userStore.auth(username.value, password.value, rememberMe.value))
+  const userId = loginAsUser.value ? username.value : org.value
+  if (await userStore.auth(userId, password.value, rememberMe.value))
     await router.push('/')
   else
     shake()
@@ -55,17 +54,19 @@ async function auth() {
 
 onMounted(async () => {
   const apiOrgs = await useFetchOrgs()
-  orgs.value = apiOrgs.map(o => `${o.id} - ${o.name}`)
+  orgs.value = apiOrgs.map(o => ({
+    id: o.id,
+    title: `${o.id} - ${o.name}`
+  }))
   loadingOrgs.value = false
 })
-
 </script>
 
 <template>
   <div class="login-view-wrapper">
     <div>
       <GooseForm
-        @submit="!usernameRef?.error && !passwordRef?.error && auth()"
+        @submit="usernameRef?.error || orgRef?.error || passwordRef?.error || auth()"
       >
         <main ref="main">
           <header>
@@ -75,6 +76,7 @@ onMounted(async () => {
             </hgroup>
             <img src="/goose.webp">
           </header>
+          <!-- Log in as user -->
           <GooseFormInput
             v-if="loginAsUser"
             ref="usernameRef"
@@ -83,15 +85,19 @@ onMounted(async () => {
             :disabled
             autocomplete="username"
             placeholder="Имя пользователя"
+            tag="input"
           />
-          <GooseSelect
+          <!-- Log in as organization -->
+          <GooseFormInput
             v-else
             ref="orgRef"
             v-model="org"
-            placeholder="Организация"
-            :items="orgs"
+            :checks="['required']"
             :disabled="disabled || loadingOrgs"
+            :items="orgs"
             :loading="loadingOrgs"
+            placeholder="Организация"
+            tag="select"
           />
           <GooseFormInput
             ref="passwordRef"
@@ -101,6 +107,7 @@ onMounted(async () => {
             autocomplete="password"
             password
             placeholder="Пароль"
+            tag="input"
           />
           <footer>
             <GooseCheckbox
@@ -117,8 +124,8 @@ onMounted(async () => {
             </GooseSwitch>
             <GooseButton
               :disabled
-              :loading="disabled"
               :icon="faRightToBracket"
+              :loading="disabled"
               submit
               title="Войти"
             />

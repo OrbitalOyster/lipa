@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GooseInput from '#components/GooseInput.vue'
+import GooseSelect from '#components/GooseSelect.vue'
 import { ref } from 'vue'
 
 const messages = {
@@ -8,6 +9,7 @@ const messages = {
 }
 
 const props = defineProps<{
+    tag: 'input' | 'select'
     checks?: FormCheck[]
   }>(),
   text = defineModel<string>({ default: '' }),
@@ -30,11 +32,23 @@ function validate() {
   return error.value
 }
 
+function tagToComponent() {
+  switch (props.tag) {
+    case 'input':
+      return GooseInput
+    case 'select':
+      return GooseSelect
+    default:
+      throw new Error('Major screw up')
+  }
+}
+
 defineExpose({ error })
 </script>
 
 <template>
-  <GooseInput
+  <component
+    :is="tagToComponent()"
     v-model="text"
     :error="validate()"
   />

@@ -2,6 +2,7 @@
 import { faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
@@ -10,18 +11,19 @@ const props = defineProps<{
     autofocus?: boolean
     checks?: FormCheck[]
     disabled?: boolean
+    error?: string
     loading?: boolean
-    items: string[]
+    items: SelectItem[]
     placeholder: string
     side?: Side
   }>(),
   active = ref(false),
   selectedIndex = ref<null | number>(null),
+  selectedId = defineModel<string>({ default: '' }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
 
-const selected = defineModel<string>({ default: '' })
 
 const fitTargetWidth = true,
   side = props.side ?? 'bottom',
@@ -36,9 +38,9 @@ const setValue = (value: number | null) => {
   selectedIndex.value = value
   /* Resetting value? */
   if (value === null || !props.items[value] /* Should not happen */)
-    selected.value = ''
+    selectedId.value = ''
   else
-    selected.value = props.items[value]
+    selectedId.value = props.items[value].id
 }
 
 function keyScroll(direction: number) {
@@ -58,8 +60,6 @@ function scrollToSelected(instant: boolean) {
 }
 
 watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
-
-const error = ''
 </script>
 
 <template>
@@ -82,27 +82,32 @@ const error = ''
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ selected }}
+      {{ selectedIndex && items[selectedIndex]?.title || '' }}
     </div>
     <!-- Placeholder -->
     <GooseInputPlaceholder v-if="placeholder">
       {{ placeholder }}
     </GooseInputPlaceholder>
+    <!-- Chevron -->
+    <FontAwesomeIcon
+      class="chevron"
+      :style="{transform: active ? 'rotate(180deg)' : 'rotate(0)'}"
+      :icon="faChevronDown"
+      size="xl"
+    />
     <!-- Icons -->
-    <div class="input-icons">
+    <div class="icons">
+      <!-- Validation icon -->
+      <GooseErrorIcon
+        v-if="error"
+        :message="error"
+      />
       <!-- Loading -->
       <FontAwesomeIcon
         v-if="loading"
         class="fa-pulse"
         style="width: 2rem"
         :icon="faSpinner"
-        size="xl"
-      />
-      <!-- Chevron -->
-      <FontAwesomeIcon
-        class="chevron"
-        :style="{transform: active ? 'rotate(180deg)' : 'rotate(0)'}"
-        :icon="faChevronDown"
         size="xl"
       />
     </div>
@@ -126,7 +131,7 @@ const error = ''
           :class="{ selected: selectedIndex === i }"
           @click="setValue(i); active = false"
         >
-          {{ option }}
+          {{ option.title }}
         </li>
       </ul>
     </Transition>
@@ -171,20 +176,21 @@ const error = ''
     border-color: colors.$input-disabled
     color: colors.$disabled-primary
 
-  .disabled .input-icons .chevron
+  .disabled .chevron
     color: colors.$disabled-primary
 
-  .input-icons
+  .icons
     align-items: center
     display: inline-flex
     gap: .25rem
     height: 100%
+    position: absolute
+    right: 2.75rem
+
+  .chevron
     pointer-events: none
     position: absolute
     right: .75rem
-    user-select: none
-
-  .chevron
     transition: transitions.$transform
     width: 2rem
 
