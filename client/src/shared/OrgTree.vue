@@ -8,13 +8,6 @@ import type { Ref } from 'vue'
 import axios from 'axios'
 import { ref } from 'vue'
 
-/* TODO: Shared types */
-interface ApiOrg {
-  id: string
-  name: string
-  parent?: string
-}
-
 /* Converts api array to object */
 const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
   arr.filter(i => i.parent === parent).map(i => ({

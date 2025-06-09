@@ -10,13 +10,12 @@ const dbUser = Bun.env['DB_USER'],
   connectionString = `mysql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`
 
 export const orgs = async (context: Context) => {
-  await sleep(2000)
+  await sleep(1000)
   try {
     const connection = await mysql.createConnection(connectionString),
       [rows] = await connection.query<Org[]>('SELECT * FROM orgs ORDER BY ord'),
       parsedRows = rows.map(org => ({
         id: org.id,
-        ord: org.ord,
         name: org.name,
         parent: org.parent ?? undefined, /* Ignore 'null' parent */
       }))

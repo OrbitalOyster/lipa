@@ -103,5 +103,5 @@ const text = defineModel<string>({ default: '' }),
     display: flex
     gap: .25rem
     position: absolute
-    right: .5rem
+    right: .75rem
 </style>

@@ -61,4 +61,12 @@ declare global {
     rememberMe: boolean
     username: string
   }
+
+  /* TODO: Shared types */
+  interface ApiOrg {
+    id: string
+    name: string
+    parent?: string
+  }
+
 }

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
-import GooseSelect from '#components/GooseSelect.vue'
 import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
+import GooseSelect from '#components/GooseSelect.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
+import type { Ref } from 'vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
-import { onMounted } from 'vue'
 import { useAnimate } from '@vueuse/core'
-import useFetchOrgs from '#composables/useFetchOrgs'
+import useFetchOrgs from '#composables/useFetchOrgs.ts'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -40,9 +40,8 @@ const { play: shake } = useAnimate(main, [
   { transform: 'translate(0, 0) rotate(0deg)' },
 ], { immediate: false, duration: 400 })
 
-
-const orgs = ref([]),
-  org = ref(null)
+const orgs: Ref<string[]> = ref([]),
+  org = ref('')
 
 async function auth() {
   disabled.value = true
@@ -76,8 +75,8 @@ onMounted(async () => {
             <img src="/goose.webp">
           </header>
           <GooseFormInput
-            ref="usernameRef"
             v-if="loginAsUser"
+            ref="usernameRef"
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
@@ -92,6 +91,7 @@ onMounted(async () => {
             :items="orgs"
             :disabled="disabled || loadingOrgs"
             :loading="loadingOrgs"
+            autofocus
           />
           <GooseFormInput
             ref="passwordRef"

@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import { faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
@@ -181,11 +180,12 @@ const error = ''
     height: 100%
     pointer-events: none
     position: absolute
-    right: 1rem
+    right: .75rem
     user-select: none
 
   .chevron
     transition: transitions.$transform
+    width: 2rem
 
   ul
     background-color: colors.$card
