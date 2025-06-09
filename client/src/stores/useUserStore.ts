@@ -40,10 +40,11 @@ const useUserStore = defineStore('user', {
       }
     },
     /* Logs user in */
-    async auth(username: string, password: string, rememberMe: boolean) {
+    async auth(userId: string, isOrg: boolean, password: string, rememberMe: boolean) {
       const res: AxiosResponse<boolean> = await axios.post(
         `${apiEndpoint}/auth`, {
-          username,
+          userId,
+          isOrg,
           password,
           rememberMe,
         },

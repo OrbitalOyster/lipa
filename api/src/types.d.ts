@@ -13,6 +13,10 @@ declare global {
     exp?: number
   }
 
+  interface User extends RowDataPacket {
+    
+  }
+
   interface Org extends RowDataPacket {
     id: string
     ord: string

@@ -55,13 +55,6 @@ declare global {
     side?: Side
   }
 
-  /* Login form */
-  interface LoginFormCheck {
-    password: string
-    rememberMe: boolean
-    username: string
-  }
-
   /* TODO: Shared types */
   interface ApiOrg {
     id: string
@@ -74,5 +67,4 @@ declare global {
     id: string
     title: string
   }
-
 }

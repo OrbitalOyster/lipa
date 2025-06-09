@@ -81,7 +81,7 @@ watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ selectedIndex && items[selectedIndex]?.title || '' }}
+      {{ selectedIndex !== null && items[selectedIndex]?.title || '' }}
     </div>
     <!-- Placeholder -->
     <GooseInputPlaceholder v-if="placeholder">

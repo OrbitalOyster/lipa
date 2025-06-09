@@ -44,8 +44,9 @@ const { play: shake } = useAnimate(main, [
 
 async function auth() {
   disabled.value = true
-  const userId = loginAsOrg.value ? org.value : username.value
-  if (await userStore.auth(userId, password.value, rememberMe.value))
+  const isOrg = loginAsOrg.value,
+    userId = isOrg ? org.value : username.value
+  if (await userStore.auth(userId, isOrg, password.value, rememberMe.value))
     await router.push('/')
   else
     shake()
