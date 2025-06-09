@@ -7,6 +7,7 @@ import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
+    autofocus?: boolean
     checks?: FormCheck[]
     disabled?: boolean
     loading?: boolean
@@ -38,7 +39,6 @@ const setValue = (value: number | null) => {
     selected.value = ''
   else
     selected.value = props.items[value]
-  // store.validate()
 }
 
 function keyScroll(direction: number) {
@@ -72,6 +72,7 @@ const error = ''
       ref="target"
       class="target"
       :class="error ? 'invalid' : 'valid'"
+      :autofocus
       :tabindex="disabled ? -1 : 0"
       :style="{ pointerEvents: disabled ? 'none' : 'all' }"
       @blur="e => active = active && e.relatedTarget === floating"

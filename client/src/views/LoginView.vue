@@ -21,6 +21,7 @@ const router = useRouter(),
   loadingOrgs = ref(true),
   main = useTemplateRef('main'),
   usernameRef = useTemplateRef('usernameRef'),
+  orgRef = useTemplateRef('orgRef'),
   passwordRef = useTemplateRef('passwordRef'),
   username = ref(''),
   password = ref(''),
@@ -81,17 +82,16 @@ onMounted(async () => {
             :checks="['required', 'notBogus']"
             :disabled
             autocomplete="username"
-            autofocus
             placeholder="Имя пользователя"
           />
           <GooseSelect
             v-else
+            ref="orgRef"
             v-model="org"
             placeholder="Организация"
             :items="orgs"
             :disabled="disabled || loadingOrgs"
             :loading="loadingOrgs"
-            autofocus
           />
           <GooseFormInput
             ref="passwordRef"
