@@ -24,7 +24,6 @@ const props = defineProps<{
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
 
-
 const fitTargetWidth = true,
   side = props.side ?? 'bottom',
   { floatingStyles, isPositioned, middlewareData }

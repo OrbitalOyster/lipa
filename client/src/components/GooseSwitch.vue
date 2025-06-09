@@ -75,11 +75,13 @@ const toggled = defineModel<boolean>({ default: false }),
     background-color: colors.$disabled
     border-radius: 1rem
     content: ""
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 0 .125rem .125rem)
     height: $mark-size
     left: calc($height / 2 - $mark-size / 2)
     position: absolute
     top: calc($height / 2 - $mark-size / 2)
     transition: left transitions.$time transitions.$function
+    transform: translateY(-.0625rem)
     width: $mark-size
 
   /* On toggled */

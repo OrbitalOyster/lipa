@@ -78,11 +78,13 @@ const toggled = defineModel<boolean>({ default: false }),
     background-color: colors.$primary
     border-radius: borders.$radius
     content: ""
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 0 0.125rem 0.125rem)
     height: $mark-size
     left: calc(($button-size - $mark-size) / 2)
     position: absolute
     scale: 0%
     top: calc(($button-size - $mark-size) / 2)
+    transform: translateY(-.0625rem)
     transition: height .1s ease-in-out, top .1s ease-in-out, scale .1s ease-in-out
     width: $mark-size
 
