@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -6,8 +7,11 @@ import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
+import OrgTree from '#shared/OrgTree.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
+
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const accordionModel = ref({
   opened: useLocalStorage('sideBar', ''),
@@ -32,10 +36,13 @@ const slots = [
         <GooseAccordion v-model="accordionModel">
           <template #orgs>
             <Suspense>
-              <!-- <OrgTree /> -->
-              <template #default>
+              <OrgTree />
+              <template #fallback>
                 <div class="loading">
-                  loading...
+                  <FontAwesomeIcon
+                    class="fa-pulse"
+                    :icon="faSpinner"
+                  />
                 </div>
               </template>
             </Suspense>
@@ -81,8 +88,8 @@ const slots = [
     width: 100vw
 
   aside
-    flex-shrink: 0
     flex-basis: 32rem
+    flex-shrink: 0
 
   main
     display: flex
@@ -91,5 +98,9 @@ const slots = [
     height: 100%
 
   .loading
-    background-color: salmon
+    align-items: center
+    display: flex
+    font-size: 3rem
+    height: 100%
+    justify-content: center
 </style>

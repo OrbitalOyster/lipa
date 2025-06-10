@@ -5,8 +5,8 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { Ref } from 'vue'
-import axios from 'axios'
 import { ref } from 'vue'
+import useFetchOrgs from '#composables/useFetchOrgs.ts'
 
 /* Converts api array to object */
 const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
@@ -21,9 +21,11 @@ const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
 const search = ref(''),
   debounced = refDebounced(search, 500),
   checked = ref(false),
-  axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
-  axiosRes = await axiosInstance.get('/orgs'),
-  apiOrgs: ApiOrg[] = axiosRes.data,
+
+  // axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
+  // axiosRes = await axiosInstance.get('/orgs'),
+  // apiOrgs: ApiOrg[] = axiosRes.data,
+  apiOrgs = await useFetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs))
 </script>
 
