@@ -41,7 +41,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
 
 export const setPayload = async (context: Context) => {
   const payload = await context.req.json<UserPayload>()
-  if (payload.username || payload.exp)
+  if (payload.username || payload.isOrg || payload.exp)
     throw new Error('Haxxor alert')
   await updateCookie(context, payload)
   return context.json(payload)

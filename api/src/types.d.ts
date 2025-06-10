@@ -2,19 +2,16 @@ import type { RowDataPacket } from 'mysql2/promise'
 
 declare global {
   interface AuthRequest {
-    username: string
+    userId: string
+    isOrg: boolean
     password: string
+    rememberMe: boolean
   }
 
   interface UserPayload {
     username?: string | null
-    role?: string | null
-    sideBarWidth?: number
+    isOrg?: boolean | null
     exp?: number
-  }
-
-  interface User extends RowDataPacket {
-    
   }
 
   interface Org extends RowDataPacket {
