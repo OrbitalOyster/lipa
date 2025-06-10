@@ -18,7 +18,6 @@ const props = defineProps<{
     side?: Side
   }>(),
   active = ref(false),
-  selectedIndex = ref<null | number>(null),
   selectedId = defineModel<string>({ default: '' }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
@@ -33,32 +32,29 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
-const setValue = (value: number | null) => {
-  selectedIndex.value = value
-  /* Resetting value? */
-  if (value === null || !props.items[value] /* Should not happen */)
-    selectedId.value = ''
-  else
-    selectedId.value = props.items[value].id
-}
-
 function keyScroll(direction: number) {
+  let selectedIndex = props.items.findIndex(i => i.id === selectedId.value)
   /* Edge case - nothing selected */
-  selectedIndex.value ??= (direction > 0 ? -1 : 0)
-  setValue(wrap(selectedIndex.value, direction))
+  if (selectedIndex === -1)
+    selectedIndex = direction > 0 ? -1 : 0
+  selectedIndex = wrap(selectedIndex, direction)
+  /* Set actual value */
+  const selectedItem = props.items[selectedIndex]
+  /* Should not happen */
+  if (!selectedItem)
+    throw new Error('Majow screw up')
+  selectedId.value = selectedItem.id
   if (active.value)
-    scrollToSelected(false)
+    scrollTo(selectedIndex, false)
 }
 
-function scrollToSelected(instant: boolean) {
-  if (selectedIndex.value !== null) {
-    const highlightedElement = itemsRef.value?.[selectedIndex.value],
-      behavior = instant ? 'instant' : 'smooth'
-    highlightedElement?.scrollIntoView({ behavior, block: 'center' })
-  }
+function scrollTo(selectedIndex: number, instant: boolean) {
+  const highlightedElement = itemsRef.value?.[selectedIndex],
+    behavior = instant ? 'instant' : 'smooth'
+  highlightedElement?.scrollIntoView({ behavior, block: 'center' })
 }
 
-watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
+watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id === selectedId.value), true))
 </script>
 
 <template>
@@ -81,7 +77,7 @@ watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
       @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
-      {{ selectedIndex !== null && items[selectedIndex]?.title || '' }}
+      {{ items.find(i => i.id === selectedId)?.title }}
     </div>
     <!-- Placeholder -->
     <GooseInputPlaceholder v-if="placeholder">
@@ -124,13 +120,13 @@ watch(isPositioned, isOpen => isOpen && scrollToSelected(true))
         @focus="target?.focus()"
       >
         <li
-          v-for="(option, i) in items"
+          v-for="(item, i) in items"
           ref="itemsRef"
           :key="i"
-          :class="{ selected: selectedIndex === i }"
-          @click="setValue(i); active = false"
+          :class="{ selected: selectedId === item.id }"
+          @click="selectedId = item.id; active = false"
         >
-          {{ option.title }}
+          {{ item.title }}
         </li>
       </ul>
     </Transition>
