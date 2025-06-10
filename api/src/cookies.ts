@@ -2,10 +2,12 @@ import { getSignedCookie, setSignedCookie } from 'hono/cookie'
 import { sign, verify } from 'hono/jwt'
 import type { Context } from 'hono'
 
+const cookieName = Bun.env['COOKIE_NAME'],
+  cookieSecret = Bun.env['COOKIE_SECRET'],
+  cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
+  tokenSecret = Bun.env['TOKEN_SECRET']
+
 export const getPayload = async (context: Context) => {
-  const cookieName = Bun.env['COOKIE_NAME'],
-    cookieSecret = Bun.env['COOKIE_SECRET'],
-    tokenSecret = Bun.env['TOKEN_SECRET']
   const cookie = await getSignedCookie(
     context,
     cookieSecret,
@@ -20,10 +22,6 @@ export const getPayload = async (context: Context) => {
 }
 
 export const updateCookie = async (context: Context, payload?: UserPayload) => {
-  const cookieName = Bun.env['COOKIE_NAME'],
-    cookieSecret = Bun.env['COOKIE_SECRET'],
-    cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
-    tokenSecret = Bun.env['TOKEN_SECRET']
   const oldPayload = await getPayload(context)
   if (payload)
     Object.assign(oldPayload, payload)
@@ -43,7 +41,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
 
 export const setPayload = async (context: Context) => {
   const payload = await context.req.json<UserPayload>()
-  if (payload.username || payload.role || payload.exp)
+  if (payload.username || payload.exp)
     throw new Error('Haxxor alert')
   await updateCookie(context, payload)
   return context.json(payload)
@@ -54,9 +52,9 @@ export const check = async (context: Context) => {
   /* No cookies */
   if (!payload)
     return context.json(false)
-  const { username, role } = { ...payload }
+  const { username } = { ...payload }
   /* Logged out */
-  if (!username || !role)
+  if (!username)
     return context.json(false)
   /* Update and move on */
   await updateCookie(context)

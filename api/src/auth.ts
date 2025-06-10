@@ -4,9 +4,7 @@ import { setTimeout as sleep } from 'node:timers/promises'
 import crypto from 'crypto'
 import { updateCookie } from './cookies'
 
-/* Placeholder credentials */
-const sampleRole = 'admin',
-  authDelay = 2000
+const authDelay = 2000
 
 export const auth = async (context: Context) => {
   await sleep(authDelay)
@@ -24,16 +22,18 @@ export const auth = async (context: Context) => {
       console.log('Auth failed')
       return context.json(false)
     }
+    else {
+      const username = rows[0].name
+      console.log('Auth OK', username)
+      /* Update cookie and return ok */
+      await updateCookie(context, { username, isOrg })
+      return context.json(true)
+    }
   }
   catch (error) {
     console.log(error)
     return context.json(null)
   }
-
-  console.log('Auth OK', userId)
-  /* Update cookie and return ok */
-  await updateCookie(context, { username: userId, role: sampleRole })
-  return context.json(true)
 }
 
 export const logout = async (context: Context) => {
