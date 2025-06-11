@@ -4,7 +4,8 @@ import type { Context } from 'hono'
 
 const cookieName = Bun.env['COOKIE_NAME'],
   cookieSecret = Bun.env['COOKIE_SECRET'],
-  cookieLifetimeSec = Number(Bun.env['COOKIE_LIFETIME_SEC']),
+  cookieShortLifetimeSec = Number(Bun.env['COOKIE_SHORT_LIFETIME_SEC']),
+  cookieLongLifetimeSec = Number(Bun.env['COOKIE_LONG_LIFETIME_SEC']),
   tokenSecret = Bun.env['TOKEN_SECRET']
 
 export const getPayload = async (context: Context) => {
@@ -25,8 +26,10 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
   const oldPayload = await getPayload(context)
   if (payload)
     Object.assign(oldPayload, payload)
+  const rememberMe = oldPayload.rememberMe,
+    maxAge = rememberMe ? cookieLongLifetimeSec : cookieShortLifetimeSec
   /* Update expiration date */
-  oldPayload['exp'] = Math.floor(Date.now() / 1000) + cookieLifetimeSec
+  oldPayload['exp'] = Math.floor(Date.now() / 1000) + maxAge
   await setSignedCookie(
     context,
     cookieName,
@@ -34,7 +37,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
     cookieSecret, {
       path: '/',
       httpOnly: true,
-      maxAge: cookieLifetimeSec,
+      maxAge,
       sameSite: 'Strict',
     })
 }

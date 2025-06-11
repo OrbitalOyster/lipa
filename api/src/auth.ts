@@ -10,7 +10,6 @@ const authDelay = 2000
 export const auth = async (context: Context) => {
   await sleep(authDelay)
   const { userId, isOrg, password, rememberMe } = await context.req.json<AuthRequest>()
-
   try {
     const connection = await connect(),
       passwordHash = crypto.createHash('sha256').update(password).digest('hex'),
@@ -27,7 +26,7 @@ export const auth = async (context: Context) => {
       const username = rows[0]['name']
       console.log('Auth OK', username)
       /* Update cookie and return ok */
-      await updateCookie(context, { username, isOrg })
+      await updateCookie(context, { username, isOrg, rememberMe })
       return context.json(true)
     }
   }
@@ -38,6 +37,6 @@ export const auth = async (context: Context) => {
 }
 
 export const logout = async (context: Context) => {
-  await updateCookie(context, { username: null, isOrg: null })
+  await updateCookie(context, { username: null, isOrg: null, rememberMe: null })
   return context.text('logout')
 }

@@ -10,7 +10,8 @@ const port = Number(Bun.env['API_PORT']),
 
 /* Check config */
 if (!Bun.env['COOKIE_NAME']
-  || !Bun.env['COOKIE_LIFETIME_SEC']
+  || !Bun.env['COOKIE_SHORT_LIFETIME_SEC']
+  || !Bun.env['COOKIE_LONG_LIFETIME_SEC']
   || !Bun.env['COOKIE_SECRET']
   || !Bun.env['TOKEN_SECRET']
   || !port
