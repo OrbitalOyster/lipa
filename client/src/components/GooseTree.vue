@@ -6,11 +6,9 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { watch } from 'vue'
 
 const props = defineProps<{
-    checkable?: boolean
-    selectable?: boolean
     search?: string
   }>(),
-  emit = defineEmits(['check', 'select']),
+  emit = defineEmits(['check']),
   branch = defineModel<TreeLeaf[]>({ required: true })
 
 /* Check if leaf children have mixed check states */
@@ -20,13 +18,6 @@ function leafIsIndetermitate(leaf: TreeLeaf): boolean {
     return false
   const first = leaf.sub[0].checked
   return leaf.sub.some(l => l.checked !== first || leafIsIndetermitate(l))
-}
-
-function onSelect(leaf: TreeLeaf) {
-  if (!leaf.sub.length)
-    emit('select', leaf.title)
-  else
-    leaf.opened = !leaf.opened
 }
 
 function checkBranch(branch: TreeLeaf[], value: boolean) {
@@ -70,9 +61,7 @@ function leafMatched(leaf: TreeLeaf) {
       <div v-if="search === '' || leafMatched(leaf)">
         <div
           class="title"
-          :class="{ 'selectable-title': selectable }"
           :style="{ 'padding-left': leaf.sub.length ? 0 : '2.0rem' }"
-          @click="selectable && onSelect(leaf)"
         >
           <!-- Open/close leaf icon (disabled when searching) -->
           <FontAwesomeIcon
@@ -84,7 +73,6 @@ function leafMatched(leaf: TreeLeaf) {
           />
           <!-- Checkbox -->
           <GooseCheckbox
-            v-if="checkable"
             v-model="leaf.checked"
             :indeterminate="leafIsIndetermitate(leaf)"
           >
@@ -94,13 +82,6 @@ function leafMatched(leaf: TreeLeaf) {
               tag="div"
             />
           </GooseCheckbox>
-          <!-- Regular title -->
-          <GooseMarkable
-            v-else
-            :needle="search || ''"
-            :title="leaf.title"
-            tag="div"
-          />
         </div>
         <!-- Children nodes -->
         <Transition _name="slide">
@@ -108,10 +89,7 @@ function leafMatched(leaf: TreeLeaf) {
             v-if="leaf.sub.length && leaf.opened"
             v-model="leaf.sub"
             :search
-            :checkable
-            :selectable
             @check="value => leaf.checked = value"
-            @select="title => emit('select', title)"
           />
         </Transition>
       </div>
@@ -138,15 +116,6 @@ function leafMatched(leaf: TreeLeaf) {
     gap: .0rem
     height: fit-content
     min-height: 3rem
-
-  .selectable-title
-    cursor: pointer
-
-  .selectable-title:hover
-    background-color: #EAECEE
-
-  .selectable-title:selected
-    background-color: #D5D8DC
 
   .chevron
     cursor: pointer

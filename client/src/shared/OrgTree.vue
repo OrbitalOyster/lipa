@@ -51,12 +51,9 @@ const search = ref(''),
   </div>
   <GooseTree
     v-model="orgs"
-    :checkable="true"
-    :selectable="false"
     :checked="checked || false"
     :search="debounced"
     style="padding-left: 0"
-    @select="e => console.log(`selected ${e}`)"
   />
 </template>
 

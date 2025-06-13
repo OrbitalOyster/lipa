@@ -7,32 +7,7 @@ import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
-import GooseSelect from '#components/GooseSelect.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
-
-const items = [
-    '1 Macao',
-    '2 Madagascar',
-    '3 Malawi',
-    '4 Malaysia',
-    '5 Maldives',
-    '6 Mali',
-    '7 Malta',
-    '8 Marshall Islands (the)',
-    '9 Martinique',
-    '10 Mauritania',
-    '11 Mauritius',
-    '12 Mayotte',
-    '13 Mexico',
-    '14 Micronesia (Federated States of)',
-    '15 Moldova (the Republic of)',
-    '16 Monaco',
-    '17 Mongolia',
-    '18 Montenegro',
-    '19 Montserrat',
-    '20 Morocco',
-  ],
-  selectedItem = ref('')
 
 const s0 = ref('foo')
 const cb = ref(true)
@@ -80,14 +55,6 @@ const toggleChecked = ref(false)
         />
       </div>
       <p>{{ s0 }}</p>
-      <hr>
-      <GooseSelect
-        v-model="selectedItem"
-        placeholder="Select something"
-        :items
-        loading
-      />
-      {{ selectedItem }}
       <hr>
       <div style="display: flex; gap: 1rem">
         <GoosePopover

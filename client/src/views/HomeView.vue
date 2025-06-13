@@ -1,17 +1,15 @@
 <script setup lang="ts">
+import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faSpinner, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import { RouterLink } from 'vue-router'
-import TopBar from '#shared/TopBar.vue'
 import OrgTree from '#shared/OrgTree.vue'
+import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const accordionModel = ref({
   opened: useLocalStorage('sideBar', ''),
