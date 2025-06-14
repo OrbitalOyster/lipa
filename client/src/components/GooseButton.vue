@@ -34,7 +34,9 @@ const props = defineProps<{
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
-      {{ title }}
+      <span v-if="title">
+        {{ title }}
+      </span>
       <FontAwesomeIcon
         v-if="icon || loading"
         style="width: 2rem"
@@ -65,11 +67,13 @@ const props = defineProps<{
     font-size: 1.25rem
     gap: .75rem
     height: 3.5rem
+    justify-content: space-between
     outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
+    width: 100%
 
   .primary
     background-color: colors.$primary

@@ -20,38 +20,29 @@ const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
 
 const search = ref(''),
   debounced = refDebounced(search, 500),
-  checked = ref(false),
-
-  // axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
-  // axiosRes = await axiosInstance.get('/orgs'),
-  // apiOrgs: ApiOrg[] = axiosRes.data,
   apiOrgs = await useFetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs))
 </script>
 
 <template>
   <div class="sticky-bar">
-    <div class="search-bar-wrapper">
-      <GooseInput
-        v-model="search"
-        :icon="faMagnifyingGlass"
-        style="flex-grow: 1"
-      />
+    <GooseInput
+      v-model="search"
+      :icon="faMagnifyingGlass"
+      style="flex-grow: 1"
+    />
+    <div class="select-buttons">
       <GooseButton
-        :icon="faXmark"
-        transparent
-        tooltip="Toggle checks"
-      />
-      <GooseButton
+        title="Select all"
         :icon="faSquareCheck"
-        transparent
-        tooltip="Toggle checks"
+      />
+      <GooseButton
+        title="Select none"
       />
     </div>
   </div>
   <GooseTree
     v-model="orgs"
-    :checked="checked || false"
     :search="debounced"
     style="padding-left: 0"
   />
@@ -63,6 +54,9 @@ const search = ref(''),
 
   .sticky-bar
     box-sizing: border-box
+    display: flex
+    flex-direction: column
+    gap: .5rem
     height: fit-content
     padding: .5rem
     position: sticky
@@ -80,8 +74,8 @@ const search = ref(''),
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     margin-bottom: .25rem
 
-  .search-bar-wrapper
+  .select-buttons
     display: flex
-    gap: .5rem
     justify-content: space-between
+    gap: 1rem
 </style>
