@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { faMagnifyingGlass, faSquareCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import { refDebounced, useLocalStorage } from '@vueuse/core'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { Ref } from 'vue'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import useFetchOrgs from '#composables/useFetchOrgs.ts'
 
 /* Converts api array to object */
@@ -13,7 +13,7 @@ const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
   arr.filter(i => i.parent === parent).map(i => ({
     title: `${i.id} - ${i.name}`,
     id: i.id,
-    checked: useLocalStorage(`org-${i.id}-selected`, false),
+    toggled: useLocalStorage(`org-${i.id}-selected`, false),
     opened: useLocalStorage(`org-${i.id}-opened`, false),
     sub: toTree(arr, i.id),
   }))
@@ -21,7 +21,8 @@ const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
 const search = ref(''),
   debounced = refDebounced(search, 500),
   apiOrgs = await useFetchOrgs(),
-  orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs))
+  orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
+  treeRef = useTemplateRef('tree')
 </script>
 
 <template>
@@ -29,20 +30,22 @@ const search = ref(''),
     <GooseInput
       v-model="search"
       :icon="faMagnifyingGlass"
-      style="flex-grow: 1"
     />
     <div class="select-buttons">
       <GooseButton
-        title="Select all"
+        title="Выбрать все организации"
+        @click="treeRef?.toggleAll(true)"
         :icon="faSquareCheck"
       />
       <GooseButton
-        title="Select none"
+        title="Сбросить"
+        @click="treeRef?.toggleAll(false)"
       />
     </div>
   </div>
   <GooseTree
     v-model="orgs"
+    ref="tree"
     :search="debounced"
     style="padding-left: 0"
   />

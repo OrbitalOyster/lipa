@@ -73,7 +73,6 @@ const props = defineProps<{
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
-    width: 100%
 
   .primary
     background-color: colors.$primary

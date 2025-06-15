@@ -40,12 +40,12 @@ declare global {
 
   /* Tree */
   interface TreeLeaf {
-    checked: Ref<boolean>
     id: string
     matched?: boolean
+    opened: Ref<boolean>
     sub: TreeLeaf[]
     title: string
-    opened: Ref<boolean>
+    toggled: Ref<boolean>
   }
 
   /* FloatingUI options */

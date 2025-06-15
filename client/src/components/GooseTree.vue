@@ -8,36 +8,36 @@ import { watch } from 'vue'
 const props = defineProps<{
     search?: string
   }>(),
-  emit = defineEmits(['check']),
+  emit = defineEmits(['toggle']),
   branch = defineModel<TreeLeaf[]>({ required: true })
 
-/* Check if leaf children have mixed check states */
+/* Check if leaf children have mixed toggle states */
 function leafIsIndetermitate(leaf: TreeLeaf): boolean {
   /* Not a branch */
   if (!leaf.sub[0])
     return false
-  const first = leaf.sub[0].checked
-  return leaf.sub.some(l => l.checked !== first || leafIsIndetermitate(l))
+  const first = leaf.sub[0].toggled
+  return leaf.sub.some(l => l.toggled !== first || leafIsIndetermitate(l))
 }
 
-function checkBranch(branch: TreeLeaf[], value: boolean) {
+function toggleBranch(branch: TreeLeaf[], value: boolean) {
   branch.forEach((leaf) => {
-    leaf.checked = value
+    leaf.toggled = value
     if (leaf.sub.length)
-      checkBranch(leaf.sub, value)
+      toggleBranch(leaf.sub, value)
   })
 }
 
 branch.value.forEach(leaf =>
-  watch(() => leaf.checked, () => {
-    /* Check/uncheck all leaves when root is checked/unchecked */
+  watch(() => leaf.toggled, () => {
+    /* Toggle all leaves when root is toggled */
     if (leaf.sub.length) {
       /* TODO: Make sence of it */
-      if (!leaf.checked || !leafIsIndetermitate(leaf))
-        checkBranch(leaf.sub, leaf.checked)
+      if (!leaf.toggled || !leafIsIndetermitate(leaf))
+        toggleBranch(leaf.sub, leaf.toggled)
     }
     /* Emit up */
-    emit('check', branch.value.some(l => l.checked))
+    emit('toggle', branch.value.some(l => l.toggled))
   },
   ),
 )
@@ -49,6 +49,12 @@ function leafMatched(leaf: TreeLeaf) {
   leaf.opened = childrenMatched!
   return titleMatched || childrenMatched
 }
+
+function toggleAll(value: boolean) {
+  toggleBranch(branch.value, value) 
+}
+
+defineExpose({toggleAll})
 </script>
 
 <template>
@@ -73,7 +79,7 @@ function leafMatched(leaf: TreeLeaf) {
           />
           <!-- Checkbox -->
           <GooseCheckbox
-            v-model="leaf.checked"
+            v-model="leaf.toggled"
             :indeterminate="leafIsIndetermitate(leaf)"
           >
             <GooseMarkable
@@ -89,7 +95,7 @@ function leafMatched(leaf: TreeLeaf) {
             v-if="leaf.sub.length && leaf.opened"
             v-model="leaf.sub"
             :search
-            @check="value => leaf.checked = value"
+            @toggle="value => leaf.toggled = value"
           />
         </Transition>
       </div>
