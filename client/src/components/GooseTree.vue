@@ -51,10 +51,19 @@ function leafMatched(leaf: TreeLeaf) {
 }
 
 function toggleAll(value: boolean) {
-  toggleBranch(branch.value, value) 
+  toggleBranch(branch.value, value)
 }
 
-defineExpose({toggleAll})
+function toggleSome(branch: TreeLeaf[], ids: string[], value: boolean) {
+  branch.forEach((leaf) => {
+    if (ids.includes(leaf.id))
+      leaf.toggled = value
+    if (leaf.sub.length)
+      toggleSome(leaf.sub, ids, value)
+  })
+}
+
+defineExpose({ toggleAll, toggleSome: (ids: string[], value: boolean) => toggleSome(branch.value, ids, value) })
 </script>
 
 <template>
@@ -64,14 +73,14 @@ defineExpose({toggleAll})
       :key="i"
     >
       <!-- Root node -->
-      <div v-if="search === '' || leafMatched(leaf)">
+      <div v-show="search === '' || leafMatched(leaf)">
         <div
           class="title"
           :style="{ 'padding-left': leaf.sub.length ? 0 : '2.0rem' }"
         >
           <!-- Open/close leaf icon (disabled when searching) -->
           <FontAwesomeIcon
-            v-if="leaf.sub.length"
+            v-show="leaf.sub.length"
             class="chevron"
             :class="{ opened: leaf.opened }"
             :icon="faChevronRight"
@@ -92,7 +101,7 @@ defineExpose({toggleAll})
         <!-- Children nodes -->
         <Transition _name="slide">
           <GooseTree
-            v-if="leaf.sub.length && leaf.opened"
+            v-show="leaf.sub.length && leaf.opened"
             v-model="leaf.sub"
             :search
             @toggle="value => leaf.toggled = value"

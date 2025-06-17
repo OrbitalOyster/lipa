@@ -5,8 +5,8 @@ import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
-import { RouterLink } from 'vue-router'
 import OrgTree from '#shared/OrgTree.vue'
+import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
@@ -86,7 +86,7 @@ const slots = [
     width: 100vw
 
   aside
-    flex-basis: 32rem
+    flex-basis: 36rem
     flex-shrink: 0
 
   main

@@ -13,9 +13,9 @@ declare global {
 
   /* User store */
   interface UserStore {
+    orgId: null | string
+    rememberMe: boolean
     role: null | string
-    selectedOrgs: string[]
-    sideBarWidth: number
     username: null | string
   }
 

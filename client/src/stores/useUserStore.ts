@@ -11,8 +11,8 @@ const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     username: null,
     role: null,
-    sideBarWidth: 25,
-    selectedOrgs: [],
+    orgId: null,
+    rememberMe: false,
   }),
   actions: {
     async getPayload() {

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { faMagnifyingGlass, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faMagnifyingGlass, faSquare, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
+import { ref, useTemplateRef } from 'vue'
 import { refDebounced, useLocalStorage } from '@vueuse/core'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { Ref } from 'vue'
-import { ref, useTemplateRef } from 'vue'
 import useFetchOrgs from '#composables/useFetchOrgs.ts'
+import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Converts api array to object */
 const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
@@ -22,7 +23,8 @@ const search = ref(''),
   debounced = refDebounced(search, 500),
   apiOrgs = await useFetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
-  treeRef = useTemplateRef('tree')
+  treeRef = useTemplateRef('tree'),
+  orgId = useUserStore().orgId
 </script>
 
 <template>
@@ -33,19 +35,26 @@ const search = ref(''),
     />
     <div class="select-buttons">
       <GooseButton
-        title="Выбрать все организации"
-        @click="treeRef?.toggleAll(true)"
+        title="Выбрать всех"
         :icon="faSquareCheck"
+        @click="treeRef?.toggleAll(true)"
+      />
+      <GooseButton
+        v-if="orgId"
+        title="Выбрать себя"
+        :icon="faHouse"
+        @click="treeRef?.toggleSome([orgId], true)"
       />
       <GooseButton
         title="Сбросить"
+        :icon="faSquare"
         @click="treeRef?.toggleAll(false)"
       />
     </div>
   </div>
   <GooseTree
-    v-model="orgs"
     ref="tree"
+    v-model="orgs"
     :search="debounced"
     style="padding-left: 0"
   />
@@ -79,6 +88,6 @@ const search = ref(''),
 
   .select-buttons
     display: flex
-    justify-content: space-between
+    justify-content: space-around
     gap: 1rem
 </style>

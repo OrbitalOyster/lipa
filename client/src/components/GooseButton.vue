@@ -73,6 +73,10 @@ const props = defineProps<{
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
     user-select: none
+    width: inherit
+
+  span
+    flex-grow: 1
 
   .primary
     background-color: colors.$primary
