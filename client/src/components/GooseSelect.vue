@@ -110,13 +110,10 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     <Transition name="fade">
       <!-- Drop-down list -->
       <ul
-        v-if="active"
+        v-show="active && !middlewareData.hide?.referenceHidden"
         ref="floating"
         tabindex="0"
-        :style="{
-          ...floatingStyles,
-          visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'
-        }"
+        :style="{ ...floatingStyles }"
         @focus="target?.focus()"
       >
         <li

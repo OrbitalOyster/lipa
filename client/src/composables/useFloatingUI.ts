@@ -11,12 +11,12 @@ const arrowAngles = {
 }
 
 const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElement | null>, arrow: Ref<HTMLElement | null> | null, options: FloatingUIOptions) => {
-  const { active, side, fitTargetWidth } = options,
+  const { active, side, fitTargetWidth, useArrow } = options,
     arrowSize = 16,
     minWidth = 32,
     minHeight = 32,
     maxDistanceToEdge = 16,
-    offsetValue = arrow ? arrowSize : 8,
+    offsetValue = useArrow ? arrowSize : 8,
     autoPlacementOptions = side ? { allowedPlacements: [side] } : {},
     shiftOptions = { padding: arrowSize },
     arrowOptions = { element: arrow, padding: arrowSize }

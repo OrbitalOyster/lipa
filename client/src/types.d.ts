@@ -53,6 +53,7 @@ declare global {
     active: Ref<boolean>
     fitTargetWidth?: boolean
     side?: Side
+    useArrow?: boolean
   }
 
   /* TODO: Shared types */

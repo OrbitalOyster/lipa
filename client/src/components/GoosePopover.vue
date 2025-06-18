@@ -44,13 +44,10 @@ defineExpose({ toggle, active })
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
-      v-if="debounced"
+      v-show="debounced && !middlewareData.hide?.referenceHidden"
       ref="floating"
       class="floating"
-      :style="{
-        ...floatingStyles,
-        visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'
-      }"
+      :style="{ ...floatingStyles }"
     >
       <!-- Arrow -->
       <div

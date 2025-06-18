@@ -16,7 +16,7 @@ const props = defineProps<{
   arrow = useTemplateRef('arrow')
 
 const { floatingStyles, middlewareData, arrowStyle }
-  = useFloatingUI(target, floating, arrow, { active, side: props.side })
+  = useFloatingUI(target, floating, arrow, { active, side: props.side, useArrow: true })
 </script>
 
 <template>
@@ -31,13 +31,10 @@ const { floatingStyles, middlewareData, arrowStyle }
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
-      v-if="text && debounced"
+      v-show="text && debounced && !middlewareData.hide?.referenceHidden"
       ref="floating"
       class="floating"
-      :style="{
-        ...floatingStyles,
-        visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible'
-      }"
+      :style="{ ...floatingStyles }"
     >
       <!-- Arrow -->
       <div

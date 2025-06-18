@@ -85,7 +85,7 @@ const toggled = defineModel<boolean>({ default: false }),
     scale: 0%
     top: calc(($button-size - $mark-size) / 2)
     transform: translateY(-.0625rem)
-    transition: height transitions.$time transitions.$function, scale transitions.$time transitions.$function, top transitions.$time transitions.$function 
+    transition: height transitions.$time transitions.$function, scale transitions.$time transitions.$function, top transitions.$time transitions.$function
     width: $mark-size
 
   /* On hover */
