@@ -62,7 +62,7 @@ const props = defineProps<{
     color: colors.$button
     cursor: pointer
     display: inline-flex
-    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
+    filter: drop-shadow(colors.$button-shadow 0 .1rem .1rem)
     font-family: inherit
     font-size: 1.25rem
     gap: .75rem
@@ -71,7 +71,7 @@ const props = defineProps<{
     outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
-    transition: transitions.$focusable, transitions.$colors, transitions.$filter, transitions.$transform
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
     user-select: none
     width: inherit
 
@@ -117,22 +117,15 @@ const props = defineProps<{
 
   /* On hover */
   button:hover
-    filter: drop-shadow(colors.$button-shadow 0 .25rem .25rem)
-    transform: translateY(-.0625rem)
+    filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
 
   /* On focus */
   button:focus
     outline-width: .25rem
-
-  /* On active */
-  button:active
-    filter: drop-shadow(colors.$button-shadow 0 .125rem .125rem)
-    transform: translateY(0)
 
   /* On disabled */
   button:disabled
     color: colors.$disabled
     cursor: not-allowed
     filter: none
-    transform: translateY(0)
 </style>

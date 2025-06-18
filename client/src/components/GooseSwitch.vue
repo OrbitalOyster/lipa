@@ -75,19 +75,23 @@ const toggled = defineModel<boolean>({ default: false }),
     background-color: colors.$disabled
     border-radius: 1rem
     content: ""
-    filter: drop-shadow(rgba(0, 0, 0, 0.6) 0 .125rem .125rem)
+    filter: drop-shadow(colors.$button-shadow 0 .1rem .1rem)
     height: $mark-size
     left: calc($height / 2 - $mark-size / 2)
     position: absolute
     top: calc($height / 2 - $mark-size / 2)
-    transition: left transitions.$time transitions.$function
     transform: translateY(-.0625rem)
+    transition: left transitions.$time transitions.$function, transitions.$focusable, transitions.$colors, transitions.$filter
     width: $mark-size
 
   /* On toggled */
   button.toggled::after
     background-color: colors.$primary
     left: calc($width - $height / 2 - $mark-size / 2)
+
+  /* On hover */
+  button:hover::after
+    filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
 
   /* On active */
   button:active::after
@@ -104,5 +108,4 @@ const toggled = defineModel<boolean>({ default: false }),
 
   button:disabled ~ label
     cursor: not-allowed
-
 </style>
