@@ -17,11 +17,12 @@ const toggled = defineModel<boolean>({ default: false }),
       :disabled
       :class="{ toggled, disabled, indeterminate }"
       type="button"
-      @click.stop="toggled = !toggled"
+      @click="toggled = !toggled"
     />
+    <!-- preventDefault() to keep focus on button -->
     <label
       :for="id"
-      @mousedown="e => e.preventDefault()"
+      @mousedown.prevent
     >
       <slot />
     </label>
@@ -85,7 +86,7 @@ const toggled = defineModel<boolean>({ default: false }),
     scale: 0%
     top: calc(($button-size - $mark-size) / 2)
     transform: translateY(-.0625rem)
-    transition: height transitions.$time transitions.$function, scale transitions.$time transitions.$function, top transitions.$time transitions.$function
+    transition: scale transitions.$time transitions.$function, transitions.$focusable, transitions.$colors, transitions.$filter
     width: $mark-size
 
   /* On hover */

@@ -14,8 +14,8 @@ const toggled = defineModel<boolean>({ default: false }),
     <button
       :id
       :disabled
-      type="button"
       :class="{ toggled }"
+      type="button"
       @click="toggled = !toggled"
     />
     <!-- preventDefault() to keep focus on button -->
