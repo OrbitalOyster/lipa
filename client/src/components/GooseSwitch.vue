@@ -42,9 +42,6 @@ const toggled = defineModel<boolean>({ default: false }),
     display: flex
     gap: .5rem
 
-  input
-    display: none
-
   /* Base */
   button
     background-color: colors.$input-background
