@@ -49,6 +49,7 @@ const model = defineModel<Accordion>({ required: true })
   ul
     display: flex
     flex-direction: column
+    gap: .5rem
     height: 100%
 
   li
@@ -60,9 +61,6 @@ const model = defineModel<Accordion>({ required: true })
     flex-direction: column
     flex-grow: 0
     height: 3rem
-    margin-bottom: .25rem
-    margin-bottom: .25rem
-    margin-top: .25rem
     overflow: hidden
     transition: 50ms flex-grow ease-in-out
 

@@ -92,8 +92,8 @@ const slots = [
   main
     display: flex
     flex-direction: column
-    flex-grow: 1
     height: 100%
+    width: 100%
 
   .loading
     align-items: center
