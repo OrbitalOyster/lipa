@@ -14,29 +14,31 @@ const selected = ref(props.slots[0].id)
 </script>
 
 <template>
-  <ul>
-    <li
-      v-for="slot in slots"
-      :key="slot.id"
-      :class="{selected: slot.id === selected}"
-      @click="selected = slot.id"
-    >
-      <h1>
-        <FontAwesomeIcon
-          :icon="slot.icon"
-          size="lg"
-        />
-        <span>{{ slot.title }}</span>
-      </h1>
-    </li>
-  </ul>
-  <div class="content">
-    <div
-      v-for="slot in slots"
-      :key="slot.id"
-    >
-      <div v-if="slot.id === selected">
-        <slot :name="slot.id" />
+  <div class="tabs-wrapper">
+    <ul>
+      <li
+        v-for="slot in slots"
+        :key="slot.id"
+        :class="{ selected: slot.id === selected }"
+        @click="selected = slot.id"
+      >
+        <h1>
+          <FontAwesomeIcon
+            :icon="slot.icon"
+            size="lg"
+          />
+          <span>{{ slot.title }}</span>
+        </h1>
+      </li>
+    </ul>
+    <div class="content">
+      <div
+        v-for="slot in slots"
+        :key="slot.id"
+      >
+        <div v-if="slot.id === selected">
+          <slot :name="slot.id" />
+        </div>
       </div>
     </div>
   </div>
@@ -46,11 +48,16 @@ const selected = ref(props.slots[0].id)
   @use '../assets/colors'
   @use '../assets/borders'
 
+  .tabs-wrapper
+    display: flex
+    flex-direction: column
+    height: 100%
+
   ul
     display: flex
     flex-direction: row
     height: 3rem
-  
+
   li
     background-color: white
     border-radius: borders.$radius
@@ -79,12 +86,11 @@ const selected = ref(props.slots[0].id)
     /* transform: translate(0, borders.$radius) */
 
   h1
+    align-items: center
     display: flex
     font-size: 1rem
     font-weight: normal
     gap: .5rem
-    margin: 0
-    padding: 0
 
   .content
     background-color: colors.$card
@@ -93,5 +99,4 @@ const selected = ref(props.slots[0].id)
     display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     height: 100%
-
 </style>

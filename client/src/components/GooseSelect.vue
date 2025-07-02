@@ -117,9 +117,9 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
         @focus="target?.focus()"
       >
         <li
-          v-for="(item, i) in items"
+          v-for="item in items"
           ref="itemsRef"
-          :key="i"
+          :key="item.id"
           :class="{ selected: selectedId === item.id }"
           @click="selectedId = item.id; active = false"
         >
