@@ -8,15 +8,15 @@ import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
-    autofocus?: boolean
-    checks?: FormCheck[]
-    disabled?: boolean
-    error?: string
-    loading?: boolean
-    items: SelectItem[]
-    placeholder: string
-    side?: Side
-  }>(),
+  autofocus?: boolean
+  checks?: FormCheck[]
+  disabled?: boolean
+  error?: string
+  loading?: boolean
+  items: SelectItem[]
+  placeholder: string
+  side?: Side
+}>(),
   active = ref(false),
   selectedId = defineModel<string>({ default: '' }),
   itemsRef = useTemplateRef('itemsRef'),

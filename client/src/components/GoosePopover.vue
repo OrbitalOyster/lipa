@@ -9,11 +9,11 @@ import { useFloatingUI } from '#composables/useFloatingUI.ts'
 const debounceDelay = 1000
 
 const props = defineProps<{
-    hasArrow?: boolean
-    clickToggle?: boolean
-    hoverToggle?: boolean
-    side?: Side
-  }>(),
+  hasArrow?: boolean
+  clickToggle?: boolean
+  hoverToggle?: boolean
+  side?: Side
+}>(),
   active = ref(false),
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),

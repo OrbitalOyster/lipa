@@ -6,18 +6,18 @@ import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps<{
-    danger?: boolean
-    disabled?: boolean
-    icon?: IconDefinition
-    loading?: boolean
-    small?: boolean
-    submit?: boolean
-    title?: string
-    tooltip?: string
-    tooltipSide?: Side
-    transparent?: boolean
-    warning?: boolean
-  }>(),
+  danger?: boolean
+  disabled?: boolean
+  icon?: IconDefinition
+  loading?: boolean
+  small?: boolean
+  submit?: boolean
+  title?: string
+  tooltip?: string
+  tooltipSide?: Side
+  transparent?: boolean
+  warning?: boolean
+}>(),
   type = props.submit ? 'submit' : 'button',
   emit = defineEmits(['click'])
 </script>

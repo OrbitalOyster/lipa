@@ -6,8 +6,8 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { watch } from 'vue'
 
 const props = defineProps<{
-    search?: string
-  }>(),
+  search?: string
+}>(),
   emit = defineEmits(['toggle']),
   branch = defineModel<TreeLeaf[]>({ required: true })
 

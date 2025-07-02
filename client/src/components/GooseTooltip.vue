@@ -5,9 +5,9 @@ import { refDebounced } from '@vueuse/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
-    side?: Side
-    text?: string
-  }>(),
+  side?: Side
+  text?: string
+}>(),
   active = ref(false),
   debounceDelay = 1000,
   debounced = refDebounced(active, debounceDelay),
