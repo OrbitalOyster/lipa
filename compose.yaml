@@ -12,9 +12,9 @@ services:
       - ${DB_PORT}:${DB_PORT}
 
   phpmyadmin:
+    image: phpmyadmin
     depends_on:
       - db
-    image: phpmyadmin
     restart: always
     ports:
       - ${PHPMYADMIN_PORT}:${PRODUCTION_PORT}
@@ -46,7 +46,6 @@ services:
   client:
     build:
       context: client
-      dockerfile: Dockerfile
       args:
         - VITE_API_URI=http://${SERVER}:${API_PORT}
     ports:
