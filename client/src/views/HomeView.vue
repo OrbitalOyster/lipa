@@ -34,7 +34,7 @@ const tableModel = {
     ['126', 'Foo Bar', '4.3.2.1', '2000'],
     ['127', 'Foo Bar', '4.3.2.1', '2000'],
     ['128', 'Foo Bar', '4.3.2.1', '2000'],
-  ]
+  ],
 }
 </script>
 
@@ -74,7 +74,7 @@ const tableModel = {
             </div>
           </template>
           <template #initial>
-            <GooseTable v-model="tableModel"/>
+            <GooseTable v-model="tableModel" />
           </template>
           <template #complex>
             <p>Baz</p>

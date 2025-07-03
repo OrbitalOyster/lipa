@@ -39,7 +39,7 @@ function tagToComponent() {
     case 'select':
       return GooseSelect
     default:
-      throw new Error('Major screw up')
+      throw new Error('Major screwup')
   }
 }
 
