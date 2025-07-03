@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faSpinner, faUpload } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
+import GooseLoading from '#components/GooseLoading.vue'
 import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import OrgTree from '#shared/OrgTree.vue'
@@ -48,12 +48,7 @@ const tableModel = {
             <Suspense>
               <OrgTree />
               <template #fallback>
-                <div class="loading">
-                  <FontAwesomeIcon
-                    class="fa-pulse"
-                    :icon="faSpinner"
-                  />
-                </div>
+                <GooseLoading />
               </template>
             </Suspense>
           </template>
@@ -103,11 +98,4 @@ const tableModel = {
   main
     height: 100%
     width: 100%
-
-  .loading
-    align-items: center
-    display: flex
-    font-size: 3rem
-    height: 100%
-    justify-content: center
 </style>
