@@ -20,11 +20,13 @@ const useUserStore = defineStore('user', {
       if (res.data)
         Object.assign(this, res.data)
     },
-    async setPayload(payload) {
+    /*
+    async setPayload(payload: UserTokenPayload) {
       const res = await axios.post(`${apiEndpoint}/payload`, payload)
       if (res.data)
         Object.assign(this, res.data)
     },
+    */
     /* Checks if user's logged in */
     async check() {
       /* Already logged in */
