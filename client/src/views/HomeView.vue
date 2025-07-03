@@ -24,12 +24,24 @@ const slots = [
   { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
+
+const tableModel = {
+  headers: ['Изменён', 'Организация', 'Срок отчёта', 'Год'],
+  rows: [
+    ['123', 'Foo Bar', '4.3.2.1', '2000'],
+    ['124', 'Foo Bar', '4.3.2.1', '2000'],
+    ['125', 'Foo Bar', '4.3.2.1', '2000'],
+    ['126', 'Foo Bar', '4.3.2.1', '2000'],
+    ['127', 'Foo Bar', '4.3.2.1', '2000'],
+    ['128', 'Foo Bar', '4.3.2.1', '2000'],
+  ]
+}
 </script>
 
 <template>
   <div class="home-view-wrapper">
     <TopBar />
-    <div style="display: flex; flex-direction: row; flex-grow: 1; gap: .5rem">
+    <div style="display: flex; flex-direction: row; flex-grow: 1; gap: 1rem">
       <aside>
         <GooseAccordion v-model="accordionModel">
           <template #orgs>
@@ -62,8 +74,7 @@ const slots = [
             </div>
           </template>
           <template #initial>
-            <p>Bar</p>
-            <GooseTable style="width: 100%" />
+            <GooseTable v-model="tableModel"/>
           </template>
           <template #complex>
             <p>Baz</p>
@@ -79,14 +90,14 @@ const slots = [
     box-sizing: border-box
     display: flex
     flex-direction: column
-    gap: .5rem
+    gap: 1rem
     height: 100vh
-    padding: .5rem
+    padding: 1rem
     position: fixed
     width: 100vw
 
   aside
-    flex-basis: 36rem
+    flex-basis: 32rem
     flex-shrink: 0
 
   main

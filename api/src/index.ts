@@ -3,6 +3,7 @@ import { check, getPayload, setPayload } from './cookies'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { orgs } from './orgs'
+import { reports } from './reports'
 
 /* Config */
 const port = Number(Bun.env['API_PORT']),
@@ -40,6 +41,8 @@ app.get('/logout', logout)
 
 /* Orgs */
 app.get('/orgs', orgs)
+/* Reports */
+app.get('/reports', reports)
 
 export default {
   fetch: app.fetch,

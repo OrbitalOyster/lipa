@@ -96,7 +96,7 @@ const selected = ref(props.slots[0].id)
     background-color: colors.$card
     border-radius: borders.$radius
     border: borders.$card
-    display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     height: 100%
+    width: 100%
 </style>
