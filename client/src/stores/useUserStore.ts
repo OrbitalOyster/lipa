@@ -9,9 +9,9 @@ if (!apiEndpoint)
 
 const useUserStore = defineStore('user', {
   state: (): UserStore => ({
-    username: null,
+    userId: null,
+    isOrg: null,
     role: null,
-    orgId: null,
     rememberMe: false,
   }),
   actions: {
@@ -28,7 +28,7 @@ const useUserStore = defineStore('user', {
     /* Checks if user's logged in */
     async check() {
       /* Already logged in */
-      if (this.username)
+      if (this.userId)
         return true
       try {
         const res: AxiosResponse<boolean>
@@ -57,7 +57,8 @@ const useUserStore = defineStore('user', {
     },
     async logout() {
       await axios.get(`${apiEndpoint}/logout`)
-      this.username = null
+      this.userId = null
+      this.isOrg = null
       this.role = null
     },
   },

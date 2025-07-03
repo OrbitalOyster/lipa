@@ -13,10 +13,10 @@ declare global {
 
   /* User store */
   interface UserStore {
-    orgId: null | string
-    rememberMe: boolean
+    userId: null | string
+    isOrg: null | boolean
     role: null | string
-    username: null | string
+    rememberMe: boolean
   }
 
   /* Accordion */

@@ -46,7 +46,7 @@ async function logout() {
       <div>
         Вы зашли как:
         <span class="username">
-          {{ userStore.username }}
+          {{ userStore.userId }}
         </span>
       </div>
       <GooseButton

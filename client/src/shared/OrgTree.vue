@@ -24,7 +24,7 @@ const search = ref(''),
   apiOrgs = await useFetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
   treeRef = useTemplateRef('tree'),
-  orgId = useUserStore().orgId
+  isOrg = useUserStore().isOrg
 </script>
 
 <template>
@@ -40,10 +40,10 @@ const search = ref(''),
         @click="treeRef?.toggleAll(true)"
       />
       <GooseButton
-        v-if="orgId"
+        v-if="isOrg"
         title="Выбрать себя"
         :icon="faHouse"
-        @click="treeRef?.toggleSome([orgId], true)"
+        @click="treeRef?.toggleSome([useUserStore().userId], true)"
       />
       <GooseButton
         title="Сбросить"

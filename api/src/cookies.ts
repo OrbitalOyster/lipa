@@ -26,7 +26,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
   const oldPayload = await getPayload(context)
   if (payload)
     Object.assign(oldPayload, payload)
-  const rememberMe = oldPayload.rememberMe,
+  const rememberMe = oldPayload['rememberMe'],
     maxAge = rememberMe ? cookieLongLifetimeSec : cookieShortLifetimeSec
   /* Update expiration date */
   oldPayload['exp'] = Math.floor(Date.now() / 1000) + maxAge
@@ -44,7 +44,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
 
 export const setPayload = async (context: Context) => {
   const payload = await context.req.json<UserPayload>()
-  if (payload.username || payload.orgId || payload.exp)
+  if (payload.userId || payload.isOrg || payload.exp)
     throw new Error('Haxxor alert')
   await updateCookie(context, payload)
   return context.json(payload)
@@ -55,9 +55,9 @@ export const check = async (context: Context) => {
   /* No cookies */
   if (!payload)
     return context.json(false)
-  const { username } = { ...payload }
+  const { userId } = { ...payload }
   /* Logged out */
-  if (!username)
+  if (!userId)
     return context.json(false)
   /* Update and move on */
   await updateCookie(context)

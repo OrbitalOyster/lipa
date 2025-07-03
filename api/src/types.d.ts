@@ -9,8 +9,9 @@ declare global {
   }
 
   interface UserPayload {
-    username?: string | null
+    userId?: string | null
     isOrg?: boolean | null
+    rememberMe?: boolean | null
     exp?: number
   }
 
