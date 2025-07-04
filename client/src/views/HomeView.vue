@@ -28,14 +28,15 @@ const slots = [
 const tableModel = {
   headers: ['Изменён', 'Организация', 'Срок отчёта', 'Год'],
   rows: [
-    ['123', 'Foo Bar', '4.3.2.1', '2000'],
-    ['124', 'Foo Bar', '4.3.2.1', '2000'],
-    ['125', 'Foo Bar', '4.3.2.1', '2000'],
-    ['126', 'Foo Bar', '4.3.2.1', '2000'],
-    ['127', 'Foo Bar', '4.3.2.1', '2000'],
-    ['128', 'Foo Bar', '4.3.2.1', '2000'],
+    ['123', 'Foo Bar', '4.3.2.1', '2001'],
+    ['124', 'Foo Bar', '4.3.2.1', '2003'],
+    ['125', 'Foo Bar', '4.3.2.1', '2005'],
+    ['126', 'Foo Bar', '4.3.2.1', '2007'],
+    ['127', 'Foo Bar', '4.3.2.1', '2009'],
+    ['128', 'Foo Bar', '4.3.2.1', '2011'],
   ],
 }
+
 </script>
 
 <template>
@@ -69,7 +70,19 @@ const tableModel = {
             </div>
           </template>
           <template #initial>
-            <GooseTable v-model="tableModel" />
+            <Suspense>
+            <GooseTable v-model="tableModel">
+  
+            <template #1="{a}">
+              <div v-if="a === 3">Three: {{a}}</div>
+              <div v-else>{{a}}</div>
+            </template>
+
+            </GooseTable>
+              <template #fallback>
+                <GooseLoading />
+              </template>
+            </Suspense>
           </template>
           <template #complex>
             <p>Baz</p>

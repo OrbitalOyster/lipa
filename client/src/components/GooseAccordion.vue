@@ -35,6 +35,7 @@ const model = defineModel<Accordion>({ required: true })
         />
       </div>
       <div class="item-container">
+      <!-- <div v-if="model.opened === item.id" class="item-container">  <<< Lazy loading -->
         <slot :name="item.id" />
       </div>
     </li>
