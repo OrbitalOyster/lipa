@@ -71,14 +71,17 @@ const tableModel = {
           </template>
           <template #initial>
             <Suspense>
-            <GooseTable v-model="tableModel">
-  
-            <template #1="{a}">
-              <div v-if="a === 3">Three: {{a}}</div>
-              <div v-else>{{a}}</div>
-            </template>
+              <GooseTable v-model="tableModel">
+    
+                <template #n="{td}">
+                  Number: {{td}}
+                </template>
 
-            </GooseTable>
+                <template #str="{td}">
+                  Formatted: {{td}} !
+                </template>
+
+              </GooseTable>
               <template #fallback>
                 <GooseLoading />
               </template>

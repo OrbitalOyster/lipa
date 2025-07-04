@@ -16,17 +16,23 @@ const model = defineModel<TableModel>({ required: true }),
   rows = model.value.rows
 
 const reports = await useFetchReports(10, 1)
-
 console.log(reports)
 
-// const items = [{a:"hello",b: 1, c: 12345}, {a:"world", b: 100, c: "bar"}]
 const items = ref([
-  [1,{a:2},3,4,5],
-  [2,{a:3},4,5,6],
-  [3,{a:4},5,6,7],
+/*
+  {date: 123, n: {td: 1}, str: {td:"hello"}, n2: 100 },
+  {date: 123, n: {td: 2}, str: {td:"world"}, n2: 100 },
+  {date: 123, n: {td: 3}, str: {td:"foo"}, n2: 100 },
+  {date: 123, n: {td: 4}, str: {td:"bar"}, n2: 100 },
+  {date: 123, n: {td: 5}, str: {td:"baz"}, n2: 100 },
+*/
+  {date: 123, n: 1, str: "hello", n2: 100 },
+  {date: 123, n: 2, str: "world", n2: 100 },
+  {date: 123, n: 3, str: "foo", n2: 100 },
+  {date: 123, n: 4, str: "bar", n2: 100 },
+  {date: 123, n: 5, str: "baz", n2: 100 },
 ])
 
-const bar = ref([{a: 777}, {a: 888}, {a: 999}])
 </script>
 
 <template>
@@ -36,9 +42,9 @@ const bar = ref([{a: 777}, {a: 888}, {a: 999}])
     </thead>
     <tbody>
       <tr v-for="row, r in items">
-        <td v-for="td, i in row">
-          <p>foo: {{td}}</p>
-          <slot :name="i" v-bind="td"/>
+        <td v-for="cell, c in row">
+          <slot :name="c" v-bind="{td: cell}"/>
+          <p>{{cell}}</p>
         </td>
       </tr>
     </tbody>
