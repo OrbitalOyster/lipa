@@ -42,7 +42,7 @@ function keyScroll(direction: number) {
   const selectedItem = props.items[selectedIndex]
   /* Should not happen */
   if (!selectedItem)
-    throw new Error('Majow screw up')
+    throw new Error('Majow screwup')
   selectedId.value = selectedItem.id
   if (active.value)
     scrollTo(selectedIndex, false)
@@ -160,6 +160,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
 
   /* On focus */
   .target:focus
+    border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 
   /* On disabled */

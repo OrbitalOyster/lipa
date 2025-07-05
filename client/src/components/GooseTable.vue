@@ -5,11 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 
 import { ref } from 'vue'
+import { useSlots } from 'vue'
 
 interface TableModel {
   headers: string[]
   rows: string[][]
 }
+
+const slots = useSlots(),
+  slotNames = Object.keys(slots)
 
 const model = defineModel<TableModel>({ required: true }),
   headers = model.value.headers,
@@ -43,8 +47,8 @@ const items = ref([
     <tbody>
       <tr v-for="row, r in items">
         <td v-for="cell, c in row">
-          <slot :name="c" v-bind="{td: cell}"/>
-          <p>{{cell}}</p>
+          <slot v-if="slotNames.includes(c)" :name="c" v-bind="{td: cell}"/>
+          <p v-else>{{cell}}</p>
         </td>
       </tr>
     </tbody>
