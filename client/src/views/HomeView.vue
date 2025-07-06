@@ -26,14 +26,18 @@ const slots = [
 ]
 
 const tableModel = {
-  headers: ['Изменён', 'Организация', 'Срок отчёта', 'Год'],
+  headers: [
+    { title: 'Дата', sortable: true }, 
+    { title: 'Организация'}, 
+    { title: 'Статус'}, 
+    { title: 'Год'},
+  ],
   rows: [
-    ['123', 'Foo Bar', '4.3.2.1', '2001'],
-    ['124', 'Foo Bar', '4.3.2.1', '2003'],
-    ['125', 'Foo Bar', '4.3.2.1', '2005'],
-    ['126', 'Foo Bar', '4.3.2.1', '2007'],
-    ['127', 'Foo Bar', '4.3.2.1', '2009'],
-    ['128', 'Foo Bar', '4.3.2.1', '2011'],
+    { date: 123, n: 1, str: 'hello', n2: 100 },
+    { date: 123, n: 2, str: 'world', n2: 100 },
+    { date: 123, n: 3, str: 'foo', n2: 100 },
+    { date: 123, n: 4, str: 'bar', n2: 100 },
+    { date: 123, n: 5, str: 'baz', n2: 100 },
   ],
 }
 
@@ -72,15 +76,13 @@ const tableModel = {
           <template #initial>
             <Suspense>
               <GooseTable v-model="tableModel">
-    
                 <template #n="{td}">
-                  Number: {{td}}
+                  Number: {{ td }}
                 </template>
 
                 <template #str="{td}">
-                  Formatted: {{td}} !
+                  Formatted: {{ td }} !
                 </template>
-
               </GooseTable>
               <template #fallback>
                 <GooseLoading />

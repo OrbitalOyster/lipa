@@ -4,8 +4,7 @@ import useFetchReports from '#composables/useFetchReports.ts'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 
-import { ref } from 'vue'
-import { useSlots } from 'vue'
+import { ref, useSlots } from 'vue'
 
 interface TableModel {
   headers: string[]
@@ -22,53 +21,25 @@ const model = defineModel<TableModel>({ required: true }),
 const reports = await useFetchReports(10, 1)
 console.log(reports)
 
-const items = ref([
-/*
-  {date: 123, n: {td: 1}, str: {td:"hello"}, n2: 100 },
-  {date: 123, n: {td: 2}, str: {td:"world"}, n2: 100 },
-  {date: 123, n: {td: 3}, str: {td:"foo"}, n2: 100 },
-  {date: 123, n: {td: 4}, str: {td:"bar"}, n2: 100 },
-  {date: 123, n: {td: 5}, str: {td:"baz"}, n2: 100 },
-*/
-  {date: 123, n: 1, str: "hello", n2: 100 },
-  {date: 123, n: 2, str: "world", n2: 100 },
-  {date: 123, n: 3, str: "foo", n2: 100 },
-  {date: 123, n: 4, str: "bar", n2: 100 },
-  {date: 123, n: 5, str: "baz", n2: 100 },
-])
-
 </script>
 
 <template>
-
-  <table>
-    <thead>
-    </thead>
-    <tbody>
-      <tr v-for="row, r in items">
-        <td v-for="cell, c in row">
-          <slot v-if="slotNames.includes(c)" :name="c" v-bind="{td: cell}"/>
-          <p v-else>{{cell}}</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-<!--
   <table>
     <thead>
       <tr>
-        <th 
+        <th
           v-for="header, i in headers"
-          key="i"
+          :key="i"
         >
-          <div class="foo">
-            <span 
-              :class="i < 2 && 'sortable'"
+          <div class="cell">
+            <span
+              class="header"
+              :class="header.sortable && 'sortable'"
             >
-              {{ header }}
+              {{ header.title }}
             </span>
             <FontAwesomeIcon
+              v-if="header.sortable"
               :icon="faArrowDownWideShort"
             />
           </div>
@@ -77,16 +48,19 @@ const items = ref([
     </thead>
     <tbody>
       <tr v-for="row in rows">
-        <td v-for="item in row">
-          <div class="foo">
-            {{ item }}
+        <td v-for="cell, c in row">
+          <div class="cell">
+            <slot
+              v-if="slotNames.includes(c)"
+              :name="c"
+              v-bind="{td: cell}"
+            />
+            <span v-else>{{ cell }}</span>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
--->
-
 </template>
 
 <style lang="sass" scoped>
@@ -98,12 +72,8 @@ const items = ref([
   th
     height: 2rem
 
-  th div
-    font-size: 1rem
-    /* padding: .5rem */
-    display: flex
-    justify-content: center
-    gap: .2rem
+  .header
+    font-weight: 600
 
   .sortable
     color: colors.$primary
@@ -115,9 +85,13 @@ const items = ref([
     cursor: pointer
     user-select: none
 
-  tr
+  tbody tr
     border-top: 1px solid #F0F0F0
     border-bottom: 1px solid #F0F0F0
+    cursor: pointer
+
+  tbody tr:hover
+    background-color: #ABEBC6
 
   td
     height: 3rem
@@ -128,7 +102,7 @@ const items = ref([
   /* td */
     /* padding: 1rem */
 
-  .foo
+  .cell
     display: flex
     justify-content: center
     height: 100%
