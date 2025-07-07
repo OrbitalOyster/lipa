@@ -3,13 +3,14 @@ import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUplo
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
-import GooseTable from '#components/GooseTable.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import OrgTree from '#shared/OrgTree.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
+
+import ReportsTab from '#shared/ReportsTab.vue'
 
 const accordionModel = ref({
   opened: useLocalStorage('sideBar', ''),
@@ -24,22 +25,6 @@ const slots = [
   { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
-
-const tableModel = {
-  headers: [
-    { title: 'Дата', sortable: true }, 
-    { title: 'Организация'}, 
-    { title: 'Статус'}, 
-    { title: 'Год'},
-  ],
-  rows: [
-    { date: 123, n: 1, str: 'hello', n2: 100 },
-    { date: 123, n: 2, str: 'world', n2: 100 },
-    { date: 123, n: 3, str: 'foo', n2: 100 },
-    { date: 123, n: 4, str: 'bar', n2: 100 },
-    { date: 123, n: 5, str: 'baz', n2: 100 },
-  ],
-}
 
 </script>
 
@@ -75,15 +60,7 @@ const tableModel = {
           </template>
           <template #initial>
             <Suspense>
-              <GooseTable v-model="tableModel">
-                <template #n="{td}">
-                  Number: {{ td }}
-                </template>
-
-                <template #str="{td}">
-                  Formatted: {{ td }} !
-                </template>
-              </GooseTable>
+              <ReportsTab />
               <template #fallback>
                 <GooseLoading />
               </template>

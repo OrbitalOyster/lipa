@@ -19,13 +19,18 @@ interface APIReport {
 export const reports = async (context: Context) => {
   await sleep(500)
   /* Query params */
-  const n = Number(context.req.query()['n']),
+  const size = Number(context.req.query()['size']),
     page = Number(context.req.query()['page'])
 
   const placeholderRaw = fs.readFileSync('reports.json').toString(),
-    json = (JSON.parse(placeholderRaw) as APIReport[])
+    rows = (JSON.parse(placeholderRaw) as APIReport[])
       .map((r: APIReport, i: number) => ({ ...r, i })) // Add index
-      .slice(page * n, (page + 1) * n) // Get page
+      .slice(page * size, (page + 1) * size) // Get page
 
-  return context.json(json)
+  return context.json(
+    {
+      page, size, total: 500,
+      rows
+    }
+  )
 }

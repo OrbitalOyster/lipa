@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import useFetchReports from '#composables/useFetchReports.ts'
-
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,14 +10,10 @@ interface TableModel {
 }
 
 const slots = useSlots(),
-  slotNames = Object.keys(slots)
-
-const model = defineModel<TableModel>({ required: true }),
-  headers = model.value.headers,
-  rows = model.value.rows
-
-const reports = await useFetchReports(10, 1)
-console.log(reports)
+  slotNames = Object.keys(slots),
+  model = defineModel<TableModel>({ required: true })
+  // headers = model.value.headers,
+  // rows = model.value.rows
 
 </script>
 
@@ -28,10 +22,10 @@ console.log(reports)
     <thead>
       <tr>
         <th
-          v-for="header, i in headers"
+          v-for="header, i in model.headers"
           :key="i"
         >
-          <div class="cell">
+          <div>
             <span
               class="header"
               :class="header.sortable && 'sortable'"
@@ -47,15 +41,21 @@ console.log(reports)
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in rows">
-        <td v-for="cell, c in row">
-          <div class="cell">
+      <tr
+        v-for="row, r in model.rows"
+        :key="r"
+      >
+        <td
+          v-for="header, h in model.headers"
+          :key="h"
+        >
+          <div>
             <slot
-              v-if="slotNames.includes(c)"
-              :name="c"
-              v-bind="{td: cell}"
+              v-if="slotNames.includes(header.prop)"
+              :name="header.prop"
+              v-bind="{td: row[header.prop]}"
             />
-            <span v-else>{{ cell }}</span>
+            <span v-else>{{ row[header.prop] }}</span>
           </div>
         </td>
       </tr>
@@ -96,15 +96,12 @@ console.log(reports)
   td
     height: 3rem
 
-  tr:nth-child(even)
-    background-color:  #E8F8F5
-
-  /* td */
-    /* padding: 1rem */
-
-  .cell
+  td div, th div
     display: flex
     justify-content: center
     height: 100%
     align-items: center
+
+  tr:nth-child(even)
+    background-color:  #E8F8F5
   </style>
