@@ -15,6 +15,7 @@ const props = defineProps<{
   firstPages: number 
   middlePages: number
   lastPages: number
+  disabled: boolean
 }>(),
   model = defineModel<Pagination>(),
   emit = defineEmits([ 'update' ]),
@@ -55,7 +56,7 @@ function setPage(i) {
 </script>
 
 <template>
-  <ul>
+  <ul :class="{ disabled }">
 
     <FontAwesomeIcon
       class="arrow"
@@ -99,6 +100,10 @@ function setPage(i) {
     justify-content: center
     display: flex
     gap: .1rem
+
+  ul.disabled
+    pointer-events: none 
+    filter: grayscale(1)
 
   .arrow
     cursor: pointer

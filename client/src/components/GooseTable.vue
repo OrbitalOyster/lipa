@@ -9,16 +9,18 @@ interface TableModel {
   rows: string[][]
 }
 
+const props = defineProps<{
+  loading: boolean
+}>()
+
 const slots = useSlots(),
   slotNames = Object.keys(slots),
   model = defineModel<TableModel>({ required: true })
-  // headers = model.value.headers,
-  // rows = model.value.rows
 
 </script>
 
 <template>
-  <table>
+  <table :class="{ loading }">
     <thead>
       <tr>
         <th
@@ -67,7 +69,13 @@ const slots = useSlots(),
   @use '../assets/colors'
 
   table
+    filter: blur(0px)
     width: 100%
+    transition: filter .2s ease-in-out
+
+  .loading
+    pointer-events: none
+    filter: blur(8px)
 
   th
     height: 2rem

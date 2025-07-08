@@ -33,7 +33,7 @@ export const reports = async (context: Context) => {
 
   const totalPages = Math.ceil(total / size)
   if (page > totalPages)
-    page = totalPages
+    page = totalPages - 1
 
   const placeholderRaw = fs.readFileSync('reports.json').toString(),
     rows = (JSON.parse(placeholderRaw) as APIReport[])

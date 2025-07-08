@@ -19,19 +19,26 @@ const tableModel = ref({
     { title: 'Год', prop: 'year' },
   ],
   rows: [],
-})
+}),
+  loading = ref(true)
 
 async function update() {
+  loading.value = true
   const apiReports = await useFetchReports(pagination.value.size, pagination.value.page)
   pagination.value = {...apiReports}
   tableModel.value.rows = apiReports.rows
+  loading.value = false
 }
 
-update()
+await update()
+loading.value = false
 </script>
 
 <template>
-  <GooseTable v-model="tableModel">
+  <GooseTable
+    v-model="tableModel"
+    :loading
+  >
     <template #date="{td}">
       {{ new Date(td).toLocaleString('ru') }}
     </template>
@@ -45,6 +52,7 @@ update()
     :firstPages="5"
     :middlePages="1"
     :lastPages="1"
+    :disabled="loading"
     v-model="pagination"
     @update="update"
   />
