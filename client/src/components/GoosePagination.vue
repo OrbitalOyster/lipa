@@ -1,13 +1,9 @@
 <script setup lang="ts">
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import GooseButton from '#components/GooseButton.vue'
 import { computed, ref, watch } from 'vue'
-
-const firstPages = 3,
-  middlePages = 3,
-  lastPages = 3
 
 interface Pagination {
   size: number
@@ -15,12 +11,18 @@ interface Pagination {
   total: number
 }
 
-const model = defineModel<Pagination>(),
-  emit = defineEmits([ 'update' ])
+const props = defineProps<{
+  firstPages: number 
+  middlePages: number
+  lastPages: number
+}>(),
+  model = defineModel<Pagination>(),
+  emit = defineEmits([ 'update' ]),
+  totalPages = computed(() => Math.ceil(model.value.total / model.value.size))
 
 function isPageVisible(n, active, total) {
   /* First and last pages */
-  if (n < firstPages || n >= total - lastPages)
+  if (n < props.firstPages || n >= total - props.lastPages)
     return true
 
   /* Pages around active */
@@ -29,13 +31,12 @@ function isPageVisible(n, active, total) {
 
   /* Pages around middle section */
   const m = Math.round(total / 2)
-  if (n + 1 >= m - 1 && n + 1 <= m + 1)
+  if (n + 1 >= m - props.middlePages && n + 1 <= m + props.middlePages)
     return true
   
   return false
 }
 
-const totalPages = computed(() => Math.ceil(model.value.total / model.value.size)) 
 
 function setPage(i) {
   if (model.value.page !== i) {
@@ -50,10 +51,11 @@ function setPage(i) {
     emit('update')
   }
 }
+
 </script>
 
 <template>
-  <div>
+  <ul>
 
     <FontAwesomeIcon
       class="arrow"
@@ -63,15 +65,20 @@ function setPage(i) {
     />
 
     <template v-for="i in totalPages">
-      <span
+      <li
         class="page"
         :class="{ active: i - 1 === model.page }"
         v-if="isPageVisible(i - 1, model.page, totalPages)"
         @click="setPage(i - 1)"
       >
       {{ i }} 
-      </span>
-      <template v-else>.</template>
+      </li>
+      <template v-else-if="isPageVisible(i - 2, model.page, totalPages)">
+        <FontAwesomeIcon
+          :icon="faEllipsis"
+          size="lg"
+        />
+      </template>
     </template>
 
     <FontAwesomeIcon
@@ -81,27 +88,36 @@ function setPage(i) {
       size="lg"
     />
 
-  </div>
+  </ul>
 </template>
 
 <style lang="sass" scoped>
-  div
+  @use '../assets/colors'
+
+  ul
     align-items: center
-    justify-content: space-between
+    justify-content: center
     display: flex
-    gap: 1rem
+    gap: .1rem
 
   .arrow
     cursor: pointer
     user-select: none
+    width: 2rem
 
-  span.page
+  li.page
+    display: flex
+    justify-content: center
+    align-items: center
+    box-sizing: border-box
     cursor: pointer
-    font-size: 1.5rem
+    font-size: 1.25rem
     user-select: none
+    border-radius: .5rem
+    min-width: 2.5rem
+    min-height: 2.5rem
 
-  span.page.active
-    font-size: 1.5rem
-    font-weight: bold
-
+  li.page.active
+    color: white
+    background-color: colors.$primary
 </style>

@@ -24,29 +24,28 @@ const tableModel = ref({
 async function update() {
   const apiReports = await useFetchReports(pagination.value.size, pagination.value.page)
   pagination.value = {...apiReports}
-  tableModel.value.rows = apiReports.rows.map(r => ({
-    ...r,
-    /* Convert JSON prop to actual Date */
-    date: new Date(r.date).toLocaleString('ru'),
-  }))
-}
-
-async function onPageChange() {
-  await update()
+  tableModel.value.rows = apiReports.rows
 }
 
 update()
 </script>
 
 <template>
-  <GoosePagination v-model="pagination" @update="onPageChange"/>
   <GooseTable v-model="tableModel">
-    <template #n="{td}">
-      Number: {{ td }}
+    <template #date="{td}">
+      {{ new Date(td).toLocaleString('ru') }}
     </template>
 
-    <template #str="{td}">
+    <template #org="{td}">
       Formatted: {{ td }} !
     </template>
   </GooseTable>
+  <GoosePagination 
+    style="padding: 1rem"
+    :firstPages="5"
+    :middlePages="1"
+    :lastPages="1"
+    v-model="pagination"
+    @update="update"
+  />
 </template>
