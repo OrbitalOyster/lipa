@@ -6,16 +6,10 @@ import useFetchReports from '#composables/useFetchReports.ts'
 import { ref } from 'vue'
 
 const pagination = ref({
-  size: 25,
+  size: 10,
   page: 0,
-  total: 500
+  total: 0
 })
-
-const reports = await useFetchReports(pagination.value.size, pagination.value.page),
-  parsedReports = reports.rows.map(r => ({
-    ...r,
-    date: new Date(r.date).toLocaleString('ru'),
-  }))
 
 const tableModel = ref({
   headers: [
@@ -24,23 +18,27 @@ const tableModel = ref({
     { title: 'Статус', prop: 'status' },
     { title: 'Год', prop: 'year' },
   ],
-  rows: parsedReports,
+  rows: [],
 })
 
-async function onPageChange() {
-  const reports = await useFetchReports(pagination.value.size, pagination.value.page),
-    parsedReports = reports.rows.map(r => ({
-      ...r,
-      date: new Date(r.date).toLocaleString('ru'),
-    }))
-
-  tableModel.value.rows = parsedReports
+async function update() {
+  const apiReports = await useFetchReports(pagination.value.size, pagination.value.page)
+  pagination.value = {...apiReports}
+  tableModel.value.rows = apiReports.rows.map(r => ({
+    ...r,
+    /* Convert JSON prop to actual Date */
+    date: new Date(r.date).toLocaleString('ru'),
+  }))
 }
 
+async function onPageChange() {
+  await update()
+}
+
+update()
 </script>
 
 <template>
-  {{ pagination.page }}
   <GoosePagination v-model="pagination" @update="onPageChange"/>
   <GooseTable v-model="tableModel">
     <template #n="{td}">
