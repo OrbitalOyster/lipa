@@ -1,6 +1,6 @@
 import type { Context } from 'hono'
-import { setTimeout as sleep } from 'node:timers/promises'
 import fs from 'node:fs'
+import { setTimeout as sleep } from 'node:timers/promises'
 
 /*
 interface ReportsQuery {
@@ -16,11 +16,24 @@ interface APIReport {
   status: string
 }
 
+const maxSize = 100
+
 export const reports = async (context: Context) => {
-  await sleep(500)
+  await sleep(1500)
+
+  // TODO: tmp
+  const total = 500
+
   /* Query params */
-  const size = Number(context.req.query()['size']),
-    page = Number(context.req.query()['page'])
+  let size = Number(context.req.query()['size']) || 10,
+    page = Number(context.req.query()['page']) || 0
+
+  if (size > maxSize)
+    size = maxSize
+
+  const totalPages = Math.ceil(total / size)
+  if (page > totalPages)
+    page = totalPages
 
   const placeholderRaw = fs.readFileSync('reports.json').toString(),
     rows = (JSON.parse(placeholderRaw) as APIReport[])
@@ -29,8 +42,10 @@ export const reports = async (context: Context) => {
 
   return context.json(
     {
-      page, size, total: 500,
-      rows
-    }
+      page,
+      size,
+      total,
+      rows,
+    },
   )
 }
