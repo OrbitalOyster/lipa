@@ -19,14 +19,19 @@ const tableModel = ref({
     { title: 'Год', sortable: true, prop: 'year' },
   ],
   rows: [],
-  sortedBy: 'year',
-  sortDesc: false,
+  sortBy: 'year',
+  desc: false,
 }),
   loading = ref(true)
 
 async function update() {
   loading.value = true
-  const apiReports = await useFetchReports(pagination.value.size, pagination.value.page)
+  const apiReports = await useFetchReports(
+    pagination.value.size,
+    pagination.value.page,
+    tableModel.value.sortBy,
+    tableModel.value.desc
+  )
   pagination.value = {...apiReports}
   tableModel.value.rows = apiReports.rows
   loading.value = false
@@ -40,7 +45,7 @@ loading.value = false
   <GooseTable
     v-model="tableModel"
     :loading
-    @update="c => console.log(tableModel.sortedBy, tableModel.sortDesc)"
+    @update="update"
   >
     <template #date="{td}">
       {{ new Date(td).toLocaleString('ru') }}

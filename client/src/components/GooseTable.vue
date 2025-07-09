@@ -20,10 +20,10 @@ const slots = useSlots(),
 const emit = defineEmits<{update}>()
 
 const sort = (column) => {
-  if (model.value.sortedBy === column)
-    model.value.sortDesc = !model.value.sortDesc
+  if (model.value.sortBy === column)
+    model.value.desc = !model.value.desc
   else
-    model.value.sortedBy = column
+    model.value.sortBy = column
   emit('update')
 }
 </script>
@@ -45,8 +45,8 @@ const sort = (column) => {
               {{ header.title }}
             </span>
             <FontAwesomeIcon
-              v-if="model.sortedBy === header.prop"
-              :icon="model.sortDesc ? faArrowDownWideShort : faArrowDownShortWide"
+              v-if="model.sortBy === header.prop"
+              :icon="model.desc ? faArrowDownWideShort : faArrowDownShortWide"
             />
           </div>
         </th>
