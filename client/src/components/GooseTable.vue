@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDownWideShort, faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons'
 
 import { ref, useSlots } from 'vue'
 
@@ -17,6 +17,15 @@ const slots = useSlots(),
   slotNames = Object.keys(slots),
   model = defineModel<TableModel>({ required: true })
 
+const emit = defineEmits<{update}>()
+
+const sort = (column) => {
+  if (model.value.sortedBy === column)
+    model.value.sortDesc = !model.value.sortDesc
+  else
+    model.value.sortedBy = column
+  emit('update')
+}
 </script>
 
 <template>
@@ -31,12 +40,13 @@ const slots = useSlots(),
             <span
               class="header"
               :class="header.sortable && 'sortable'"
+              @click="sort(header.prop)"
             >
               {{ header.title }}
             </span>
             <FontAwesomeIcon
-              v-if="header.sortable"
-              :icon="faArrowDownWideShort"
+              v-if="model.sortedBy === header.prop"
+              :icon="model.sortDesc ? faArrowDownWideShort : faArrowDownShortWide"
             />
           </div>
         </th>
@@ -71,7 +81,7 @@ const slots = useSlots(),
   table
     filter: blur(0px)
     width: 100%
-    transition: filter .2s ease-in-out
+    transition: filter .1s ease-in-out
 
   .loading
     pointer-events: none

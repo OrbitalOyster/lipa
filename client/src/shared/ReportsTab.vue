@@ -16,9 +16,11 @@ const tableModel = ref({
     { title: 'Дата', sortable: true, prop: 'date' },
     { title: 'Организация', prop: 'org' },
     { title: 'Статус', prop: 'status' },
-    { title: 'Год', prop: 'year' },
+    { title: 'Год', sortable: true, prop: 'year' },
   ],
   rows: [],
+  sortedBy: 'year',
+  sortDesc: false,
 }),
   loading = ref(true)
 
@@ -38,6 +40,7 @@ loading.value = false
   <GooseTable
     v-model="tableModel"
     :loading
+    @update="c => console.log(tableModel.sortedBy, tableModel.sortDesc)"
   >
     <template #date="{td}">
       {{ new Date(td).toLocaleString('ru') }}
