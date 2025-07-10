@@ -52,7 +52,7 @@ loading.value = false
   <div class="filters">
     <span>
       Отображать по:
-      <GooseSelect :items="pageSizes" placeholder="wut?"/>
+      <GooseSelect :items="pageSizes"/>
     </span>
     <span>
       От. До.

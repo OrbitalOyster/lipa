@@ -138,8 +138,9 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   .select-wrapper
     align-items: center
     cursor: pointer
-    display: flex
+    display: inline-flex
     position: relative
+    min-width: 8rem
 
   .select-wrapper.disabled
     cursor: not-allowed
@@ -156,6 +157,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     padding: 1.5rem 1rem .25rem 1rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
+    white-space: nowrap
     width: 100%
 
   /* On focus */
@@ -191,6 +193,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     background-color: colors.$card
     border-radius: borders.$radius
     border: borders.$card
+    box-sizing: border-box
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     margin-bottom: .25rem
     margin: 0
