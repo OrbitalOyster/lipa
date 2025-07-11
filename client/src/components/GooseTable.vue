@@ -1,15 +1,10 @@
 <script setup lang="ts">
+import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faArrowDownWideShort, faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons'
 
-import { ref, useSlots } from 'vue'
+import { useSlots } from 'vue'
 
-interface TableModel {
-  headers: string[]
-  rows: string[][]
-}
-
-const props = defineProps<{
+defineProps<{
   loading: boolean
 }>()
 
@@ -17,9 +12,9 @@ const slots = useSlots(),
   slotNames = Object.keys(slots),
   model = defineModel<TableModel>({ required: true })
 
-const emit = defineEmits<{update}>()
+const emit = defineEmits<{ update: [] }>()
 
-const sort = (column) => {
+const sort = (column: string) => {
   if (model.value.sortBy === column)
     model.value.desc = !model.value.desc
   else

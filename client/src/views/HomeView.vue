@@ -5,12 +5,11 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import OrgTree from '#shared/OrgTree.vue'
+import ReportsTab from '#shared/ReportsTab.vue'
 import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-
-import ReportsTab from '#shared/ReportsTab.vue'
 
 const accordionModel = ref({
   opened: useLocalStorage('sideBar', ''),

@@ -55,11 +55,11 @@ function scrollTo(selectedIndex: number, instant: boolean) {
 
   /* Scroll to top if nothing is selected */
   if (!highlightedElement)
-    floating.value.scrollTo(0,0)
+    floating.value?.scrollTo(0, 0)
 }
 
 /* Deactivate element on blur, but only if focus target is not drop-down list */
-function onTargetBlur(e) {
+function onTargetBlur(e: FocusEvent) {
   if (e.relatedTarget !== floating.value)
     active.value = false
 }

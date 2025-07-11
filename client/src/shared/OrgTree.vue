@@ -24,7 +24,12 @@ const search = ref(''),
   apiOrgs = await useFetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
   treeRef = useTemplateRef('tree'),
-  isOrg = useUserStore().isOrg
+  isOrg = useUserStore().isOrg,
+  userId = useUserStore().userId
+
+/* Should not happen */
+if (!userId)
+  throw new Error('Major screwup')
 </script>
 
 <template>
@@ -43,7 +48,7 @@ const search = ref(''),
         v-if="isOrg"
         title="Выбрать себя"
         :icon="faHouse"
-        @click="treeRef?.toggleSome([useUserStore().userId], true)"
+        @click="treeRef?.toggleSome([userId], true)"
       />
       <GooseButton
         title="Сбросить"

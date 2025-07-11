@@ -2,33 +2,33 @@
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
-import useFetchReports from '#composables/useFetchReports.ts'
 import { ref } from 'vue'
+import useFetchReports from '#composables/useFetchReports.ts'
 
 const pageSizes = [
-  {id: 10, title: 10},
-  {id: 25, title: 25},
-  {id: 50, title: 50},
-  {id: 100, title: 100}
+  { id: 10, title: 10 },
+  { id: 25, title: 25 },
+  { id: 50, title: 50 },
+  { id: 100, title: 100 },
 ]
 
 const pagination = ref({
   size: 10,
   page: 0,
-  total: 0
+  total: 0,
 })
 
-const tableModel = ref({
-  headers: [
-    { title: 'Дата', sortable: true, prop: 'date' },
-    { title: 'Организация', prop: 'org' },
-    { title: 'Статус', prop: 'status' },
-    { title: 'Год', sortable: true, prop: 'year' },
-  ],
-  rows: [],
-  sortBy: 'date',
-  desc: false,
-}),
+const tableModel = ref<TableModel>({
+    headers: [
+      { title: 'Дата', sortable: true, prop: 'date' },
+      { title: 'Организация', prop: 'org' },
+      { title: 'Статус', prop: 'status' },
+      { title: 'Год', sortable: true, prop: 'year' },
+    ],
+    rows: [],
+    sortBy: 'date',
+    desc: false,
+  }),
   loading = ref(true)
 
 async function update() {
@@ -37,9 +37,9 @@ async function update() {
     pagination.value.size,
     pagination.value.page,
     tableModel.value.sortBy,
-    tableModel.value.desc
+    tableModel.value.desc,
   )
-  pagination.value = {...apiReports}
+  pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows
   loading.value = false
 }
@@ -52,7 +52,7 @@ loading.value = false
   <div class="filters">
     <span>
       Отображать по:
-      <GooseSelect :items="pageSizes"/>
+      <GooseSelect :items="pageSizes" />
     </span>
     <span>
       От. До.
@@ -74,13 +74,13 @@ loading.value = false
       Formatted: {{ td }} !
     </template>
   </GooseTable>
-  <GoosePagination 
-    style="padding: 1rem"
-    :firstPages="5"
-    :middlePages="1"
-    :lastPages="1"
-    :disabled="loading"
+  <GoosePagination
     v-model="pagination"
+    style="padding: 1rem"
+    :first-pages="5"
+    :middle-pages="1"
+    :last-pages="1"
+    :disabled="loading"
     @update="update"
   />
 </template>

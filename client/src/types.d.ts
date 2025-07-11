@@ -71,9 +71,39 @@ declare global {
     parent?: string
   }
 
+  interface APIReport {
+    date: string
+    org: string
+    year: number
+    status: string
+  }
+
+  interface FetchReportsResult {
+    page: number
+    size: number
+    sortBy: string
+    desc: boolean
+    total: number
+    rows: APIReport[]
+  }
+
   /* Select item */
   interface SelectItem {
     id: string
     title: string
+  }
+
+  /* Table */
+  interface TableHeader {
+    title: string
+    sortable?: boolean
+    prop: string
+  }
+
+  interface TableModel {
+    headers: TableHeader[]
+    rows: Record<string, any>[]
+    sortBy: string
+    desc: boolean
   }
 }
