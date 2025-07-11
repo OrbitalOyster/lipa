@@ -71,22 +71,19 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
 <template>
   <div
     class="select-wrapper"
-    :class="{ disabled }"
   >
     <!-- Pseudo-input -->
     <button
       ref="target"
       type="button"
       class="target"
-      :class="error ? 'invalid' : 'valid'"
+      :class="{ invalid: error, valid: !error }"
       :disabled
       :autofocus
-      :tabindex="disabled ? -1 : 0"
       @blur="onTargetBlur"
       @click="active = !active"
       @keydown.up.prevent="keyScroll(-1)"
       @keydown.down.prevent="keyScroll(1)"
-      @keydown.enter="active = !active"
       @keydown.esc="active = false"
     >
       {{ items.find(i => i.id === selectedId)?.title }}
@@ -157,9 +154,6 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     position: relative
     min-width: $min-width
 
-  .select-wrapper.disabled
-    cursor: not-allowed
-
   .target
     align-items: center
     background-color: colors.$input-background
@@ -184,14 +178,12 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     outline-width: borders.$focus-outline-width
 
   /* On disabled */
-  .disabled .target
+  .target:disabled
     background-color: colors.$input-disabled
     border-color: colors.$input-disabled
     color: colors.$disabled-primary
-    pointer-events: none
-
-  .disabled .chevron
-    color: colors.$disabled-primary
+    cursor: not-allowed
+    /* pointer-events: none */
 
   .icons
     align-items: center
@@ -208,6 +200,9 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     transition: transitions.$transform
     width: $chevron-width
 
+  .target:disabled ~ .chevron
+    color: colors.$disabled-primary
+
   ul
     background-color: colors.$card
     border-radius: borders.$radius
@@ -215,10 +210,8 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     box-sizing: border-box
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     margin-bottom: .25rem
-    margin: 0
     overflow-y: auto
     overscroll-behavior: none
-    padding: 0
     position: absolute
     z-index: 99
 

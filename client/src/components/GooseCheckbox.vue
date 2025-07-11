@@ -15,7 +15,7 @@ const toggled = defineModel<boolean>({ default: false }),
     <button
       :id
       :disabled
-      :class="{ toggled, disabled, indeterminate }"
+      :class="{ toggled, indeterminate }"
       type="button"
       @click="toggled = !toggled"
     />
@@ -90,7 +90,7 @@ const toggled = defineModel<boolean>({ default: false }),
     width: $mark-size
 
   /* On hover */
-  button:hover::after
+  button:not(:disabled):hover::after
     filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
 
   /* On toggled */

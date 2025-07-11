@@ -87,7 +87,7 @@ const toggled = defineModel<boolean>({ default: false }),
     left: calc($width - $height / 2 - $mark-size / 2)
 
   /* On hover */
-  button:hover::after
+  button:not(:disabled):hover::after
     filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
 
   /* On active */
