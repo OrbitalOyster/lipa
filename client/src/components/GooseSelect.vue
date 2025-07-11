@@ -135,12 +135,16 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  $chevron-offset: .75rem
+  $chevron-width: 2rem
+  $min-width: $chevron-offset * 2 + $chevron-width
+
   .select-wrapper
     align-items: center
     cursor: pointer
     display: inline-flex
     position: relative
-    min-width: 8rem
+    min-width: $min-width
 
   .select-wrapper.disabled
     cursor: not-allowed
@@ -185,9 +189,9 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   .chevron
     pointer-events: none
     position: absolute
-    right: .75rem
+    right: $chevron-offset
     transition: transitions.$transform
-    width: 2rem
+    width: $chevron-width
 
   ul
     background-color: colors.$card
