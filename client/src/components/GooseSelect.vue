@@ -52,9 +52,20 @@ function scrollTo(selectedIndex: number, instant: boolean) {
   const highlightedElement = itemsRef.value?.[selectedIndex],
     behavior = instant ? 'instant' : 'smooth'
   highlightedElement?.scrollIntoView({ behavior, block: 'center' })
+
+  /* Scroll to top if nothing is selected */
+  if (!highlightedElement)
+    floating.value.scrollTo(0,0)
+}
+
+/* Deactivate element on blur, but only if focus target is not drop-down list */
+function onTargetBlur(e) {
+  if (e.relatedTarget !== floating.value)
+    active.value = false
 }
 
 watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id === selectedId.value), true))
+
 </script>
 
 <template>
@@ -69,8 +80,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       :class="error ? 'invalid' : 'valid'"
       :autofocus
       :tabindex="disabled ? -1 : 0"
-      :style="{ pointerEvents: disabled ? 'none' : 'all' }"
-      @blur="e => active = active && e.relatedTarget === floating"
+      @blur="onTargetBlur"
       @click="active = !active"
       @keydown.up.prevent="keyScroll(-1)"
       @keydown.down.prevent="keyScroll(1)"
@@ -174,6 +184,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     background-color: colors.$input-disabled
     border-color: colors.$input-disabled
     color: colors.$disabled-primary
+    pointer-events: none
 
   .disabled .chevron
     color: colors.$disabled-primary
