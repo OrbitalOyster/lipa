@@ -74,10 +74,12 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     :class="{ disabled }"
   >
     <!-- Pseudo-input -->
-    <div
+    <button
       ref="target"
+      type="button"
       class="target"
       :class="error ? 'invalid' : 'valid'"
+      :disabled
       :autofocus
       :tabindex="disabled ? -1 : 0"
       @blur="onTargetBlur"
@@ -88,7 +90,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       @keydown.esc="active = false"
     >
       {{ items.find(i => i.id === selectedId)?.title }}
-    </div>
+    </button>
     <!-- Placeholder -->
     <GooseInputPlaceholder v-if="placeholder">
       {{ placeholder }}
@@ -151,7 +153,6 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
 
   .select-wrapper
     align-items: center
-    cursor: pointer
     display: inline-flex
     position: relative
     min-width: $min-width
@@ -162,17 +163,20 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   .target
     align-items: center
     background-color: colors.$input-background
-    border-color: colors.$outline
+    /* border-color: colors.$outline */
     border-radius: borders.$radius
     border: 1px solid colors.$input-border
     display: flex
-    height: 2rem
+    height: 3.5rem
     outline: colors.$outline solid 0px
     padding: 1.5rem 1rem .25rem 1rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     white-space: nowrap
     width: 100%
+    font: inherit
+    color: colors.$text
+    cursor: pointer
 
   /* On focus */
   .target:focus
