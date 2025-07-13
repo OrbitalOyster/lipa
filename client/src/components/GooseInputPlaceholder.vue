@@ -1,6 +1,13 @@
+<script setup lang="ts">
+  const props = defineProps<{
+    title: string
+    active: boolean
+  }>()
+</script>
+
 <template>
-  <label>
-    <slot />
+  <label :class="{ active }">
+    {{ title }}
   </label>
 </template>
 
@@ -11,18 +18,14 @@
   label
     color: colors.$input-label
     left: 1rem
+    overflow: hidden
     pointer-events: none
     position: absolute
+    text-overflow: ellipsis
     transform-origin: left
     transition: transitions.$transform
     user-select: none
 
-  /* Shrink and translate label if:
-   * - input is focused
-   * - placeholder not shown
-   * - input is not empty */
-  * [placeholder]:focus + label,
-  * [placeholder]:not(:placeholder-shown) + label,
-  * :not(:empty) + label
+  .active
     transform: translateY(calc(-70%)) scale(.9)
 </style>

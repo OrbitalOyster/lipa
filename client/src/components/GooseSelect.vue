@@ -89,9 +89,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       {{ items.find(i => i.id === selectedId)?.title }}
     </button>
     <!-- Placeholder -->
-    <GooseInputPlaceholder v-if="placeholder">
-      {{ placeholder }}
-    </GooseInputPlaceholder>
+    <GooseInputPlaceholder v-if="placeholder" :title="placeholder" :active="selectedId !== ''"/>
     <!-- Chevron -->
     <FontAwesomeIcon
       class="chevron"

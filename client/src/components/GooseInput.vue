@@ -28,13 +28,11 @@ const text = defineModel<string>({ default: '' }),
       :autofocus
       :class="error ? 'invalid' : 'valid'"
       :disabled
-      :placeholder
       :type="password && passwordHidden ? 'password' : 'text'"
+      :style="{ 'padding-top': placeholder ? '1.5rem' : '.25rem' }"
     >
     <!-- Placeholder -->
-    <GooseInputPlaceholder v-if="placeholder">
-      {{ placeholder }}
-    </GooseInputPlaceholder>
+    <GooseInputPlaceholder v-if="placeholder" :title="placeholder" :active="text !== ''"/>
     <div class="icons">
       <!-- Validation icon -->
       <GooseErrorIcon
@@ -78,7 +76,7 @@ const text = defineModel<string>({ default: '' }),
     height: 3.5rem
     min-width: 8rem
     outline: colors.$outline solid 0px
-    padding: .25rem 1rem .25rem 1rem
+    padding: 1.5rem 1rem .25rem 1rem
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 
@@ -93,12 +91,6 @@ const text = defineModel<string>({ default: '' }),
     border-color: colors.$input-disabled
     color: colors.$disabled-primary
     cursor: not-allowed
-
-  input[placeholder]
-    padding-top: 1.5rem
-
-  input::placeholder
-    opacity: 0
 
   .icons
     align-items: center
