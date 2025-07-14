@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
-import { ref } from 'vue'
+import { useFocus } from '@vueuse/core'
 
 defineProps<{
   autocomplete?: string
@@ -16,13 +17,17 @@ defineProps<{
 }>()
 
 const text = defineModel<string>({ default: '' }),
-  passwordHidden = ref(true)
+  input = useTemplateRef('input'),
+  passwordHidden = ref(true),
+  { focused } = useFocus(input)
+
 </script>
 
 <template>
   <div class="input-wrapper">
     <!-- Actual input -->
     <input
+      ref="input"
       v-model="text"
       :autocomplete
       :autofocus
@@ -32,7 +37,11 @@ const text = defineModel<string>({ default: '' }),
       :style="{ 'padding-top': placeholder ? '1.5rem' : '.25rem' }"
     >
     <!-- Placeholder -->
-    <GooseInputPlaceholder v-if="placeholder" :title="placeholder" :active="text !== ''"/>
+    <GooseInputPlaceholder
+      v-if="placeholder"
+      :title="placeholder"
+      :active="focused || text !== ''"
+    />
     <div class="icons">
       <!-- Validation icon -->
       <GooseErrorIcon

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  const props = defineProps<{
-    title: string
-    active: boolean
-  }>()
+defineProps<{
+  title: string
+  active: boolean
+}>()
 </script>
 
 <template>
