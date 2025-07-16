@@ -6,6 +6,7 @@ import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
+import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
   autofocus?: boolean
@@ -21,7 +22,8 @@ const props = defineProps<{
   selectedId = defineModel<string>({ default: '' }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
-  floating = useTemplateRef('floating')
+  floating = useTemplateRef('floating'),
+  { width } = useElementSize(target)
 
 const fitTargetWidth = true,
   side = props.side ?? 'bottom',
@@ -86,13 +88,16 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       @keydown.down.prevent="keyScroll(1)"
       @keydown.esc="active = false"
     >
-      {{ items.find(i => i.id === selectedId)?.title }}
+      <div class="item">
+        {{ items.find(i => i.id === selectedId)?.title }}
+      </div>
     </button>
     <!-- Placeholder -->
     <GooseInputPlaceholder
       v-if="placeholder"
       :title="placeholder"
       :active="selectedId !== ''"
+      :style="{ width: width + 'px' }"
     />
     <!-- Chevron -->
     <FontAwesomeIcon
@@ -146,9 +151,13 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  $height: 3.5rem
   $chevron-offset: .75rem
+
+  $chevron-height: 2rem
   $chevron-width: 2rem
-  $min-width: $chevron-offset * 2 + $chevron-width
+
+  $min-width: $height
 
   .select-wrapper
     align-items: center
@@ -163,9 +172,16 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     border-radius: borders.$radius
     border: 1px solid colors.$input-border
     display: flex
-    height: 3.5rem
+    height: $height
     outline: colors.$outline solid 0px
-    padding: 1.5rem 1rem .25rem 1rem
+
+    /* padding-bottom: 0.25rem */
+    padding-bottom: $chevron-offset
+    padding-left: $chevron-offset
+    padding-right: $chevron-offset
+    /* padding-top: 1.5rem */
+    padding-top: $chevron-offset
+
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     white-space: nowrap
@@ -173,6 +189,12 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     font: inherit
     color: colors.$text
     cursor: pointer
+
+  .item
+    line-height: 1.25rem
+    margin-right: $chevron-width + $chevron-offset
+    overflow: hidden
+    text-overflow: ellipsis
 
   /* On focus */
   .target:focus
@@ -201,6 +223,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     right: $chevron-offset
     transition: transitions.$transform
     width: $chevron-width
+    height: $chevron-height
 
   .target:disabled ~ .chevron
     color: colors.$disabled-primary

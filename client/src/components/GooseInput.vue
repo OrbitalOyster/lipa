@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
-import { useFocus } from '@vueuse/core'
+import { useFocus, useElementSize } from '@vueuse/core'
 
 defineProps<{
   autocomplete?: string
@@ -19,8 +19,8 @@ defineProps<{
 const text = defineModel<string>({ default: '' }),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
-  { focused } = useFocus(input)
-
+  { focused } = useFocus(input),
+  { width } = useElementSize(input)
 </script>
 
 <template>
@@ -41,6 +41,7 @@ const text = defineModel<string>({ default: '' }),
       v-if="placeholder"
       :title="placeholder"
       :active="focused || text !== ''"
+      :style="{ width: width + 'px' }"
     />
     <div class="icons">
       <!-- Validation icon -->
