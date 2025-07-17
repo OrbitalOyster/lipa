@@ -17,7 +17,7 @@ defineProps<{
 
   label
     color: colors.$input-label
-    left: 1rem
+    left: .75rem
     line-height: 1.25rem
     overflow: hidden
     pointer-events: none
@@ -26,6 +26,7 @@ defineProps<{
     transform-origin: left
     transition: transitions.$transform
     user-select: none
+    white-space: nowrap
 
   .active
     transform: translateY(calc(-70%)) scale(.9)

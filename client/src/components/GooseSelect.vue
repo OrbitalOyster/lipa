@@ -97,7 +97,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       v-if="placeholder"
       :title="placeholder"
       :active="selectedId !== ''"
-      :style="{ width: width + 'px' }"
+      class="placeholder"
     />
     <!-- Chevron -->
     <FontAwesomeIcon
@@ -151,48 +151,34 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   @use '../assets/colors'
   @use '../assets/transitions'
 
-  $height: 3.5rem
-  $chevron-offset: .75rem
-
-  $chevron-height: 2rem
-  $chevron-width: 2rem
-
-  $min-width: $height
-
   .select-wrapper
     align-items: center
     display: inline-flex
+    min-width: 3.5rem
     position: relative
-    min-width: $min-width
 
   .target
     align-items: center
     background-color: colors.$input-background
-    /* border-color: colors.$outline */
     border-radius: borders.$radius
     border: 1px solid colors.$input-border
+    color: colors.$text
+    cursor: pointer
     display: flex
-    height: $height
+    font: inherit
+    height: 3.5rem
     outline: colors.$outline solid 0px
-
-    /* padding-bottom: 0.25rem */
-    padding-bottom: $chevron-offset
-    padding-left: $chevron-offset
-    padding-right: $chevron-offset
-    /* padding-top: 1.5rem */
-    padding-top: $chevron-offset
-
+    padding: 1.5rem 2.25rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     white-space: nowrap
     width: 100%
-    font: inherit
-    color: colors.$text
-    cursor: pointer
+
+  .placeholder
+    width: calc(100% - 3.25rem)
 
   .item
     line-height: 1.25rem
-    margin-right: $chevron-width + $chevron-offset
     overflow: hidden
     text-overflow: ellipsis
 
@@ -218,12 +204,12 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     right: 2.75rem
 
   .chevron
+    height: 1.5rem
     pointer-events: none
     position: absolute
-    right: $chevron-offset
+    right: 1rem
     transition: transitions.$transform
-    width: $chevron-width
-    height: $chevron-height
+    width: 1.5rem
 
   .target:disabled ~ .chevron
     color: colors.$disabled-primary

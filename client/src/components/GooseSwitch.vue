@@ -54,7 +54,7 @@ const toggled = defineModel<boolean>({ default: false }),
     padding: 0
     position: relative
     transition: transitions.$focusable, transitions.$colors
-    width: $width
+    min-width: $width
 
   /* On focus */
   button:focus

@@ -160,7 +160,7 @@ onMounted(async () => {
     border: borders.$card
     display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
-    /* flex-direction: column */
+    flex-direction: column
     gap: 1rem
     height: fit-content
     margin-bottom: .25rem
