@@ -168,14 +168,14 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     font: inherit
     height: 3.5rem
     outline: colors.$outline solid 0px
-    padding: 1.5rem 2.25rem 0.25rem .75rem
+    padding: 1.5rem 2.5rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     white-space: nowrap
     width: 100%
 
   .placeholder
-    width: calc(100% - 3.25rem)
+    width: calc(100% - 3.5rem)
 
   .item
     line-height: 1.25rem
