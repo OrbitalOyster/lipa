@@ -6,7 +6,7 @@ defineProps<{
   indeterminate?: boolean
 }>()
 
-const toggled = defineModel<boolean>({ default: false }),
+const toggled = defineModel<boolean>({ required: true }),
   id = useId()
 </script>
 

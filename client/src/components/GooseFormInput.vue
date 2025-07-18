@@ -12,7 +12,7 @@ const props = defineProps<{
   tag: 'input' | 'select'
   checks?: FormCheck[]
 }>(),
-  text = defineModel<string>({ default: '' }),
+  text = defineModel<string>({ required: true }),
   error = ref('')
 
 function validate() {

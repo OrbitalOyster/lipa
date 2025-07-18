@@ -14,11 +14,11 @@ const props = defineProps<{
   error?: string
   loading?: boolean
   items: SelectItem[]
-  placeholder: string
+  placeholder?: string
   side?: Side
 }>(),
   active = ref(false),
-  selectedId = defineModel<string>({ default: '' }),
+  selectedId = defineModel<string>({ required: true }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
@@ -115,7 +115,6 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       <FontAwesomeIcon
         v-if="loading"
         class="fa-pulse"
-        style="width: 2rem"
         :icon="faSpinner"
         size="xl"
       />

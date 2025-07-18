@@ -6,11 +6,11 @@ import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 
 const pageSizes = [
-  { id: 10, title: 10 },
-  { id: 25, title: 25 },
-  { id: 50, title: 50 },
-  { id: 100, title: 100 },
-]
+  { id: "10", title: "10" },
+  { id: "25", title: "25" },
+  { id: "50", title: "50" },
+  { id: "100", title: "100" },
+], pageSize = ref(pageSizes[0].id)
 
 const pagination = ref({
   size: 10,
@@ -50,10 +50,10 @@ loading.value = false
 
 <template>
   <div class="filters">
-    <span>
-      Отображать по:
-      <GooseSelect :items="pageSizes" />
-    </span>
+    <div class="page-size-select">
+      <p>Отображать по:</p>
+      <GooseSelect :items="pageSizes" v-model="pageSize" />
+    </div>
     <span>
       От. До.
     </span>
@@ -91,4 +91,9 @@ loading.value = false
     display: flex
     height: 3rem
     justify-content: space-between
+
+  .page-size-select
+    align-items: center 
+    display: flex
+    gap: 1rem
 </style>

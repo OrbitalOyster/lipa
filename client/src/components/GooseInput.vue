@@ -16,7 +16,7 @@ defineProps<{
   placeholder?: string
 }>()
 
-const text = defineModel<string>({ default: '' }),
+const text = defineModel<string>({ required: true }),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
   { focused } = useFocus(input)
