@@ -6,7 +6,6 @@ import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
-import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
   autofocus?: boolean
@@ -22,8 +21,7 @@ const props = defineProps<{
   selectedId = defineModel<string>({ default: '' }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
-  floating = useTemplateRef('floating'),
-  { width } = useElementSize(target)
+  floating = useTemplateRef('floating')
 
 const fitTargetWidth = true,
   side = props.side ?? 'bottom',
