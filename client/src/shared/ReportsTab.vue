@@ -96,4 +96,6 @@ loading.value = false
     align-items: center 
     display: flex
     gap: 1rem
+    justify-content: space-between
+    width: 15rem
 </style>

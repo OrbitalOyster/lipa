@@ -77,7 +77,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
       ref="target"
       type="button"
       class="target"
-      :class="{ invalid: error, valid: !error }"
+      :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
       :disabled
       :autofocus
       @blur="onTargetBlur"
@@ -163,13 +163,17 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     cursor: pointer
     display: flex
     font: inherit
-    height: 3.5rem
+    height: 2.5rem
     outline: colors.$outline solid 0px
-    padding: 1.5rem 2.5rem 0.25rem .75rem
+    padding: .25rem 2.5rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     user-select: none
     white-space: nowrap
     width: 100%
+
+  .has-placeholder
+    height: 3.5rem
+    padding-top: 1.5rem
 
   .placeholder
     width: calc(100% - 3.5rem)
@@ -177,6 +181,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
   .item
     line-height: 1.25rem
     overflow: hidden
+    padding-right: .5rem
     text-overflow: ellipsis
 
   /* On focus */
