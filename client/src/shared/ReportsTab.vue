@@ -4,16 +4,17 @@ import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
+import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
   { id: "10", title: "10" },
   { id: "25", title: "25" },
   { id: "50", title: "50" },
   { id: "100", title: "100" },
-], pageSize = ref(pageSizes[0].id)
+], pageSize = useLocalStorage('reports-pagination-size', pageSizes[0].id)
 
 const pagination = ref({
-  size: 10,
+  size: pageSize.value,
   page: 0,
   total: 0,
 })
@@ -34,7 +35,7 @@ const tableModel = ref<TableModel>({
 async function update() {
   loading.value = true
   const apiReports = await useFetchReports(
-    pagination.value.size,
+    pageSize.value,
     pagination.value.page,
     tableModel.value.sortBy,
     tableModel.value.desc,
@@ -52,7 +53,7 @@ loading.value = false
   <div class="filters">
     <div class="page-size-select">
       <p>Отображать по:</p>
-      <GooseSelect :items="pageSizes" v-model="pageSize" />
+      <GooseSelect :items="pageSizes" v-model="pageSize" @update="update"/>
     </div>
     <span>
       От. До.

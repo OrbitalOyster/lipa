@@ -17,6 +17,7 @@ const props = defineProps<{
   placeholder?: string
   side?: Side
 }>(),
+  emit = defineEmits(['update']),
   active = ref(false),
   selectedId = defineModel<string>({ required: true }),
   itemsRef = useTemplateRef('itemsRef'),
@@ -32,6 +33,11 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
+function update(newId) {
+  selectedId.value = newId 
+  emit('update', newId)
+}
+
 function keyScroll(direction: number) {
   let selectedIndex = props.items.findIndex(i => i.id === selectedId.value)
   /* Edge case - nothing selected */
@@ -42,8 +48,8 @@ function keyScroll(direction: number) {
   const selectedItem = props.items[selectedIndex]
   /* Should not happen */
   if (!selectedItem)
-    throw new Error('Majow screwup')
-  selectedId.value = selectedItem.id
+    throw new Error('Major screwup')
+  update(selectedItem.id)
   if (active.value)
     scrollTo(selectedIndex, false)
 }
@@ -65,6 +71,7 @@ function onTargetBlur(e: FocusEvent) {
 }
 
 watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id === selectedId.value), true))
+
 
 </script>
 
@@ -94,7 +101,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     <GooseInputPlaceholder
       v-if="placeholder"
       :title="placeholder"
-      :active="selectedId !== ''"
+      :active="!!selectedId"
       class="placeholder"
     />
     <!-- Chevron -->
@@ -134,7 +141,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
           ref="itemsRef"
           :key="item.id"
           :class="{ selected: selectedId === item.id }"
-          @click="selectedId = item.id; active = false"
+          @click="update(item.id); active = false"
         >
           {{ item.title }}
         </li>
