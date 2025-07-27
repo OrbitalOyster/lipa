@@ -11,11 +11,14 @@ const pageSizes = [
   { id: "25", title: "25" },
   { id: "50", title: "50" },
   { id: "100", title: "100" },
-], pageSize = useLocalStorage('reports-pagination-size', pageSizes[0].id)
+],
+  /* Syncs with local storage */
+  pageSize = useLocalStorage('reports-pagination-size', pageSizes[0].id),
+  page = useLocalStorage('reports-pagination-page', "0")
 
 const pagination = ref({
   size: pageSize.value,
-  page: 0,
+  page: page.value,
   total: 0,
 })
 
@@ -34,6 +37,7 @@ const tableModel = ref<TableModel>({
 
 async function update() {
   loading.value = true
+  page.value = pagination.value.page
   const apiReports = await useFetchReports(
     pageSize.value,
     pagination.value.page,
