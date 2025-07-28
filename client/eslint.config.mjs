@@ -7,7 +7,7 @@ export default defineConfigWithVueTs(
   { ignores: ['dist'] }, /* Ignore output folder */
   eslintPluginImportX.flatConfigs.recommended, /* Import plugin */
   pluginVue.configs['flat/recommended'], /* Vue plugin */
-  stylistic.configs['recommended-flat'], /* Formatting */
+  stylistic.configs['recommended'], /* Formatting */
   vueTsConfigs.recommendedTypeChecked, /* Main config */
   vueTsConfigs.stylisticTypeChecked,
   {

@@ -33,8 +33,8 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
-function update(newId) {
-  selectedId.value = newId 
+function update(newId: string) {
+  selectedId.value = newId
   emit('update', newId)
 }
 
@@ -71,7 +71,6 @@ function onTargetBlur(e: FocusEvent) {
 }
 
 watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id === selectedId.value), true))
-
 
 </script>
 

@@ -7,14 +7,14 @@ import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
-  { id: "10", title: "10" },
-  { id: "25", title: "25" },
-  { id: "50", title: "50" },
-  { id: "100", title: "100" },
-],
+    { id: '10', title: '10' },
+    { id: '25', title: '25' },
+    { id: '50', title: '50' },
+    { id: '100', title: '100' },
+  ],
   /* Syncs with local storage */
-  pageSize = useLocalStorage('reports-pagination-size', pageSizes[0].id),
-  page = useLocalStorage('reports-pagination-page', "0")
+  pageSize = useLocalStorage('reports-pagination-size', Number(pageSizes[0].id)),
+  page = useLocalStorage('reports-pagination-page', 0)
 
 const pagination = ref({
   size: pageSize.value,
@@ -57,7 +57,11 @@ loading.value = false
   <div class="filters">
     <div class="page-size-select">
       <p>Отображать по:</p>
-      <GooseSelect :items="pageSizes" v-model="pageSize" @update="update"/>
+      <GooseSelect
+        v-model="pageSize"
+        :items="pageSizes"
+        @update="update"
+      />
     </div>
     <span>
       От. До.
@@ -98,7 +102,7 @@ loading.value = false
     justify-content: space-between
 
   .page-size-select
-    align-items: center 
+    align-items: center
     display: flex
     gap: 1rem
     justify-content: space-between
