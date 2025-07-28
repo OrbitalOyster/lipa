@@ -7,13 +7,13 @@ import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
-    { id: '10', title: '10' },
-    { id: '25', title: '25' },
-    { id: '50', title: '50' },
-    { id: '100', title: '100' },
+    { id: 10, title: '10' },
+    { id: 25, title: '25' },
+    { id: 50, title: '50' },
+    { id: 100, title: '100' },
   ],
   /* Syncs with local storage */
-  pageSize = useLocalStorage('reports-pagination-size', Number(pageSizes[0].id)),
+  pageSize = useLocalStorage('reports-pagination-size', pageSizes[0]!.id),
   page = useLocalStorage('reports-pagination-page', 0)
 
 const pagination = ref({

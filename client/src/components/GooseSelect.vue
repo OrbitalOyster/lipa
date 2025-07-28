@@ -19,7 +19,7 @@ const props = defineProps<{
 }>(),
   emit = defineEmits(['update']),
   active = ref(false),
-  selectedId = defineModel<string>({ required: true }),
+  selectedId = defineModel<SelectId>({ required: true }),
   itemsRef = useTemplateRef('itemsRef'),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating')
@@ -33,7 +33,7 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
-function update(newId: string) {
+function update(newId: SelectId) {
   selectedId.value = newId
   emit('update', newId)
 }

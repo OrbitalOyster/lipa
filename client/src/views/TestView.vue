@@ -4,7 +4,6 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 import GooseConfirm from '#components/GooseConfirm.vue'
 import GooseForm from '#components/GooseForm.vue'
-import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GoosePopover from '#components/GoosePopover.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
@@ -33,20 +32,6 @@ const toggleChecked = ref(false)
       id="mySampleForm"
       class="validated"
     >
-      <GooseFormInput
-        placeholder="From"
-        name="sampleInput1"
-        form="mySampleForm"
-        tag="input"
-      />
-      <hr>
-      <GooseFormInput
-        name="sampleInput2"
-        form="mySampleForm"
-        tag="input"
-        password
-      />
-      <hr>
       <div class="validated">
         <GooseInput
           v-model="s0"

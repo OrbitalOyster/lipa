@@ -88,8 +88,10 @@ declare global {
   }
 
   /* Select item */
+  type SelectId = string | number
+
   interface SelectItem {
-    id: string
+    id: SelectId
     title: string
   }
 
