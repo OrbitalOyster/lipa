@@ -14,7 +14,9 @@ const pageSizes = [
   ],
   /* Syncs with local storage */
   pageSize = useLocalStorage('reports-pagination-size', pageSizes[0]!.id),
-  page = useLocalStorage('reports-pagination-page', 0)
+  page = useLocalStorage('reports-pagination-page', 0),
+  sortBy = useLocalStorage('reports-sort-by', 'date'),
+  sortDesc = useLocalStorage('reports-sort-desc', false)
 
 const pagination = ref({
   size: pageSize.value,
@@ -30,18 +32,20 @@ const tableModel = ref<TableModel>({
       { title: 'Год', sortable: true, prop: 'year' },
     ],
     rows: [],
-    sortBy: 'date',
-    desc: false,
+    sortBy: sortBy.value,
+    desc: sortDesc.value,
   }),
   loading = ref(true)
 
 async function update() {
   loading.value = true
   page.value = pagination.value.page
+  sortBy.value = tableModel.value.sortBy
+  sortDesc.value = tableModel.value.desc
   const apiReports = await useFetchReports(
     pageSize.value,
     pagination.value.page,
-    tableModel.value.sortBy,
+    sortBy.value,
     tableModel.value.desc,
   )
   pagination.value = { ...apiReports }
