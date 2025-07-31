@@ -66,6 +66,8 @@ async function logout() {
     display: flex
     align-items: center
     justify-content: space-between
+    width: 100%
+    padding: 1rem
 
   .logo
     display: flex
