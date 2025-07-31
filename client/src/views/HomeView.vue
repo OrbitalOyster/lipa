@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
+import GooseSidebar from '#components/GooseSidebar.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import OrgTree from '#shared/OrgTree.vue'
 import ReportsTab from '#shared/ReportsTab.vue'
@@ -25,65 +26,72 @@ const slots = [
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
 
+const sidebarToggled = ref(true)
 </script>
 
 <template>
   <div class="home-view-wrapper">
+    <GooseSidebar :toggled="sidebarToggled" width="32rem">
+    <template #sidebar>
+      <p>Sidebar</p>
+    </template>
+    <GooseButton transparent :icon="faBars" @click="sidebarToggled = !sidebarToggled"/>
     <TopBar />
-    <div style="display: flex; flex-direction: row; flex-grow: 1; gap: 1rem">
-      <aside>
-        <GooseAccordion v-model="accordionModel">
-          <template #orgs>
-            <Suspense>
-              <OrgTree />
-              <template #fallback>
-                <GooseLoading />
-              </template>
-            </Suspense>
-          </template>
-        </GooseAccordion>
-      </aside>
-      <main>
-        <GooseTabs :slots>
-          <template #xlsx>
-            <div style="padding: 1rem">
-              <RouterLink to="/test">
-                Form
-              </RouterLink>
-              <GooseButton
-                :icon="faUpload"
-                transparent
-                tooltip="Загрузить .xlsx файл"
-              />
-            </div>
-          </template>
-          <template #initial>
-            <Suspense>
-              <ReportsTab />
-              <template #fallback>
-                <GooseLoading />
-              </template>
-            </Suspense>
-          </template>
-          <template #complex>
-            <p>Baz</p>
-          </template>
-        </GooseTabs>
-      </main>
-    </div>
+    <!--
+    <aside>
+      <GooseAccordion v-model="accordionModel">
+        <template #orgs>
+          <Suspense>
+            <OrgTree />
+            <template #fallback>
+              <GooseLoading />
+            </template>
+          </Suspense>
+        </template>
+      </GooseAccordion>
+    </aside>
+    -->
+    <main>
+      <GooseTabs :slots>
+        <template #xlsx>
+          <div style="padding: 1rem">
+            <RouterLink to="/test">
+              Form
+            </RouterLink>
+            <GooseButton
+              :icon="faUpload"
+              transparent
+              tooltip="Загрузить .xlsx файл"
+            />
+          </div>
+        </template>
+        <template #initial>
+          <Suspense>
+            <ReportsTab />
+            <template #fallback>
+              <GooseLoading />
+            </template>
+          </Suspense>
+        </template>
+        <template #complex>
+          <p>Baz</p>
+        </template>
+      </GooseTabs>
+    </main>
+    </GooseSidebar>
   </div>
 </template>
 
 <style lang="sass" scoped>
   .home-view-wrapper
-    box-sizing: border-box
+    /* box-sizing: border-box */
     display: flex
     flex-direction: column
     gap: 1rem
-    height: 100vh
-    padding: 1rem
-    position: fixed
-    width: 100vw
+    /* height: 100vh */
+    /* padding: 1rem */
+    /* position: fixed */
+    /* width: 100vw */
 
   aside
     flex-basis: 32rem
