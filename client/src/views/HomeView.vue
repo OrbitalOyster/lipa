@@ -33,21 +33,36 @@ const sidebarToggled = ref(true)
   <div class="home-view-wrapper">
     <GooseSidebar
       :toggled="sidebarToggled"
-      width="32rem"
+      width="36rem"
     >
       <template #sidebar>
-        <GooseAccordion v-model="accordionModel">
-          <template #orgs>
-            <Suspense>
-              <OrgTree />
-              <template #fallback>
-                <GooseLoading />
-              </template>
-            </Suspense>
-          </template>
-        </GooseAccordion>
+        <div class="accordion-wrapper">
+
+    <div class="logo">
+      <img src="/goose.webp">
+      <h1>
+        <RouterLink
+          to="/"
+          class="main-title"
+        >
+          Gooseberry.js
+        </RouterLink>
+      </h1>
+    </div>
+
+          <GooseAccordion v-model="accordionModel">
+            <template #orgs>
+              <Suspense>
+                <OrgTree />
+                <template #fallback>
+                  <GooseLoading />
+                </template>
+              </Suspense>
+            </template>
+          </GooseAccordion>
+        </div>
       </template>
-      <div style="display: flex; gap: 2rem; align-items: center; padding-left: 1rem">
+      <div style="display: flex; gap: 0rem; align-items: center; padding-left: 1rem">
         <GooseButton
           transparent
           :icon="faBars"
@@ -91,6 +106,9 @@ const sidebarToggled = ref(true)
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders'
+  @use '../assets/colors'
+
   .home-view-wrapper
     box-sizing: border-box
     display: flex
@@ -101,9 +119,37 @@ const sidebarToggled = ref(true)
     /* position: fixed */
     /* width: 100vw */
 
-  aside
-    flex-basis: 32rem
-    flex-shrink: 0
+  .logo
+    display: flex
+    align-items: center
+    gap: 1rem
+
+  .main-title
+    color: inherit
+    font-size: 2rem
+
+  img
+    border-radius: 100%
+    height: 4rem
+    width: 4rem
+
+  h1
+    display: inline
+    font-weight: 400
+
+
+  .accordion-wrapper
+    box-sizing: border-box
+    display: flex
+    flex-direction: column
+    gap: 1rem
+    height: 100%
+    padding: 1rem 1rem 1rem 1rem
+
+    background-color: #f6f2f066
+    border-radius: borders.$radius
+    border: borders.$card
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
 
   main
     padding: 1rem

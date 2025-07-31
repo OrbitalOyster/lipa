@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <aside
     :class="{ toggled }"
-    :style="{ width: toggled ? width : '0rem' }"
+    :style="{ width, transform: toggled ? 'scaleX(1)' : 'scaleX(0)' }"
   >
     <slot name="sidebar" />
   </aside>
@@ -22,7 +22,7 @@ defineProps<{
 </template>
 
 <style lang="sass" scoped>
-  $transition-duration: .1s
+  $transition-duration: .2s
   $transition-function: ease-in-out
 
   aside
@@ -30,8 +30,9 @@ defineProps<{
     opacity: 0
     position: fixed
     transition-duration: $transition-duration
-    transition-property: width, opacity
+    transition-property: width, opacity, transform
     transition-timing-function: $transition-function
+    transform-origin: left
     z-index: 50
 
   aside.toggled

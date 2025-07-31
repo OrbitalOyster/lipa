@@ -23,17 +23,6 @@ async function logout() {
     @submit="logout"
   />
   <header>
-    <div class="logo">
-      <img src="/goose.webp">
-      <h1>
-        <RouterLink
-          to="/"
-          class="main-title"
-        >
-          Gooseberry.js
-        </RouterLink>
-      </h1>
-    </div>
     <div style="display: flex; flex-direction: column; align-items: center; gap: .5rem">
       <div style="font-size: 1.5rem">
         Главная
@@ -68,24 +57,6 @@ async function logout() {
     justify-content: space-between
     width: 100%
     padding: 1rem
-
-  .logo
-    display: flex
-    align-items: center
-    gap: 1rem
-
-  .main-title
-    color: inherit
-    font-size: 2rem
-
-  img
-    border-radius: 100%
-    height: 4rem
-    width: 4rem
-
-  h1
-    display: inline
-    font-weight: 400
 
   .username
     cursor: pointer

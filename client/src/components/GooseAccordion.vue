@@ -63,7 +63,7 @@ const model = defineModel<Accordion>({ required: true })
     flex-grow: 0
     height: 3rem
     overflow: hidden
-    transition: 50ms flex-grow ease-in-out
+    transition: .2s flex-grow ease-in-out
 
   li.opened
     flex-grow: 1
