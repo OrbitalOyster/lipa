@@ -30,7 +30,7 @@ app.get('/', c => c.text('You\'re doing it wrong\n'))
 /* User data */
 app.get('/payload', async c => c.json(await getPayload(c)))
 
-app.post('/payload', setPayload)
+// app.post('/payload', setPayload)
 
 /* Auth check */
 app.get('/check', check)

@@ -42,6 +42,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
     })
 }
 
+/*
 export const setPayload = async (context: Context) => {
   const payload = await context.req.json<UserPayload>()
   if (payload.userId || payload.isOrg || payload.exp)
@@ -49,6 +50,7 @@ export const setPayload = async (context: Context) => {
   await updateCookie(context, payload)
   return context.json(payload)
 }
+*/
 
 export const check = async (context: Context) => {
   const payload = await getPayload(context)

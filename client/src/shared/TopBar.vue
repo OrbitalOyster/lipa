@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RouterLink, useRouter } from 'vue-router'
 import GooseButton from '#components/GooseButton.vue'
 import GooseConfirm from '#components/GooseConfirm.vue'
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { useRouter } from 'vue-router'
 import { useTemplateRef } from 'vue'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -23,6 +23,7 @@ async function logout() {
     @submit="logout"
   />
   <header>
+    <div />
     <div style="display: flex; flex-direction: column; align-items: center; gap: .5rem">
       <div style="font-size: 1.5rem">
         Главная
@@ -35,7 +36,7 @@ async function logout() {
       <div>
         Вы зашли как:
         <span class="username">
-          {{ userStore.userId }}
+          {{ userStore.name }}
         </span>
       </div>
       <GooseButton

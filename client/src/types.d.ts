@@ -15,6 +15,7 @@ declare global {
   interface UserStore {
     userId: null | string
     isOrg: null | boolean
+    name: null | string
     role: null | string
     rememberMe: boolean
   }

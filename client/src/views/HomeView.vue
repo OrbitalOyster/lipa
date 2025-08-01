@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
@@ -37,19 +38,17 @@ const sidebarToggled = ref(true)
     >
       <template #sidebar>
         <div class="accordion-wrapper">
-
-    <div class="logo">
-      <img src="/goose.webp">
-      <h1>
-        <RouterLink
-          to="/"
-          class="main-title"
-        >
-          Gooseberry.js
-        </RouterLink>
-      </h1>
-    </div>
-
+          <div class="logo">
+            <img src="/goose.webp">
+            <h1>
+              <RouterLink
+                to="/"
+                class="main-title"
+              >
+                Gooseberry.js
+              </RouterLink>
+            </h1>
+          </div>
           <GooseAccordion v-model="accordionModel">
             <template #orgs>
               <Suspense>
@@ -60,6 +59,15 @@ const sidebarToggled = ref(true)
               </Suspense>
             </template>
           </GooseAccordion>
+          <p>
+            По всем вопросам обращайтесь
+            <FontAwesomeIcon
+              style="width: 2rem"
+              :icon="faPhone"
+              size="lg"
+            />
+            8 (812) 246-47-49
+          </p>
         </div>
       </template>
       <div style="display: flex; gap: 0rem; align-items: center; padding-left: 1rem">
@@ -70,10 +78,6 @@ const sidebarToggled = ref(true)
         />
         <TopBar />
       </div>
-      <!--
-    <aside>
-    </aside>
-    -->
       <main>
         <GooseTabs :slots>
           <template #xlsx>
@@ -114,10 +118,6 @@ const sidebarToggled = ref(true)
     display: flex
     flex-direction: column
     gap: 1rem
-    /* height: 100vh */
-    /* padding: 1rem */
-    /* position: fixed */
-    /* width: 100vw */
 
   .logo
     display: flex
@@ -137,19 +137,17 @@ const sidebarToggled = ref(true)
     display: inline
     font-weight: 400
 
-
   .accordion-wrapper
+    background-color: #f6f2f066
+    border-radius: borders.$radius
+    border: borders.$card
     box-sizing: border-box
     display: flex
+    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
     gap: 1rem
     height: 100%
     padding: 1rem 1rem 1rem 1rem
-
-    background-color: #f6f2f066
-    border-radius: borders.$radius
-    border: borders.$card
-    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
 
   main
     padding: 1rem

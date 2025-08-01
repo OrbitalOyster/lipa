@@ -23,9 +23,10 @@ export const auth = async (context: Context) => {
       return context.json(false)
     }
     else {
-      console.log('Auth OK', userId)
+      const name = rows[0]["name"]
+      console.log('Auth OK', userId, name)
       /* Update cookie and return ok */
-      await updateCookie(context, { userId, isOrg, rememberMe })
+      await updateCookie(context, { userId, isOrg, name, rememberMe })
       return context.json(true)
     }
   }
@@ -36,6 +37,6 @@ export const auth = async (context: Context) => {
 }
 
 export const logout = async (context: Context) => {
-  await updateCookie(context, { userId: null, isOrg: null, rememberMe: null })
+  await updateCookie(context, { userId: null, isOrg: null, name: null, rememberMe: null })
   return context.text('logout')
 }

@@ -35,7 +35,7 @@ const sort = (column: string) => {
             <span
               class="header"
               :class="header.sortable && 'sortable'"
-              @click="sort(header.prop)"
+              @click="header.sortable && sort(header.prop)"
             >
               {{ header.title }}
             </span>

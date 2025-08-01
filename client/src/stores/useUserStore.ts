@@ -11,6 +11,7 @@ const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     userId: null,
     isOrg: null,
+    name: null,
     role: null,
     rememberMe: false,
   }),
@@ -61,6 +62,7 @@ const useUserStore = defineStore('user', {
       await axios.get(`${apiEndpoint}/logout`)
       this.userId = null
       this.isOrg = null
+      this.name = null
       this.role = null
     },
   },
