@@ -6,6 +6,7 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseSidebar from '#components/GooseSidebar.vue'
 import GooseTabs from '#components/GooseTabs.vue'
+import MainLogo from '#shared/MainLogo.vue'
 import OrgTree from '#shared/OrgTree.vue'
 import ReportsTab from '#shared/ReportsTab.vue'
 import { RouterLink } from 'vue-router'
@@ -38,17 +39,7 @@ const sidebarToggled = ref(true)
     >
       <template #sidebar>
         <div class="accordion-wrapper">
-          <div class="logo">
-            <img src="/goose.webp">
-            <h1>
-              <RouterLink
-                to="/"
-                class="main-title"
-              >
-                Gooseberry.js
-              </RouterLink>
-            </h1>
-          </div>
+          <MainLogo />
           <GooseAccordion v-model="accordionModel">
             <template #orgs>
               <Suspense>
@@ -118,24 +109,6 @@ const sidebarToggled = ref(true)
     display: flex
     flex-direction: column
     gap: 1rem
-
-  .logo
-    display: flex
-    align-items: center
-    gap: 1rem
-
-  .main-title
-    color: inherit
-    font-size: 2rem
-
-  img
-    border-radius: 100%
-    height: 4rem
-    width: 4rem
-
-  h1
-    display: inline
-    font-weight: 400
 
   .accordion-wrapper
     background-color: #f6f2f066

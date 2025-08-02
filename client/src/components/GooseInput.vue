@@ -30,7 +30,7 @@ const text = defineModel<string>({ required: true }),
       v-model="text"
       :autocomplete
       :autofocus
-      :class="error ? 'invalid' : 'valid'"
+      :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
       :disabled
       :type="password && passwordHidden ? 'password' : 'text'"
       :style="{ 'padding-top': placeholder ? '1.5rem' : '.25rem' }"
@@ -82,10 +82,10 @@ const text = defineModel<string>({ required: true }),
     box-sizing: border-box
     color: colors.$text
     font: inherit
-    height: 3.5rem
+    height: 2.5rem
     min-width: 3.5rem
     outline: colors.$outline solid 0px
-    padding: 1.5rem .75rem 0.25rem .75rem
+    padding: .25rem .75rem .25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 
@@ -100,6 +100,10 @@ const text = defineModel<string>({ required: true }),
     border-color: colors.$input-disabled
     color: colors.$disabled-primary
     cursor: not-allowed
+
+  .has-placeholder
+    height: 3.5rem
+    padding-top: 1.5rem
 
   .placeholder
     width: calc(100% - 1.5rem)

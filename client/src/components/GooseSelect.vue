@@ -106,7 +106,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     <!-- Chevron -->
     <FontAwesomeIcon
       class="chevron"
-      :style="{transform: active ? 'rotate(180deg)' : 'rotate(0)'}"
+      :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
       :icon="faChevronDown"
       size="xl"
     />
