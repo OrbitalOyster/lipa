@@ -111,7 +111,11 @@ const toggled = defineModel<boolean>({ required: true }),
     cursor: pointer
     user-select: none
 
-  /* Label */
+  /* Hide empty labels */
+  label:not(:has(*))
+    display: none
+
+  /* On disabled */
   button:disabled ~ label
     cursor: not-allowed
 </style>

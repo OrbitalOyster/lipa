@@ -85,8 +85,8 @@ const sort = (column: string) => {
 
   table
     filter: blur(0px)
-    width: 100%
     transition: filter .1s ease-in-out
+    width: 100%
 
   .loading
     pointer-events: none
@@ -94,6 +94,12 @@ const sort = (column: string) => {
 
   thead
     height: 3.5rem
+
+  thead tr
+    background-color: tomato
+    position: sticky
+    top: 0
+    z-index: 10
 
   th
     height: 100%
@@ -112,8 +118,8 @@ const sort = (column: string) => {
     user-select: none
 
   tbody tr
-    border-top: 1px solid #F0F0F0
     border-bottom: 1px solid #F0F0F0
+    border-top: 1px solid #F0F0F0
     cursor: pointer
 
   tbody tr:hover
@@ -128,6 +134,9 @@ const sort = (column: string) => {
     display: flex
     height: 100%
     justify-content: center
+
+  th:first-child, td:first-child
+    width: 4rem /* TODO: No magic numbers */
 
   tr:nth-child(even)
     background-color:  #E8F8F5
