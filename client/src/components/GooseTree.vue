@@ -128,16 +128,16 @@ defineExpose({ toggleAll, toggleSome: (ids: string[], value: boolean) => toggleS
   .title
     align-items: center
     display: flex
-    gap: .0rem
     height: fit-content
     min-height: 3rem
 
+  /* Shevron icon */
   .chevron
     cursor: pointer
     flex-shrink: 0
     transition: transform 100ms
     width: 2rem
 
-  .opened
+  .chevron.opened
     transform: rotate(90deg)
 </style>

@@ -15,11 +15,10 @@ $transform: transform $time $function
   opacity: 0
 
 .slide-enter-active, .slide-leave-active
-  transition: transform $time $function
-  transform-origin: top
+  transition: clip $time $function
 
 .slide-enter-from, .slide-leave-to
-  transform: scaleY(0)
+  clip: rect(auto, auto, 0, auto)
 
 .slide-enter-to, .slide-leave-from
-  transform: scaleY(1)
+  clip: rect(auto, auto, 10rem, auto)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
+import GooseCheckbox from '#components/GooseCheckbox.vue'
 import { useSlots } from 'vue'
 
 defineProps<{
@@ -27,6 +27,11 @@ const sort = (column: string) => {
   <table :class="{ loading }">
     <thead>
       <tr>
+        <th>
+          <div>
+            <GooseCheckbox />
+          </div>
+        </th>
         <th
           v-for="header, i in model.headers"
           :key="i"
@@ -52,6 +57,11 @@ const sort = (column: string) => {
         v-for="row, r in model.rows"
         :key="r"
       >
+        <td>
+          <div>
+            <GooseCheckbox />
+          </div>
+        </td>
         <td
           v-for="header, h in model.headers"
           :key="h"
@@ -82,20 +92,23 @@ const sort = (column: string) => {
     pointer-events: none
     filter: blur(8px)
 
+  thead
+    height: 3.5rem
+
   th
-    height: 2rem
+    height: 100%
+    vertical-align: middle
 
   .header
     font-weight: 600
 
   .sortable
     color: colors.$primary
-    text-decoration: underline
-    text-decoration-style: dotted
-    /* text-decoration-thickness: .0625rem */
-    text-decoration-color: colors.$primary
-    text-underline-offset: .25rem
     cursor: pointer
+    text-decoration-color: colors.$primary
+    text-decoration-style: dotted
+    text-decoration: underline
+    text-underline-offset: .25rem
     user-select: none
 
   tbody tr
@@ -108,12 +121,13 @@ const sort = (column: string) => {
 
   td
     height: 3rem
+    vertical-align: middle
 
   td div, th div
-    display: flex
-    justify-content: center
-    height: 100%
     align-items: center
+    display: flex
+    height: 100%
+    justify-content: center
 
   tr:nth-child(even)
     background-color:  #E8F8F5

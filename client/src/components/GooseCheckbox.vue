@@ -43,6 +43,7 @@ const toggled = defineModel<boolean>({ required: true }),
     align-items: center
     display: flex
     gap: .5rem
+    width: fit-content
 
   /* Base */
   button
