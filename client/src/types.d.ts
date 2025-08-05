@@ -108,5 +108,6 @@ declare global {
     rows: Record<string, any>[]
     sortBy: string
     desc: boolean
+    toggledItems: boolean[]
   }
 }

@@ -34,6 +34,7 @@ const tableModel = ref<TableModel>({
     rows: [],
     sortBy: sortBy.value,
     desc: sortDesc.value,
+    toggledItems: new Array(pageSize.value).fill(false),
   }),
   loading = ref(true)
 
@@ -50,6 +51,7 @@ async function update() {
   )
   pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows
+  tableModel.value.toggledItems = new Array(pageSize.value).fill(false)
   loading.value = false
 }
 

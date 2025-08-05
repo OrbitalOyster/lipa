@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed, useSlots } from 'vue'
 import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
-import { useSlots } from 'vue'
 
 defineProps<{
   loading: boolean
@@ -21,6 +21,17 @@ const sort = (column: string) => {
     model.value.sortBy = column
   emit('update')
 }
+
+const toggleAllRef = computed({
+    get() {
+      return model.value.toggledItems.some(l => l)
+    },
+    set(newValue) {
+      for (let i = 0; i < model.value.rows.length; i++)
+        model.value.toggledItems[i] = newValue
+    },
+  }), toggleAllIndetermitate = computed(() => model.value.toggledItems.some(l => l !== model.value.toggledItems[0]))
+
 </script>
 
 <template>
@@ -29,7 +40,10 @@ const sort = (column: string) => {
       <tr>
         <th>
           <div>
-            <GooseCheckbox />
+            <GooseCheckbox
+              v-model="toggleAllRef"
+              :indeterminate="toggleAllIndetermitate"
+            />
           </div>
         </th>
         <th
@@ -59,7 +73,7 @@ const sort = (column: string) => {
       >
         <td>
           <div>
-            <GooseCheckbox />
+            <GooseCheckbox v-model="model.toggledItems[r]" />
           </div>
         </td>
         <td
@@ -95,11 +109,12 @@ const sort = (column: string) => {
   thead
     height: 3.5rem
 
-  thead tr
-    background-color: tomato
-    position: sticky
-    top: 0
-    z-index: 10
+  /*
+    thead tr
+      background-color: tomato
+      position: sticky
+      top: 0
+      z-index: 10 */
 
   th
     height: 100%
