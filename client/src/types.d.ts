@@ -103,9 +103,14 @@ declare global {
     prop: string
   }
 
+  interface TableRow {
+    selected: boolean
+    data: Record<string, any>
+  }
+
   interface TableModel {
     headers: TableHeader[]
-    rows: Record<string, any>[]
+    rows: TableRow[]
     sortBy: string
     desc: boolean
     toggledItems: boolean[]

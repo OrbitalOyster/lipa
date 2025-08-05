@@ -22,15 +22,24 @@ const sort = (column: string) => {
   emit('update')
 }
 
-const toggleAllRef = computed({
+const selectAllRef = computed({
     get() {
-      return model.value.toggledItems.some(l => l)
+      return model.value.rows.some(l => l.selected)
     },
     set(newValue) {
-      for (let i = 0; i < model.value.rows.length; i++)
-        model.value.toggledItems[i] = newValue
+      for (const row of model.value.rows)
+        row.selected = newValue
     },
-  }), toggleAllIndetermitate = computed(() => model.value.toggledItems.some(l => l !== model.value.toggledItems[0]))
+  }),
+  selectAllIndetermitate = computed(
+    () => {
+      /* Empty table */
+      if (!model.value.rows[0])
+        return false
+      const first = model.value.rows[0]
+      return model.value.rows.some(l => l.selected !== first.selected)
+    },
+  )
 
 </script>
 
@@ -41,8 +50,8 @@ const toggleAllRef = computed({
         <th>
           <div>
             <GooseCheckbox
-              v-model="toggleAllRef"
-              :indeterminate="toggleAllIndetermitate"
+              v-model="selectAllRef"
+              :indeterminate="selectAllIndetermitate"
             />
           </div>
         </th>
@@ -73,7 +82,7 @@ const toggleAllRef = computed({
       >
         <td>
           <div>
-            <GooseCheckbox v-model="model.toggledItems[r]" />
+            <GooseCheckbox v-model="row.selected" />
           </div>
         </td>
         <td
@@ -84,9 +93,9 @@ const toggleAllRef = computed({
             <slot
               v-if="slotNames.includes(header.prop)"
               :name="header.prop"
-              v-bind="{td: row[header.prop]}"
+              v-bind="{ td: row.data[header.prop] }"
             />
-            <span v-else>{{ row[header.prop] }}</span>
+            <span v-else>{{ row.data[header.prop] }}</span>
           </div>
         </td>
       </tr>

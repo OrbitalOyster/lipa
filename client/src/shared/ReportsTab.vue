@@ -50,7 +50,7 @@ async function update() {
     tableModel.value.desc,
   )
   pagination.value = { ...apiReports }
-  tableModel.value.rows = apiReports.rows
+  tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(pageSize.value).fill(false)
   loading.value = false
 }
