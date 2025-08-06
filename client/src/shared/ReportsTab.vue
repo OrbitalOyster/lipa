@@ -24,18 +24,7 @@ const pagination = ref({
   total: 0,
 })
 
-/*
-type TableData = Record<
-  date: string
-  org: string
-  year: number
-  status: string
-}
-*/
-
-type Prop = string | number
-
-const tableModel = ref<TableModel<Prop>>({
+const tableModel = ref<TableModel<APIReport>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Организация', prop: 'org' },
@@ -93,7 +82,7 @@ loading.value = false
     @update="update"
   >
     <template #date="{td}">
-      {{ td && new Date(td).toLocaleString('ru') }}
+      {{ new Date(td).toLocaleString('ru') }}
     </template>
 
     <template #org="{td}">

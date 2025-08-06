@@ -66,13 +66,18 @@ declare global {
   }
 
   /* TODO: Shared types */
-  interface ApiOrg {
+  interface APIOrg {
     id: string
     name: string
     parent?: string
   }
 
-  type APIReport = Record<string, string | number>
+  interface APIReport {
+    date: string
+    org: string
+    year: number
+    status: string
+  }
 
   interface FetchReportsResult {
     page: number
@@ -100,7 +105,7 @@ declare global {
 
   interface TableRow<T> {
     selected: boolean
-    data: Record<string, T>
+    data: T
   }
 
   interface TableModel<T> {

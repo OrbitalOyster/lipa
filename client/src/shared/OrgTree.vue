@@ -10,7 +10,7 @@ import useFetchOrgs from '#composables/useFetchOrgs.ts'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Converts api array to object */
-const toTree = (arr: ApiOrg[], parent?: string): TreeLeaf[] =>
+const toTree = (arr: APIOrg[], parent?: string): TreeLeaf[] =>
   arr.filter(i => i.parent === parent).map(i => ({
     title: `${i.id} - ${i.name}`,
     id: i.id,
