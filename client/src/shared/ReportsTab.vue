@@ -24,7 +24,18 @@ const pagination = ref({
   total: 0,
 })
 
-const tableModel = ref<TableModel>({
+/*
+type TableData = Record<
+  date: string
+  org: string
+  year: number
+  status: string
+}
+*/
+
+type Prop = string | number
+
+const tableModel = ref<TableModel<Prop>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Организация', prop: 'org' },
@@ -82,7 +93,7 @@ loading.value = false
     @update="update"
   >
     <template #date="{td}">
-      {{ new Date(td).toLocaleString('ru') }}
+      {{ td && new Date(td).toLocaleString('ru') }}
     </template>
 
     <template #org="{td}">

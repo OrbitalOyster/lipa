@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { computed, useSlots } from 'vue'
 import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -10,7 +10,7 @@ defineProps<{
 
 const slots = useSlots(),
   slotNames = Object.keys(slots),
-  model = defineModel<TableModel>({ required: true })
+  model = defineModel<TableModel<T>>({ required: true })
 
 const emit = defineEmits<{ update: [] }>()
 
@@ -93,7 +93,7 @@ const selectAllRef = computed({
             <slot
               v-if="slotNames.includes(header.prop)"
               :name="header.prop"
-              v-bind="{ td: row.data[header.prop] }"
+              v-bind="{ td: (row.data as Record<string, T>)[header.prop] }"
             />
             <span v-else>{{ row.data[header.prop] }}</span>
           </div>

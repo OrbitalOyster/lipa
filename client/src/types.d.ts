@@ -72,12 +72,7 @@ declare global {
     parent?: string
   }
 
-  interface APIReport {
-    date: string
-    org: string
-    year: number
-    status: string
-  }
+  type APIReport = Record<string, string | number>
 
   interface FetchReportsResult {
     page: number
@@ -103,14 +98,14 @@ declare global {
     prop: string
   }
 
-  interface TableRow {
+  interface TableRow<T> {
     selected: boolean
-    data: Record<string, any>
+    data: Record<string, T>
   }
 
-  interface TableModel {
+  interface TableModel<T> {
     headers: TableHeader[]
-    rows: TableRow[]
+    rows: TableRow<T>[]
     sortBy: string
     desc: boolean
     toggledItems: boolean[]
