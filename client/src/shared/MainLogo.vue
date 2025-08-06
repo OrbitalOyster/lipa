@@ -34,7 +34,7 @@ import GooseTooltip from '#components/GooseTooltip.vue'
   img
     border-radius: 100%
     height: 4rem
-    box-shadow: 0 0 3px 2px
+    box-shadow: 0px 0px 3px 2px
     width: 4rem
 
   h1

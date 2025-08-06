@@ -10,6 +10,7 @@ const props = defineProps<{
   disabled?: boolean
   icon?: IconDefinition
   loading?: boolean
+  round?: boolean
   small?: boolean
   submit?: boolean
   title?: string
@@ -30,7 +31,7 @@ const props = defineProps<{
     <button
       :disabled
       :type
-      :class="{ primary: !transparent, warning, danger, small, transparent }"
+      :class="{ primary: !transparent, warning, danger, round, small, transparent }"
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
@@ -75,8 +76,8 @@ const props = defineProps<{
     user-select: none
     width: inherit
 
-  span
-    flex-grow: 1
+  /* span
+    flex-grow: 1 */
 
   .primary
     background-color: colors.$primary
@@ -114,6 +115,9 @@ const props = defineProps<{
     height: 3rem
     padding-left: .5rem
     padding-right: .5rem
+
+  .round
+    border-radius: 100%
 
   /* On hover */
   button:hover

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
+import GooseScrollToTop from '#components/GooseScrollToTop.vue'
 import GooseSidebar from '#components/GooseSidebar.vue'
 import GooseTabs from '#components/GooseTabs.vue'
 import MainLogo from '#shared/MainLogo.vue'
@@ -97,6 +98,8 @@ const sidebarToggled = ref(true)
         </GooseTabs>
       </main>
     </GooseSidebar>
+
+    <GooseScrollToTop />
   </div>
 </template>
 

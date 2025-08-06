@@ -96,13 +96,13 @@ function setPage(i: number) {
 
   ul
     align-items: center
-    justify-content: center
     display: flex
     gap: .1rem
+    justify-content: center
 
   ul.disabled
-    pointer-events: none
     filter: grayscale(1)
+    pointer-events: none
 
   .arrow
     cursor: pointer
@@ -110,18 +110,18 @@ function setPage(i: number) {
     width: 2rem
 
   li.page
-    display: flex
-    justify-content: center
     align-items: center
+    border-radius: .5rem
     box-sizing: border-box
     cursor: pointer
+    display: flex
     font-size: 1.25rem
-    user-select: none
-    border-radius: .5rem
-    min-width: 2.5rem
+    justify-content: center
     min-height: 2.5rem
+    min-width: 2.5rem
+    user-select: none
 
   li.page.active
-    color: white
+    color: colors.$button
     background-color: colors.$primary
 </style>

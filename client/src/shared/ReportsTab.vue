@@ -89,15 +89,17 @@ loading.value = false
       Formatted: {{ td }} !
     </template>
   </GooseTable>
-  <GoosePagination
-    v-model="pagination"
-    style="padding: 1rem"
-    :first-pages="5"
-    :middle-pages="1"
-    :last-pages="1"
-    :disabled="loading"
-    @update="update"
-  />
+  <div style="height: 3rem; display: flex; justify-content: center; align-items: center; padding: 1rem">
+    <GoosePagination
+      v-model="pagination"
+      style="padding: 1rem"
+      :first-pages="5"
+      :middle-pages="1"
+      :last-pages="1"
+      :disabled="loading"
+      @update="update"
+    />
+  </div>
 </template>
 
 <style lang="sass">

@@ -33,7 +33,6 @@ defineProps<{
     transition-property: width, opacity, transform
     transition-timing-function: $transition-function
     transform-origin: left
-    z-index: 50
 
   aside.toggled
     opacity: 1

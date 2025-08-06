@@ -56,6 +56,11 @@ const { floatingStyles, middlewareData, arrowStyle }
   /* Do not remove this line, needed for transition effect */
   @use '../assets/transitions.sass'
 
+  span
+    display: inline-block
+    width: fit-content
+    height: fit-content
+
   .arrow
     background-color: colors.$info
     border: 1px solid colors.$info-border
