@@ -27,7 +27,9 @@ import GooseTooltip from '#components/GooseTooltip.vue'
   .logo-wrapper
     align-items: center
     display: flex
+    flex-shrink: 0
     gap: 1rem
+    height: 4rem
 
   img
     border-radius: 100%
