@@ -15,7 +15,7 @@ export default tseslint.config(
     },
   },
   eslintPluginImportX.flatConfigs.recommended, /* Import plugin */
-  stylistic.configs['recommended-flat'], /* Formatting */
+  stylistic.configs['recommended'], /* Formatting */
   {
     rules: {
       'sort-imports': 'error',
