@@ -8,6 +8,9 @@ const cookieName = Bun.env['COOKIE_NAME'],
   cookieLongLifetimeSec = Number(Bun.env['COOKIE_LONG_LIFETIME_SEC']),
   tokenSecret = Bun.env['TOKEN_SECRET']
 
+/* JWT encryption algorithm */
+const alg = 'HS512'
+
 export const getPayload = async (context: Context) => {
   const cookie = await getSignedCookie(
     context,
@@ -17,7 +20,7 @@ export const getPayload = async (context: Context) => {
   /* No cookie */
   if (!cookie)
     return {}
-  const payload = await verify(cookie, tokenSecret),
+  const payload = await verify(cookie, tokenSecret, alg),
     { exp, ...sanitizedPayload } = payload // Voodoo
   return sanitizedPayload
 }
@@ -33,7 +36,7 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
   await setSignedCookie(
     context,
     cookieName,
-    await sign(oldPayload, tokenSecret),
+    await sign(oldPayload, tokenSecret, alg),
     cookieSecret, {
       path: '/',
       httpOnly: true,
@@ -42,26 +45,16 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
     })
 }
 
-/*
-export const setPayload = async (context: Context) => {
-  const payload = await context.req.json<UserPayload>()
-  if (payload.userId || payload.isOrg || payload.exp)
-    throw new Error('Haxxor alert')
-  await updateCookie(context, payload)
-  return context.json(payload)
-}
-*/
-
 export const check = async (context: Context) => {
   const payload = await getPayload(context)
   /* No cookies */
   if (!payload)
-    return context.json(false)
+    return false
   const { userId } = { ...payload }
   /* Logged out */
   if (!userId)
-    return context.json(false)
-  /* Update and move on */
+    return false
+  /* Update cookie and move on */
   await updateCookie(context)
-  return context.json(true)
+  return true
 }

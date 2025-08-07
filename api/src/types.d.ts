@@ -22,6 +22,15 @@ declare global {
     name: string
     parent: string | null
   }
+
+  interface APIReport {
+    date: string
+    org: string
+    year: number
+    status: string
+  }
+
+  type sortableCols = 'date' | 'year'
 }
 
 declare module 'bun' {

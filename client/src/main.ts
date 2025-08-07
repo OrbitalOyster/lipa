@@ -1,4 +1,3 @@
-import '#icons.ts'
 import '@fontsource-variable/exo-2'
 import App from './App.vue'
 import axios from 'axios'

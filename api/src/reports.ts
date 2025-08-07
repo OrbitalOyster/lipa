@@ -2,22 +2,6 @@ import type { Context } from 'hono'
 import fs from 'node:fs'
 import { setTimeout as sleep } from 'node:timers/promises'
 
-/*
-interface ReportsQuery {
-  n?: string
-  page?: string
-}
-*/
-
-interface APIReport {
-  date: string
-  org: string
-  year: number
-  status: string
-}
-
-type sortableCols = 'date' | 'year'
-
 const maxSize = 100,
   defaultSort = 'date'
 

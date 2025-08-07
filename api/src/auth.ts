@@ -38,5 +38,5 @@ export const auth = async (context: Context) => {
 
 export const logout = async (context: Context) => {
   await updateCookie(context, { userId: null, isOrg: null, name: null, rememberMe: null })
-  return context.text('logout')
+  return context.json('logout')
 }
