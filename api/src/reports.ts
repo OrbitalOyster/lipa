@@ -9,25 +9,26 @@ const maxSize = 100,
 const total = 500
 
 export const reports = async (context: Context) => {
-  await sleep(100)
+  await sleep(300)
 
   /* Query params */
   let size = Number(context.req.query()['size']) || 10,
     page = Number(context.req.query()['page']) || 0,
-    sortBy = context.req.query()['sortBy'],
-    desc = context.req.query()['desc'] || 'false'
+    sortBy = context.req.query()['sortBy']
+  const descStr = context.req.query()['desc'] || 'false'
 
   if (size > maxSize)
     size = maxSize
 
-  if (!(['date', 'year'].includes(sortBy)))
+  if (!sortBy || !(['date', 'year'].includes(sortBy)))
     sortBy = defaultSort
 
+  let desc = false
   try {
-    desc = JSON.parse(desc.toLowerCase())
-  } catch (error) {
+    desc = JSON.parse(descStr.toLowerCase())
+  }
+  catch (error) {
     console.log('Haxxor alert!')
-    desc = false
   }
 
   const totalPages = Math.ceil(total / size)
@@ -41,7 +42,7 @@ export const reports = async (context: Context) => {
 
   const placeholderRaw = fs.readFileSync('reports.json').toString(),
     rows = (JSON.parse(placeholderRaw) as APIReport[])
-      .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date)} )) // Add index, convert ISODate to date
+      .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date) })) // Add index, convert ISODate to date
       .sort(cmpr) // Sort
       .slice(page * size, (page + 1) * size) // Get page
 

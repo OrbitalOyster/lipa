@@ -1,5 +1,6 @@
+import type { Context, Next } from 'hono'
 import { auth, logout } from './auth'
-import { check, getPayload, setPayload } from './cookies'
+import { check, getPayload } from './cookies'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -30,11 +31,11 @@ const app = new Hono()
 app.use('*', logger())
 
 /* 404 */
-const notFound = context => context.text('Nothing here', 404)
+const notFound = (context: Context) => context.text('Nothing here', 404)
 app.notFound(notFound)
 
 /* 500 */
-app.onError((err, context) => {
+app.onError((err, context: Context) => {
   console.error(err)
   return context.text('Major screw-up, check console for details', 500)
 })
@@ -44,22 +45,22 @@ app.use('*', cors({ origin, credentials: true }))
 /* Stupid favicon */
 app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 /* Default response */
-app.get('/', context => context.text(defaultMessage))
+app.get('/', (context: Context) => context.text(defaultMessage))
 
 /* User data */
-app.get('/payload', async context => context.json(await getPayload(context)))
+app.get('/payload', async (context: Context) => context.json(await getPayload(context)))
 /* Auth check */
-app.get('/check', async context => context.json(await check(context)))
+app.get('/check', async (context: Context) => context.json(await check(context)))
 /* Auth */
 app.post('/auth', auth)
 /* Orgs */
 app.get('/orgs', orgs)
 
 /* Auth check middleware */
-const checkAuth = async (context, next) => { 
+const checkAuth = async (context: Context, next: Next) => {
   const authOk = await check(context)
   if (authOk)
-    await next()
+    return await next()
   else
     return notFound(context)
 }

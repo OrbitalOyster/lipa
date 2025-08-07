@@ -23,7 +23,7 @@ export const auth = async (context: Context) => {
       return context.json(false)
     }
     else {
-      const name = rows[0]["name"]
+      const name = rows[0]['name']
       console.log('Auth OK', userId, name)
       /* Update cookie and return ok */
       await updateCookie(context, { userId, isOrg, name, rememberMe })
