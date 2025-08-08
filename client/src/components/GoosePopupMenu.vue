@@ -4,8 +4,9 @@
 
   const props = defineProps<{
     active: Boolean
-    side?: Side
     items: SelectItem[]
+    side?: Side
+    showSelected?: Boolean
   }>()
 
   const target = useTemplateRef('target'),
@@ -44,24 +45,12 @@
         v-for="item in items"
         ref="itemsRef"
         :key="item.id"
-        :class="{ selected: selectedId === item.id }"
-        @click="update(item.id); active = false"
+        :class="{ selected: showSelected && selectedId === item.id }"
+        @click="update(item.id)"
       >
         {{ item.title }}
       </li>
     </ul>
-
-  <!--
-    <div
-      v-show="active && !middlewareData.hide?.referenceHidden"
-      tabindex="0"
-      ref="floating"
-      class="floating"
-      :style="{ ...floatingStyles }"
-    >
-    POPUP MENU!!!
-    </div>
-    -->
   </Transition>
 </template>
 
