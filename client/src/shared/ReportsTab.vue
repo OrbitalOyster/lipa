@@ -6,6 +6,10 @@ import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalStorage } from '@vueuse/core'
 
+import GooseButton from '#components/GooseButton.vue'
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import GoosePopupMenu from '#components/GoosePopupMenu.vue'
+
 const pageSizes = [
     { id: 10, title: '10' },
     { id: 25, title: '25' },
@@ -16,7 +20,14 @@ const pageSizes = [
   pageSize = useLocalStorage('reports-pagination-size', pageSizes[0]!.id),
   page = useLocalStorage('reports-pagination-page', 0),
   sortBy = useLocalStorage('reports-sort-by', 'date'),
-  sortDesc = useLocalStorage('reports-sort-desc', false)
+  sortDesc = useLocalStorage('reports-sort-desc', false),
+
+  fromDate = useLocalStorage('reports-from-date', '2025-01-01'),
+  toDate = useLocalStorage('reports-to-date', '2025-01-31')
+
+  const showExtraDates = ref(false),
+    extraDates = [{id: 'foo', title: 'Foo'}, { id: 'bar', title: 'Bar'}],
+    selectedExtraDate = ref('foo')
 
 const pagination = ref({
   size: pageSize.value,
@@ -69,9 +80,20 @@ loading.value = false
         @update="update"
       />
     </div>
-    <span>
-      От. До.
-    </span>
+    <div style="display: flex; align-items: center">
+      <input class="calendar" type="date" v-model="fromDate" :max="toDate">
+      -
+      <input class="calendar" type="date" v-model="toDate" :min="fromDate">
+      <GoosePopupMenu :active="showExtraDates" :items="extraDates" v-model="selectedExtraDate">
+        <GooseButton
+          :icon="faEllipsisVertical"
+          tooltip="Выбрать дату"
+          tooltip-side="right"
+          small transparent
+          @click="showExtraDates = !showExtraDates"
+        />
+      </GoosePopupMenu>
+    </div>
     <span>
       Foo
     </span>
@@ -103,11 +125,16 @@ loading.value = false
 </template>
 
 <style lang="sass">
+  @use '../assets/borders'
+  @use '../assets/colors'
+  @use '../assets/transitions'
+
   .filters
     align-items: center
     display: flex
     height: 3rem
     justify-content: space-between
+    padding: .5rem
 
   .page-size-select
     align-items: center
@@ -115,4 +142,21 @@ loading.value = false
     gap: 1rem
     justify-content: space-between
     width: 15rem
+
+  .calendar
+    background-color: colors.$input-background
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
+    box-sizing: border-box
+    color: colors.$text
+    font: inherit
+    height: 2.5rem
+    min-width: 10rem
+    outline: colors.$outline solid 0px
+    padding: .25rem .5rem .25rem .75rem
+    transition: transitions.$focusable, transitions.$colors
+
+  .calendar:focus
+    border-color: colors.$outline
+    outline-width: borders.$focus-outline-width
 </style>
