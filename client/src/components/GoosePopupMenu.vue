@@ -5,18 +5,17 @@
   const props = defineProps<{
     active: Boolean
     items: SelectItem[]
+    fitTargetWidth?: Boolean
     side?: Side
     showSelected?: Boolean
   }>()
 
   const target = useTemplateRef('target'),
     floating = useTemplateRef('floating'),
-    selectedId = defineModel<SelectId>({ required: true })
-
-  const fitTargetWidth = true,
+    selectedId = defineModel<SelectId>({ required: true }),
     side = props.side ?? 'bottom',
     { floatingStyles, isPositioned, middlewareData }
-      = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth })
+      = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth })
   
   function update(newId: SelectId) {
     selectedId.value = newId
@@ -59,9 +58,6 @@
   @use '../assets/colors'
   @use '../assets/transitions'
 
-  .floating
-    background-color: salmon
-
   ul
     background-color: colors.$card
     border-radius: borders.$radius
@@ -85,5 +81,4 @@
 
   li.selected
     background-color: #D5D8DC
-
 </style>
