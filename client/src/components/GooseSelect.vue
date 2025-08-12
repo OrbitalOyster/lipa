@@ -25,11 +25,6 @@ function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
 }
 
-function update(newId: SelectId) {
-  selectedId.value = newId
-  emit('update', newId)
-}
-
 function keyScroll(direction: number) {
   let selectedIndex = props.items.findIndex(i => i.id === selectedId.value)
   /* Edge case - nothing selected */
@@ -42,9 +37,11 @@ function keyScroll(direction: number) {
   if (!selectedItem)
     throw new Error('Major screwup')
   update(selectedItem.id)
+}
 
-  // if (active.value)
-  //  scrollTo(selectedIndex, false)
+function update(newId: SelectId) {
+  selectedId.value = newId
+  emit('update', newId)
 }
 </script>
 
@@ -62,7 +59,6 @@ function keyScroll(direction: number) {
       <!-- Pseudo-input -->
       <button
         type="button"
-        class="target"
         :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
         :disabled
         :autofocus
@@ -108,28 +104,6 @@ function keyScroll(direction: number) {
       </div>
     </div>
   </GoosePopupMenu>
-
-  <!--
-    <Transition name="fade">
-      <ul
-        v-show="active && !middlewareData.hide?.referenceHidden"
-        ref="floating"
-        tabindex="0"
-        :style="{ ...floatingStyles }"
-        @focus="target?.focus()"
-      >
-        <li
-          v-for="item in items"
-          ref="itemsRef"
-          :key="item.id"
-          :class="{ selected: selectedId === item.id }"
-          @click="update(item.id); active = false"
-        >
-          {{ item.title }}
-        </li>
-      </ul>
-    </Transition>
-    -->
 </template>
 
 <style lang="sass" scoped>
@@ -141,10 +115,10 @@ function keyScroll(direction: number) {
     align-items: center
     display: inline-flex
     min-width: 3.5rem
-    width: 100%
     position: relative
+    width: 100%
 
-  .target
+  button
     align-items: center
     background-color: colors.$input-background
     border-radius: borders.$radius
@@ -161,6 +135,18 @@ function keyScroll(direction: number) {
     white-space: nowrap
     width: 100%
 
+  /* On focus */
+  button:focus
+    border-color: colors.$outline
+    outline-width: borders.$focus-outline-width
+
+  /* On disabled */
+  button:disabled
+    background-color: colors.$input-disabled
+    border-color: colors.$input-disabled
+    color: colors.$disabled-primary
+    cursor: not-allowed
+
   .has-placeholder
     height: 3.5rem
     padding-top: 1.5rem
@@ -173,19 +159,6 @@ function keyScroll(direction: number) {
     overflow: hidden
     padding-right: .5rem
     text-overflow: ellipsis
-
-  /* On focus */
-  .target:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
-
-  /* On disabled */
-  .target:disabled
-    background-color: colors.$input-disabled
-    border-color: colors.$input-disabled
-    color: colors.$disabled-primary
-    cursor: not-allowed
-    /* pointer-events: none */
 
   .icons
     align-items: center
@@ -203,30 +176,6 @@ function keyScroll(direction: number) {
     transition: transitions.$transform
     width: 1.5rem
 
-  .target:disabled ~ .chevron
+  button:disabled ~ .chevron
     color: colors.$disabled-primary
-
-  ul
-    background-color: colors.$card
-    border-radius: borders.$radius
-    border: borders.$card
-    box-sizing: border-box
-    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
-    margin-bottom: .25rem
-    overflow-y: auto
-    overscroll-behavior: none
-    position: absolute
-    z-index: 99
-
-  li
-    cursor: pointer
-    display: block
-    padding: 1rem
-    user-select: none
-
-  li:hover
-    background-color: #EAECEE
-
-  li.selected
-    background-color: #D5D8DC
 </style>
