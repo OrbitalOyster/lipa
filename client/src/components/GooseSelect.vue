@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
-import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
-// import type { Side } from '@floating-ui/core'
-import { useFloatingUI } from '#composables/useFloatingUI.ts'
-
 import GoosePopupMenu from '#components/GoosePopupMenu.vue'
+import type { Side } from '@floating-ui/core'
+import { ref } from 'vue'
 
 const props = defineProps<{
   autofocus?: boolean
@@ -21,15 +19,7 @@ const props = defineProps<{
 }>(),
   emit = defineEmits(['update']),
   active = ref(false),
-  selectedId = defineModel<SelectId>({ required: true }),
-  // itemsRef = useTemplateRef('itemsRef'),
-  target = useTemplateRef('target')// ,
-  // floating = useTemplateRef('floating')
-
-// const fitTargetWidth = true,
-// side = props.side ?? 'bottom',
-// { floatingStyles, isPositioned, middlewareData }
-//  = useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
+  selectedId = defineModel<SelectId>({ required: true })
 
 function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
@@ -53,26 +43,9 @@ function keyScroll(direction: number) {
     throw new Error('Major screwup')
   update(selectedItem.id)
 
-  //if (active.value)
+  // if (active.value)
   //  scrollTo(selectedIndex, false)
 }
-
-/*
-function scrollTo(selectedIndex: number, instant: boolean) {
-  const highlightedElement = itemsRef.value?.[selectedIndex],
-    behavior = instant ? 'instant' : 'smooth'
-  highlightedElement?.scrollIntoView({ behavior, block: 'center' })
-  if (!highlightedElement)
-    floating.value?.scrollTo(0, 0)
-}
-*/
-
-/* Deactivate element on blur, but only if focus target is not drop-down list */
-// function onTargetBlur(e: FocusEvent) {
-//   if (e.relatedTarget !== floating.value)
-//     active.value = false
-// }
-
 </script>
 
 <template>

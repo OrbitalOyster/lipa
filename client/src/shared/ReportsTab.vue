@@ -1,14 +1,13 @@
 <script setup lang="ts">
+import GooseButton from '#components/GooseButton.vue'
 import GoosePagination from '#components/GoosePagination.vue'
+import GoosePopupMenu from '#components/GoosePopupMenu.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalStorage } from '@vueuse/core'
-
-import GooseButton from '#components/GooseButton.vue'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import GoosePopupMenu from '#components/GoosePopupMenu.vue'
 
 const pageSizes = [
     { id: 10, title: '10' },
