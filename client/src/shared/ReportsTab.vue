@@ -25,15 +25,15 @@ const pageSizes = [
   fromDate = useLocalStorage('reports-from-date', '2025-01-01'),
   toDate = useLocalStorage('reports-to-date', '2025-01-31')
 
-  const showExtraDates = ref(false),
-    extraDates = [
-      { id: 'currentMonth', title: 'Текущий месяц'},
-      { id: 'previousMonth', title: 'Предыдущий месяц'},
-      { id: 'today', title: 'Сегодня'},
-      { id: 'yesterday', title: 'Вчера'},
-      { id: 'fromJan1', title: 'С начала года'},
-    ],
-    selectedExtraDate = ref('bar')
+const showExtraDates = ref(false),
+  extraDates = [
+    { id: 'currentMonth', title: 'Текущий месяц' },
+    { id: 'previousMonth', title: 'Предыдущий месяц' },
+    { id: 'today', title: 'Сегодня' },
+    { id: 'yesterday', title: 'Вчера' },
+    { id: 'fromJan1', title: 'С начала года' },
+  ],
+  selectedExtraDate = ref('bar')
 
 const pagination = ref({
   size: pageSize.value,
@@ -87,20 +87,31 @@ loading.value = false
       />
     </div>
     <div style="display: flex; align-items: center">
-      <input class="calendar" type="date" v-model="fromDate" :max="toDate">
+      <input
+        v-model="fromDate"
+        class="calendar"
+        type="date"
+        :max="toDate"
+      >
       -
-      <input class="calendar" type="date" v-model="toDate" :min="fromDate">
+      <input
+        v-model="toDate"
+        class="calendar"
+        type="date"
+        :min="fromDate"
+      >
       <GoosePopupMenu
+        v-model="selectedExtraDate"
         :active="showExtraDates"
         :items="extraDates"
-        v-model="selectedExtraDate"
         @update="d => { showExtraDates=false; console.log(d)}"
       >
         <GooseButton
           :icon="faEllipsisVertical"
           tooltip="Выбрать дату"
           tooltip-side="right"
-          small transparent
+          small
+          transparent
           @click="showExtraDates = !showExtraDates"
         />
       </GoosePopupMenu>

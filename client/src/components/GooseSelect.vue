@@ -4,8 +4,10 @@ import { ref, useTemplateRef, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
-import type { Side } from '@floating-ui/core'
+// import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
+
+import GoosePopupMenu from '#components/GoosePopupMenu.vue'
 
 const props = defineProps<{
   autofocus?: boolean
@@ -20,14 +22,14 @@ const props = defineProps<{
   emit = defineEmits(['update']),
   active = ref(false),
   selectedId = defineModel<SelectId>({ required: true }),
-  itemsRef = useTemplateRef('itemsRef'),
-  target = useTemplateRef('target'),
-  floating = useTemplateRef('floating')
+  // itemsRef = useTemplateRef('itemsRef'),
+  target = useTemplateRef('target')// ,
+  // floating = useTemplateRef('floating')
 
-const fitTargetWidth = true,
-  side = props.side ?? 'bottom',
-  { floatingStyles, isPositioned, middlewareData }
-    = useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
+// const fitTargetWidth = true,
+// side = props.side ?? 'bottom',
+// { floatingStyles, isPositioned, middlewareData }
+//  = useFloatingUI(target, floating, null, { active, side, fitTargetWidth })
 
 function wrap(value: number, direction: number) {
   return (value + direction + props.items.length) % props.items.length
@@ -50,84 +52,92 @@ function keyScroll(direction: number) {
   if (!selectedItem)
     throw new Error('Major screwup')
   update(selectedItem.id)
-  if (active.value)
-    scrollTo(selectedIndex, false)
+
+  //if (active.value)
+  //  scrollTo(selectedIndex, false)
 }
 
+/*
 function scrollTo(selectedIndex: number, instant: boolean) {
   const highlightedElement = itemsRef.value?.[selectedIndex],
     behavior = instant ? 'instant' : 'smooth'
   highlightedElement?.scrollIntoView({ behavior, block: 'center' })
-
-  /* Scroll to top if nothing is selected */
   if (!highlightedElement)
     floating.value?.scrollTo(0, 0)
 }
+*/
 
 /* Deactivate element on blur, but only if focus target is not drop-down list */
-function onTargetBlur(e: FocusEvent) {
-  if (e.relatedTarget !== floating.value)
-    active.value = false
-}
-
-watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id === selectedId.value), true))
+// function onTargetBlur(e: FocusEvent) {
+//   if (e.relatedTarget !== floating.value)
+//     active.value = false
+// }
 
 </script>
 
 <template>
-  <div
-    class="select-wrapper"
+  <GoosePopupMenu
+    v-model="selectedId"
+    :active
+    :items
+    :side
+    :fit-target-width="true"
+    :show-selected="true"
+    @update="newId => { active = false; update(newId) }"
   >
-    <!-- Pseudo-input -->
-    <button
-      ref="target"
-      type="button"
-      class="target"
-      :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
-      :disabled
-      :autofocus
-      @blur="onTargetBlur"
-      @click="active = !active"
-      @keydown.up.prevent="keyScroll(-1)"
-      @keydown.down.prevent="keyScroll(1)"
-      @keydown.esc="active = false"
-    >
-      <div class="item">
-        {{ items.find(i => i.id === selectedId)?.title }}
-      </div>
-    </button>
-    <!-- Placeholder -->
-    <GooseInputPlaceholder
-      v-if="placeholder"
-      :title="placeholder"
-      :active="!!selectedId"
-      class="placeholder"
-    />
-    <!-- Chevron -->
-    <FontAwesomeIcon
-      class="chevron"
-      :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
-      :icon="faChevronDown"
-      size="xl"
-    />
-    <!-- Icons -->
-    <div class="icons">
-      <!-- Validation icon -->
-      <GooseErrorIcon
-        v-if="error"
-        :message="error"
+    <div class="select-wrapper">
+      <!-- Pseudo-input -->
+      <button
+        type="button"
+        class="target"
+        :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
+        :disabled
+        :autofocus
+        @blur="active = false"
+        @click="active = !active"
+        @keydown.up.prevent="keyScroll(-1)"
+        @keydown.down.prevent="keyScroll(1)"
+        @keydown.esc="active = false"
+      >
+        <div class="item">
+          {{ items.find(i => i.id === selectedId)?.title }}
+        </div>
+      </button>
+
+      <!-- Placeholder -->
+      <GooseInputPlaceholder
+        v-if="placeholder"
+        :title="placeholder"
+        :active="!!selectedId"
+        class="placeholder"
       />
-      <!-- Loading -->
+      <!-- Chevron -->
       <FontAwesomeIcon
-        v-if="loading"
-        class="fa-pulse"
-        :icon="faSpinner"
+        class="chevron"
+        :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
+        :icon="faChevronDown"
         size="xl"
       />
+      <!-- Icons -->
+      <div class="icons">
+        <!-- Validation icon -->
+        <GooseErrorIcon
+          v-if="error"
+          :message="error"
+        />
+        <!-- Loading -->
+        <FontAwesomeIcon
+          v-if="loading"
+          class="fa-pulse"
+          :icon="faSpinner"
+          size="xl"
+        />
+      </div>
     </div>
-    <!-- Pretty transition -->
+  </GoosePopupMenu>
+
+  <!--
     <Transition name="fade">
-      <!-- Drop-down list -->
       <ul
         v-show="active && !middlewareData.hide?.referenceHidden"
         ref="floating"
@@ -146,7 +156,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
         </li>
       </ul>
     </Transition>
-  </div>
+    -->
 </template>
 
 <style lang="sass" scoped>
@@ -158,6 +168,7 @@ watch(isPositioned, isOpen => isOpen && scrollTo(props.items.findIndex(i => i.id
     align-items: center
     display: inline-flex
     min-width: 3.5rem
+    width: 100%
     position: relative
 
   .target
