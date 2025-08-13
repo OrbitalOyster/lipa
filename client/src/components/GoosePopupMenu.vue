@@ -9,15 +9,15 @@ const props = defineProps<{
   fitTargetWidth?: boolean
   side?: Side
   showSelected?: boolean
-}>()
-
-const target = useTemplateRef('target'),
+}>(),
+  target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
   itemsRef = useTemplateRef('itemsRef'),
   selectedId = defineModel<SelectId>({ required: true }),
   side = props.side ?? 'bottom',
   { floatingStyles, middlewareData }
-      = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth })
+      = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth }),
+  emit = defineEmits(['update'])
 
 function update(newId: SelectId) {
   selectedId.value = newId
@@ -29,9 +29,7 @@ async function scrollToSelected(instant: boolean) {
   const behavior = instant ? 'instant' : 'smooth',
     selectedIndex = props.items.findIndex(i => i.id === selectedId.value),
     highlightedElement = itemsRef.value?.[selectedIndex]
-
   highlightedElement?.scrollIntoView({ behavior, block: 'center' })
-
   /* Scroll to top if nothing is selected */
   if (!highlightedElement)
     floating.value?.scrollTo(0, 0)
@@ -43,7 +41,6 @@ watch(() => props.active, async () => props.active && await scrollToSelected(tru
 /* Slow scroll on selected change */
 watch(() => selectedId.value, async () => props.active && await scrollToSelected(false))
 
-const emit = defineEmits(['update'])
 </script>
 
 <template>

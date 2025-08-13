@@ -29,10 +29,10 @@ defineProps<{
     height: 100vh
     opacity: 0
     position: fixed
+    transform-origin: left
     transition-duration: $transition-duration
     transition-property: width, opacity, transform
     transition-timing-function: $transition-function
-    transform-origin: left
 
   aside.toggled
     opacity: 1

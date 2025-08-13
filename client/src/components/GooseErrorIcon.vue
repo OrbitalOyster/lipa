@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GoosePopover from '#components/GoosePopover.vue'
+import GooseTooltip from '#components/GooseTooltip.vue'
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 defineProps<{
@@ -10,9 +10,8 @@ defineProps<{
 
 <template>
   <!-- Validation error icon -->
-  <GoosePopover
-    has-arrow
-    hover-toggle
+  <GooseTooltip
+    :text="message"
   >
     <div class="error-icon">
       <FontAwesomeIcon
@@ -20,12 +19,7 @@ defineProps<{
         size="2xl"
       />
     </div>
-    <template #popover>
-      <p>
-        {{ message }}
-      </p>
-    </template>
-  </GoosePopover>
+  </GooseTooltip>
 </template>
 
 <style lang="sass" scoped>
