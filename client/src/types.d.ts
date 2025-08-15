@@ -20,14 +20,6 @@ declare global {
     rememberMe: boolean
   }
 
-  /*
-  interface UserTokenPayload {
-    userId?: string | null
-    isOrg?: boolean | null
-    rememberMe?: boolean | null
-  }
-  */
-
   /* Accordion */
   interface AccordionItem {
     icon: IconDefinition
@@ -115,4 +107,7 @@ declare global {
     desc: boolean
     toggledItems: boolean[]
   }
+
+  /* Reports tab */
+  type ExtraDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
 }

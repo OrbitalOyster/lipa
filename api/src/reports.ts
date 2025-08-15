@@ -14,6 +14,8 @@ export const reports = async (context: Context) => {
   /* Query params */
   let size = Number(context.req.query()['size']) || 10,
     page = Number(context.req.query()['page']) || 0,
+    fromDate = context.req.query()['fromDate'],
+    toDate = context.req.query()['toDate'],
     sortBy = context.req.query()['sortBy']
   const descStr = context.req.query()['desc'] || 'false'
 
@@ -31,6 +33,11 @@ export const reports = async (context: Context) => {
     console.log('Haxxor alert!')
   }
 
+  /* TODO: Validate */
+  fromDate = new Date(fromDate)
+  toDate = new Date(toDate)
+  toDate.setDate(toDate.getDate() + 1)
+
   const totalPages = Math.ceil(total / size)
   if (page > totalPages)
     page = totalPages - 1
@@ -43,6 +50,7 @@ export const reports = async (context: Context) => {
   const placeholderRaw = fs.readFileSync('reports.json').toString(),
     rows = (JSON.parse(placeholderRaw) as APIReport[])
       .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date) })) // Add index, convert ISODate to date
+      .filter(r => r.date > fromDate && r.date < toDate) // Filter by date
       .sort(cmpr) // Sort
       .slice(page * size, (page + 1) * size) // Get page
 
@@ -52,7 +60,7 @@ export const reports = async (context: Context) => {
       size,
       sortBy,
       desc,
-      total,
+      total: rows.length,
       rows,
     },
   )

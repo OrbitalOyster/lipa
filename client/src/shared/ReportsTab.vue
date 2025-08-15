@@ -23,8 +23,6 @@ const pageSizes = [
   fromDate = useLocalStorage('reports-from-date', '2025-01-01'),
   toDate = useLocalStorage('reports-to-date', '2025-01-31')
 
-type ExtraDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
-
 const showExtraDates = ref(false),
   extraDates = [
     { id: 'currentMonth', title: 'Текущий месяц' },
@@ -33,7 +31,7 @@ const showExtraDates = ref(false),
     { id: 'yesterday', title: 'Вчера' },
     { id: 'fromJan1', title: 'С начала года' },
   ],
-  selectedExtraDate = ref('bar')
+  selectedExtraDate = ref(extraDates[0]!.id)
 
 const pagination = ref({
   size: pageSize.value,
@@ -63,6 +61,8 @@ async function update() {
   const apiReports = await useFetchReports(
     pageSize.value,
     pagination.value.page,
+    fromDate.value,
+    toDate.value,
     sortBy.value,
     tableModel.value.desc,
   )
@@ -131,6 +131,7 @@ await update()
         class="calendar"
         type="date"
         :max="toDate"
+        @change="update"
       >
       -
       <input
@@ -138,6 +139,7 @@ await update()
         class="calendar"
         type="date"
         :min="fromDate"
+        @change="update"
       >
       <GoosePopupMenu
         v-model="selectedExtraDate"
