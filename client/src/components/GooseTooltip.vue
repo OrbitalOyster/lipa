@@ -9,7 +9,7 @@ const props = defineProps<{
   text?: string
 }>(),
   active = ref(false),
-  debounceDelay = 1000,
+  debounceDelay = 1500,
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),

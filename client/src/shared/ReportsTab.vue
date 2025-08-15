@@ -20,9 +20,10 @@ const pageSizes = [
   page = useLocalStorage('reports-pagination-page', 0),
   sortBy = useLocalStorage('reports-sort-by', 'date'),
   sortDesc = useLocalStorage('reports-sort-desc', false),
-
   fromDate = useLocalStorage('reports-from-date', '2025-01-01'),
   toDate = useLocalStorage('reports-to-date', '2025-01-31')
+
+type ExtraDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
 
 const showExtraDates = ref(false),
   extraDates = [
@@ -71,8 +72,47 @@ async function update() {
   loading.value = false
 }
 
+function dateToYYYMMDD(d: Date) {
+  const offset = d.getTimezoneOffset(),
+    zeroDate = new Date(d.getTime() - offset * 60 * 1000) /* Hatred */
+  return zeroDate.toISOString().substr(0, 10)
+}
+
+function setDate(d: ExtraDate) {
+  const now = new Date(),
+    year = now.getFullYear(),
+    month = now.getMonth(),
+    day = now.getDate()
+
+  switch (d) {
+    case 'currentMonth':
+      fromDate.value = dateToYYYMMDD(new Date(year, month, 1))
+      toDate.value = dateToYYYMMDD(new Date(year, month + 1, 0))
+      break
+
+    case 'previousMonth':
+      fromDate.value = dateToYYYMMDD(new Date(year, month - 1, 1))
+      toDate.value = dateToYYYMMDD(new Date(year, month, 0))
+      break
+
+    case 'today':
+      fromDate.value = dateToYYYMMDD(new Date(year, month, day))
+      toDate.value = fromDate.value
+      break
+
+    case 'yesterday':
+      fromDate.value = dateToYYYMMDD(new Date(year, month, day - 1))
+      toDate.value = fromDate.value
+      break
+
+    case 'fromJan1':
+      fromDate.value = dateToYYYMMDD(new Date(year, 0, 1))
+      toDate.value = dateToYYYMMDD(new Date(year, month, day))
+      break
+  }
+}
+
 await update()
-loading.value = false
 </script>
 
 <template>
@@ -103,7 +143,7 @@ loading.value = false
         v-model="selectedExtraDate"
         :active="showExtraDates"
         :items="extraDates"
-        @update="d => { showExtraDates=false; console.log(d)}"
+        @update="d => { showExtraDates=false; setDate(d)}"
       >
         <GooseButton
           :icon="faEllipsisVertical"

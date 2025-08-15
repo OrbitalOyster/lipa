@@ -5,10 +5,10 @@ import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
   active: boolean
-  items: SelectItem[]
   fitTargetWidth?: boolean
-  side?: Side
+  items: SelectItem[]
   showSelected?: boolean
+  side?: Side
 }>(),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
@@ -40,7 +40,6 @@ watch(() => props.active, async () => props.active && await scrollToSelected(tru
 
 /* Slow scroll on selected change */
 watch(() => selectedId.value, async () => props.active && await scrollToSelected(false))
-
 </script>
 
 <template>

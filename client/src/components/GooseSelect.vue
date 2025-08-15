@@ -21,8 +21,11 @@ const props = defineProps<{
   active = ref(false),
   selectedId = defineModel<SelectId>({ required: true })
 
-function wrap(value: number, direction: number) {
-  return (value + direction + props.items.length) % props.items.length
+function update(newId: SelectId) {
+  if (newId === selectedId.value)
+    return
+  selectedId.value = newId
+  emit('update', newId)
 }
 
 function keyScroll(direction: number) {
@@ -30,18 +33,14 @@ function keyScroll(direction: number) {
   /* Edge case - nothing selected */
   if (selectedIndex === -1)
     selectedIndex = direction > 0 ? -1 : 0
-  selectedIndex = wrap(selectedIndex, direction)
+  /* Wrap around items */
+  selectedIndex = (selectedIndex + direction + props.items.length) % props.items.length
   /* Set actual value */
   const selectedItem = props.items[selectedIndex]
   /* Should not happen */
   if (!selectedItem)
     throw new Error('Major screwup')
   update(selectedItem.id)
-}
-
-function update(newId: SelectId) {
-  selectedId.value = newId
-  emit('update', newId)
 }
 </script>
 
@@ -72,7 +71,6 @@ function update(newId: SelectId) {
           {{ items.find(i => i.id === selectedId)?.title }}
         </div>
       </button>
-
       <!-- Placeholder -->
       <GooseInputPlaceholder
         v-if="placeholder"
