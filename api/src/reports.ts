@@ -6,7 +6,7 @@ const maxSize = 100,
   defaultSort = 'date'
 
 // TODO: tmp
-const total = 500
+// const total = 500
 
 export const reports = async (context: Context) => {
   await sleep(300)
@@ -38,21 +38,27 @@ export const reports = async (context: Context) => {
   toDate = new Date(toDate)
   toDate.setDate(toDate.getDate() + 1)
 
-  const totalPages = Math.ceil(total / size)
-  if (page > totalPages)
-    page = totalPages - 1
-
   const cmpr = (a, b) => {
     const order = desc ? -1 : 1
     return (a[sortBy] - b[sortBy]) * order
   }
 
-  const placeholderRaw = fs.readFileSync('reports.json').toString(),
-    rows = (JSON.parse(placeholderRaw) as APIReport[])
-      .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date) })) // Add index, convert ISODate to date
-      .filter(r => r.date > fromDate && r.date < toDate) // Filter by date
-      .sort(cmpr) // Sort
-      .slice(page * size, (page + 1) * size) // Get page
+  const placeholderRaw = fs.readFileSync('reports.json').toString()
+
+  let rows = (JSON.parse(placeholderRaw) as APIReport[])
+    .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date) })) // Add index, convert ISODate to date
+    .filter(r => r.date > fromDate && r.date < toDate) // Filter by date
+    .sort(cmpr) // Sort
+
+  const total = rows.length
+
+  const totalPages = Math.ceil(total / size)
+  if (totalPages === 0)
+    page = 0
+  else if (page > totalPages)
+    page = totalPages - 1
+
+  rows = rows.slice(page * size, (page + 1) * size) // Get page
 
   return context.json(
     {
@@ -60,7 +66,7 @@ export const reports = async (context: Context) => {
       size,
       sortBy,
       desc,
-      total: rows.length,
+      total,
       rows,
     },
   )

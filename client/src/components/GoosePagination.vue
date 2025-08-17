@@ -38,14 +38,17 @@ function isPageVisible(n: number, active: number, total: number) {
 }
 
 function setPage(i: number) {
+  /* If we're actually changing pages */
   if (model.value.page !== i) {
     model.value.page = i
 
-    if (model.value.page < 0)
-      model.value.page = 0
-
+    /* Not going over */
     if (model.value.page >= totalPages.value)
       model.value.page = totalPages.value - 1
+
+    /* Not going under */
+    if (model.value.page < 0)
+      model.value.page = 0
 
     emit('update')
   }
@@ -59,7 +62,7 @@ function setPage(i: number) {
       class="arrow"
       :icon="faChevronLeft"
       size="lg"
-      @click="setPage(model.page - 1)"
+      @click="model.page && setPage(model.page - 1)"
     />
 
     <template
@@ -86,7 +89,7 @@ function setPage(i: number) {
       class="arrow"
       :icon="faChevronRight"
       size="lg"
-      @click="setPage(model.page + 1)"
+      @click="(model.page !== totalPages - 1) && setPage(model.page + 1)"
     />
   </ul>
 </template>

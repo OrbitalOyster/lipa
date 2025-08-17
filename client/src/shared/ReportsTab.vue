@@ -110,6 +110,8 @@ function setDate(d: ExtraDate) {
       toDate.value = dateToYYYMMDD(new Date(year, month, day))
       break
   }
+
+  update()
 }
 
 await update()
@@ -161,29 +163,34 @@ await update()
       Foo
     </span>
   </div>
-  <GooseTable
-    v-model="tableModel"
-    :loading
-    @update="update"
-  >
-    <template #date="{td}">
-      {{ new Date(td).toLocaleString('ru') }}
-    </template>
-
-    <template #org="{td}">
-      Formatted: {{ td }} !
-    </template>
-  </GooseTable>
-  <div style="height: 3rem; display: flex; justify-content: center; align-items: center; padding: 1rem">
-    <GoosePagination
-      v-model="pagination"
-      style="padding: 1rem"
-      :first-pages="5"
-      :middle-pages="1"
-      :last-pages="1"
-      :disabled="loading"
+  <div v-if="tableModel.rows.length">
+    <GooseTable
+      v-model="tableModel"
+      :loading
       @update="update"
-    />
+    >
+      <template #date="{td}">
+        {{ new Date(td).toLocaleString('ru') }}
+      </template>
+
+      <template #org="{td}">
+        Formatted: {{ td }} !
+      </template>
+    </GooseTable>
+    <div style="height: 3rem; display: flex; justify-content: center; align-items: center; padding: 1rem">
+      <GoosePagination
+        v-model="pagination"
+        style="padding: 1rem"
+        :first-pages="5"
+        :middle-pages="1"
+        :last-pages="1"
+        :disabled="loading"
+        @update="update"
+      />
+    </div>
+  </div>
+  <div class="nothing-found" v-else>
+    <p>Отчётов не найдено</p>
   </div>
 </template>
 
@@ -222,4 +229,9 @@ await update()
   .calendar:focus
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
+
+  .nothing-found
+    display: flex
+    justify-content: center
+    padding: 2rem
 </style>
