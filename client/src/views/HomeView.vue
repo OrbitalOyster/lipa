@@ -12,36 +12,34 @@ import OrgTree from '#shared/OrgTree.vue'
 import ReportsTab from '#shared/ReportsTab.vue'
 import TopBar from '#shared/TopBar.vue'
 import XLSXTab from '#shared/XLSXTab.vue'
-import { ref } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
+import { useLocalSettings } from '#stores/useLocalSettings.ts'
 
-const accordionModel = ref({
-  opened: useLocalStorage('sideBar', ''),
-  items: [
+const localSettings = useLocalSettings(),
+  accordionItems = [
     { id: 'orgs', title: 'Организации', icon: faBuilding },
     { id: 'forms', title: 'Формы', icon: faClipboard },
     { id: 'statuses', title: 'Статусы', icon: faPencil },
-  ] })
-
-const slots = [
-  { id: 'xlsx', title: 'Шаблоны', icon: faFileExcel },
-  { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
-  { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
-]
-
-const sidebarToggled = ref(true)
+  ],
+  slots = [
+    { id: 'xlsx', title: 'Шаблоны', icon: faFileExcel },
+    { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
+    { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
+  ]
 </script>
 
 <template>
   <div class="home-view-wrapper">
     <GooseSidebar
-      :toggled="sidebarToggled"
+      :toggled="localSettings.sideBarToggled"
       width="36rem"
     >
       <template #sidebar>
         <div class="accordion-wrapper">
           <MainLogo />
-          <GooseAccordion v-model="accordionModel">
+          <GooseAccordion
+            v-model:opened="localSettings.sideBar"
+            :items="accordionItems"
+          >
             <template #orgs>
               <Suspense>
                 <OrgTree />
@@ -66,7 +64,7 @@ const sidebarToggled = ref(true)
         <GooseButton
           transparent
           :icon="faBars"
-          @click="sidebarToggled = !sidebarToggled"
+          @click="localSettings.sideBarToggled = !localSettings.sideBarToggled"
         />
         <TopBar />
       </div>

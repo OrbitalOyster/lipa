@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
-import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
@@ -76,7 +75,11 @@ update()
       />
     </div>
     <div>
-      <GooseButton :icon="faPlus" small tooltip="Создать первичный отчёт"/>
+      <GooseButton
+        :icon="faPlus"
+        small
+        tooltip="Создать первичный отчёт"
+      />
     </div>
   </div>
   <!-- On loading -->

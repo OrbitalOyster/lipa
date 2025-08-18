@@ -27,11 +27,6 @@ declare global {
     title: string
   }
 
-  interface Accordion {
-    items: AccordionItem[]
-    opened: string
-  }
-
   /* Tabs */
   interface TabSlot {
     icon: IconDefinition

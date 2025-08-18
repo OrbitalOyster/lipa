@@ -2,19 +2,23 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
-const model = defineModel<Accordion>({ required: true })
+defineProps<{
+  items: AccordionItem[]
+}>()
+
+const opened = defineModel<string>('opened')
 </script>
 
 <template>
   <ul>
     <li
-      v-for="item in model.items"
+      v-for="item in items"
       :key="item.id"
-      :class="{ opened: model.opened === item.id }"
+      :class="{ opened: opened === item.id }"
     >
       <div
         class="title"
-        @click="model.opened = model.opened === item.id ? '' : item.id"
+        @click="() => { opened = opened === item.id ? '' : item.id }"
       >
         <div style="display: flex; align-items: center">
           <div class="icon">
@@ -29,7 +33,7 @@ const model = defineModel<Accordion>({ required: true })
         </div>
         <FontAwesomeIcon
           class="chevron"
-          :class="model.opened === item.id && 'chevron-opened'"
+          :class="opened === item.id && 'chevron-opened'"
           :icon="faChevronDown"
           size="xl"
         />
