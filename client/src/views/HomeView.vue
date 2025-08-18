@@ -69,7 +69,10 @@ const localSettings = useLocalSettings(),
         <TopBar />
       </div>
       <main>
-        <GooseTabs :slots>
+        <GooseTabs
+          v-model="localSettings.tab"
+          :slots
+        >
           <template #xlsx>
             <XLSXTab />
           </template>

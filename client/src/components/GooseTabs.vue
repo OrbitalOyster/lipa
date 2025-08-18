@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { ref } from 'vue'
 
 const props = defineProps<{
   slots: TabSlot[]
@@ -10,7 +9,7 @@ const props = defineProps<{
 if (!props.slots[0])
   throw new Error('Major screwup')
 
-const selected = ref(props.slots[0].id)
+const selected = defineModel<string>()
 </script>
 
 <template>

@@ -14,8 +14,9 @@ const useLocalSettings = defineStore('settings', {
     toDate: useLocalStorage('to-date', '2025-01-31'),
     pageSizes,
     pageSize: useLocalStorage('pagination-size', 10),
-    sideBar: useLocalStorage('sidebar', 'orgs'),
+    sideBar: useLocalStorage('sidebar', ''),
     sideBarToggled: useLocalStorage('sidebar-toggled', true),
+    tab: useLocalStorage('tab', 'initial'),
   }),
 })
 
