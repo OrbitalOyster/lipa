@@ -1,28 +1,23 @@
 <script setup lang="ts">
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import DateSelector from '#shared/DateSelector.vue'
+import GooseButton from '#components/GooseButton.vue'
+import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
+import { useLocalSettings } from '#stores/useLocalSettings.ts'
 import { useLocalStorage } from '@vueuse/core'
 
-const pageSizes = [
-    { id: 10, title: '10' },
-    { id: 25, title: '25' },
-    { id: 50, title: '50' },
-    { id: 100, title: '100' },
-  ],
-  /* Syncs with local storage */
-  pageSize = useLocalStorage('reports-pagination-size', pageSizes[0]!.id),
+const localSettings = useLocalSettings(),
   page = useLocalStorage('reports-pagination-page', 0),
   sortBy = useLocalStorage('reports-sort-by', 'date'),
-  sortDesc = useLocalStorage('reports-sort-desc', false),
-  fromDate = useLocalStorage('reports-from-date', '2025-01-01'),
-  toDate = useLocalStorage('reports-to-date', '2025-01-31')
+  sortDesc = useLocalStorage('reports-sort-desc', false)
 
 const pagination = ref({
-  size: pageSize.value,
+  size: localSettings.pageSize,
   page: page.value,
   total: 0,
 })
@@ -37,7 +32,7 @@ const tableModel = ref<TableModel<APIReport>>({
     rows: [],
     sortBy: sortBy.value,
     desc: sortDesc.value,
-    toggledItems: new Array(pageSize.value).fill(false),
+    toggledItems: new Array(localSettings.pageSize).fill(false),
   }),
   loading = ref(true)
 
@@ -47,20 +42,20 @@ async function update() {
   sortBy.value = tableModel.value.sortBy
   sortDesc.value = tableModel.value.desc
   const apiReports = await useFetchReports(
-    pageSize.value,
+    localSettings.pageSize,
     pagination.value.page,
-    fromDate.value,
-    toDate.value,
+    localSettings.fromDate,
+    localSettings.toDate,
     sortBy.value,
     tableModel.value.desc,
   )
   pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
-  tableModel.value.toggledItems = new Array(pageSize.value).fill(false)
+  tableModel.value.toggledItems = new Array(localSettings.pageSize).fill(false)
   loading.value = false
 }
 
-await update()
+update()
 </script>
 
 <template>
@@ -68,22 +63,28 @@ await update()
     <div class="page-size-select">
       <p>Отображать по:</p>
       <GooseSelect
-        v-model="pageSize"
-        :items="pageSizes"
+        v-model="localSettings.pageSize"
+        :items="localSettings.pageSizes"
         @update="update"
       />
     </div>
     <div style="display: flex; align-items: center">
       <DateSelector
-        v-model:from-date="fromDate"
-        v-model:to-date="toDate"
+        v-model:from-date="localSettings.fromDate"
+        v-model:to-date="localSettings.toDate"
         @update="update"
       />
     </div>
-    <span>
-      Foo
-    </span>
+    <div>
+      <GooseButton :icon="faPlus" small tooltip="Создать первичный отчёт"/>
+    </div>
   </div>
+  <!-- On loading -->
+  <!--
+    <div v-if="loading" style="padding: 3rem">
+      <GooseLoading />
+    </div>
+  -->
   <div v-if="tableModel.rows.length">
     <GooseTable
       v-model="tableModel"

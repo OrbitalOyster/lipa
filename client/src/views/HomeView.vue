@@ -24,7 +24,7 @@ const accordionModel = ref({
   ] })
 
 const slots = [
-  { id: 'xlsx', title: 'Исходники', icon: faFileExcel },
+  { id: 'xlsx', title: 'Шаблоны', icon: faFileExcel },
   { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
   { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
 ]
@@ -76,14 +76,7 @@ const sidebarToggled = ref(true)
             <XLSXTab />
           </template>
           <template #initial>
-            <Suspense>
-              <ReportsTab />
-              <template #fallback>
-                <div style="padding: 3rem">
-                  <GooseLoading />
-                </div>
-              </template>
-            </Suspense>
+            <ReportsTab />
           </template>
           <template #complex>
             <p>Baz</p>
