@@ -55,7 +55,7 @@ export const reports = async (context: Context) => {
   const totalPages = Math.ceil(total / size)
   if (totalPages === 0)
     page = 0
-  else if (page > totalPages)
+  else if (page >= totalPages)
     page = totalPages - 1
 
   rows = rows.slice(page * size, (page + 1) * size) // Get page

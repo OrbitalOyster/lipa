@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseAccordion from '#components/GooseAccordion.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -10,8 +10,8 @@ import GooseTabs from '#components/GooseTabs.vue'
 import MainLogo from '#shared/MainLogo.vue'
 import OrgTree from '#shared/OrgTree.vue'
 import ReportsTab from '#shared/ReportsTab.vue'
-import { RouterLink } from 'vue-router'
 import TopBar from '#shared/TopBar.vue'
+import XLSXTab from '#shared/XLSXTab.vue'
 import { ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
@@ -73,22 +73,15 @@ const sidebarToggled = ref(true)
       <main>
         <GooseTabs :slots>
           <template #xlsx>
-            <div style="padding: 1rem">
-              <RouterLink to="/test">
-                Form
-              </RouterLink>
-              <GooseButton
-                :icon="faUpload"
-                transparent
-                tooltip="Загрузить .xlsx файл"
-              />
-            </div>
+            <XLSXTab />
           </template>
           <template #initial>
             <Suspense>
               <ReportsTab />
               <template #fallback>
-                <GooseLoading />
+                <div style="padding: 3rem">
+                  <GooseLoading />
+                </div>
               </template>
             </Suspense>
           </template>

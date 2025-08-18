@@ -41,15 +41,12 @@ function setPage(i: number) {
   /* If we're actually changing pages */
   if (model.value.page !== i) {
     model.value.page = i
-
     /* Not going over */
     if (model.value.page >= totalPages.value)
       model.value.page = totalPages.value - 1
-
     /* Not going under */
     if (model.value.page < 0)
       model.value.page = 0
-
     emit('update')
   }
 }
