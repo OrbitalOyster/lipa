@@ -42,4 +42,17 @@ function update() {
 </template>
 
 <style lang="sass" scoped>
+  .filters
+    align-items: center
+    display: flex
+    height: 3rem
+    justify-content: space-between
+    padding: .5rem
+
+  .page-size-select
+    align-items: center
+    display: flex
+    gap: 1rem
+    justify-content: space-between
+    width: 15rem
 </style>

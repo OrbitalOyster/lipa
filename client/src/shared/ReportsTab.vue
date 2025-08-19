@@ -122,7 +122,7 @@ update()
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/transitions'
@@ -140,23 +140,6 @@ update()
     gap: 1rem
     justify-content: space-between
     width: 15rem
-
-  .calendar
-    background-color: colors.$input-background
-    border-radius: borders.$radius
-    border: 1px solid colors.$input-border
-    box-sizing: border-box
-    color: colors.$text
-    font: inherit
-    height: 2.5rem
-    min-width: 10rem
-    outline: colors.$outline solid 0px
-    padding: .25rem .5rem .25rem .75rem
-    transition: transitions.$focusable, transitions.$colors
-
-  .calendar:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
 
   .nothing-found
     display: flex

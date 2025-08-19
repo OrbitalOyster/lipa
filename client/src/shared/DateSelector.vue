@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import GooseButton from '#components/GooseButton.vue'
 import GoosePopupMenu from '#components/GoosePopupMenu.vue'
+import GooseTooltip from '#components/GooseTooltip.vue'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
-import { ref } from 'vue'
 
 const fromDate = defineModel<string>('fromDate', { required: true }),
   toDate = defineModel<string>('toDate', { required: true }),
@@ -58,24 +59,44 @@ function setDate(d: ExtraDate) {
 
   emit('update')
 }
+
+function checkDate() {
+  const fromDateNum = Date.parse(fromDate.value),
+    toDateNum = Date.parse(toDate.value)
+  const result = !isNaN(fromDateNum)
+    && !isNaN(toDateNum)
+    && fromDateNum <= toDateNum
+  return result
+}
+
+const dateValid = computed(checkDate)
+
+watch([fromDate, toDate], () => checkDate() && emit('update'))
+
 </script>
 
 <template>
-  <input
-    v-model="fromDate"
-    class="calendar"
-    type="date"
-    :max="toDate"
-    @change="emit('update')"
+  <GooseTooltip
+    :text="dateValid ? '' : 'Некорректная дата'"
   >
-  -
-  <input
-    v-model="toDate"
-    class="calendar"
-    type="date"
-    :min="fromDate"
-    @change="emit('update')"
-  >
+    <input
+      v-model="fromDate"
+      class="calendar"
+      :class="{ invalid: !dateValid }"
+      type="date"
+      :max="toDate"
+      title=""
+    >
+    -
+    <input
+      v-model="toDate"
+      class="calendar"
+      :class="{ invalid: !dateValid }"
+      type="date"
+      :min="fromDate"
+      title=""
+    >
+  </GooseTooltip>
   <GoosePopupMenu
     v-model="selectedExtraDate"
     :active="showPopup"
@@ -92,3 +113,30 @@ function setDate(d: ExtraDate) {
     />
   </GoosePopupMenu>
 </template>
+
+<style lang="sass" scoped>
+  @use '../assets/borders'
+  @use '../assets/colors'
+  @use '../assets/transitions'
+
+  .calendar
+    background-color: colors.$input-background
+    border-radius: borders.$radius
+    border: 1px solid colors.$input-border
+    box-sizing: border-box
+    color: colors.$text
+    font: inherit
+    height: 2.5rem
+    min-width: 10rem
+    outline: colors.$outline solid 0px
+    padding: .25rem .5rem .25rem .75rem
+    transition: transitions.$focusable, transitions.$colors
+
+  .calendar:focus
+    border-color: colors.$outline
+    outline-width: borders.$focus-outline-width
+
+  .invalid
+    background-color: colors.$input-invalid-background
+    border: 1px solid colors.$input-invalid-border
+</style>
