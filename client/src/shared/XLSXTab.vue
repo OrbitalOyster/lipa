@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import axios from 'axios'
+import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseModal from '#components/GooseModal.vue'
 import GooseSelect from '#components/GooseSelect.vue'
-import { faCheck, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
 import { useFileDialog } from '@vueuse/core'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
 import { useTemplateRef } from 'vue'
 
 const localSettings = useLocalSettings()
 
-const { files , open , reset , onCancel , onChange } = useFileDialog ({
+const { files, open, reset, onChange } = useFileDialog ({
   accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   multiple: false,
 })
@@ -22,28 +22,27 @@ if (!apiEndpoint)
   throw new Error('Missing api endpoint')
 
 onChange((files) => {
-  console.log('change', files)
   if (files) {
+
+    if (!files[0])
+      throw new Error('Major screw-up')
+
     const formData = new FormData()
     formData.append('attachment', files[0])
 
     axios.post(`${apiEndpoint}/upload`, formData, {
       headers: {
-        'Content-Type': "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     })
-    .then((response) => {
-      // Handle successful upload response
-      console.log("File uploaded successfully:", response.data);
-    })
-    .catch((error) => {
-      // Handle upload error
-      console.error("Error uploading file:", error);
-    });
-
+      .then((response) => {
+        console.log('File uploaded successfully:', response.data)
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error)
+      })
   }
 })
-
 
 function update() {
 
@@ -53,14 +52,26 @@ const uploadModalRef = useTemplateRef('uploadModal')
 </script>
 
 <template>
-  <GooseModal title="Загрузить шаблон" ref="uploadModal" @close="reset">
+  <GooseModal
+    ref="uploadModal"
+    title="Загрузить шаблон"
+    @close="reset"
+  >
     <div class="upload-modal">
-      <GooseButton title="Выбрать .xlsx" :icon="faUpload" @click="open" />
+      <GooseButton
+        title="Выбрать .xlsx"
+        :icon="faUpload"
+        @click="open"
+      />
       <div v-if="files?.length">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <p> {{files[0].name}} </p>
-          <p> Размер: {{Math.round((files[0].size / 1024) * 100) / 100}} kB</p>
-          <GooseButton transparent small :icon="faTrash" />
+          <p> {{ files[0].name }} </p>
+          <p> Размер: {{ Math.round((files[0].size / 1024) * 100) / 100 }} kB</p>
+          <GooseButton
+            transparent
+            small
+            :icon="faTrash"
+          />
         </div>
       </div>
     </div>

@@ -46,11 +46,11 @@ defineExpose({ show })
           ref="dialog"
           class="dialog"
         >
-        <header>
-          <h1>
-            {{title}}
-          </h1>
-        </header>
+          <header>
+            <h1>
+              {{ title }}
+            </h1>
+          </header>
           <slot />
           <footer>
             <GooseButton
