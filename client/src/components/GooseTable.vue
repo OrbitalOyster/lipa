@@ -10,17 +10,15 @@ defineProps<{
 
 const slots = useSlots(),
   slotNames = Object.keys(slots),
-  model = defineModel<TableModel<T>>({ required: true })
-
-const emit = defineEmits<{ update: [] }>()
-
-const sort = (column: string) => {
-  if (model.value.sortBy === column)
-    model.value.desc = !model.value.desc
-  else
-    model.value.sortBy = column
-  emit('update')
-}
+  model = defineModel<TableModel<T>>({ required: true }),
+  emit = defineEmits<{ update: [] }>(),
+  sort = (column: string) => {
+    if (model.value.sortBy === column)
+      model.value.desc = !model.value.desc
+    else
+      model.value.sortBy = column
+    emit('update')
+  }
 
 const selectAllRef = computed({
     get() {

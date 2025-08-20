@@ -78,6 +78,7 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
 <template>
   <GooseTooltip
     :text="dateValid ? '' : 'Некорректная дата'"
+    side="top"
   >
     <input
       v-model="fromDate"
