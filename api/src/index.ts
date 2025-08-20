@@ -5,6 +5,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { orgs } from './orgs'
+import { upload } from './upload'
 import { reports } from './reports'
 import { serveStatic } from 'hono/bun'
 
@@ -55,6 +56,9 @@ app.get('/check', async (context: Context) => context.json(await check(context))
 app.post('/auth', auth)
 /* Orgs */
 app.get('/orgs', orgs)
+
+/* Uploads */
+app.post('/upload', upload)
 
 /* Auth check middleware */
 const checkAuth = async (context: Context, next: Next) => {

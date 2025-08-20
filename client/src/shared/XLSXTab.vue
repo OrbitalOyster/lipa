@@ -1,18 +1,70 @@
 <script setup lang="ts">
+import axios from 'axios'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
+import GooseModal from '#components/GooseModal.vue'
 import GooseSelect from '#components/GooseSelect.vue'
-import { faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { useFileDialog } from '@vueuse/core'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
+import { useTemplateRef } from 'vue'
 
 const localSettings = useLocalSettings()
+
+const { files , open , reset , onCancel , onChange } = useFileDialog ({
+  accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  multiple: false,
+})
+
+const apiEndpoint = import.meta.env.VITE_API_URI
+
+if (!apiEndpoint)
+  throw new Error('Missing api endpoint')
+
+onChange((files) => {
+  console.log('change', files)
+  if (files) {
+    const formData = new FormData()
+    formData.append('attachment', files[0])
+
+    axios.post(`${apiEndpoint}/upload`, formData, {
+      headers: {
+        'Content-Type': "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      // Handle successful upload response
+      console.log("File uploaded successfully:", response.data);
+    })
+    .catch((error) => {
+      // Handle upload error
+      console.error("Error uploading file:", error);
+    });
+
+  }
+})
+
 
 function update() {
 
 }
+
+const uploadModalRef = useTemplateRef('uploadModal')
 </script>
 
 <template>
+  <GooseModal title="Загрузить шаблон" ref="uploadModal" @close="reset">
+    <div class="upload-modal">
+      <GooseButton title="Выбрать .xlsx" :icon="faUpload" @click="open" />
+      <div v-if="files?.length">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <p> {{files[0].name}} </p>
+          <p> Размер: {{Math.round((files[0].size / 1024) * 100) / 100}} kB</p>
+          <GooseButton transparent small :icon="faTrash" />
+        </div>
+      </div>
+    </div>
+  </GooseModal>
   <div>
     <div class="filters">
       <div class="page-size-select">
@@ -35,6 +87,7 @@ function update() {
           :icon="faUpload"
           small
           tooltip="Загрузить .xlsx"
+          @click="uploadModalRef?.show()"
         />
       </div>
     </div>
@@ -55,4 +108,7 @@ function update() {
     gap: 1rem
     justify-content: space-between
     width: 15rem
+
+  .upload-modal
+    width: 32rem
 </style>
