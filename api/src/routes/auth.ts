@@ -1,6 +1,6 @@
 import type { Context } from 'hono'
 import type { RowDataPacket } from 'mysql2'
-import connect from './mysqlConnection.ts'
+import connect from '../mysqlConnection.ts'
 import crypto from 'crypto'
 import { setTimeout as sleep } from 'node:timers/promises'
 import { updateCookie } from './cookies'

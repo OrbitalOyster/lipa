@@ -82,7 +82,6 @@ const selected = defineModel<string>()
     border-bottom: none
     color: colors.$text
     margin-top: 0
-    /* transform: translate(0, borders.$radius) */
 
   p
     align-items: center

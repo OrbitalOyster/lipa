@@ -1,5 +1,5 @@
 import type { Context } from 'hono'
-import connect from './mysqlConnection.ts'
+import connect from '../mysqlConnection.ts'
 import { setTimeout as sleep } from 'node:timers/promises'
 
 export const orgs = async (context: Context) => {
