@@ -27,9 +27,9 @@ const opened = defineModel<string>('opened')
               size="lg"
             />
           </div>
-          <h1>
+          <p>
             {{ item.title }}
-          </h1>
+          </p>
         </div>
         <FontAwesomeIcon
           class="chevron"
@@ -93,10 +93,6 @@ const opened = defineModel<string>('opened')
     display: inline-flex
     justify-content: center
     width: 1.5rem
-
-  h1
-    font-size: 1rem
-    font-weight: normal
 
   .item-container
     height: 100%

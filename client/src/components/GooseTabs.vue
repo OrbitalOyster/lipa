@@ -21,13 +21,13 @@ const selected = defineModel<string>()
         :class="{ selected: slot.id === selected }"
         @click="selected = slot.id"
       >
-        <h1>
+        <p>
           <FontAwesomeIcon
             :icon="slot.icon"
             size="lg"
           />
           <span>{{ slot.title }}</span>
-        </h1>
+        </p>
       </li>
     </ul>
     <div class="content">
@@ -84,7 +84,7 @@ const selected = defineModel<string>()
     margin-top: 0
     /* transform: translate(0, borders.$radius) */
 
-  h1
+  p
     align-items: center
     display: flex
     font-size: 1rem

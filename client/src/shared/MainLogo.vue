@@ -39,9 +39,10 @@ import GooseTooltip from '#components/GooseTooltip.vue'
 
   h1
     display: inline
+    font-size: 2rem
+    font-weight: 400
+    margin-block: 1rem
 
   .title
     color: colors.$text
-    font-size: 2rem
-    font-weight: 400
 </style>
