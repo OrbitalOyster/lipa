@@ -42,18 +42,41 @@ class XLSXWorksheet {
     row.eachCell(
       { includeEmpty: true },
       (cell, colNum) =>
-        parsedRow.push(new XLSXCell(cell)),
+        parsedRow.push(new XLSXCell(cell, rowNum, colNum)),
     )
     return parsedRow
   }
 
+  private getCell(rowNum: number, colNum: number) {
+    return this.rows[rowNum - 1][colNum - 1]
+  }
+
+  private cellHasTopBorder(cell: XLSXCell) {
+    const { rowNum, colNum } = cell,
+      topCell = this.getCell(rowNum - 1, colNum)
+    return !!(topCell?.borders?.['bottom'] || cell.borders?.['top'])
+  }
+
+  private cellHasRightBorder(cell: XLSXCell) {
+    const { rowNum, colNum } = cell,
+      rightCell = this.getCell(rowNum, colNum + 1)
+    return !!(rightCell?.borders?.['left'] || cell.borders?.['right'])
+  }
+
+  private cellIsTopRightCorner(cell: XLSXCell) {
+    return this.cellHasTopBorder(cell) && this.cellHasRightBorder(cell)
+  }
+
   public findTables() {
     for (const row of this.rows)
-      for (const cell of row) {
-        if (cell.value && cell.value.toString().match(tableNameRegexp))
+      for (const cell of row)
+        if (cell.value && cell.value.toString().match(tableNameRegexp)) {
           console.log(`Table name match at ${cell.address}`)
-      }
+          const topRightCell = this.getCell(cell.rowNum + 1, cell.colNum)
+          console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`);
+        }
   }
+
 
 }
 
