@@ -7,9 +7,11 @@ import { XLSXCell } from './XLSXCell.ts'
 
 const tableNameRegexp = /\([0-9]{1,5}\)/
 
+type XLSXRow = (XLSXCell | null)[]
+
 class XLSXWorksheet {
   public name = ''
-  public rows = []
+  public rows: XLSXRow[] = []
 
   constructor(worksheet: Worksheet) {
     this.name = worksheet.name
@@ -36,8 +38,8 @@ class XLSXWorksheet {
     )
   }
 
-  private parseRow(row, rowNum) {
-    const parsedRow: (XLSXCell | null)[] = []
+  private parseRow(row: Row, rowNum: number) {
+    const parsedRow: XLSXRow = []
     /* For each cell */
     row.eachCell(
       { includeEmpty: true },
@@ -48,7 +50,7 @@ class XLSXWorksheet {
   }
 
   private getCell(rowNum: number, colNum: number) {
-    return this.rows[rowNum - 1][colNum - 1]
+    return this.rows[rowNum - 1]?.[colNum - 1]
   }
 
   private cellHasTopBorder(cell: XLSXCell) {
@@ -73,11 +75,9 @@ class XLSXWorksheet {
         if (cell.value && cell.value.toString().match(tableNameRegexp)) {
           console.log(`Table name match at ${cell.address}`)
           const topRightCell = this.getCell(cell.rowNum + 1, cell.colNum)
-          console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`);
+          console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`)
         }
   }
-
-
 }
 
 export { XLSXWorksheet }

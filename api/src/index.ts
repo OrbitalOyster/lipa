@@ -5,9 +5,9 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { orgs } from './routes/orgs'
-import { upload } from './routes/upload'
 import { reports } from './routes/reports'
 import { serveStatic } from 'hono/bun'
+import { upload } from './routes/upload'
 
 const defaultMessage = 'Lipa API v0.0.1'
 
