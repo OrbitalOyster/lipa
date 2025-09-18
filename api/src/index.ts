@@ -47,9 +47,12 @@ app.use('*', cors({ origin, credentials: true }))
 app.use('/favicon.ico', serveStatic({ path: './favicon.ico' }))
 /* Default response */
 app.get('/', (context: Context) => context.text(defaultMessage))
-
-/* User data */
-app.get('/payload', async (context: Context) => context.json(await getPayload(context)))
+/* Sanitized user data */
+app.get('/payload', async (context: Context) => {
+  const payload = await getPayload(context),
+    { exp, rememberMe, ...sanitizedPayload } = payload /* Voodoo */
+  return context.json(sanitizedPayload)
+})
 /* Auth check */
 app.get('/check', async (context: Context) => context.json(await check(context)))
 /* Auth */
