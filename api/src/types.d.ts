@@ -9,11 +9,11 @@ declare global {
   }
 
   interface UserPayload {
-    userId?: string | null
-    isOrg?: boolean | null
-    name: string | null
-    rememberMe?: boolean | null
-    exp?: number
+    userId: string
+    isOrg: boolean
+    name: string
+    rememberMe: boolean
+    exp: number
   }
 
   interface Org extends RowDataPacket {

@@ -1,4 +1,4 @@
-import { getSignedCookie, setSignedCookie } from 'hono/cookie'
+import { deleteCookie, getSignedCookie, setSignedCookie } from 'hono/cookie'
 import { sign, verify } from 'hono/jwt'
 import type { Context } from 'hono'
 
@@ -11,28 +11,28 @@ const cookieName = Bun.env['COOKIE_NAME'],
 /* JWT encryption algorithm */
 const alg = 'HS512'
 
-export const getPayload = async (context: Context) => {
+export const getPayload = async (context: Context): Promise<Partial<UserPayload>> => {
   const cookie = await getSignedCookie(
     context,
     cookieSecret,
     cookieName,
   )
-  /* No cookie */
+  /* No cookie / expired cookie / invalid cookie */
   if (!cookie)
     return {}
-  const payload = await verify(cookie, tokenSecret, alg),
-    { exp, ...sanitizedPayload } = payload // Voodoo
-  return sanitizedPayload
+  const payload = await verify(cookie, tokenSecret, alg)
+  return payload
 }
 
-export const updateCookie = async (context: Context, payload?: UserPayload) => {
+export const updateCookie = async (context: Context, payload?: Partial<UserPayload>) => {
   const oldPayload = await getPayload(context)
   if (payload)
     Object.assign(oldPayload, payload)
-  const rememberMe = oldPayload['rememberMe'],
+  /* Set cookie lifetime */
+  const rememberMe = oldPayload.rememberMe ? true : false,
     maxAge = rememberMe ? cookieLongLifetimeSec : cookieShortLifetimeSec
   /* Update expiration date */
-  oldPayload['exp'] = Math.floor(Date.now() / 1000) + maxAge
+  oldPayload.exp = Math.floor(Date.now() / 1000) + maxAge
   await setSignedCookie(
     context,
     cookieName,
@@ -47,8 +47,8 @@ export const updateCookie = async (context: Context, payload?: UserPayload) => {
 
 export const check = async (context: Context) => {
   const payload = await getPayload(context)
-  /* No cookies */
-  if (!payload)
+  /* Not logged in */
+  if (!payload.userId)
     return false
   const { userId } = { ...payload }
   /* Logged out */
@@ -57,4 +57,8 @@ export const check = async (context: Context) => {
   /* Update cookie and move on */
   await updateCookie(context)
   return true
+}
+
+export const clearCookie = (context: Context) => {
+  deleteCookie(context, cookieName)
 }

@@ -1,16 +1,22 @@
+import { clearCookie, updateCookie } from './cookies'
 import type { Context } from 'hono'
 import type { RowDataPacket } from 'mysql2'
 import connect from '../mysqlConnection.ts'
 import crypto from 'crypto'
 import { setTimeout as sleep } from 'node:timers/promises'
-import { updateCookie } from './cookies'
 
 const authDelay = 2000
 
+interface AuthSQLResult {
+  name: string
+}
+
 export const auth = async (context: Context) => {
   await sleep(authDelay)
+  /* Get user credentials from request */
   const { userId, isOrg, password, rememberMe } = await context.req.json<AuthRequest>()
   try {
+    /* Query DB */
     const connection = await connect(),
       passwordHash = crypto.createHash('sha256').update(password).digest('hex'),
       query = isOrg
@@ -23,7 +29,7 @@ export const auth = async (context: Context) => {
       return context.json(false)
     }
     else {
-      const name = rows[0]['name']
+      const name = (rows[0] as AuthSQLResult).name
       console.log('Auth OK', userId, name)
       /* Update cookie and return ok */
       await updateCookie(context, { userId, isOrg, name, rememberMe })
@@ -36,7 +42,7 @@ export const auth = async (context: Context) => {
   }
 }
 
-export const logout = async (context: Context) => {
-  await updateCookie(context, { userId: null, isOrg: null, name: null, rememberMe: null })
+export const logout = (context: Context) => {
+  clearCookie(context)
   return context.json('logout')
 }

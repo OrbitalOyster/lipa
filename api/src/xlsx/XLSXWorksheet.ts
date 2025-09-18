@@ -5,13 +5,14 @@ import type {
 
 import { XLSXCell } from './XLSXCell.ts'
 
-const tableNameRegexp = /\([0-9]{1,5}\)/
-
-type XLSXRow = (XLSXCell | null)[]
+type XLSXRow = XLSXCell[]
 
 class XLSXWorksheet {
   public name = ''
   public rows: XLSXRow[] = []
+
+  private readonly merges
+  private readonly colWidths
 
   constructor(worksheet: Worksheet) {
     this.name = worksheet.name
@@ -29,6 +30,9 @@ class XLSXWorksheet {
     const colWidths = worksheet.columns
       .map(c => c.width || defaultColWidth)
       .slice(0, dimensions.right)
+
+    this.merges = merges
+    this.colWidths = colWidths
 
     /* Parse rows */
     worksheet.eachRow(
@@ -72,10 +76,11 @@ class XLSXWorksheet {
   public findTables() {
     for (const row of this.rows)
       for (const cell of row)
-        if (cell.value && cell.value.toString().match(tableNameRegexp)) {
+        if (cell && cell.isTableName()) {
           console.log(`Table name match at ${cell.address}`)
           const topRightCell = this.getCell(cell.rowNum + 1, cell.colNum)
-          console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`)
+          if (topRightCell)
+            console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`)
         }
   }
 }
