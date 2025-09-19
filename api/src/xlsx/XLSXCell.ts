@@ -30,6 +30,7 @@ class XLSXCell {
 
   private parseBorders(cell: Cell) {
     const style = cell.style
+    /*
     if (!style.border)
       return null
     if (
@@ -39,11 +40,12 @@ class XLSXCell {
       && !style.border.left
     )
       return null
+    */
     return {
-      top: style.border.top || null,
-      right: style.border.right || null,
-      bottom: style.border.bottom || null,
-      left: style.border.left || null,
+      top: style.border?.top || null,
+      right: style.border?.right || null,
+      bottom: style.border?.bottom || null,
+      left: style.border?.left || null,
     }
   }
 

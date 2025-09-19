@@ -7,7 +7,7 @@ import { logger } from 'hono/logger'
 import { orgs } from './routes/orgs'
 import { reports } from './routes/reports'
 import { serveStatic } from 'hono/bun'
-import { upload } from './routes/upload'
+import { upload } from './xlsx/templates'
 
 const defaultMessage = 'Lipa API v0.0.1'
 
@@ -60,9 +60,6 @@ app.post('/auth', auth)
 /* Orgs */
 app.get('/orgs', orgs)
 
-/* Uploads */
-app.post('/upload', upload)
-
 /* Auth check middleware */
 const checkAuth = async (context: Context, next: Next) => {
   const authOk = await check(context)
@@ -73,6 +70,8 @@ const checkAuth = async (context: Context, next: Next) => {
 }
 app.use(checkAuth)
 
+/* Templates upload */
+app.post('/upload', upload)
 /* Reports */
 app.get('/reports', reports)
 /* Logout */

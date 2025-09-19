@@ -110,10 +110,10 @@ class XLSXWorksheet {
   }
 
   public findTables() {
+    const result = []
     for (const row of this.rows)
       for (const cell of row)
         if (cell && cell.isTableName()) {
-          console.log(`Table name match at ${cell.address}`)
           const topRightCorner = this.getCell(cell.rowNum + 1, cell.colNum)
           /* Found top right corner */
           if (topRightCorner && topRightCorner.isTopRightCorner()) {
@@ -124,16 +124,16 @@ class XLSXWorksheet {
             if (topLeftCorner && this.findTopRightCorner(topLeftCorner) === topRightCorner) {
               const width = topRightCorner.colNum - topLeftCorner.colNum + 1,
                 height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1
-              console.log(
-                topRightCorner.address,
-                bottomRightCorner?.address,
-                bottomLeftCorner?.address,
-                topLeftCorner?.address,
-                width, height,
-              )
+              result.push({
+                worksheet: this.name,
+                width,
+                height,
+                range: `${topLeftCorner.address}:${bottomRightCorner.address}`,
+              })
             }
           }
         }
+    return result
   }
 }
 
