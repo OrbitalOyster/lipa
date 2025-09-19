@@ -48,29 +48,65 @@ class XLSXWorksheet {
     row.eachCell(
       { includeEmpty: true },
       (cell, colNum) =>
-        parsedRow.push(new XLSXCell(cell, rowNum, colNum)),
+        parsedRow.push(new XLSXCell(this, cell, rowNum, colNum)),
     )
     return parsedRow
   }
 
-  private getCell(rowNum: number, colNum: number) {
+  public getCell(rowNum: number, colNum: number) {
     return this.rows[rowNum - 1]?.[colNum - 1]
   }
 
-  private cellHasTopBorder(cell: XLSXCell) {
-    const { rowNum, colNum } = cell,
-      topCell = this.getCell(rowNum - 1, colNum)
-    return !!(topCell?.borders?.['bottom'] || cell.borders?.['top'])
+  private findBottomRightCorner(topRightCorner: XLSXCell) {
+    const col = topRightCorner.colNum
+    let row = topRightCorner.rowNum + 1,
+      currentCell = this.getCell(row, col)
+    while (currentCell && currentCell.isRightSide())
+      currentCell = this.getCell(++row, col)
+    const bottomRightCorner = this.getCell(row - 1, col)
+    if (bottomRightCorner && bottomRightCorner.isBottomRightCorner())
+      return bottomRightCorner
+    else
+      return null
   }
 
-  private cellHasRightBorder(cell: XLSXCell) {
-    const { rowNum, colNum } = cell,
-      rightCell = this.getCell(rowNum, colNum + 1)
-    return !!(rightCell?.borders?.['left'] || cell.borders?.['right'])
+  private findBottomLeftCorner(bottomRightCorner: XLSXCell) {
+    const row = bottomRightCorner.rowNum
+    let col = bottomRightCorner.colNum - 1,
+      currentCell = this.getCell(row, col)
+    while (currentCell && currentCell.isBottomSide())
+      currentCell = this.getCell(row, --col)
+    const bottomLeftCorner = this.getCell(row, col + 1)
+    if (bottomLeftCorner && bottomLeftCorner.isBottomLeftCorner())
+      return bottomLeftCorner
+    else
+      return null
   }
 
-  private cellIsTopRightCorner(cell: XLSXCell) {
-    return this.cellHasTopBorder(cell) && this.cellHasRightBorder(cell)
+  private findTopLeftCorner(bottomLeftCorner: XLSXCell) {
+    const col = bottomLeftCorner.colNum
+    let row = bottomLeftCorner.rowNum - 1,
+      currentCell = this.getCell(row, col)
+    while (currentCell && currentCell.isLeftSide())
+      currentCell = this.getCell(--row, col)
+    const topLeftCorner = this.getCell(row + 1, col)
+    if (topLeftCorner && topLeftCorner.isTopLeftCorner())
+      return topLeftCorner
+    else
+      return null
+  }
+
+  private findTopRightCorner(topLeftCorner: XLSXCell) {
+    const row = topLeftCorner.rowNum
+    let col = topLeftCorner.colNum + 1,
+      currentCell = this.getCell(row, col)
+    while (currentCell && currentCell.isTopSide())
+      currentCell = this.getCell(row, ++col)
+    const topRightCorner = this.getCell(row, col - 1)
+    if (topRightCorner && topRightCorner.isTopRightCorner())
+      return topRightCorner
+    else
+      return null
   }
 
   public findTables() {
@@ -78,9 +114,25 @@ class XLSXWorksheet {
       for (const cell of row)
         if (cell && cell.isTableName()) {
           console.log(`Table name match at ${cell.address}`)
-          const topRightCell = this.getCell(cell.rowNum + 1, cell.colNum)
-          if (topRightCell)
-            console.log(`Is top right corner: ${this.cellIsTopRightCorner(topRightCell)}`)
+          const topRightCorner = this.getCell(cell.rowNum + 1, cell.colNum)
+          /* Found top right corner */
+          if (topRightCorner && topRightCorner.isTopRightCorner()) {
+            const bottomRightCorner = this.findBottomRightCorner(topRightCorner),
+              bottomLeftCorner = bottomRightCorner && this.findBottomLeftCorner(bottomRightCorner),
+              topLeftCorner = bottomLeftCorner && this.findTopLeftCorner(bottomLeftCorner)
+            /* Success */
+            if (topLeftCorner && this.findTopRightCorner(topLeftCorner) === topRightCorner) {
+              const width = topRightCorner.colNum - topLeftCorner.colNum + 1,
+                height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1
+              console.log(
+                topRightCorner.address,
+                bottomRightCorner?.address,
+                bottomLeftCorner?.address,
+                topLeftCorner?.address,
+                width, height,
+              )
+            }
+          }
         }
   }
 }
