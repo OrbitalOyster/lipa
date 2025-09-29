@@ -104,5 +104,5 @@ declare global {
   }
 
   /* Reports tab */
-  type ExtraDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
+  type PresetDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
 }

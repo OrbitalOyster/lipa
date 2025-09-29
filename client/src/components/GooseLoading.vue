@@ -13,11 +13,11 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 </template>
 
 <style lang="sass" scoped>
-   div
-      align-items: center
-      display: flex
-      font-size: 3rem
-      height: 100%
-      justify-content: center
-      width: 100%
+  div
+    align-items: center
+    display: flex
+    font-size: 3rem
+    height: 100%
+    justify-content: center
+    width: 100%
 </style>

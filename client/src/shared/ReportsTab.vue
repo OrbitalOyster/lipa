@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
+import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
@@ -33,10 +34,11 @@ const tableModel = ref<TableModel<APIReport>>({
     desc: sortDesc.value,
     toggledItems: new Array(localSettings.pageSize).fill(false),
   }),
-  loading = ref(true)
+  loading = ref(true), /* On first load */
+  updating = ref(false) /* On page change */
 
 async function update() {
-  loading.value = true
+  updating.value = true
   page.value = pagination.value.page
   sortBy.value = tableModel.value.sortBy
   sortDesc.value = tableModel.value.desc
@@ -51,10 +53,12 @@ async function update() {
   pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(localSettings.pageSize).fill(false)
-  loading.value = false
+  updating.value = false
 }
 
 update()
+  .then(() => loading.value = false)
+  .catch((err) => { throw Error(`Error updating: ${err}`) })
 </script>
 
 <template>
@@ -83,15 +87,16 @@ update()
     </div>
   </div>
   <!-- On loading -->
-  <!--
-    <div v-if="loading" style="padding: 3rem">
-      <GooseLoading />
-    </div>
-  -->
-  <div v-if="tableModel.rows.length">
+  <div
+    v-if="loading"
+    style="padding: 3rem"
+  >
+    <GooseLoading />
+  </div>
+  <div v-else-if="tableModel.rows.length">
     <GooseTable
       v-model="tableModel"
-      :loading
+      :updating
       @update="update"
     >
       <template #date="{td}">
@@ -109,7 +114,7 @@ update()
         :first-pages="5"
         :middle-pages="1"
         :last-pages="1"
-        :disabled="loading"
+        :disabled="loading || updating"
         @update="update"
       />
     </div>

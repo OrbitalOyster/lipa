@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
 
 defineProps<{
-  loading: boolean
+  updating: boolean
 }>()
 
 const slots = useSlots(),
@@ -42,7 +42,7 @@ const selectAllRef = computed({
 </script>
 
 <template>
-  <table :class="{ loading }">
+  <table :class="{ updating }">
     <thead>
       <tr>
         <th>
@@ -109,7 +109,7 @@ const selectAllRef = computed({
     transition: filter .1s ease-in-out
     width: 100%
 
-  .loading
+  .updating
     pointer-events: none
     filter: blur(8px)
 

@@ -21,10 +21,10 @@ const fromDate = defineModel<string>('fromDate', { required: true }),
 function dateToYYYMMDD(d: Date) {
   const offset = d.getTimezoneOffset(),
     zeroDate = new Date(d.getTime() - offset * 60 * 1000) /* Hatred */
-  return zeroDate.toISOString().substr(0, 10)
+  return zeroDate.toISOString().substring(0, 10)
 }
 
-function setDate(d: ExtraDate) {
+function setDate(d: PresetDate) {
   const now = new Date(),
     year = now.getFullYear(),
     month = now.getMonth(),
@@ -43,12 +43,12 @@ function setDate(d: ExtraDate) {
 
     case 'today':
       fromDate.value = dateToYYYMMDD(new Date(year, month, day))
-      toDate.value = fromDate.value
+      toDate.value = dateToYYYMMDD(new Date(year, month, day))
       break
 
     case 'yesterday':
       fromDate.value = dateToYYYMMDD(new Date(year, month, day - 1))
-      toDate.value = fromDate.value
+      toDate.value = dateToYYYMMDD(new Date(year, month, day - 1))
       break
 
     case 'fromJan1':

@@ -152,6 +152,7 @@ function keyScroll(direction: number) {
   .item
     line-height: 1.25rem
     overflow: hidden
+    padding-right: .5rem
     text-overflow: ellipsis
 
   .icons
