@@ -21,13 +21,13 @@ const { floatingStyles, middlewareData, arrowStyle }
 
 <template>
   <!-- Target element -->
-  <span
+  <div
     ref="target"
     @mouseover="active = true"
     @mouseleave="active = false"
   >
     <slot />
-  </span>
+  </div>
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div

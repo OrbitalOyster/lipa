@@ -111,10 +111,8 @@ function keyScroll(direction: number) {
 
   .select-wrapper
     align-items: center
-    display: inline-flex
-    min-width: 3.5rem
+    display: flex
     position: relative
-    width: 100%
 
   button
     align-items: center
@@ -129,7 +127,6 @@ function keyScroll(direction: number) {
     outline: colors.$outline solid 0px
     padding: .25rem 2.5rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
-    user-select: none
     white-space: nowrap
     width: 100%
 
@@ -155,7 +152,6 @@ function keyScroll(direction: number) {
   .item
     line-height: 1.25rem
     overflow: hidden
-    padding-right: .5rem
     text-overflow: ellipsis
 
   .icons
