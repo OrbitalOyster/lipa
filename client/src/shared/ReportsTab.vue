@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
@@ -37,11 +37,8 @@ const tableModel = ref<TableModel<APIReport>>({
   loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
-async function update() {
-  updating.value = true
-  page.value = pagination.value.page
-  sortBy.value = tableModel.value.sortBy
-  sortDesc.value = tableModel.value.desc
+/* Request data */
+async function getData() {
   const apiReports = await useFetchReports(
     localSettings.pageSize,
     pagination.value.page,
@@ -53,6 +50,15 @@ async function update() {
   pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(localSettings.pageSize).fill(false)
+}
+
+async function update() {
+  updating.value = true
+  /* Set local settings */
+  page.value = pagination.value.page
+  sortBy.value = tableModel.value.sortBy
+  sortDesc.value = tableModel.value.desc
+  await getData()
   updating.value = false
 }
 
@@ -64,6 +70,7 @@ update()
 <template>
   <div class="filters">
     <div class="page-size-select">
+      <p>Отчётов найдёно: {{ pagination.total }}</p>
       <p>Отображать по:</p>
       <GooseSelect
         v-model="localSettings.pageSize"
@@ -78,11 +85,17 @@ update()
         @update="update"
       />
     </div>
-    <div>
+    <div style="display: flex; gap: .5rem">
       <GooseButton
         :icon="faPlus"
         small
         tooltip="Создать первичный отчёт"
+      />
+      <GooseButton
+        :icon="faRotate"
+        small
+        tooltip="Обновить список"
+        @click="async () => { loading = true; await getData(); loading = false }"
       />
     </div>
   </div>
@@ -107,10 +120,9 @@ update()
         Formatted: {{ td }} !
       </template>
     </GooseTable>
-    <div style="height: 3rem; display: flex; justify-content: center; align-items: center; padding: 1rem">
+    <div class="pagination">
       <GoosePagination
         v-model="pagination"
-        style="padding: 1rem"
         :first-pages="5"
         :middle-pages="1"
         :last-pages="1"
@@ -144,10 +156,17 @@ update()
     display: flex
     gap: 1rem
     justify-content: space-between
-    width: 15rem
+    /* width: 15rem */
 
   .nothing-found
     display: flex
     justify-content: center
     padding: 2rem
+
+  .pagination
+    height: 3rem
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 1rem
 </style>
