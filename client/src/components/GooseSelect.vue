@@ -8,15 +8,15 @@ import type { Side } from '@floating-ui/core'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  autofocus?: boolean
-  checks?: FormCheck[]
-  disabled?: boolean
-  error?: string
-  loading?: boolean
-  items: SelectItem[]
-  placeholder?: string
-  side?: Side
-}>(),
+    autofocus?: boolean
+    checks?: FormCheck[]
+    disabled?: boolean
+    error?: string
+    loading?: boolean
+    items: SelectItem[]
+    placeholder?: string
+    side?: Side
+  }>(),
   emit = defineEmits(['update']),
   active = ref(false),
   selectedId = defineModel<SelectId>({ required: true })

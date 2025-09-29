@@ -9,9 +9,9 @@ const messages = {
 }
 
 const props = defineProps<{
-  tag: 'input' | 'select'
-  checks?: FormCheck[]
-}>(),
+    tag: 'input' | 'select'
+    checks?: FormCheck[]
+  }>(),
   text = defineModel<string>({ required: true }),
   error = ref('')
 

@@ -4,19 +4,19 @@ import type { Side } from '@floating-ui/core'
 import { useFloatingUI } from '#composables/useFloatingUI.ts'
 
 const props = defineProps<{
-  active: boolean
-  fitTargetWidth?: boolean
-  items: SelectItem[]
-  showSelected?: boolean
-  side?: Side
-}>(),
+    active: boolean
+    fitTargetWidth?: boolean
+    items: SelectItem[]
+    showSelected?: boolean
+    side?: Side
+  }>(),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
   itemsRef = useTemplateRef('itemsRef'),
   selectedId = defineModel<SelectId>({ required: true }),
   side = props.side ?? 'bottom',
   { floatingStyles, middlewareData }
-      = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth }),
+    = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth }),
   emit = defineEmits(['update'])
 
 function update(newId: SelectId) {

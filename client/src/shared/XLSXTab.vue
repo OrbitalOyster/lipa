@@ -23,7 +23,6 @@ if (!apiEndpoint)
 
 onChange((files) => {
   if (files) {
-
     if (!files[0])
       throw new Error('Major screw-up')
 

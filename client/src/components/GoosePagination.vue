@@ -11,11 +11,11 @@ interface Pagination {
 }
 
 const props = defineProps<{
-  firstPages: number
-  middlePages: number
-  lastPages: number
-  disabled: boolean
-}>(),
+    firstPages: number
+    middlePages: number
+    lastPages: number
+    disabled: boolean
+  }>(),
   model = defineModel<Pagination>({ required: true }),
   emit = defineEmits(['update']),
   totalPages = computed(() => Math.ceil(model.value.total / model.value.size))
