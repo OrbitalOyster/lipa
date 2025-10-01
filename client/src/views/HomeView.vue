@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { faBars, faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseAccordion from '#components/GooseAccordion.vue'
-import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseScrollToTop from '#components/GooseScrollToTop.vue'
 import GooseSidebar from '#components/GooseSidebar.vue'
@@ -61,11 +60,6 @@ const localSettings = useLocalSettings(),
         </div>
       </template>
       <div style="display: flex; gap: 0rem; align-items: center; padding-left: 1rem">
-        <GooseButton
-          transparent
-          :icon="faBars"
-          @click="localSettings.sideBarToggled = !localSettings.sideBarToggled"
-        />
         <TopBar />
       </div>
       <main>

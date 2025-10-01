@@ -16,7 +16,7 @@ defineProps<{
     <div class="error-icon">
       <FontAwesomeIcon
         :icon="faTriangleExclamation"
-        size="2xl"
+        size="xl"
       />
     </div>
   </GooseTooltip>
@@ -28,7 +28,7 @@ defineProps<{
   .error-icon
     color: colors.$danger
     cursor: help
-    width: 2.5rem
+    width: 1.5rem
 
   p
     padding: .5rem

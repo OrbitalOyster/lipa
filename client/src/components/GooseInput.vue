@@ -51,7 +51,6 @@ const text = defineModel<string>({ required: true }),
       <FontAwesomeIcon
         v-if="icon"
         :icon="icon"
-        size="lg"
       />
       <!-- Password show/hide icon -->
       <GooseTogglePassword
@@ -85,7 +84,9 @@ const text = defineModel<string>({ required: true }),
     margin: borders.$focus-outline-width
     min-width: 3.25rem
     outline: colors.$outline solid 0px
+    overflow: hidden
     padding: .25rem .75rem .25rem .75rem
+    text-overflow: ellipsis
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 

@@ -173,6 +173,7 @@ onMounted(async () => {
     display: flex
     gap: 1rem
     justify-content: space-between
+    padding-bottom: .5rem
 
   hgroup
     display: flex

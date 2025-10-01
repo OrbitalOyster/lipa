@@ -50,11 +50,11 @@ const toggled = defineModel<boolean>({ required: true }),
     box-sizing: content-box
     cursor: pointer
     height: $height
+    min-width: $width
     outline: colors.$outline solid 0px
     padding: 0
     position: relative
     transition: transitions.$focusable, transitions.$colors
-    min-width: $width
 
   /* On focus */
   button:focus

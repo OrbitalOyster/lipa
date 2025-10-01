@@ -18,7 +18,7 @@ defineProps<{
   label
     color: colors.$input-label
     left: 1rem
-    line-height: 1.25rem
+    line-height: 1.5rem
     overflow: hidden
     pointer-events: none
     position: absolute
@@ -29,5 +29,5 @@ defineProps<{
     white-space: nowrap
 
   .active
-    transform: translateY(calc(-60%)) scale(.8)
+    transform: translateY(calc(-50%)) scale(.9)
 </style>
