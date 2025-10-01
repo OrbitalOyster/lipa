@@ -35,16 +35,22 @@ const props = defineProps<{
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
-      <span v-if="title">
+      <span
+        v-if="title"
+        class="title"
+      >
         {{ title }}
       </span>
-      <FontAwesomeIcon
+      <span
         v-if="icon || loading"
-        style="width: 2rem"
-        :class="loading && 'fa-pulse'"
-        :icon="loading ? faSpinner : icon!"
-        size="xl"
-      />
+        class="icon"
+      >
+        <FontAwesomeIcon
+          class="fa-fw"
+          :class="loading && 'fa-pulse'"
+          :icon="loading ? faSpinner : icon!"
+        />
+      </span>
     </button>
   </GooseTooltip>
 </template>
@@ -67,17 +73,13 @@ const props = defineProps<{
     font-family: inherit
     font-size: 1.25rem
     gap: .75rem
-    height: 3.5rem
-    justify-content: space-between
+    min-height: 3rem
+    min-width: 3rem
+    margin: borders.$focus-outline-width
     outline: colors.$outline solid 0px
-    padding-left: .75rem
-    padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter
-    user-select: none
-    width: inherit
-
-  /* span
-    flex-grow: 1 */
+    justify-content: space-around
+    padding: .5rem
 
   .primary
     background-color: colors.$primary

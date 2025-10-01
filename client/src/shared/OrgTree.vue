@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { faHouse, faMagnifyingGlass, faSquare, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import { refDebounced, useLocalStorage } from '@vueuse/core'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { Ref } from 'vue'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import useFetchOrgs from '#composables/useFetchOrgs.ts'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -41,18 +41,15 @@ if (!userId)
     <div class="select-buttons">
       <GooseButton
         title="Выбрать всех"
-        :icon="faSquareCheck"
         @click="treeRef?.toggleAll(true)"
       />
       <GooseButton
         v-if="isOrg"
         title="Выбрать себя"
-        :icon="faHouse"
         @click="treeRef?.toggleSome([userId], true)"
       />
       <GooseButton
         title="Сбросить"
-        :icon="faSquare"
         @click="treeRef?.toggleAll(false)"
       />
     </div>
@@ -94,5 +91,4 @@ if (!userId)
   .select-buttons
     display: flex
     justify-content: space-around
-    gap: 1rem
 </style>

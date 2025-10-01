@@ -161,7 +161,7 @@ onMounted(async () => {
     display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
-    gap: 1rem
+    gap: .5rem
     height: fit-content
     margin-bottom: .25rem
     min-width: 36rem

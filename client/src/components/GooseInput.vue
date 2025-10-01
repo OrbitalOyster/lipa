@@ -83,6 +83,7 @@ const text = defineModel<string>({ required: true }),
     color: colors.$text
     font: inherit
     height: 2.5rem
+    margin: borders.$focus-outline-width
     min-width: 3.5rem
     outline: colors.$outline solid 0px
     padding: .25rem .75rem .25rem .75rem
