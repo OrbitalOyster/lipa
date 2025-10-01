@@ -165,7 +165,7 @@ onMounted(async () => {
     height: fit-content
     margin-bottom: .25rem
     min-width: 36rem
-    padding: 1rem
+    padding: .75rem
     width: fit-content
 
   header
@@ -173,7 +173,7 @@ onMounted(async () => {
     display: flex
     gap: 1rem
     justify-content: space-between
-    padding-bottom: .5rem
+    padding: .5rem
 
   hgroup
     display: flex
@@ -191,6 +191,7 @@ onMounted(async () => {
   img
     border-radius: 100%
     height: 4rem
+    box-shadow: 0px 0px 2px 1px
     width: 4rem
 
   footer

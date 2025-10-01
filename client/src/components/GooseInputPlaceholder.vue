@@ -17,7 +17,7 @@ defineProps<{
 
   label
     color: colors.$input-label
-    left: 1rem
+    left: .75rem
     line-height: 1.5rem
     overflow: hidden
     pointer-events: none

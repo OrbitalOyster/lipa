@@ -70,6 +70,7 @@ const text = defineModel<string>({ required: true }),
   .input-wrapper
     align-items: center
     display: flex
+    margin: borders.$focus-outline-width
     position: relative
 
   /* Base */
@@ -81,7 +82,6 @@ const text = defineModel<string>({ required: true }),
     color: colors.$text
     font: inherit
     height: 2.5rem
-    margin: borders.$focus-outline-width
     min-width: 3.25rem
     outline: colors.$outline solid 0px
     overflow: hidden
@@ -114,5 +114,5 @@ const text = defineModel<string>({ required: true }),
     display: flex
     gap: .25rem
     position: absolute
-    right: .75rem
+    right: .5rem
 </style>

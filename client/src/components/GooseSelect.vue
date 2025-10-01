@@ -143,7 +143,7 @@ function keyScroll(direction: number) {
     cursor: not-allowed
 
   .has-placeholder
-    height: 3.5rem
+    height: 3.25rem
     padding-top: 1.5rem
 
   .placeholder
@@ -159,7 +159,6 @@ function keyScroll(direction: number) {
     align-items: center
     display: inline-flex
     gap: .25rem
-    height: 100%
     position: absolute
     right: 2.75rem
 

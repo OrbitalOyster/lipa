@@ -28,7 +28,6 @@ defineProps<{
   .error-icon
     color: colors.$danger
     cursor: help
-    width: 1.5rem
 
   p
     padding: .5rem
