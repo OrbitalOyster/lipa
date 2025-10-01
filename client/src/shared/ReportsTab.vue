@@ -85,14 +85,17 @@ update()
         @update="update"
       />
     </div>
-    <div style="display: flex; gap: .5rem">
+    <div>
       <GooseButton
         :icon="faPlus"
         tooltip="Создать первичный отчёт"
+        tooltip-side="top"
       />
       <GooseButton
         :icon="faRotate"
         tooltip="Обновить список"
+        tooltip-side="top"
+        :loading
         @click="async () => { loading = true; await getData(); loading = false }"
       />
     </div>
@@ -145,7 +148,6 @@ update()
   .filters
     align-items: center
     display: flex
-    height: 3rem
     justify-content: space-between
     padding: .5rem
 

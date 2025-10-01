@@ -33,7 +33,6 @@ const text = defineModel<string>({ required: true }),
       :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
       :disabled
       :type="password && passwordHidden ? 'password' : 'text'"
-      :style="{ 'padding-top': placeholder ? '1.25rem' : '.25rem' }"
     >
     <!-- Placeholder -->
     <GooseInputPlaceholder
