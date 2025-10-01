@@ -54,6 +54,7 @@ const toggled = defineModel<boolean>({ required: true }),
     cursor: pointer
     flex-shrink: 0
     height: $button-size
+    margin: borders.$focus-outline-width
     outline: colors.$outline solid 0px
     padding: 0
     position: relative

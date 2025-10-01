@@ -11,12 +11,14 @@ const inputValue = ref('hello')
 <template>
   <h1>Testing grounds</h1>
   <hr>
-  <GooseButton title="Button 1" />
-  <GooseButton :icon="faPoo" :small="true" />
-  <GooseButton
-    :icon="faPoo"
-    title="Button 3"
-  />
+  <div style="display: flex">
+    <GooseButton title="Button 1" />
+    <GooseButton :icon="faPoo" />
+    <GooseButton
+      :icon="faPoo"
+      title="Button 3"
+    />
+  </div>
   <GooseInput v-model="inputValue" />
   <hr>
   <div style="background-color: salmon; display: inline">

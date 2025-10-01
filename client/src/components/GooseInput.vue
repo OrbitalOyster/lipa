@@ -82,7 +82,7 @@ const text = defineModel<string>({ required: true }),
     box-sizing: border-box
     color: colors.$text
     font: inherit
-    height: 2rem
+    height: 2.5rem
     margin: borders.$focus-outline-width
     min-width: 3.25rem
     outline: colors.$outline solid 0px

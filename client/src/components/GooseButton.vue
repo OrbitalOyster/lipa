@@ -42,6 +42,7 @@ const props = defineProps<{
       </span>
       <span
         v-if="icon || loading"
+        class="icon"
       >
         <FontAwesomeIcon
           :class="loading && 'fa-pulse'"
@@ -78,6 +79,12 @@ const props = defineProps<{
     padding-left: .75rem
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter
+
+  span.title
+    display: flex
+
+  span.icon
+    display: flex
 
   .primary
     background-color: colors.$primary
