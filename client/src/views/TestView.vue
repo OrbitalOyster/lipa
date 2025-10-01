@@ -12,7 +12,7 @@ const inputValue = ref('hello')
   <h1>Testing grounds</h1>
   <hr>
   <GooseButton title="Button 1" />
-  <GooseButton :icon="faPoo" />
+  <GooseButton :icon="faPoo" :small="true" />
   <GooseButton
     :icon="faPoo"
     title="Button 3"

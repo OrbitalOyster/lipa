@@ -43,7 +43,6 @@ async function logout() {
         :icon="faRightFromBracket"
         tooltip="Выйти из системы"
         tooltip-side="bottom"
-        small
         warning
         @click="logoutConfirm?.show()"
       />

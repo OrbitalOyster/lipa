@@ -68,7 +68,6 @@ const uploadModalRef = useTemplateRef('uploadModal')
           <p> Размер: {{ Math.round((files[0].size / 1024) * 100) / 100 }} kB</p>
           <GooseButton
             transparent
-            small
             :icon="faTrash"
           />
         </div>
@@ -95,7 +94,6 @@ const uploadModalRef = useTemplateRef('uploadModal')
       <div>
         <GooseButton
           :icon="faUpload"
-          small
           tooltip="Загрузить .xlsx"
           @click="uploadModalRef?.show()"
         />

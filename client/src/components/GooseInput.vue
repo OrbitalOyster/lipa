@@ -33,7 +33,7 @@ const text = defineModel<string>({ required: true }),
       :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
       :disabled
       :type="password && passwordHidden ? 'password' : 'text'"
-      :style="{ 'padding-top': placeholder ? '1.5rem' : '.25rem' }"
+      :style="{ 'padding-top': placeholder ? '1.25rem' : '.25rem' }"
     >
     <!-- Placeholder -->
     <GooseInputPlaceholder
@@ -82,9 +82,9 @@ const text = defineModel<string>({ required: true }),
     box-sizing: border-box
     color: colors.$text
     font: inherit
-    height: 2.5rem
+    height: 2rem
     margin: borders.$focus-outline-width
-    min-width: 3.5rem
+    min-width: 3.25rem
     outline: colors.$outline solid 0px
     padding: .25rem .75rem .25rem .75rem
     transition: transitions.$focusable, transitions.$colors
@@ -103,8 +103,8 @@ const text = defineModel<string>({ required: true }),
     cursor: not-allowed
 
   .has-placeholder
-    height: 3.5rem
-    padding-top: 1.5rem
+    height: 3.25rem
+    padding-top: 1.25rem
 
   .placeholder
     width: calc(100% - 1.5rem)

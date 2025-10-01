@@ -108,7 +108,6 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       :icon="faEllipsisVertical"
       tooltip="Выбрать дату"
       tooltip-side="right"
-      small
       transparent
       @click="showPopup = !showPopup"
     />

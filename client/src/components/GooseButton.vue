@@ -11,7 +11,6 @@ const props = defineProps<{
     icon?: IconDefinition
     loading?: boolean
     round?: boolean
-    small?: boolean
     submit?: boolean
     title?: string
     tooltip?: string
@@ -31,7 +30,7 @@ const props = defineProps<{
     <button
       :disabled
       :type
-      :class="{ primary: !transparent, warning, danger, round, small, transparent }"
+      :class="{ primary: !transparent, warning, danger, round, transparent }"
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
@@ -43,10 +42,8 @@ const props = defineProps<{
       </span>
       <span
         v-if="icon || loading"
-        class="icon"
       >
         <FontAwesomeIcon
-          class="fa-fw"
           :class="loading && 'fa-pulse'"
           :icon="loading ? faSpinner : icon!"
         />
@@ -72,14 +69,15 @@ const props = defineProps<{
     filter: drop-shadow(colors.$button-shadow 0 .1rem .1rem)
     font-family: inherit
     font-size: 1.25rem
-    gap: .75rem
-    min-height: 3rem
-    min-width: 3rem
-    margin: borders.$focus-outline-width
-    outline: colors.$outline solid 0px
-    transition: transitions.$focusable, transitions.$colors, transitions.$filter
+    gap: .5rem
     justify-content: space-around
-    padding: .5rem
+    margin: borders.$focus-outline-width
+    min-height: 3.25rem
+    min-width: 3.25rem
+    outline: colors.$outline solid 0px
+    padding-left: .75rem
+    padding-right: .75rem
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
 
   .primary
     background-color: colors.$primary
@@ -105,6 +103,8 @@ const props = defineProps<{
   .transparent
     background-color: transparent
     color: colors.$text
+    min-height: 0
+    min-width: 0
     outline: none
     padding-left: 0
     padding-right: 0
@@ -112,11 +112,6 @@ const props = defineProps<{
   .transparent:disabled
     color: colors.$text-inactive
     cursor: not-allowed
-
-  .small
-    height: 3rem
-    padding-left: .5rem
-    padding-right: .5rem
 
   .round
     border-radius: 100%

@@ -88,12 +88,10 @@ update()
     <div style="display: flex; gap: .5rem">
       <GooseButton
         :icon="faPlus"
-        small
         tooltip="Создать первичный отчёт"
       />
       <GooseButton
         :icon="faRotate"
-        small
         tooltip="Обновить список"
         @click="async () => { loading = true; await getData(); loading = false }"
       />
