@@ -96,7 +96,7 @@ const toggled = defineModel<boolean>({ required: true }),
 
   /* On hover */
   button:not(:disabled):hover::after
-    filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
+    filter: drop-shadow(colors.$button-shadow 0 .15rem .15rem)
 
   /* On toggled */
   button.toggled::after

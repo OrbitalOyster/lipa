@@ -61,7 +61,6 @@ const props = defineProps<{
   /* Base */
   button
     align-items: center
-    border-color: colors.$outline
     border-radius: borders.$radius
     border: none
     color: colors.$button
@@ -125,7 +124,7 @@ const props = defineProps<{
 
   /* On hover */
   button:hover
-    filter: drop-shadow(colors.$button-shadow 0 .2rem .2rem)
+    filter: drop-shadow(colors.$button-shadow 0 .15rem .15rem)
 
   /* On focus */
   button:focus
