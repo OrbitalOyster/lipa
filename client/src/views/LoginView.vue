@@ -131,15 +131,18 @@ onMounted(async () => {
               :loading="disabled"
               submit
               title="Войти"
+              tooltip="А ещё можно нажать на Enter"
+              tooltip-side="right"
             />
           </footer>
         </main>
       </GooseForm>
       <div class="copyright">
-        <span>
-          <FontAwesomeIcon :icon="faCopyright" />
-          {{ new Date().getFullYear() }}
-        </span>
+        <FontAwesomeIcon
+          :icon="faCopyright"
+          size="lg"
+        />
+        {{ new Date().getFullYear() }}
       </div>
     </div>
   </div>
@@ -203,6 +206,7 @@ onMounted(async () => {
 
   .copyright
     display: flex
+    gap: .2rem
     justify-content: end
     padding: .5rem
 </style>

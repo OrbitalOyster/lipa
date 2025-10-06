@@ -21,13 +21,15 @@ const selected = defineModel<string>()
         :class="{ selected: slot.id === selected }"
         @click="selected = slot.id"
       >
-        <p>
+        <div style="display: flex; align-items: center">
           <FontAwesomeIcon
             :icon="slot.icon"
             size="lg"
           />
-          <span>{{ slot.title }}</span>
-        </p>
+          <div>
+            {{ slot.title }}
+          </div>
+        </div>
       </li>
     </ul>
     <div class="content">

@@ -41,9 +41,9 @@ async function logout() {
     <div style="align-items: center; display: flex; gap: 1rem">
       <div>
         Вы зашли как:
-        <span class="username">
+        <div class="username">
           {{ userStore.name }}
-        </span>
+        </div>
       </div>
       <GooseButton
         :icon="faRightFromBracket"
@@ -66,6 +66,7 @@ async function logout() {
 
   .username
     cursor: pointer
+    display: inline
     font-weight: 600
     text-decoration: underline
 </style>

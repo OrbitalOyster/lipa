@@ -58,13 +58,13 @@ const selectAllRef = computed({
           :key="i"
         >
           <div>
-            <span
+            <div
               class="header"
               :class="header.sortable && 'sortable'"
               @click="header.sortable && sort(header.prop)"
             >
               {{ header.title }}
-            </span>
+            </div>
             <FontAwesomeIcon
               v-if="model.sortBy === header.prop"
               :icon="model.desc ? faArrowDownWideShort : faArrowDownShortWide"
@@ -93,7 +93,9 @@ const selectAllRef = computed({
               :name="header.prop"
               v-bind="{ td: row.data[header.prop] }"
             />
-            <span v-else>{{ row.data[header.prop] }}</span>
+            <div v-else>
+              {{ row.data[header.prop] }}
+            </div>
           </div>
         </td>
       </tr>
@@ -115,13 +117,6 @@ const selectAllRef = computed({
 
   thead
     height: 3.5rem
-
-  /*
-    thead tr
-      background-color: tomato
-      position: sticky
-      top: 0
-      z-index: 10 */
 
   th
     height: 100%

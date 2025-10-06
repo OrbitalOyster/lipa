@@ -9,7 +9,7 @@ const { y } = useWindowScroll(),
 
 <template>
   <Transition name="fade">
-    <span
+    <div
       v-if="y > threshold"
       class="scroll-to-to-top-wrapper"
     >
@@ -19,7 +19,7 @@ const { y } = useWindowScroll(),
         round
         @click="y = 0"
       />
-    </span>
+    </div>
   </Transition>
 </template>
 
