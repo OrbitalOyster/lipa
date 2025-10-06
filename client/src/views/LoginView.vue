@@ -126,7 +126,7 @@ onMounted(async () => {
               <div>Войти как организация</div>
             </GooseSwitch>
             <GooseButton
-              :disabled
+              :disabled="disabled || loadingOrgs"
               :icon="faRightToBracket"
               :loading="disabled"
               submit
