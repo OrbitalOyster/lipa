@@ -34,13 +34,13 @@ const props = defineProps<{
       :tabindex="transparent ? -1 : 0"
       @click="emit('click')"
     >
-      <span
+      <div
         v-if="title"
         class="title"
       >
         {{ title }}
-      </span>
-      <span
+      </div>
+      <div
         v-if="icon || loading"
         class="icon"
       >
@@ -48,7 +48,7 @@ const props = defineProps<{
           :class="loading && 'fa-pulse'"
           :icon="loading ? faSpinner : icon!"
         />
-      </span>
+      </div>
     </button>
   </GooseTooltip>
 </template>
@@ -79,10 +79,10 @@ const props = defineProps<{
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter
 
-  span.title
+  .title
     display: flex
 
-  span.icon
+  .icon
     display: flex
 
   .primary

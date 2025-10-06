@@ -96,6 +96,8 @@ onMounted(async () => {
             :disabled
             autocomplete="username"
             placeholder="Имя пользователя"
+            tooltip="Логин латинскими символами"
+            tooltip-side="left"
             tag="input"
           />
           <!-- Password -->
@@ -108,6 +110,7 @@ onMounted(async () => {
             password
             placeholder="Пароль"
             tag="input"
+            tooltip="Без римских цифр"
           />
           <footer>
             <GooseCheckbox
@@ -161,12 +164,11 @@ onMounted(async () => {
     display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
-    gap: .5rem
+    gap: .25rem
     height: fit-content
     margin-bottom: .25rem
     min-width: 36rem
     padding: .75rem
-    width: fit-content
 
   header
     align-items: center

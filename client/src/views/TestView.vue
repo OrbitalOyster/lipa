@@ -5,7 +5,7 @@ import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import { ref } from 'vue'
 
-const inputValue = ref('hello')
+const inputValue = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
 </script>
 
 <template>
@@ -19,22 +19,21 @@ const inputValue = ref('hello')
       title="Button 3"
     />
   </div>
-  <GooseInput v-model="inputValue" />
+  <div style="display: flex">
+    <GooseInput
+      v-model="inputValue"
+      placeholder="Type something here"
+    />
+    <GooseInput v-model="inputValue" />
+  </div>
   <GooseInput
     v-model="inputValue"
     placeholder="Type something here"
+    password
   />
   <hr>
-  <div style="background-color: salmon; display: inline">
-    <span>
-      Hello!
-    </span>
-    <span>
-      <FontAwesomeIcon
-        :icon="faPoo"
-      />
-    </span>
-  </div>
+  <input style="height: 3rem"/>
+  <input />
 </template>
 
 <style lang="sass" scoped>

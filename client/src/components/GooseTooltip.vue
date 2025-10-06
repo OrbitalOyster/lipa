@@ -21,13 +21,13 @@ const { floatingStyles, middlewareData, arrowStyle }
 
 <template>
   <!-- Target element -->
-  <span
+  <div
     ref="target"
     @mouseover="active = true"
     @mouseleave="active = false"
   >
     <slot />
-  </span>
+  </div>
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
@@ -56,10 +56,8 @@ const { floatingStyles, middlewareData, arrowStyle }
   /* Do not remove this line, needed for transition effect */
   @use '../assets/transitions.sass'
 
-  span
-    display: inline-block
-    width: fit-content
-    height: fit-content
+  div
+    display: flex
 
   .arrow
     background-color: colors.$info
