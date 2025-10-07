@@ -106,7 +106,7 @@ onMounted(async () => {
             v-model="password"
             :checks="['required']"
             :disabled
-            autocomplete="password"
+            autocomplete="current-password"
             password
             placeholder="Пароль"
             tag="input"
@@ -205,6 +205,7 @@ onMounted(async () => {
     justify-content: space-between
 
   .copyright
+    align-items: center
     display: flex
     gap: .2rem
     justify-content: end

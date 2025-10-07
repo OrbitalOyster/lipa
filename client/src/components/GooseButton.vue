@@ -23,34 +23,36 @@ const props = defineProps<{
 </script>
 
 <template>
-  <GooseTooltip
-    :side="tooltipSide"
-    :text="tooltip"
-  >
-    <button
-      :disabled
-      :type
-      :class="{ primary: !transparent, warning, danger, round, transparent }"
-      :tabindex="transparent ? -1 : 0"
-      @click="emit('click')"
+  <div style="display: inline-flex">
+    <GooseTooltip
+      :side="tooltipSide"
+      :text="tooltip"
     >
-      <div
-        v-if="title"
-        class="title"
+      <button
+        :disabled
+        :type
+        :class="{ primary: !transparent, warning, danger, round, transparent }"
+        :tabindex="transparent ? -1 : 0"
+        @click="emit('click')"
       >
-        {{ title }}
-      </div>
-      <div
-        v-if="icon || loading"
-        class="icon"
-      >
-        <FontAwesomeIcon
-          :class="loading && 'fa-pulse'"
-          :icon="loading ? faSpinner : icon!"
-        />
-      </div>
-    </button>
-  </GooseTooltip>
+        <div
+          v-if="title"
+          class="title"
+        >
+          {{ title }}
+        </div>
+        <div
+          v-if="icon || loading"
+          class="icon"
+        >
+          <FontAwesomeIcon
+            :class="loading && 'fa-pulse'"
+            :icon="loading ? faSpinner : icon!"
+          />
+        </div>
+      </button>
+    </GooseTooltip>
+  </div>
 </template>
 
 <style scoped lang="sass">

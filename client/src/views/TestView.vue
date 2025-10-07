@@ -3,15 +3,24 @@ import { faPoo, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
+import GooseSelect from '#components/GooseSelect.vue'
 import { ref } from 'vue'
 
 const inputValue = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+
+const testSelectItems = ref([
+  { id: 1, title: 'Lorem ipsum' },
+  { id: 2, title: 'dolor sit amet' },
+  { id: 3, title: 'consectetur adipiscing elit' },
+])
+const testSelect = ref('')
+
 </script>
 
 <template>
   <h1>Testing grounds</h1>
   <hr>
-  <div style="display: flex">
+  <div>
     <GooseButton title="Button 1" />
     <GooseButton :icon="faTruckFast" />
     <GooseButton
@@ -25,6 +34,12 @@ const inputValue = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit,
       placeholder="Type something here"
     />
     <GooseInput v-model="inputValue" />
+    <GooseSelect
+      v-model="testSelect"
+      :items="testSelectItems"
+      placeholder="Select something"
+      style="width: 20rem"
+    />
   </div>
   <GooseInput
     v-model="inputValue"
@@ -32,8 +47,6 @@ const inputValue = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit,
     password
   />
   <hr>
-  <input style="height: 3rem"/>
-  <input />
 </template>
 
 <style lang="sass" scoped>

@@ -56,9 +56,6 @@ const { floatingStyles, middlewareData, arrowStyle }
   /* Do not remove this line, needed for transition effect */
   @use '../assets/transitions.sass'
 
-  div
-    display: flex
-
   .arrow
     background-color: colors.$info
     border: 1px solid colors.$info-border

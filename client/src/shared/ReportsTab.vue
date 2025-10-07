@@ -85,7 +85,7 @@ update()
         @update="update"
       />
     </div>
-    <div style="display: flex">
+    <div>
       <GooseButton
         :icon="faPlus"
         tooltip="Создать первичный отчёт"

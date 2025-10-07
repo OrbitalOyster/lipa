@@ -46,7 +46,6 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
   <!-- Target element -->
   <div
     ref="target"
-    style="display: flex"
   >
     <slot />
   </div>

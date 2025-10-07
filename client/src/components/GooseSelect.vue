@@ -45,62 +45,64 @@ function keyScroll(direction: number) {
 </script>
 
 <template>
-  <GoosePopupMenu
-    v-model="selectedId"
-    :active
-    :items
-    :side
-    :fit-target-width="true"
-    :show-selected="true"
-    @update="newId => { active = false; update(newId) }"
-  >
-    <div class="select-wrapper">
-      <!-- Pseudo-input -->
-      <button
-        type="button"
-        :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
-        :disabled
-        :autofocus
-        @blur="active = false"
-        @click="active = !active"
-        @keydown.up.prevent="keyScroll(-1)"
-        @keydown.down.prevent="keyScroll(1)"
-        @keydown.esc="active = false"
-      >
-        <div class="item">
-          {{ items.find(i => i.id === selectedId)?.title }}
-        </div>
-      </button>
-      <!-- Placeholder -->
-      <GooseInputPlaceholder
-        v-if="placeholder"
-        :title="placeholder"
-        :active="!!selectedId"
-        class="placeholder"
-      />
-      <!-- Chevron -->
-      <FontAwesomeIcon
-        class="chevron"
-        :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
-        :icon="faChevronDown"
-      />
-      <!-- Icons -->
-      <div class="icons">
-        <!-- Validation icon -->
-        <GooseErrorIcon
-          v-if="error"
-          :message="error"
+  <div>
+    <GoosePopupMenu
+      v-model="selectedId"
+      :active
+      :items
+      :side
+      :fit-target-width="true"
+      :show-selected="true"
+      @update="newId => { active = false; update(newId) }"
+    >
+      <div class="select-wrapper">
+        <!-- Pseudo-input -->
+        <button
+          type="button"
+          :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
+          :disabled
+          :autofocus
+          @blur="active = false"
+          @click="active = !active"
+          @keydown.up.prevent="keyScroll(-1)"
+          @keydown.down.prevent="keyScroll(1)"
+          @keydown.esc="active = false"
+        >
+          <div class="item">
+            {{ items.find(i => i.id === selectedId)?.title }}
+          </div>
+        </button>
+        <!-- Placeholder -->
+        <GooseInputPlaceholder
+          v-if="placeholder"
+          :title="placeholder"
+          :active="!!selectedId"
+          class="placeholder"
         />
-        <!-- Loading -->
+        <!-- Chevron -->
         <FontAwesomeIcon
-          v-if="loading"
-          class="fa-pulse"
-          :icon="faSpinner"
-          size="xl"
+          class="chevron"
+          :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
+          :icon="faChevronDown"
         />
+        <!-- Icons -->
+        <div class="icons">
+          <!-- Validation icon -->
+          <GooseErrorIcon
+            v-if="error"
+            :message="error"
+          />
+          <!-- Loading -->
+          <FontAwesomeIcon
+            v-if="loading"
+            class="fa-pulse"
+            :icon="faSpinner"
+            size="xl"
+          />
+        </div>
       </div>
-    </div>
-  </GoosePopupMenu>
+    </GoosePopupMenu>
+  </div>
 </template>
 
 <style lang="sass" scoped>
