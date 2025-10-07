@@ -81,7 +81,6 @@ const text = defineModel<string>({ required: true }),
   .input-wrapper
     align-items: center
     display: flex
-    flex-grow: 1
     margin: borders.$focus-outline-width
     position: relative
 

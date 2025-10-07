@@ -107,6 +107,7 @@ onMounted(async () => {
             :checks="['required']"
             :disabled
             autocomplete="current-password"
+            name="password"
             password
             placeholder="Пароль"
             tag="input"

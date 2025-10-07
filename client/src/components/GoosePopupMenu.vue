@@ -44,9 +44,7 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
 
 <template>
   <!-- Target element -->
-  <div
-    ref="target"
-  >
+  <div ref="target">
     <slot />
   </div>
   <!-- Pretty animation on toggle -->
