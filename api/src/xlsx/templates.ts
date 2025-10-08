@@ -1,10 +1,12 @@
 import type { Context } from 'hono'
 import ExcelJS from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet.ts'
-// import fs from 'fs'
+import { createHash } from 'node:crypto'
+import fs from 'node:fs/promises'
 import { getPayload } from '../routes/cookies.ts'
 
-const attachmentName = 'attachment'
+const attachmentName = 'attachment',
+  uploadsFolder = '/tmp'
 
 async function parseXLSXFile(file: File) {
   const buffer = await file.arrayBuffer(),
@@ -40,8 +42,16 @@ export const upload = async (context: Context) => {
   /* No attachment, somehow */
   if (!attachment || !(attachment instanceof File))
     return context.json('Missing attachment', 400)
-  console.log(`Uploaded file '${attachment.name}', size ${attachment.size}, by ${userId}`)
-  // fs.writeFile('upload', await attachment.arrayBuffer(), () => console.log('saved to disk'))
+  /* Convert, get hash */
+  const bytes = await attachment.bytes(),
+    hash = createHash('sha256').update(bytes).digest('hex'),
+    time = new Date().valueOf(),
+    fullFilename = `${uploadsFolder}/${userId}-${time}-${attachment.name}`,
+    filenameHash = createHash('sha256').update(fullFilename).digest('hex')
+  console.log(`Uploaded '${attachment.name}'\n\tsize ${attachment.size}\n\tuser ${userId}\n\ttime ${time}\n\thash ${hash}`)
+  await fs.writeFile(`${uploadsFolder}/${filenameHash}`, bytes)
+  console.log('Saved to disk: ', filenameHash)
+
   const validation = await validate(attachment)
   return context.json(validation)
 }
