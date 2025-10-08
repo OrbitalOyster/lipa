@@ -38,7 +38,7 @@ export const upload = async (context: Context) => {
   /* No attachment, somehow */
   if (!attachment || !(attachment instanceof File))
     return context.json('Missing attachment', 400)
-  /* Convert, get hash */
+  /* Validate */
   const bufferArray = await attachment.arrayBuffer(),
     validation = await validate(bufferArray)
   /* Unable to parse  validate */
@@ -50,8 +50,15 @@ export const upload = async (context: Context) => {
     time = new Date().valueOf(),
     fullFilename = `${uploadsFolder}/${userId}-${time}-${attachment.name}`,
     filenameHash = createHash('sha256').update(fullFilename).digest('hex')
-  console.log(`Uploaded '${attachment.name}'\n\tsize ${attachment.size}\n\tuser ${userId}\n\ttime ${time}\n\thash ${hash}`)
+  console.log(`Uploaded '${attachment.name}'
+    size ${attachment.size}
+    user ${userId}
+    time ${time}
+    hash ${hash}`)
   await fs.writeFile(`${uploadsFolder}/${filenameHash}`, buffer)
   console.log('Saved to disk: ', filenameHash)
-  return context.json({ result: filenameHash })
+  return context.json({
+    tables: validation.tables,
+    key: filenameHash,
+  })
 }
