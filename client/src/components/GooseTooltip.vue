@@ -9,7 +9,7 @@ const props = defineProps<{
     text?: string
   }>(),
   active = ref(false),
-  debounceDelay = 1500,
+  debounceDelay = 1000,
   debounced = refDebounced(active, debounceDelay),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
@@ -31,7 +31,7 @@ const { floatingStyles, middlewareData, arrowStyle }
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
-      v-show="text && debounced && !middlewareData.hide?.referenceHidden"
+      v-show="active && text && debounced && !middlewareData.hide?.referenceHidden && !middlewareData.hide?.escaped"
       ref="floating"
       class="floating"
       :style="{ ...floatingStyles }"
@@ -69,10 +69,8 @@ const { floatingStyles, middlewareData, arrowStyle }
     border: 1px solid colors.$info-border
     color: colors.$info-text
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
-    left: 0
     margin-bottom: .25rem
     position: absolute
-    top: 0
     width: max-content
     z-index: 99
 

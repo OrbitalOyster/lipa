@@ -47,6 +47,12 @@ const testSelect = ref('')
     password
   />
   <hr>
+
+  <div style="display: flex; align-items: center; justify-content: center; background-color: black; height: 35rem">
+    <div style="background-color: gray; width: 25rem; height: 25rem">
+      <h1>Hello</h1>
+    </div>
+  </div>
 </template>
 
 <style lang="sass" scoped>
