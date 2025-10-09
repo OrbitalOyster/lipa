@@ -101,10 +101,7 @@ update()
     </div>
   </div>
   <!-- On loading -->
-  <div
-    v-if="loading"
-    style="padding: 3rem"
-  >
+  <div v-if="loading">
     <GooseLoading />
   </div>
   <div v-else-if="tableModel.rows.length">

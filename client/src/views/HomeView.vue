@@ -51,9 +51,7 @@ const localSettings = useLocalSettings(),
           <p>
             По всем вопросам обращайтесь
             <FontAwesomeIcon
-              style="width: 2rem"
               :icon="faPhone"
-              size="lg"
             />
             8 (812) 246-47-49
           </p>

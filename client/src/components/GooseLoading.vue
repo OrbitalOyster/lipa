@@ -8,6 +8,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
     <FontAwesomeIcon
       class="fa-pulse"
       :icon="faSpinner"
+      size="3x"
     />
   </div>
 </template>
@@ -15,9 +16,10 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 <style lang="sass" scoped>
   div
     align-items: center
+    box-sizing: border-box
     display: flex
-    font-size: 3rem
     height: 100%
     justify-content: center
+    padding: 1rem
     width: 100%
 </style>

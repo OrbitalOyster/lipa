@@ -4,6 +4,7 @@ import { XLSXWorksheet } from './XLSXWorksheet.ts'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
 import { getPayload } from '../routes/cookies.ts'
+import { setTimeout as sleep } from 'node:timers/promises'
 
 const attachmentName = 'attachment',
   uploadsFolder = '/tmp'
@@ -19,18 +20,22 @@ async function parseXLSXFile(buffer: ArrayBuffer) {
 export const validate = async (buffer: ArrayBuffer) => {
   try {
     const workbook = await parseXLSXFile(buffer)
-    if (workbook.worksheets[0]) {
-      const tables = workbook.worksheets[0].findTables()
-      return { tables }
-    }
-    return { err: 'No worksheets' }
+    /* No worksheets, somehow */
+    if (!workbook.worksheets)
+      return { err: 'No worksheets' }
+    return workbook.worksheets.map(w => ({
+      name: w.name,
+      tables: w.findTables(),
+    }))
   }
   catch (err) {
+    console.error(err)
     return { err: 'Unable to parse' }
   }
 }
 
 export const upload = async (context: Context) => {
+  await sleep(1000)
   const payload = await getPayload(context),
     userId = payload['userId'], /* Who */
     body = await context.req.parseBody(),
@@ -41,8 +46,8 @@ export const upload = async (context: Context) => {
   /* Validate */
   const bufferArray = await attachment.arrayBuffer(),
     validation = await validate(bufferArray)
-  /* Unable to parse  validate */
-  if (validation.err)
+  /* Unable to parse or validate */
+  if ('err' in validation)
     return context.json(validation)
   /* Save to tmp, return hash */
   const buffer = Buffer.from(bufferArray),
@@ -58,7 +63,7 @@ export const upload = async (context: Context) => {
   await fs.writeFile(`${uploadsFolder}/${filenameHash}`, buffer)
   console.log('Saved to disk: ', filenameHash)
   return context.json({
-    tables: validation.tables,
+    worksheets: validation,
     key: filenameHash,
   })
 }

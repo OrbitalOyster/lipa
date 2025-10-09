@@ -6,6 +6,8 @@ import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 defineProps<{
   title: string
+  closeButton?: boolean
+  cancelButton?: boolean
 }>()
 
 const active = ref(false),
@@ -50,10 +52,17 @@ defineExpose({ show })
             <h1>
               {{ title }}
             </h1>
+            <GooseButton
+              v-if="closeButton"
+              :icon="faMultiply"
+              transparent
+              @click="hide"
+            />
           </header>
           <slot />
           <footer>
             <GooseButton
+              v-if="cancelButton"
               title="Отмена"
               :icon="faMultiply"
               @click="hide"
@@ -92,10 +101,10 @@ defineExpose({ show })
     padding: 1rem
 
   header
-    display: flex
     align-items: center
-    justify-content: space-between
     border-bottom: borders.$card
+    display: flex
+    justify-content: space-between
     padding-bottom: 1rem
 
   h1

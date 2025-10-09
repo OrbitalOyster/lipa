@@ -114,6 +114,8 @@ class XLSXWorksheet {
     for (const row of this.rows)
       for (const cell of row)
         if (cell && cell.isTableName()) {
+          /* Table name */
+          const name = cell.value
           const topRightCorner = this.getCell(cell.rowNum + 1, cell.colNum)
           /* Found top right corner */
           if (topRightCorner && topRightCorner.isTopRightCorner()) {
@@ -125,7 +127,7 @@ class XLSXWorksheet {
               const width = topRightCorner.colNum - topLeftCorner.colNum + 1,
                 height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1
               result.push({
-                worksheet: this.name,
+                name,
                 width,
                 height,
                 range: `${topLeftCorner.address}:${bottomRightCorner.address}`,
