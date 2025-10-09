@@ -1,23 +1,25 @@
 <script setup lang="ts">
+import { faCheck, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import GooseButton from '#components/GooseButton.vue'
-import { faMultiply } from '@fortawesome/free-solid-svg-icons'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 defineProps<{
   title: string
   closeButton?: boolean
+  okButton?: boolean
   cancelButton?: boolean
 }>()
 
 const active = ref(false),
-  emit = defineEmits(['close']),
+  emit = defineEmits(['submit', 'close']),
   dialog = useTemplateRef('dialog')
 
 const { activate, deactivate } = useFocusTrap(dialog, {
   /* On escape */
   escapeDeactivates: () => {
     active.value = false
+    emit('close')
     return true
   },
 })
@@ -28,7 +30,13 @@ async function show() {
   activate()
 }
 
-function hide() {
+function submit() {
+  active.value = false
+  deactivate()
+  emit('submit')
+}
+
+function close() {
   active.value = false
   deactivate()
   emit('close')
@@ -56,16 +64,22 @@ defineExpose({ show })
               v-if="closeButton"
               :icon="faMultiply"
               transparent
-              @click="hide"
+              @click="close"
             />
           </header>
           <slot />
-          <footer>
+          <footer v-if="okButton || cancelButton">
+            <GooseButton
+              v-if="okButton"
+              title="Ok"
+              :icon="faCheck"
+              @click="submit"
+            />
             <GooseButton
               v-if="cancelButton"
               title="Отмена"
               :icon="faMultiply"
-              @click="hide"
+              @click="close"
             />
           </footer>
         </div>
@@ -111,7 +125,8 @@ defineExpose({ show })
     font-size: 1.5rem
 
   footer
+    border-top: borders.$card
     display: flex
     justify-content: end
-    gap: 1rem
+    padding-top: 1rem
 </style>

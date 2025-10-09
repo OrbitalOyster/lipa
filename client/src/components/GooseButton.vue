@@ -19,7 +19,7 @@ const props = defineProps<{
     warning?: boolean
   }>(),
   type = props.submit ? 'submit' : 'button',
-  emit = defineEmits(['click'])
+  emit = defineEmits(['click', 'blur'])
 </script>
 
 <template>
@@ -34,6 +34,7 @@ const props = defineProps<{
         :class="{ primary: !transparent, warning, danger, round, transparent }"
         :tabindex="transparent ? -1 : 0"
         @click="emit('click')"
+        @blur="emit('blur')"
       >
         <div
           v-if="title"

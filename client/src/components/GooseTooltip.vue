@@ -31,7 +31,7 @@ const { floatingStyles, middlewareData, arrowStyle }
   <!-- Pretty animation on toggle -->
   <Transition name="fade">
     <div
-      v-show="active && text && debounced && !middlewareData.hide?.referenceHidden && !middlewareData.hide?.escaped"
+      v-show="text && active && debounced && !middlewareData.hide?.referenceHidden"
       ref="floating"
       class="floating"
       :style="{ ...floatingStyles }"

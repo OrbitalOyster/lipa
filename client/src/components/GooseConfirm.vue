@@ -108,5 +108,5 @@ defineExpose({ show })
 
   footer
     display: flex
-    justify-content: space-evenly
+    justify-content: end
 </style>

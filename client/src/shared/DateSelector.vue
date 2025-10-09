@@ -110,6 +110,7 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       tooltip-side="right"
       transparent
       @click="showPopup = !showPopup"
+      @blur="showPopup = false"
     />
   </GoosePopupMenu>
 </template>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { faPlus, faFileExcel, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faTriangleExclamation, faFileExcel, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseModal from '#components/GooseModal.vue'
@@ -17,20 +18,24 @@ const { open, reset, onChange } = useFileDialog({
   multiple: false,
 })
 
-interface XLSXParseWorksheet {
-  name: string
-  tables: []
-}
-
 interface XLSXParseSuccess {
-  worksheets: XLSXParseWorksheet[]
+  worksheets: {
+    name: string
+    tables: {
+      name: string
+      range: string
+    }[]
+  }[]
   key: string
 }
 
 const apiEndpoint = import.meta.env.VITE_API_URI,
   uploading = ref(false),
   xlsx = ref<null | File>(null),
-  xlsxParseResult = ref<XLSXParseSuccess | null>(null)
+  xlsxParseResult = ref<XLSXParseSuccess | null>(null),
+  error = ref(''),
+  okButton = ref(false),
+  cancelButton = ref(false)
 
 if (!apiEndpoint)
   throw new Error('Missing api endpoint')
@@ -42,7 +47,7 @@ onChange((files) => {
   if (!files[0])
     throw new Error('Major screw-up')
 
-  xlsx.value = null
+  resetUploadForm()
   uploading.value = true
 
   const formData = new FormData()
@@ -57,8 +62,16 @@ onChange((files) => {
     })
     .then((response) => {
       console.log('File uploaded successfully:', response.data)
-      xlsx.value = files[0]!
-      xlsxParseResult.value = response.data
+      /* Parsing error */
+      if ('err' in response.data) {
+        error.value = response.data.err
+      }
+      else {
+        xlsx.value = files[0]!
+        xlsxParseResult.value = response.data
+        okButton.value = true
+        cancelButton.value = true
+      }
     })
     .catch((error) => {
       console.error('Error uploading file:', error)
@@ -69,6 +82,17 @@ onChange((files) => {
 const update = () => {}
 
 const uploadModalRef = useTemplateRef('uploadModal')
+
+function resetUploadForm() {
+  error.value = ''
+  uploading.value = false
+  xlsx.value = null
+  xlsxParseResult.value = null
+  okButton.value = false
+  cancelButton.value = false
+  reset()
+}
+
 </script>
 
 <template>
@@ -76,9 +100,12 @@ const uploadModalRef = useTemplateRef('uploadModal')
     ref="uploadModal"
     title="Новый шаблон"
     close-button
-    @close="reset(); xlsx = null"
+    :ok-button
+    :cancel-button
+    @close="resetUploadForm()"
   >
     <div class="upload-modal">
+      <!-- Select file section -->
       <div style="display: flex; align-items: center; justify-content: space-between">
         <p>Выберите .xlsx файл современного формата</p>
         <GooseButton
@@ -87,8 +114,19 @@ const uploadModalRef = useTemplateRef('uploadModal')
           @click="open"
         />
       </div>
+      <!-- Parse results section -->
       <div>
         <GooseLoading v-if="uploading" />
+        <div
+          v-if="!uploading && error"
+          class="error-message"
+        >
+          <FontAwesomeIcon
+            :icon="faTriangleExclamation"
+            size="3x"
+          />
+          Не удалось распознать файл: {{ error }}
+        </div>
         <div v-if="xlsx">
           <p> Название файла: {{ xlsx.name }} </p>
           <p> Размер: {{ Math.round((xlsx.size / 1024) * 100) / 100 }} kB </p>
@@ -104,7 +142,9 @@ const uploadModalRef = useTemplateRef('uploadModal')
               style="padding-left: 1rem"
             >
               <li>
-                <div class="table-name"> {{ table.name }} </div> : {{ table.range }}
+                <div class="table-name">
+                  {{ table.name }}
+                </div> : {{ table.range }}
               </li>
             </ul>
           </ul>
@@ -141,6 +181,8 @@ const uploadModalRef = useTemplateRef('uploadModal')
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/colors'
+
   .filters
     align-items: center
     display: flex
@@ -161,4 +203,12 @@ const uploadModalRef = useTemplateRef('uploadModal')
   .table-name
     display: inline-flex
     font-weight: bold
+
+  .error-message
+    align-items: center
+    color: colors.$danger
+    display: flex
+    gap: 1rem
+    justify-content: center
+    padding: 1rem
 </style>

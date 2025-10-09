@@ -149,6 +149,7 @@ const selectAllRef = computed({
   td div, th div
     align-items: center
     display: flex
+    gap: .25rem
     height: 100%
     justify-content: center
 
