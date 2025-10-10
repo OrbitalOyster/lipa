@@ -3,6 +3,7 @@ import { faTriangleExclamation, faFileExcel } from '@fortawesome/free-solid-svg-
 import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
+import GooseInput from '#components/GooseInput.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseModal from '#components/GooseModal.vue'
 import axios from 'axios'
@@ -22,9 +23,11 @@ interface XLSXParseSuccess {
 const apiEndpoint = import.meta.env.VITE_API_URI,
   modal = useTemplateRef('modal'),
   uploading = ref(false),
-  xlsx = ref<null | File>(null),
-  xlsxParseResult = ref<XLSXParseSuccess | null>(null),
+  xlsxFile = ref<null | File>(null),
+  parseResult = ref<XLSXParseSuccess | null>(null),
   error = ref(''),
+  key = ref(''),
+  saveAsFilename = ref(''),
   okButton = ref(false),
   cancelButton = ref(false)
 
@@ -39,13 +42,14 @@ const { open, reset, onChange } = useFileDialog({
 const resetUploadForm = () => {
   error.value = ''
   uploading.value = false
-  xlsx.value = null
-  xlsxParseResult.value = null
+  xlsxFile.value = null
+  parseResult.value = null
   okButton.value = false
   cancelButton.value = false
   reset()
 }
 
+/* File selected */
 onChange((files) => {
   if (!files || !files[0])
     return
@@ -70,8 +74,9 @@ onChange((files) => {
         error.value = response.data.err
       }
       else {
-        xlsx.value = files[0]!
-        xlsxParseResult.value = response.data
+        xlsxFile.value = files[0]!
+        parseResult.value = response.data
+        saveAsFilename.value = xlsxFile.value.name
         okButton.value = true
         cancelButton.value = true
       }
@@ -82,9 +87,7 @@ onChange((files) => {
     .finally(() => uploading.value = false)
 })
 
-const show = () => modal.value?.show()
-
-defineExpose({ show })
+defineExpose({ show: () => modal.value?.show() })
 </script>
 
 <template>
@@ -109,6 +112,7 @@ defineExpose({ show })
       <!-- Parse results section -->
       <div>
         <GooseLoading v-if="uploading" />
+        <!-- On error -->
         <div
           v-if="!uploading && error"
           class="error-message"
@@ -119,12 +123,13 @@ defineExpose({ show })
           />
           Не удалось распознать файл: {{ error }}
         </div>
-        <div v-if="xlsx">
-          <p> Название файла: {{ xlsx.name }} </p>
-          <p> Размер: {{ Math.round((xlsx.size / 1024) * 100) / 100 }} kB </p>
-          <p> Листов: {{ xlsxParseResult?.worksheets.length }} </p>
+        <!-- File stats section -->
+        <div v-if="xlsxFile">
+          <p> Название файла: {{ xlsxFile.name }} </p>
+          <p> Размер: {{ Math.round((xlsxFile.size / 1024) * 100) / 100 }} kB </p>
+          <p> Листов: {{ parseResult?.worksheets.length }} </p>
           <ul
-            v-for="worksheet in xlsxParseResult?.worksheets"
+            v-for="worksheet in parseResult?.worksheets"
             :key="worksheet.name"
           >
             <li>Лист {{ worksheet.name }}:</li>
@@ -140,6 +145,13 @@ defineExpose({ show })
               </li>
             </ul>
           </ul>
+          <div style="display: flex; align-items: center; gap: 1rem">
+            <p>Сохранить шаблон как:</p>
+            <GooseInput
+              v-model="saveAsFilename"
+              style="flex-grow: 1"
+            />
+          </div>
         </div>
       </div>
     </div>
