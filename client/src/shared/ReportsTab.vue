@@ -153,7 +153,6 @@ update()
     display: flex
     gap: 1rem
     justify-content: space-between
-    /* width: 15rem */
 
   .nothing-found
     display: flex

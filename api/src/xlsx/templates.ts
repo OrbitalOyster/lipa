@@ -1,13 +1,17 @@
 import type { Context } from 'hono'
 import ExcelJS from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet.ts'
+import connect from '../mysqlConnection.ts'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
+import fsc from 'node:fs'
 import { getPayload } from '../routes/cookies.ts'
 import { setTimeout as sleep } from 'node:timers/promises'
 
+/* TODO: .env */
 const attachmentName = 'attachment',
-  uploadsFolder = '/tmp'
+  uploadsFolder = '/tmp',
+  templatesFolder = './templates'
 
 async function parseXLSXFile(buffer: ArrayBuffer) {
   const workbook = new ExcelJS.Workbook()
@@ -66,4 +70,43 @@ export const upload = async (context: Context) => {
     worksheets: validation,
     key: filenameHash,
   })
+}
+
+export const sync = () => {
+
+}
+
+const getHash = (path: string) => new Promise((resolve, reject) => {
+  const hash = createHash('sha256')
+  const rs = fsc.createReadStream(path)
+  rs.on('error', reject)
+  rs.on('data', chunk => hash.update(chunk))
+  rs.on('end', () => resolve(hash.digest('hex')))
+})
+
+export const save = async (context: Context) => {
+  const payload = await getPayload(context),
+    userId = payload['userId'],
+    { key, filename } = await context.req.json<SaveTemplateRequest>()
+  const srcFile = `${uploadsFolder}/${key}`
+  try {
+    /* Get hash (again) */
+    console.log(await getHash(srcFile))
+
+    /* Check if src file exists */
+    await fs.access(srcFile, fs.constants.F_OK)
+    /* Copy */
+    await fs.copyFile(srcFile, `${templatesFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
+
+    /* Query DB */
+    const connection = await connect(),
+      query = `INSERT INTO templates (userId, filename, hash) VALUES ("${userId}", "${filename}", "${12345}")`
+    await connection.query(query)
+    await connection.end()
+  }
+  catch (err) {
+    console.error(err)
+    return context.json('Try again', 400)
+  }
+  return context.json('Ok')
 }

@@ -1,13 +1,13 @@
 import type { Context, Next } from 'hono'
 import { auth, logout } from './routes/auth'
 import { check, getPayload } from './routes/cookies'
+import { save, upload } from './xlsx/templates'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { orgs } from './routes/orgs'
 import { reports } from './routes/reports'
 import { serveStatic } from 'hono/bun'
-import { upload } from './xlsx/templates'
 
 const defaultMessage = 'Lipa API v0.0.1'
 
@@ -72,6 +72,7 @@ app.use(checkAuth)
 
 /* Templates upload */
 app.post('/upload', upload)
+app.post('/save', save)
 /* Reports */
 app.get('/reports', reports)
 /* Logout */

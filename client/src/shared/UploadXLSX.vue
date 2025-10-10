@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faTriangleExclamation, faFileExcel } from '@fortawesome/free-solid-svg-icons'
+import { faTriangleExclamation, faFileExcel, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
@@ -27,9 +27,7 @@ const apiEndpoint = import.meta.env.VITE_API_URI,
   parseResult = ref<XLSXParseSuccess | null>(null),
   error = ref(''),
   key = ref(''),
-  saveAsFilename = ref(''),
-  okButton = ref(false),
-  cancelButton = ref(false)
+  saveAsFilename = ref('')
 
 if (!apiEndpoint)
   throw new Error('Missing api endpoint')
@@ -44,8 +42,6 @@ const resetUploadForm = () => {
   uploading.value = false
   xlsxFile.value = null
   parseResult.value = null
-  okButton.value = false
-  cancelButton.value = false
   reset()
 }
 
@@ -77,8 +73,7 @@ onChange((files) => {
         xlsxFile.value = files[0]!
         parseResult.value = response.data
         saveAsFilename.value = xlsxFile.value.name
-        okButton.value = true
-        cancelButton.value = true
+        key.value = parseResult.value.key
       }
     })
     .catch((error) => {
@@ -86,6 +81,17 @@ onChange((files) => {
     })
     .finally(() => uploading.value = false)
 })
+
+const upload = async () => {
+  console.log({ key, saveAsFilename })
+  const result = await axios.post(
+    `${apiEndpoint}/save`, {
+      key: key.value,
+      filename: saveAsFilename.value
+    }
+  )
+  console.log(result)
+}
 
 defineExpose({ show: () => modal.value?.show() })
 </script>
@@ -95,8 +101,6 @@ defineExpose({ show: () => modal.value?.show() })
     ref="modal"
     title="Новый шаблон"
     close-button
-    :ok-button
-    :cancel-button
     @close="resetUploadForm()"
   >
     <div class="upload-modal">
@@ -150,6 +154,11 @@ defineExpose({ show: () => modal.value?.show() })
             <GooseInput
               v-model="saveAsFilename"
               style="flex-grow: 1"
+            />
+            <GooseButton
+              title="Загрузить"
+              :icon="faUpload"
+              @click="upload"
             />
           </div>
         </div>

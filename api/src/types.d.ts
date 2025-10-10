@@ -31,6 +31,11 @@ declare global {
   }
 
   type sortableCols = 'date' | 'year'
+
+  interface SaveTemplateRequest {
+    key: string
+    filename: string
+  }
 }
 
 declare module 'bun' {
