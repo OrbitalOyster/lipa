@@ -7,10 +7,6 @@ import { setTimeout as sleep } from 'node:timers/promises'
 
 const authDelay = 2000
 
-interface AuthSQLResult {
-  name: string
-}
-
 export const auth = async (context: Context) => {
   await sleep(authDelay)
   /* Get user credentials from request */

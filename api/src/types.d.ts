@@ -8,12 +8,25 @@ declare global {
     rememberMe: boolean
   }
 
+  interface AuthSQLResult {
+    name: string
+  }
+
   interface UserPayload {
     userId: string
     isOrg: boolean
     name: string
     rememberMe: boolean
     exp: number
+  }
+
+  interface CheckFilenameQueryResult {
+    filenameExists: number
+  }
+
+  interface CheckHashQueryResult {
+    filename: string | null
+    hashExists: number
   }
 
   interface Org extends RowDataPacket {

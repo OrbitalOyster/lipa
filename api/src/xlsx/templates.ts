@@ -1,10 +1,10 @@
 import type { Context } from 'hono'
 import ExcelJS from 'exceljs'
+import type { RowDataPacket } from 'mysql2'
 import { XLSXWorksheet } from './XLSXWorksheet.ts'
 import connect from '../mysqlConnection.ts'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
-import fsc from 'node:fs'
 import { getPayload } from '../routes/cookies.ts'
 import { setTimeout as sleep } from 'node:timers/promises'
 
@@ -72,17 +72,35 @@ export const upload = async (context: Context) => {
   })
 }
 
-export const sync = () => {
-
+export const checkFilenameExists = async (filename: string) => {
+  const connection = await connect(),
+    query = `SELECT COUNT(filename) AS filenameExists FROM templates WHERE filename = '${filename}'`,
+    [rows] = await connection.query<RowDataPacket[]>(query),
+    result = !!(rows[0]! as CheckFilenameQueryResult)['filenameExists']
+  await connection.end()
+  return result
 }
 
-const getHash = (path: string) => new Promise((resolve, reject) => {
-  const hash = createHash('sha256')
-  const rs = fsc.createReadStream(path)
-  rs.on('error', reject)
-  rs.on('data', chunk => hash.update(chunk))
-  rs.on('end', () => resolve(hash.digest('hex')))
-})
+const checkHashExists = async (hash: string) => {
+  const connection = await connect(),
+    query = `SELECT filename, COUNT(hash) AS hashExists FROM templates WHERE hash = '${hash}'`,
+    [rows] = await connection.query<RowDataPacket[]>(query),
+    result = rows[0]! as CheckHashQueryResult
+  await connection.end()
+  return result.hashExists && result.filename
+}
+
+export const sync = async (context: Context) => {
+  /* Actual files */
+  const files = await fs.readdir(templatesFolder)
+  /* DB files */
+  const connection = await connect(),
+    [rows] = await connection.query(`SELECT * FROM templates`)
+  await connection.end()
+  console.log(files)
+  console.log(rows)
+  return context.json('Ok')
+}
 
 export const save = async (context: Context) => {
   const payload = await getPayload(context),
@@ -90,18 +108,25 @@ export const save = async (context: Context) => {
     { key, filename } = await context.req.json<SaveTemplateRequest>()
   const srcFile = `${uploadsFolder}/${key}`
   try {
-    /* Get hash (again) */
-    console.log(await getHash(srcFile))
-
+    /* Check if DB filename exists */
+    if (await checkFilenameExists(filename))
+      throw new Error('Filename taken (says DB)')
     /* Check if src file exists */
     await fs.access(srcFile, fs.constants.F_OK)
-    /* Copy */
+    /* Get hash (again) */
+    const file = await fs.readFile(srcFile),
+      buffer = Buffer.from(file.buffer),
+      hash = createHash('sha256').update(buffer).digest('hex')
+    /* Check if hash is already taken */
+    const hashTaken = await checkHashExists(hash)
+    if (hashTaken)
+      throw new Error(`File exists: ${hashTaken}`)
+    /* Copy from tmp folder */
     await fs.copyFile(srcFile, `${templatesFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
-
     /* Query DB */
     const connection = await connect(),
-      query = `INSERT INTO templates (userId, filename, hash) VALUES ("${userId}", "${filename}", "${12345}")`
-    await connection.query(query)
+      insertQuery = `INSERT INTO templates (userId, filename, hash) VALUES ("${userId}", "${filename}", "${hash}")`
+    await connection.query(insertQuery)
     await connection.end()
   }
   catch (err) {
