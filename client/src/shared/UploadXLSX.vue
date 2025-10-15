@@ -10,6 +10,8 @@ import GooseModal from '#components/GooseModal.vue'
 import axios from 'axios'
 
 interface XLSXParseSuccess {
+  filenameExists: boolean
+  hashExists: string | false
   worksheets: {
     name: string
     tables: {
@@ -28,7 +30,8 @@ const apiEndpoint = import.meta.env.VITE_API_URI,
   error = ref(''),
   key = ref(''),
   saveAsFilename = ref(''),
-  filenameTaken = ref(false)
+  filenameExists = ref(false),
+  hashExists = ref<string | false>(false)
 
 if (!apiEndpoint)
   throw new Error('Missing api endpoint')
@@ -74,7 +77,11 @@ onChange((files) => {
         xlsxFile.value = files[0]!
         parseResult.value = response.data
         saveAsFilename.value = xlsxFile.value.name
+        if (!parseResult.value)
+          throw new Error('Major screwup')
         key.value = parseResult.value.key
+        filenameExists.value = parseResult.value.filenameExists
+        hashExists.value = parseResult.value.hashExists
       }
     })
     .catch((error) => {
@@ -97,8 +104,8 @@ const upload = async () => {
 /* Filename check */
 const checkFilename = async () => {
   const check = await axios.get(`${apiEndpoint}/check-filename?q=${saveAsFilename.value}`)
-  filenameTaken.value = check.data
-  console.log(saveAsFilename.value, filenameTaken.value)
+  filenameExists.value = check.data
+  console.log(saveAsFilename.value, filenameExists.value)
 }
 watchDebounced(saveAsFilename, checkFilename, { debounce: 500 })
 
@@ -125,7 +132,7 @@ defineExpose({ show: () => modal.value?.show() })
       <!-- Parse results section -->
       <div>
         <GooseLoading v-if="uploading" />
-        <!-- On error -->
+        <!-- On uploading error -->
         <div
           v-if="!uploading && error"
           class="error-message"
@@ -158,12 +165,22 @@ defineExpose({ show: () => modal.value?.show() })
               </li>
             </ul>
           </ul>
+          <div
+            v-if="hashExists"
+            class="warning-message"
+          >
+            <FontAwesomeIcon
+              :icon="faTriangleExclamation"
+              size="2x"
+            />
+            Аналогичный файл уже загружен ({{ hashExists }})
+          </div>
           <div style="display: flex; align-items: center; gap: 1rem">
             <p>Сохранить шаблон как:</p>
             <GooseInput
               v-model="saveAsFilename"
               style="flex-grow: 1"
-              :error="filenameTaken ? 'Имя занято' : ''"
+              :error="filenameExists ? 'Имя занято' : ''"
             />
             <GooseButton
               title="Загрузить"
@@ -186,6 +203,14 @@ defineExpose({ show: () => modal.value?.show() })
   .error-message
     align-items: center
     color: colors.$danger
+    display: flex
+    gap: 1rem
+    justify-content: center
+    padding: 1rem
+
+  .warning-message
+    align-items: center
+    color: colors.$warning
     display: flex
     gap: 1rem
     justify-content: center

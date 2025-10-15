@@ -38,6 +38,24 @@ export const validate = async (buffer: ArrayBuffer) => {
   }
 }
 
+export const checkFilenameExists = async (filename: string) => {
+  const connection = await connect(),
+    query = `SELECT COUNT(filename) AS filenameExists FROM templates WHERE filename = '${filename}'`,
+    [rows] = await connection.query<RowDataPacket[]>(query),
+    result = !!(rows[0]! as CheckFilenameQueryResult)['filenameExists']
+  await connection.end()
+  return result
+}
+
+const checkHashExists = async (hash: string) => {
+  const connection = await connect(),
+    query = `SELECT filename, COUNT(hash) AS hashExists FROM templates WHERE hash = '${hash}'`,
+    [rows] = await connection.query<RowDataPacket[]>(query),
+    result = rows[0]! as CheckHashQueryResult
+  await connection.end()
+  return !!result.hashExists && result.filename
+}
+
 export const upload = async (context: Context) => {
   await sleep(1000)
   const payload = await getPayload(context),
@@ -58,36 +76,25 @@ export const upload = async (context: Context) => {
     hash = createHash('sha256').update(buffer).digest('hex'),
     time = new Date().valueOf(),
     fullFilename = `${uploadsFolder}/${userId}-${time}-${attachment.name}`,
-    filenameHash = createHash('sha256').update(fullFilename).digest('hex')
+    filenameHash = createHash('sha256').update(fullFilename).digest('hex'),
+    filenameExists = await checkFilenameExists(attachment.name),
+    hashExists = await checkHashExists(hash)
+
   console.log(`Uploaded '${attachment.name}'
     size ${attachment.size}
     user ${userId}
     time ${time}
-    hash ${hash}`)
+    hash ${hash}
+    filename exists: ${filenameExists}
+    hash exists: ${hashExists}`)
+
   await fs.writeFile(`${uploadsFolder}/${filenameHash}`, buffer)
   console.log('Saved to disk: ', filenameHash)
   return context.json({
+    filenameExists, hashExists,
     worksheets: validation,
     key: filenameHash,
   })
-}
-
-export const checkFilenameExists = async (filename: string) => {
-  const connection = await connect(),
-    query = `SELECT COUNT(filename) AS filenameExists FROM templates WHERE filename = '${filename}'`,
-    [rows] = await connection.query<RowDataPacket[]>(query),
-    result = !!(rows[0]! as CheckFilenameQueryResult)['filenameExists']
-  await connection.end()
-  return result
-}
-
-const checkHashExists = async (hash: string) => {
-  const connection = await connect(),
-    query = `SELECT filename, COUNT(hash) AS hashExists FROM templates WHERE hash = '${hash}'`,
-    [rows] = await connection.query<RowDataPacket[]>(query),
-    result = rows[0]! as CheckHashQueryResult
-  await connection.end()
-  return result.hashExists && result.filename
 }
 
 export const sync = async (context: Context) => {
@@ -95,7 +102,7 @@ export const sync = async (context: Context) => {
   const files = await fs.readdir(templatesFolder)
   /* DB files */
   const connection = await connect(),
-    [rows] = await connection.query(`SELECT * FROM templates`)
+    [rows] = await connection.query(`SELECT filename, hash FROM templates`)
   await connection.end()
   console.log(files)
   console.log(rows)
@@ -134,4 +141,11 @@ export const save = async (context: Context) => {
     return context.json('Try again', 400)
   }
   return context.json('Ok')
+}
+
+export const getTemplates = async (context: Context) => {
+  const connection = await connect(),
+    [rows] = await connection.query(`SELECT date, userId, filename FROM templates`)
+  await connection.end()
+  return context.json(rows)
 }

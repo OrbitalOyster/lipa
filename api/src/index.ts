@@ -1,7 +1,7 @@
 import type { Context, Next } from 'hono'
 import { auth, logout } from './routes/auth'
 import { check, getPayload } from './routes/cookies'
-import { checkFilenameExists, save, sync, upload } from './xlsx/templates'
+import { checkFilenameExists, getTemplates, save, sync, upload } from './xlsx/templates'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -73,6 +73,7 @@ app.use(checkAuth)
 /* Templates upload */
 app.post('/upload', upload)
 app.get('/sync', sync)
+app.get('/templates', getTemplates)
 
 app.get('/check-filename', async (context: Context) => {
   const filename = context.req.query()['q']

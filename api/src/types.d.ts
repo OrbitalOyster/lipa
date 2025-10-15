@@ -43,6 +43,7 @@ declare global {
     status: string
   }
 
+  // TODO: Unused
   type sortableCols = 'date' | 'year'
 
   interface SaveTemplateRequest {
