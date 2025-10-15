@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { faTriangleExclamation, faFileExcel, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
+import { useFileDialog, watchDebounced } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GooseModal from '#components/GooseModal.vue'
 import axios from 'axios'
-import { useFileDialog } from '@vueuse/core'
 
 interface XLSXParseSuccess {
   worksheets: {
@@ -27,7 +27,8 @@ const apiEndpoint = import.meta.env.VITE_API_URI,
   parseResult = ref<XLSXParseSuccess | null>(null),
   error = ref(''),
   key = ref(''),
-  saveAsFilename = ref('')
+  saveAsFilename = ref(''),
+  filenameTaken = ref(false)
 
 if (!apiEndpoint)
   throw new Error('Missing api endpoint')
@@ -47,7 +48,7 @@ const resetUploadForm = () => {
 
 /* File selected */
 onChange((files) => {
-  if (!files || !files[0])
+  if (!files?.[0])
     return
 
   resetUploadForm()
@@ -87,11 +88,19 @@ const upload = async () => {
   const result = await axios.post(
     `${apiEndpoint}/save`, {
       key: key.value,
-      filename: saveAsFilename.value
-    }
+      filename: saveAsFilename.value,
+    },
   )
   console.log(result)
 }
+
+/* Filename check */
+const checkFilename = async () => {
+  const check = await axios.get(`${apiEndpoint}/check-filename?q=${saveAsFilename.value}`)
+  filenameTaken.value = check.data
+  console.log(saveAsFilename.value, filenameTaken.value)
+}
+watchDebounced(saveAsFilename, checkFilename, { debounce: 500 })
 
 defineExpose({ show: () => modal.value?.show() })
 </script>
@@ -154,6 +163,7 @@ defineExpose({ show: () => modal.value?.show() })
             <GooseInput
               v-model="saveAsFilename"
               style="flex-grow: 1"
+              :error="filenameTaken ? 'Имя занято' : ''"
             />
             <GooseButton
               title="Загрузить"
