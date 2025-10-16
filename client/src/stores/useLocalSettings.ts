@@ -20,6 +20,9 @@ const useLocalSettings = defineStore('settings', {
       sideBar: useLocalStorage('sidebar', ''),
       sideBarToggled: useLocalStorage('sidebar-toggled', true),
       tab: useLocalStorage('tab', 'initial'),
+      reportsPage: useLocalStorage('reports-page', 0),
+      reportsSortBy: useLocalStorage('reports-sort-by', 'date'),
+      reportsSortDesc: useLocalStorage('reports-sort-desc', false),
     }
   },
 })

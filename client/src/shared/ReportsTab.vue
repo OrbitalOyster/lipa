@@ -9,18 +9,13 @@ import GooseTable from '#components/GooseTable.vue'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
-import { useLocalStorage } from '@vueuse/core'
 
 const localSettings = useLocalSettings(),
-  page = useLocalStorage('reports-pagination-page', 0),
-  sortBy = useLocalStorage('reports-sort-by', 'date'),
-  sortDesc = useLocalStorage('reports-sort-desc', false)
-
-const pagination = ref({
-  size: localSettings.pageSize,
-  page: page.value,
-  total: 0,
-})
+  pagination = ref({
+    size: localSettings.pageSize,
+    page: localSettings.reportsPage,
+    total: 0,
+  })
 
 const tableModel = ref<TableModel<APIReport>>({
     headers: [
@@ -30,8 +25,8 @@ const tableModel = ref<TableModel<APIReport>>({
       { title: 'Год', sortable: true, prop: 'year' },
     ],
     rows: [],
-    sortBy: sortBy.value,
-    desc: sortDesc.value,
+    sortBy: localSettings.reportsSortBy,
+    desc: localSettings.reportsSortDesc,
     toggledItems: new Array(localSettings.pageSize).fill(false),
   }),
   loading = ref(true), /* On first load */
@@ -44,7 +39,7 @@ async function getData() {
     pagination.value.page,
     localSettings.fromDate,
     localSettings.toDate,
-    sortBy.value,
+    localSettings.reportsSortBy,
     tableModel.value.desc,
   )
   pagination.value = { ...apiReports }
@@ -55,9 +50,9 @@ async function getData() {
 async function update() {
   updating.value = true
   /* Set local settings */
-  page.value = pagination.value.page
-  sortBy.value = tableModel.value.sortBy
-  sortDesc.value = tableModel.value.desc
+  localSettings.reportsPage = pagination.value.page
+  localSettings.reportsSortBy = tableModel.value.sortBy
+  localSettings.reportsSortDesc = tableModel.value.desc
   await getData()
   updating.value = false
 }
