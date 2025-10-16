@@ -142,10 +142,3 @@ export const save = async (context: Context) => {
   }
   return context.json('Ok')
 }
-
-export const getTemplates = async (context: Context) => {
-  const connection = await connect(),
-    [rows] = await connection.query(`SELECT date, userId, filename FROM templates`)
-  await connection.end()
-  return context.json(rows)
-}

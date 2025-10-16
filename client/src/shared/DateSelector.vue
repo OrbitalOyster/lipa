@@ -3,60 +3,26 @@ import { computed, ref, watch } from 'vue'
 import GooseButton from '#components/GooseButton.vue'
 import GoosePopupMenu from '#components/GoosePopupMenu.vue'
 import GooseTooltip from '#components/GooseTooltip.vue'
+import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 
 const fromDate = defineModel<string>('fromDate', { required: true }),
   toDate = defineModel<string>('toDate', { required: true }),
   emit = defineEmits(['update']),
   showPopup = ref(false),
-  extraDates = [
+  timePeriods = [
     { id: 'currentMonth', title: 'Текущий месяц' },
     { id: 'previousMonth', title: 'Предыдущий месяц' },
     { id: 'today', title: 'Сегодня' },
     { id: 'yesterday', title: 'Вчера' },
     { id: 'fromJan1', title: 'С начала года' },
   ],
-  selectedExtraDate = ref(extraDates[0]!.id)
+  selectedPeriod = ref(timePeriods[0]!.id)
 
-function dateToYYYMMDD(d: Date) {
-  const offset = d.getTimezoneOffset(),
-    zeroDate = new Date(d.getTime() - offset * 60 * 1000) /* Hatred */
-  return zeroDate.toISOString().substring(0, 10)
-}
-
-function setDate(d: PresetDate) {
-  const now = new Date(),
-    year = now.getFullYear(),
-    month = now.getMonth(),
-    day = now.getDate()
-
-  switch (d) {
-    case 'currentMonth':
-      fromDate.value = dateToYYYMMDD(new Date(year, month, 1))
-      toDate.value = dateToYYYMMDD(new Date(year, month + 1, 0))
-      break
-
-    case 'previousMonth':
-      fromDate.value = dateToYYYMMDD(new Date(year, month - 1, 1))
-      toDate.value = dateToYYYMMDD(new Date(year, month, 0))
-      break
-
-    case 'today':
-      fromDate.value = dateToYYYMMDD(new Date(year, month, day))
-      toDate.value = dateToYYYMMDD(new Date(year, month, day))
-      break
-
-    case 'yesterday':
-      fromDate.value = dateToYYYMMDD(new Date(year, month, day - 1))
-      toDate.value = dateToYYYMMDD(new Date(year, month, day - 1))
-      break
-
-    case 'fromJan1':
-      fromDate.value = dateToYYYMMDD(new Date(year, 0, 1))
-      toDate.value = dateToYYYMMDD(new Date(year, month, day))
-      break
-  }
-
+function setDate(period: Period) {
+  const now = new Date()
+  fromDate.value = dateToPeriod(now, period).fromDate
+  toDate.value = dateToPeriod(now, period).toDate
   emit('update')
 }
 
@@ -99,9 +65,9 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
     >
   </GooseTooltip>
   <GoosePopupMenu
-    v-model="selectedExtraDate"
+    v-model="selectedPeriod"
     :active="showPopup"
-    :items="extraDates"
+    :items="timePeriods"
     @update="d => { showPopup=false; setDate(d)}"
   >
     <GooseButton

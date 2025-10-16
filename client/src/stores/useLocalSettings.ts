@@ -1,3 +1,4 @@
+import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
 import { defineStore } from 'pinia'
 import { useLocalStorage } from '@vueuse/core'
 
@@ -9,15 +10,18 @@ const pageSizes = [
 ]
 
 const useLocalSettings = defineStore('settings', {
-  state: () => ({
-    fromDate: useLocalStorage('from-date', '2025-01-01'),
-    toDate: useLocalStorage('to-date', '2025-01-31'),
-    pageSizes,
-    pageSize: useLocalStorage('pagination-size', 10),
-    sideBar: useLocalStorage('sidebar', ''),
-    sideBarToggled: useLocalStorage('sidebar-toggled', true),
-    tab: useLocalStorage('tab', 'initial'),
-  }),
+  state: () => {
+    const currentMonth = dateToPeriod(new Date(), 'currentMonth')
+    return {
+      fromDate: useLocalStorage('from-date', currentMonth.fromDate),
+      toDate: useLocalStorage('to-date', currentMonth.toDate),
+      pageSizes,
+      pageSize: useLocalStorage('pagination-size', 10),
+      sideBar: useLocalStorage('sidebar', ''),
+      sideBarToggled: useLocalStorage('sidebar-toggled', true),
+      tab: useLocalStorage('tab', 'initial'),
+    }
+  },
 })
 
 export { useLocalSettings }

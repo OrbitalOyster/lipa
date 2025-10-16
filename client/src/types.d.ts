@@ -103,6 +103,5 @@ declare global {
     toggledItems: boolean[]
   }
 
-  /* Reports tab */
-  type PresetDate = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
+  type Period = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
 }

@@ -22,7 +22,7 @@ const slots = useSlots(),
 
 const selectAllRef = computed({
     get() {
-      return model.value.rows.some(l => l.selected)
+      return model.value.rows.some(row => row.selected)
     },
     set(newValue) {
       for (const row of model.value.rows)
@@ -35,7 +35,7 @@ const selectAllRef = computed({
       if (!model.value.rows[0])
         return false
       const first = model.value.rows[0]
-      return model.value.rows.some(l => l.selected !== first.selected)
+      return model.value.rows.some(row => row.selected !== first.selected)
     },
   )
 
@@ -152,6 +152,7 @@ const selectAllRef = computed({
     gap: .25rem
     height: 100%
     justify-content: center
+    user-select: none
 
   th:first-child, td:first-child
     width: 4rem /* TODO: No magic numbers */

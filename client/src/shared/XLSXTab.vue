@@ -1,14 +1,29 @@
 <script setup lang="ts">
+import { ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseSelect from '#components/GooseSelect.vue'
+import GooseTable from '#components/GooseTable.vue'
 import UploadXLSX from '#shared/UploadXLSX.vue'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
-import { useTemplateRef } from 'vue'
 
 const localSettings = useLocalSettings(),
   uploadModalRef = useTemplateRef('uploadModal')
+
+/*
+const tableModel = ref<TableModel<APIReport>>({
+  headers: [
+    { title: 'Дата', sortable: true, prop: 'date' },
+    { title: 'Пользователь', prop: 'userId' },
+    { title: 'Имя файла', prop: 'filename' },
+  ],
+  rows: [],
+  sortBy: sortBy.value,
+  desc: sortDesc.value,
+  toggledItems: new Array(localSettings.pageSize).fill(false),
+}), */
+
 const update = () => {}
 
 </script>

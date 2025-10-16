@@ -1,36 +1,32 @@
 import type { Context } from 'hono'
 
-/*
- * size
- * page
- * fromDate
- * toDate
- * sortBy
- * desc
- */
-
 const maxSize = 100,
   defaultSort = 'date',
   defaultFromDate = '2025-01-01',
-  defaultToDate = '2025-12-01'
+  defaultToDate = '2025-12-31'
 
-export const parseQuery = (context: Context, sortable: string[], outOf: number) => {
+export const getMySQLDate = (date: Date) => {
+  return date.toISOString().slice(0, 19).replace('T', ' ')
+}
+
+export const parseQuery = (context: Context, sortable: string[]) => {
   /* Raw query */
-  let size = Number(context.req.query()['size']) || 10,
-    page = Number(context.req.query()['page']) || 0,
-    fromDate: string | Date = context.req.query()['fromDate'] || defaultFromDate,
-    toDate: string | Date = context.req.query()['toDate'] || defaultToDate,
-    sortBy = context.req.query()['sortBy'],
-    desc: string | boolean = context.req.query()['desc'] || 'false'
+  const query = context.req.query()
+  let size = Number(query['size']) || 10,
+    // page = Number(query()['page']) || 0,
+    fromDate: string | Date = query['fromDate'] || defaultFromDate,
+    toDate: string | Date = query['toDate'] || defaultToDate,
+    sortBy = query['sortBy'],
+    desc: string | boolean = query['desc'] || 'false'
   /* Validate size */
   if (size > maxSize)
     size = maxSize
   /* Validate page */
-  const totalPages = Math.ceil(outOf / size)
-  if (totalPages === 0)
-    page = 0
-  else if (page >= totalPages)
-    page = totalPages - 1
+  // const totalPages = Math.ceil(outOf / size)
+  // if (totalPages === 0)
+  //   page = 0
+  // else if (page >= totalPages)
+  //   page = totalPages - 1
   /* Validate sortBy */
   if (!sortBy || !sortable.includes(sortBy))
     sortBy = defaultSort
@@ -49,10 +45,10 @@ export const parseQuery = (context: Context, sortable: string[], outOf: number) 
   if (toDate.toJSON() === null)
     toDate = new Date(defaultToDate)
   toDate.setDate(toDate.getDate() + 1)
-
+  /* Done */
   return {
     size,
-    page,
+    // page,
     fromDate,
     toDate,
     sortBy,
