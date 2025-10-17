@@ -19,6 +19,12 @@ export const templates = async (context: Context) => {
     [rows] = await connection.query(query)
   console.log(query)
   await connection.end()
-
-  return context.json(rows)
+  return context.json({
+    page: 0,
+    size,
+    sortBy,
+    desc,
+    total: 1,
+    rows,
+  })
 }

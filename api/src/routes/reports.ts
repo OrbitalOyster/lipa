@@ -35,14 +35,12 @@ export const reports = async (context: Context) => {
 
   rows = rows.slice(page * size, (page + 1) * size) // Get page
 
-  return context.json(
-    {
-      page,
-      size,
-      sortBy,
-      desc,
-      total,
-      rows,
-    },
-  )
+  return context.json({
+    page,
+    size,
+    sortBy,
+    desc,
+    total,
+    rows,
+  })
 }
