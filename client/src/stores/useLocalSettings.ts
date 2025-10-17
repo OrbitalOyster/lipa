@@ -13,16 +13,20 @@ const useLocalSettings = defineStore('settings', {
   state: () => {
     const currentMonth = dateToPeriod(new Date(), 'currentMonth')
     return {
-      fromDate: useLocalStorage('from-date', currentMonth.fromDate),
-      toDate: useLocalStorage('to-date', currentMonth.toDate),
-      pageSizes,
-      pageSize: useLocalStorage('pagination-size', 10),
       sideBar: useLocalStorage('sidebar', ''),
       sideBarToggled: useLocalStorage('sidebar-toggled', true),
       tab: useLocalStorage('tab', 'initial'),
+      fromDate: useLocalStorage('from-date', currentMonth.fromDate),
+      toDate: useLocalStorage('to-date', currentMonth.toDate),
+      pageSizes, /* TODO: Here? */
+      reportsPageSize: useLocalStorage('reports-pagination-size', 10),
       reportsPage: useLocalStorage('reports-page', 0),
       reportsSortBy: useLocalStorage('reports-sort-by', 'date'),
       reportsSortDesc: useLocalStorage('reports-sort-desc', false),
+      templatesPage: useLocalStorage('templates-page', 0),
+      templatesPageSize: useLocalStorage('templates-pagination-size', 10),
+      templatesSortBy: useLocalStorage('templates-sort-by', 'date'),
+      templatesSortDesc: useLocalStorage('templates-sort-desc', false),
     }
   },
 })

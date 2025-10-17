@@ -59,6 +59,21 @@ declare global {
     parent?: string
   }
 
+  interface APITemplate {
+    date: string
+    userId: string
+    filename: string
+  }
+
+  interface FetchTemplatesResult {
+    page: number
+    size: number
+    sortBy: string
+    desc: boolean
+    total: number
+    rows: APITemplate[]
+  }
+
   interface APIReport {
     date: string
     org: string

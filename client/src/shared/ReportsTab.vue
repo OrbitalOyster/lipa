@@ -12,7 +12,7 @@ import { useLocalSettings } from '#stores/useLocalSettings.ts'
 
 const localSettings = useLocalSettings(),
   pagination = ref({
-    size: localSettings.pageSize,
+    size: localSettings.reportsPageSize,
     page: localSettings.reportsPage,
     total: 0,
   })
@@ -27,7 +27,7 @@ const tableModel = ref<TableModel<APIReport>>({
     rows: [],
     sortBy: localSettings.reportsSortBy,
     desc: localSettings.reportsSortDesc,
-    toggledItems: new Array(localSettings.pageSize).fill(false),
+    toggledItems: new Array(localSettings.reportsPageSize).fill(false),
   }),
   loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
@@ -35,7 +35,7 @@ const tableModel = ref<TableModel<APIReport>>({
 /* Request data */
 async function getData() {
   const apiReports = await useFetchReports(
-    localSettings.pageSize,
+    localSettings.reportsPageSize,
     pagination.value.page,
     localSettings.fromDate,
     localSettings.toDate,
@@ -44,7 +44,7 @@ async function getData() {
   )
   pagination.value = { ...apiReports }
   tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
-  tableModel.value.toggledItems = new Array(localSettings.pageSize).fill(false)
+  tableModel.value.toggledItems = new Array(localSettings.reportsPageSize).fill(false)
 }
 
 async function update() {
@@ -68,7 +68,7 @@ update()
       <p>Отчётов найдёно: {{ pagination.total }}</p>
       <p>Отображать по:</p>
       <GooseSelect
-        v-model="localSettings.pageSize"
+        v-model="localSettings.reportsPageSize"
         :items="localSettings.pageSizes"
         @update="update"
       />
