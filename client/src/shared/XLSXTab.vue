@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { faFile, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
+import GooseConfirm from '#components/GooseConfirm.vue'
 import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import UploadXLSX from '#shared/UploadXLSX.vue'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useFetchTemplates } from '#composables/useFetchData.ts'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
 
@@ -25,11 +26,13 @@ const localSettings = useLocalSettings(),
     total: 0,
   }),
   uploadModalRef = useTemplateRef('uploadModal'),
+  confirmDeleteRef = useTemplateRef('confirmDelete'),
   tableModel = ref<TableModel<XLSXTemplate>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Пользователь', prop: 'userId' },
       { title: 'Имя файла', sortable: true, prop: 'filename' },
+      { title: 'Операции', prop: 'actions' },
     ],
     rows: [],
     sortBy: localSettings.templatesSortBy,
@@ -49,10 +52,17 @@ async function getData() {
     localSettings.templatesSortBy,
     tableModel.value.desc,
   )
-  console.log(apiTemplates)
   pagination.value = { ...apiTemplates }
   tableModel.value.rows = apiTemplates.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(localSettings.templatesPageSize).fill(false)
+}
+
+const deleteTemplateConfirmed = (filename: string) => {
+  console.log('Delete', filename)
+}
+
+const viewTemplate = (filename: string) => {
+  console.log('View', filename)
 }
 
 async function update() {
@@ -71,6 +81,11 @@ update()
 </script>
 
 <template>
+  <GooseConfirm
+    ref="confirmDelete"
+    title="Удалить шаблон?"
+    @submit="deleteTemplateConfirmed"
+  />
   <UploadXLSX ref="uploadModal" />
   <div>
     <div class="filters">
@@ -111,9 +126,17 @@ update()
       <template #date="{td}">
         {{ new Date(td).toLocaleString('ru') }}
       </template>
-
-      <template #org="{td}">
-        Formatted: {{ td }} !
+      <template #actions="{row}">
+        <GooseButton
+          :icon="faFile"
+          transparent
+          @click="viewTemplate(row.filename)"
+        />
+        <GooseButton
+          :icon="faTrash"
+          transparent
+          @click="confirmDeleteRef?.show(`Удалить шаблон &quot;${row.filename}?&quot;`)"
+        />
       </template>
     </GooseTable>
     <div class="pagination">

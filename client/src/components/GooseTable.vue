@@ -91,7 +91,7 @@ const selectAllRef = computed({
             <slot
               v-if="slotNames.includes(header.prop)"
               :name="header.prop"
-              v-bind="{ td: row.data[header.prop] }"
+              v-bind="{ td: row.data[header.prop], row: row.data }"
             />
             <div v-else>
               {{ row.data[header.prop] }}

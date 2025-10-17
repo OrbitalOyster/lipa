@@ -11,7 +11,8 @@ defineProps<{
 
 const emit = defineEmits(['submit']),
   active = ref(false),
-  dialog = useTemplateRef('dialog')
+  dialog = useTemplateRef('dialog'),
+  altTitle = ref('')
 
 const { activate, deactivate } = useFocusTrap(dialog, {
   /* On escape */
@@ -21,8 +22,10 @@ const { activate, deactivate } = useFocusTrap(dialog, {
   },
 })
 
-async function show() {
+async function show(newAltTitle?: string) {
   active.value = true
+  if (newAltTitle)
+    altTitle.value = newAltTitle
   await nextTick()
   activate()
 }
@@ -51,7 +54,7 @@ defineExpose({ show })
               :icon="faTriangleExclamation"
               size="3x"
             />
-            {{ title }}
+            {{ altTitle || title }}
           </div>
           <footer>
             <GooseButton
