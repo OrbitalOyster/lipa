@@ -5,10 +5,8 @@ import connect from '../mysqlConnection.ts'
 import crypto from 'crypto'
 import { setTimeout as sleep } from 'node:timers/promises'
 
-const authDelay = 2000
-
 export const auth = async (context: Context) => {
-  await sleep(authDelay)
+  await sleep(2000)
   /* Get user credentials from request */
   const { userId, isOrg, password, rememberMe } = await context.req.json<AuthRequest>()
   try {

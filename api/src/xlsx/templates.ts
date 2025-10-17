@@ -125,9 +125,9 @@ export const save = async (context: Context) => {
       buffer = Buffer.from(file.buffer),
       hash = createHash('sha256').update(buffer).digest('hex')
     /* Check if hash is already taken */
-    const hashTaken = await checkHashExists(hash)
-    if (hashTaken)
-      throw new Error(`File exists: ${hashTaken}`)
+    const hashExists = await checkHashExists(hash)
+    if (hashExists)
+      throw new Error(`Hash exists: ${hashExists}`)
     /* Copy from tmp folder */
     await fs.copyFile(srcFile, `${templatesFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
     /* Query DB */

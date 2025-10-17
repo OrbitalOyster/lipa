@@ -3,13 +3,19 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Jun 09, 2025 at 01:21 PM
--- Server version: 11.7.2-MariaDB-ubu2404
--- PHP Version: 8.2.28
+-- Generation Time: Oct 17, 2025 at 11:17 AM
+-- Server version: 12.0.2-MariaDB-ubu2404
+-- PHP Version: 8.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `INSERT_DB_NAME`
@@ -25,7 +31,7 @@ USE `INSERT_DB_NAME`;
 
 DROP TABLE IF EXISTS `orgs`;
 CREATE TABLE IF NOT EXISTS `orgs` (
-  `id` varchar(16) NOT NULL,
+  `id` varchar(64) NOT NULL,
   `ord` int(4) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
   `shortName` varchar(256) DEFAULT NULL,
@@ -67,12 +73,36 @@ INSERT INTO `orgs` (`id`, `ord`, `name`, `shortName`, `address`, `passwordHash`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `templates`
+--
+
+DROP TABLE IF EXISTS `templates`;
+CREATE TABLE IF NOT EXISTS `templates` (
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `userId` varchar(64) NOT NULL,
+  `filename` varchar(256) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  PRIMARY KEY (`filename`),
+  UNIQUE KEY `hash` (`hash`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Dumping data for table `templates`
+--
+
+INSERT INTO `templates` (`date`, `userId`, `filename`, `hash`) VALUES
+('2025-10-17 09:21:29', '5000', 'foo-2.xlsx', 'e1f5179215d3eb82804c6ede56a24b01915740eb9b8a2f6669f51e6edb0047e7'),
+('2025-10-15 13:00:57', '6000', 'foo.xlsx', '8277744ca01b9b5ec14fee423919796c98723686f16643e644d319ca33ecb721');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `name` varchar(256) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `passwordHash` varchar(64) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
@@ -84,3 +114,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`name`, `passwordHash`) VALUES
 ('admin', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
 COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

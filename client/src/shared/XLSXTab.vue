@@ -29,7 +29,7 @@ const localSettings = useLocalSettings(),
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Пользователь', prop: 'userId' },
-      { title: 'Имя файла', prop: 'filename' },
+      { title: 'Имя файла', sortable: true, prop: 'filename' },
     ],
     rows: [],
     sortBy: localSettings.templatesSortBy,
@@ -131,7 +131,7 @@ update()
     v-else
     class="nothing-found"
   >
-    <p>Отчётов не найдено</p>
+    <p>Шаблонов не найдено</p>
   </div>
 </template>
 
@@ -142,10 +142,22 @@ update()
     justify-content: space-between
     padding: .5rem
 
+  .nothing-found
+    display: flex
+    justify-content: center
+    padding: 2rem
+
   .page-size-select
     align-items: center
     display: flex
     gap: 1rem
     justify-content: space-between
     width: 15rem
+
+  .pagination
+    height: 3rem
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 1rem
 </style>

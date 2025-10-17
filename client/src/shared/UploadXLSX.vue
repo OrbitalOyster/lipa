@@ -167,7 +167,7 @@ defineExpose({ show: () => modal.value?.show() })
           </ul>
           <div
             v-if="hashExists"
-            class="warning-message"
+            class="error-message"
           >
             <FontAwesomeIcon
               :icon="faTriangleExclamation"
@@ -185,6 +185,7 @@ defineExpose({ show: () => modal.value?.show() })
             <GooseButton
               title="Загрузить"
               :icon="faUpload"
+              :disabled="filenameExists || !!hashExists"
               @click="upload"
             />
           </div>
@@ -208,13 +209,13 @@ defineExpose({ show: () => modal.value?.show() })
     justify-content: center
     padding: 1rem
 
-  .warning-message
+  /* .warning-message
     align-items: center
     color: colors.$warning
     display: flex
     gap: 1rem
     justify-content: center
-    padding: 1rem
+    padding: 1rem */
 
   .table-name
     display: inline-flex

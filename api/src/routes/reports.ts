@@ -4,7 +4,7 @@ import { parseQuery } from '../utils'
 import { setTimeout as sleep } from 'node:timers/promises'
 
 export const reports = async (context: Context) => {
-  await sleep(300)
+  await sleep(500)
 
   const {
     size,
