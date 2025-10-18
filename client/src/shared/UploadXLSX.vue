@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faTriangleExclamation, faFileExcel, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faFileExcel, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import { useFileDialog, watchDebounced } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
