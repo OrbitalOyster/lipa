@@ -57,9 +57,7 @@ const localSettings = useLocalSettings(),
           </p>
         </div>
       </template>
-      <div style="display: flex; gap: 0rem; align-items: center; padding-left: 1rem">
-        <TopBar />
-      </div>
+      <TopBar />
       <main>
         <GooseTabs
           v-model="localSettings.tab"

@@ -78,6 +78,7 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       tooltip="Выбрать дату"
       tooltip-side="right"
       transparent
+      color="primary"
       @click="showPopup = !showPopup"
       @blur="showPopup = false"
     />

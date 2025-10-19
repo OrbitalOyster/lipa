@@ -72,12 +72,10 @@ const toggled = defineModel<boolean>({ required: true }),
     background-color: colors.$disabled
     border-radius: 1rem
     content: ""
-    filter: drop-shadow(colors.$button-shadow 0 .1rem .1rem)
     height: $mark-size
     left: calc($height / 2 - $mark-size / 2)
     position: absolute
     top: calc($height / 2 - $mark-size / 2)
-    transform: translateY(-.0625rem)
     transition: left transitions.$time transitions.$function, transitions.$focusable, transitions.$colors, transitions.$filter
     width: $mark-size
 
@@ -88,7 +86,7 @@ const toggled = defineModel<boolean>({ required: true }),
 
   /* On hover */
   button:not(:disabled):hover::after
-    filter: drop-shadow(colors.$button-shadow 0 .15rem .15rem)
+    filter: brightness(1.1)
 
   /* On active */
   button:active::after

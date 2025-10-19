@@ -4,9 +4,12 @@ import GooseTooltip from '#components/GooseTooltip.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { computed } from 'vue'
+
+type ButtonColor = 'primary' | 'warning' | 'danger'
 
 const props = defineProps<{
-    danger?: boolean
+    large?: boolean
     disabled?: boolean
     icon?: IconDefinition
     loading?: boolean
@@ -16,10 +19,18 @@ const props = defineProps<{
     tooltip?: string
     tooltipSide?: Side
     transparent?: boolean
-    warning?: boolean
+    color?: ButtonColor
   }>(),
   type = props.submit ? 'submit' : 'button',
-  emit = defineEmits(['click', 'blur'])
+  emit = defineEmits(['click', 'blur']),
+  classObject = computed(() => ({
+    large: props.large,
+    primary: props.color === 'primary' || (!props.color && !props.transparent),
+    warning: props.color === 'warning',
+    round: props.round,
+    transparent: props.transparent
+  }))
+  
 </script>
 
 <template>
@@ -31,7 +42,7 @@ const props = defineProps<{
       <button
         :disabled
         :type
-        :class="{ primary: !transparent, warning, danger, round, transparent }"
+        :class="classObject"
         :tabindex="transparent ? -1 : 0"
         @click="emit('click')"
         @blur="emit('blur')"
@@ -69,7 +80,6 @@ const props = defineProps<{
     color: colors.$button
     cursor: pointer
     display: inline-flex
-    filter: drop-shadow(colors.$button-shadow 0 .1rem .1rem)
     font-family: inherit
     font-size: 1.25rem
     gap: .5rem
@@ -81,6 +91,11 @@ const props = defineProps<{
     padding-left: .75rem
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors, transitions.$filter
+
+  .large
+    font-size: xx-large
+    min-height: 4rem
+    min-width: 4rem
 
   .title
     display: flex
@@ -118,7 +133,20 @@ const props = defineProps<{
     padding-left: 0
     padding-right: 0
 
+  .transparent.primary
+    color: colors.$primary
+
+  .transparent.warning
+    color: colors.$warning
+
+  .transparent.danger
+    color: colors.$danger
+
+  .transparent:active
+    background-color: transparent
+
   .transparent:disabled
+    background-color: transparent
     color: colors.$text-inactive
     cursor: not-allowed
 
@@ -127,7 +155,7 @@ const props = defineProps<{
 
   /* On hover */
   button:hover
-    filter: drop-shadow(colors.$button-shadow 0 .15rem .15rem)
+    filter: brightness(1.1)
 
   /* On focus */
   button:focus

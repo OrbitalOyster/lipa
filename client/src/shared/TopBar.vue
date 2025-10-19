@@ -26,6 +26,7 @@ async function logout() {
   />
   <header>
     <GooseButton
+      large
       transparent
       :icon="faBars"
       @click="localSettings.sideBarToggled = !localSettings.sideBarToggled"
@@ -49,7 +50,7 @@ async function logout() {
         :icon="faRightFromBracket"
         tooltip="Выйти из системы"
         tooltip-side="bottom"
-        warning
+        color="warning"
         @click="logoutConfirm?.show()"
       />
     </div>
@@ -58,11 +59,12 @@ async function logout() {
 
 <style lang="sass" scoped>
   header
-    display: flex
     align-items: center
+    box-sizing: border-box
+    display: flex
     justify-content: space-between
-    width: 100%
     padding: 1rem
+    width: 100%
 
   .username
     cursor: pointer

@@ -85,6 +85,7 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
     overflow-y: auto
     overscroll-behavior: none
     position: absolute
+    user-select: none
     z-index: 99
 
   li
