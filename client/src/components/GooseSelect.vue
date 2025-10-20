@@ -113,8 +113,6 @@ function keyScroll(direction: number) {
   .select-wrapper
     align-items: center
     display: flex
-    flex-grow: 1
-    margin: borders.$focus-outline-width
     position: relative
 
   button
@@ -128,7 +126,7 @@ function keyScroll(direction: number) {
     font: inherit
     height: 2.5rem
     outline: colors.$outline solid 0px
-    padding: .25rem 2.5rem 0.25rem .75rem
+    padding: .25rem 3rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     white-space: nowrap
     width: 100%
@@ -163,7 +161,7 @@ function keyScroll(direction: number) {
     display: inline-flex
     gap: .25rem
     position: absolute
-    right: 2.75rem
+    right: 2.8rem
 
   .chevron
     height: 1.5rem
@@ -171,7 +169,7 @@ function keyScroll(direction: number) {
     position: absolute
     right: 1rem
     transition: transitions.$transform
-    width: 1rem
+    width: 1.5rem
 
   button:disabled ~ .chevron
     color: colors.$disabled-primary

@@ -52,9 +52,7 @@ const toggled = defineModel<boolean>({ required: true }),
     border: 1px solid colors.$input-border
     box-sizing: content-box
     cursor: pointer
-    flex-shrink: 0
     height: $button-size
-    margin: borders.$focus-outline-width
     outline: colors.$outline solid 0px
     padding: 0
     position: relative

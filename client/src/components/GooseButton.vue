@@ -9,6 +9,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 type ButtonColor = 'primary' | 'warning' | 'danger'
 
 const props = defineProps<{
+    inline?: boolean
     large?: boolean
     disabled?: boolean
     icon?: IconDefinition
@@ -34,7 +35,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div style="display: inline-flex">
+  <div :class="{ inline }">
     <GooseTooltip
       :side="tooltipSide"
       :text="tooltip"
@@ -72,6 +73,9 @@ const props = defineProps<{
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  .inline
+    display: inline-flex
+
   /* Base */
   button
     align-items: center
@@ -79,19 +83,19 @@ const props = defineProps<{
     border: none
     color: colors.$button
     cursor: pointer
-    display: inline-flex
+    display: flex
     font-family: inherit
     font-size: 1.25rem
     font-weight: 500
     gap: .5rem
     justify-content: space-around
-    margin: borders.$focus-outline-width
     min-height: 3.25rem
     min-width: 3.25rem
     outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
     transition: transitions.$focusable, transitions.$colors
+    width: 100%
 
   .large
     font-size: xx-large

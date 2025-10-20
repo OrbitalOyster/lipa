@@ -81,7 +81,6 @@ const text = defineModel<string>({ required: true }),
   .input-wrapper
     align-items: center
     display: flex
-    margin: borders.$focus-outline-width
     position: relative
 
   /* Base */
@@ -125,5 +124,5 @@ const text = defineModel<string>({ required: true }),
     display: flex
     gap: .25rem
     position: absolute
-    right: .5rem
+    right: 1rem
 </style>

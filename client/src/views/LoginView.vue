@@ -168,7 +168,7 @@ onMounted(async () => {
     display: flex
     filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
     flex-direction: column
-    gap: .25rem
+    gap: .5rem
     height: fit-content
     margin-bottom: .25rem
     min-width: 36rem
@@ -204,6 +204,7 @@ onMounted(async () => {
     align-items: center
     display: flex
     justify-content: space-between
+    margin-top: .5rem
 
   .copyright
     align-items: center

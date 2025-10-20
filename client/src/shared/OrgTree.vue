@@ -41,6 +41,7 @@ if (!userId)
     <div class="select-buttons">
       <GooseButton
         title="Выбрать всех"
+        style="flex-grow: 1"
         @click="treeRef?.toggleAll(true)"
       />
       <GooseButton
@@ -90,5 +91,6 @@ if (!userId)
 
   .select-buttons
     display: flex
-    justify-content: space-around
+    gap: .5rem
+    justify-content: space-between
 </style>

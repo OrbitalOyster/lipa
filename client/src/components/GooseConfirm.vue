@@ -111,5 +111,6 @@ defineExpose({ show })
 
   footer
     display: flex
+    gap: .5rem
     justify-content: end
 </style>
