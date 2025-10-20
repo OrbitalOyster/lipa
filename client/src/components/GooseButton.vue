@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseTooltip from '#components/GooseTooltip.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { computed } from 'vue'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 type ButtonColor = 'primary' | 'warning' | 'danger'
 
@@ -27,10 +27,10 @@ const props = defineProps<{
     large: props.large,
     primary: props.color === 'primary' || (!props.color && !props.transparent),
     warning: props.color === 'warning',
+    danger: props.color === 'danger',
     round: props.round,
-    transparent: props.transparent
+    transparent: props.transparent,
   }))
-  
 </script>
 
 <template>
@@ -82,6 +82,7 @@ const props = defineProps<{
     display: inline-flex
     font-family: inherit
     font-size: 1.25rem
+    font-weight: 500
     gap: .5rem
     justify-content: space-around
     margin: borders.$focus-outline-width
@@ -90,7 +91,7 @@ const props = defineProps<{
     outline: colors.$outline solid 0px
     padding-left: .75rem
     padding-right: .75rem
-    transition: transitions.$focusable, transitions.$colors, transitions.$filter
+    transition: transitions.$focusable, transitions.$colors
 
   .large
     font-size: xx-large
@@ -108,9 +109,6 @@ const props = defineProps<{
 
   .primary:active
     background-color: colors.$active
-
-  .primary:disabled
-    background-color: colors.$disabled-primary
 
   .warning
     background-color: colors.$warning
@@ -154,7 +152,7 @@ const props = defineProps<{
     border-radius: 100%
 
   /* On hover */
-  button:hover
+  button:hover:not(:disabled)
     filter: brightness(1.1)
 
   /* On focus */
@@ -163,7 +161,7 @@ const props = defineProps<{
 
   /* On disabled */
   button:disabled
+    background-color: colors.$disabled-primary
     color: colors.$disabled
     cursor: not-allowed
-    filter: none
 </style>

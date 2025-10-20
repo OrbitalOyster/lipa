@@ -130,11 +130,13 @@ update()
         <GooseButton
           :icon="faFile"
           transparent
+          color="primary"
           @click="viewTemplate(row.filename)"
         />
         <GooseButton
           :icon="faTrash"
           transparent
+          color="danger"
           @click="confirmDeleteRef?.show(`Удалить шаблон &quot;${row.filename}?&quot;`)"
         />
       </template>
