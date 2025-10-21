@@ -20,11 +20,6 @@ interface XLSXTemplate
 }
 
 const localSettings = useLocalSettings(),
-  pagination = ref({
-    size: localSettings.templatesPageSize,
-    page: localSettings.templatesPage,
-    total: 0,
-  }),
   uploadModalRef = useTemplateRef('uploadModal'),
   confirmDeleteRef = useTemplateRef('confirmDelete'),
   tableModel = ref<TableModel<XLSXTemplate>>({
@@ -42,17 +37,26 @@ const localSettings = useLocalSettings(),
   loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
+/* Pagination */
+let size = localSettings.templatesPageSize,
+  page = localSettings.templatesPage,
+  total = 0
+
 /* Request data */
 async function getData() {
   const apiTemplates = await useFetchTemplates(
     localSettings.templatesPageSize,
-    pagination.value.page,
+    page,
     localSettings.fromDate,
     localSettings.toDate,
     localSettings.templatesSortBy,
     tableModel.value.desc,
   )
-  pagination.value = { ...apiTemplates }
+
+  size = apiTemplates.size
+  page = apiTemplates.page
+  total = apiTemplates.total
+
   tableModel.value.rows = apiTemplates.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(localSettings.templatesPageSize).fill(false)
 }
@@ -68,7 +72,7 @@ const viewTemplate = (filename: string) => {
 async function update() {
   updating.value = true
   /* Set local settings */
-  localSettings.templatesPage = pagination.value.page
+  localSettings.templatesPage = page
   localSettings.templatesSortBy = tableModel.value.sortBy
   localSettings.templatesSortDesc = tableModel.value.desc
   await getData()
@@ -143,7 +147,9 @@ update()
     </GooseTable>
     <div class="pagination">
       <GoosePagination
-        v-model="pagination"
+        v-model="page"
+        :size
+        :total
         :first-pages="5"
         :middle-pages="1"
         :last-pages="1"

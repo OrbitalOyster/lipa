@@ -11,13 +11,7 @@ import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalSettings } from '#stores/useLocalSettings.ts'
 
 const localSettings = useLocalSettings(),
-  pagination = ref({
-    size: localSettings.reportsPageSize,
-    page: localSettings.reportsPage,
-    total: 0,
-  })
-
-const tableModel = ref<TableModel<APIReport>>({
+  tableModel = ref<TableModel<APIReport>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Организация', prop: 'org' },
@@ -32,17 +26,26 @@ const tableModel = ref<TableModel<APIReport>>({
   loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
+/* Pagination */
+let size = localSettings.reportsPageSize,
+  page = localSettings.reportsPage,
+  total = 0
+
 /* Request data */
 async function getData() {
   const apiReports = await useFetchReports(
     localSettings.reportsPageSize,
-    pagination.value.page,
+    page,
     localSettings.fromDate,
     localSettings.toDate,
     localSettings.reportsSortBy,
     tableModel.value.desc,
   )
-  pagination.value = { ...apiReports }
+
+  size = apiReports.size
+  page = apiReports.page
+  total = apiReports.total
+
   tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
   tableModel.value.toggledItems = new Array(localSettings.reportsPageSize).fill(false)
 }
@@ -50,7 +53,7 @@ async function getData() {
 async function update() {
   updating.value = true
   /* Set local settings */
-  localSettings.reportsPage = pagination.value.page
+  localSettings.reportsPage = page
   localSettings.reportsSortBy = tableModel.value.sortBy
   localSettings.reportsSortDesc = tableModel.value.desc
   await getData()
@@ -65,7 +68,7 @@ update()
 <template>
   <div class="filters">
     <div class="page-size-select">
-      <p>Отчётов найдёно: {{ pagination.total }}</p>
+      <p>Отчётов найдёно: {{ total }}</p>
       <p>Отображать по:</p>
       <GooseSelect
         v-model="localSettings.reportsPageSize"
@@ -115,7 +118,10 @@ update()
     </GooseTable>
     <div class="pagination">
       <GoosePagination
-        v-model="pagination"
+        v-model="page"
+        :size
+        :total
+        storage="foo"
         :first-pages="5"
         :middle-pages="1"
         :last-pages="1"

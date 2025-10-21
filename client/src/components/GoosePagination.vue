@@ -1,24 +1,21 @@
 <script setup lang="ts">
-
 import { faChevronLeft, faChevronRight, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed } from 'vue'
-
-interface Pagination {
-  size: number
-  page: number
-  total: number
-}
+// import { useLocalStorage } from '@vueuse/core'
 
 const props = defineProps<{
+    // storage?: string
+    size: number
+    total: number
     firstPages: number
     middlePages: number
     lastPages: number
     disabled: boolean
   }>(),
-  model = defineModel<Pagination>({ required: true }),
+  model = defineModel<number>({ required: true }),
   emit = defineEmits(['update']),
-  totalPages = computed(() => Math.ceil(model.value.total / model.value.size))
+  totalPages = computed(() => Math.ceil(props.total / props.size))
 
 function isPageVisible(n: number, active: number, total: number) {
   /* First and last pages */
@@ -39,18 +36,17 @@ function isPageVisible(n: number, active: number, total: number) {
 
 function setPage(i: number) {
   /* If we're actually changing pages */
-  if (model.value.page !== i) {
-    model.value.page = i
+  if (model.value !== i) {
+    model.value = i
     /* Not going over */
-    if (model.value.page >= totalPages.value)
-      model.value.page = totalPages.value - 1
+    if (model.value >= totalPages.value)
+      model.value = totalPages.value - 1
     /* Not going under */
-    if (model.value.page < 0)
-      model.value.page = 0
+    if (model.value < 0)
+      model.value = 0
     emit('update')
   }
 }
-
 </script>
 
 <template>
@@ -59,7 +55,7 @@ function setPage(i: number) {
       class="arrow"
       :icon="faChevronLeft"
       size="lg"
-      @click="model.page && setPage(model.page - 1)"
+      @click="model && setPage(model - 1)"
     />
 
     <template
@@ -67,14 +63,14 @@ function setPage(i: number) {
       :key="i"
     >
       <li
-        v-if="isPageVisible(i - 1, model.page, totalPages)"
+        v-if="isPageVisible(i - 1, model, totalPages)"
         class="page"
-        :class="{ active: i - 1 === model.page }"
+        :class="{ active: i - 1 === model }"
         @click="setPage(i - 1)"
       >
         {{ i }}
       </li>
-      <template v-else-if="isPageVisible(i - 2, model.page, totalPages)">
+      <template v-else-if="isPageVisible(i - 2, model, totalPages)">
         <FontAwesomeIcon
           :icon="faEllipsis"
           size="lg"
@@ -86,7 +82,7 @@ function setPage(i: number) {
       class="arrow"
       :icon="faChevronRight"
       size="lg"
-      @click="(model.page !== totalPages - 1) && setPage(model.page + 1)"
+      @click="(model !== totalPages - 1) && setPage(model + 1)"
     />
   </ul>
 </template>
