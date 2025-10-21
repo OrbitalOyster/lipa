@@ -111,7 +111,6 @@ onMounted(async () => {
             password
             placeholder="Пароль"
             tag="input"
-            tooltip="Без римских цифр"
           />
           <footer>
             <GooseCheckbox
@@ -177,9 +176,8 @@ onMounted(async () => {
   header
     align-items: center
     display: flex
-    gap: 1rem
     justify-content: space-between
-    padding: .5rem
+    margin-bottom: .5rem
 
   hgroup
     display: flex
