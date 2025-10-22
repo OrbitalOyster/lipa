@@ -6,11 +6,25 @@ import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
+import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
 import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
-import { useLocalSettings } from '#stores/useLocalSettings.ts'
+import { useLocalStorage } from '@vueuse/core'
 
-const localSettings = useLocalSettings(),
+const pageSizes = [
+  { id: 10, title: '10' },
+  { id: 25, title: '25' },
+  { id: 50, title: '50' },
+  { id: 100, title: '100' },
+]
+
+const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
+  fromDate = useLocalStorage('from-date', currentMonth.fromDate),
+  toDate = useLocalStorage('to-date', currentMonth.toDate),
+  sortBy = useLocalStorage('reports-sort-by', 'date'),
+  desc = useLocalStorage('reports-sort-desc', false),
+  size = useLocalStorage('reports-pagination-size', 10),
+  page = useLocalStorage('reports-page', 0),
   tableModel = ref<TableModel<APIReport>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
@@ -19,44 +33,26 @@ const localSettings = useLocalSettings(),
       { title: 'Год', sortable: true, prop: 'year' },
     ],
     rows: [],
-    sortBy: localSettings.reportsSortBy,
-    desc: localSettings.reportsSortDesc,
-    toggledItems: new Array(localSettings.reportsPageSize).fill(false),
   }),
   loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
-/* Pagination */
-let size = localSettings.reportsPageSize,
-  page = localSettings.reportsPage,
-  total = 0
-
-/* Request data */
-async function getData() {
-  const apiReports = await useFetchReports(
-    localSettings.reportsPageSize,
-    page,
-    localSettings.fromDate,
-    localSettings.toDate,
-    localSettings.reportsSortBy,
-    tableModel.value.desc,
-  )
-
-  size = apiReports.size
-  page = apiReports.page
-  total = apiReports.total
-
-  tableModel.value.rows = apiReports.rows.map(r => ({ selected: false, data: r }))
-  tableModel.value.toggledItems = new Array(localSettings.reportsPageSize).fill(false)
-}
+let total = 0
 
 async function update() {
   updating.value = true
-  /* Set local settings */
-  localSettings.reportsPage = page
-  localSettings.reportsSortBy = tableModel.value.sortBy
-  localSettings.reportsSortDesc = tableModel.value.desc
-  await getData()
+  const apiReports = await useFetchReports(
+    size.value,
+    page.value,
+    fromDate.value,
+    toDate.value,
+    sortBy.value,
+    desc.value,
+  )
+  size.value = apiReports.size
+  page.value = apiReports.page
+  total = apiReports.total
+  tableModel.value.rows = apiReports.rows.map(r => ({ toggled: false, data: r }))
   updating.value = false
 }
 
@@ -71,15 +67,15 @@ update()
       <p>Отчётов найдёно: {{ total }}</p>
       <p>Отображать по:</p>
       <GooseSelect
-        v-model="localSettings.reportsPageSize"
-        :items="localSettings.pageSizes"
+        v-model="size"
+        :items="pageSizes"
         @update="update"
       />
     </div>
     <div style="display: flex; align-items: center">
       <DateSelector
-        v-model:from-date="localSettings.fromDate"
-        v-model:to-date="localSettings.toDate"
+        v-model:from-date="fromDate"
+        v-model:to-date="toDate"
         @update="update"
       />
     </div>
@@ -94,7 +90,7 @@ update()
         tooltip="Обновить список"
         tooltip-side="top"
         :loading
-        @click="async () => { loading = true; await getData(); loading = false }"
+        @click="async () => { loading = true; await update(); loading = false }"
       />
     </div>
   </div>
@@ -105,6 +101,8 @@ update()
   <div v-else-if="tableModel.rows.length">
     <GooseTable
       v-model="tableModel"
+      v-model:sort-by="sortBy"
+      v-model:desc="desc"
       :updating
       @update="update"
     >
@@ -121,7 +119,6 @@ update()
         v-model="page"
         :size
         :total
-        storage="foo"
         :first-pages="5"
         :middle-pages="1"
         :last-pages="1"

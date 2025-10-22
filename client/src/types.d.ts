@@ -106,16 +106,13 @@ declare global {
   }
 
   interface TableRow<T> {
-    selected: boolean
+    toggled: boolean
     data: T
   }
 
   interface TableModel<T> {
     headers: TableHeader[]
     rows: TableRow<T>[]
-    sortBy: string
-    desc: boolean
-    toggledItems: boolean[]
   }
 
   type Period = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'

@@ -11,22 +11,24 @@ defineProps<{
 const slots = useSlots(),
   slotNames = Object.keys(slots),
   model = defineModel<TableModel<T>>({ required: true }),
+  sortBy = defineModel<string>('sortBy'),
+  desc = defineModel<boolean>('desc'),
   emit = defineEmits<{ update: [] }>(),
   sort = (column: string) => {
-    if (model.value.sortBy === column)
-      model.value.desc = !model.value.desc
+    if (sortBy.value === column)
+      desc.value = !desc.value
     else
-      model.value.sortBy = column
+      sortBy.value = column
     emit('update')
   }
 
 const selectAllRef = computed({
     get() {
-      return model.value.rows.some(row => row.selected)
+      return model.value.rows.some(row => row.toggled)
     },
     set(newValue) {
       for (const row of model.value.rows)
-        row.selected = newValue
+        row.toggled = newValue
     },
   }),
   selectAllIndetermitate = computed(
@@ -35,10 +37,9 @@ const selectAllRef = computed({
       if (!model.value.rows[0])
         return false
       const first = model.value.rows[0]
-      return model.value.rows.some(row => row.selected !== first.selected)
+      return model.value.rows.some(row => row.toggled !== first.toggled)
     },
   )
-
 </script>
 
 <template>
@@ -66,8 +67,8 @@ const selectAllRef = computed({
               {{ header.title }}
             </div>
             <FontAwesomeIcon
-              v-if="model.sortBy === header.prop"
-              :icon="model.desc ? faArrowDownWideShort : faArrowDownShortWide"
+              v-if="sortBy === header.prop"
+              :icon="desc ? faArrowDownWideShort : faArrowDownShortWide"
             />
           </div>
         </th>
@@ -80,7 +81,7 @@ const selectAllRef = computed({
       >
         <td>
           <div>
-            <GooseCheckbox v-model="row.selected" />
+            <GooseCheckbox v-model="row.toggled" />
           </div>
         </td>
         <td
