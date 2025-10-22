@@ -11,10 +11,9 @@ import OrgTree from '#shared/OrgTree.vue'
 import ReportsTab from '#shared/ReportsTab.vue'
 import TopBar from '#shared/TopBar.vue'
 import XLSXTab from '#shared/XLSXTab.vue'
-import { useLocalSettings } from '#stores/useLocalSettings.ts'
+import { useLocalStorage } from '@vueuse/core'
 
-const localSettings = useLocalSettings(),
-  accordionItems = [
+const accordionItems = [
     { id: 'orgs', title: 'Организации', icon: faBuilding },
     { id: 'forms', title: 'Формы', icon: faClipboard },
     { id: 'statuses', title: 'Статусы', icon: faPencil },
@@ -23,20 +22,23 @@ const localSettings = useLocalSettings(),
     { id: 'xlsx', title: 'Шаблоны', icon: faFileExcel },
     { id: 'initial', title: 'Первичные отчёты', icon: faClipboard },
     { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
-  ]
+  ],
+  sideBarToggled = useLocalStorage('sidebar-toggled', false),
+  sideBar = useLocalStorage('sidebar', undefined),
+  tab = useLocalStorage('tab', 'initial')
 </script>
 
 <template>
   <div class="home-view-wrapper">
     <GooseSidebar
-      :toggled="localSettings.sideBarToggled"
+      :toggled="sideBarToggled"
       width="36rem"
     >
       <template #sidebar>
         <div class="accordion-wrapper">
           <MainLogo />
           <GooseAccordion
-            v-model:opened="localSettings.sideBar"
+            v-model:opened="sideBar"
             :items="accordionItems"
           >
             <template #orgs>
@@ -60,7 +62,7 @@ const localSettings = useLocalSettings(),
       <TopBar />
       <main>
         <GooseTabs
-          v-model="localSettings.tab"
+          v-model="tab"
           :slots
         >
           <template #xlsx>
