@@ -10,7 +10,7 @@ import { useUserStore } from '#stores/useUserStore.ts'
 const userStore = useUserStore(),
   router = useRouter(),
   logoutConfirm = useTemplateRef('logoutConfirm'),
-  sidebarToggled = useLocalStorage('sidebarToggled', true)
+  sidebarToggled = useLocalStorage('sidebar-toggled', true)
 
 async function logout() {
   await userStore.logout()
