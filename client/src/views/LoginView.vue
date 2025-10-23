@@ -94,10 +94,10 @@ onMounted(async () => {
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled
+            name="username"
             autocomplete="username"
             placeholder="Имя пользователя"
             tooltip="Логин латинскими символами"
-            tooltip-side="left"
             tag="input"
           />
           <!-- Password -->
@@ -106,8 +106,8 @@ onMounted(async () => {
             v-model="password"
             :checks="['required']"
             :disabled
-            autocomplete="current-password"
             name="password"
+            autocomplete="current-password"
             password
             placeholder="Пароль"
             tag="input"
@@ -132,7 +132,6 @@ onMounted(async () => {
               submit
               title="Войти"
               tooltip="А ещё можно нажать на Enter"
-              tooltip-side="right"
             />
           </footer>
         </main>
@@ -171,13 +170,13 @@ onMounted(async () => {
     height: fit-content
     margin-bottom: .25rem
     min-width: 36rem
-    padding: .75rem
+    padding: 1rem
 
   header
     align-items: center
     display: flex
     justify-content: space-between
-    margin-bottom: .5rem
+    margin-bottom: 1rem
 
   hgroup
     display: flex
