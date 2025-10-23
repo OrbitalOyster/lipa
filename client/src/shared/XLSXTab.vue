@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { faFile, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { ref, useTemplateRef } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
 import GooseConfirm from '#components/GooseConfirm.vue'
-import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
@@ -12,13 +11,6 @@ import UploadXLSX from '#shared/UploadXLSX.vue'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
 import { useFetchTemplates } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
-
-interface XLSXTemplate
-{
-  date: string
-  userId: string
-  filename: string
-}
 
 const pageSizes = [
   { id: 10, title: '10' },
@@ -34,10 +26,9 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
   desc = useLocalStorage('templates-sort-desc', false),
   size = useLocalStorage('templates-pagination-size', 10),
   page = useLocalStorage('templates-page', 0),
-
   uploadModalRef = useTemplateRef('uploadModal'),
   confirmDeleteRef = useTemplateRef('confirmDelete'),
-  tableModel = ref<TableModel<XLSXTemplate>>({
+  tableModel = ref<TableModel<APITemplate>>({
     headers: [
       { title: 'Дата', sortable: true, prop: 'date' },
       { title: 'Пользователь', prop: 'userId' },
@@ -46,7 +37,6 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
     ],
     rows: [],
   }),
-  loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
 let total = 0
@@ -76,9 +66,7 @@ async function update() {
   updating.value = false
 }
 
-update()
-  .then(() => loading.value = false)
-  .catch((err) => { throw Error(`Error updating: ${err}`) })
+onMounted(async () => await update())
 </script>
 
 <template>
@@ -114,54 +102,50 @@ update()
       </div>
     </div>
   </div>
-  <!-- On loading -->
-  <div v-if="loading">
-    <GooseLoading />
-  </div>
-  <div v-else-if="tableModel.rows.length">
-    <GooseTable
-      v-model="tableModel"
-      v-model:sort-by="sortBy"
-      v-model:desc="desc"
-      :updating
-      @update="update"
-    >
-      <template #date="{td}">
-        {{ new Date(td).toLocaleString('ru') }}
-      </template>
-      <template #actions="{row}">
-        <GooseButton
-          :icon="faFile"
-          transparent
-          color="primary"
-          @click="viewTemplate(row.filename)"
-        />
-        <GooseButton
-          :icon="faTrash"
-          transparent
-          color="danger"
-          @click="confirmDeleteRef?.show(`Удалить шаблон &quot;${row.filename}?&quot;`)"
-        />
-      </template>
-    </GooseTable>
-    <div class="pagination">
-      <GoosePagination
-        v-model="page"
-        :size
-        :total
-        :first-pages="5"
-        :middle-pages="1"
-        :last-pages="1"
-        :disabled="loading || updating"
-        @update="update"
-      />
-    </div>
-  </div>
-  <div
-    v-else
-    class="nothing-found"
+  <GooseTable
+    v-model="tableModel"
+    v-model:sort-by="sortBy"
+    v-model:desc="desc"
+    :updating
+    @update="update"
   >
-    <p>Шаблонов не найдено</p>
+    <template #date="{td}">
+      {{ new Date(td).toLocaleString('ru') }}
+    </template>
+
+    <template #actions="{row}">
+      <GooseButton
+        :icon="faFile"
+        transparent
+        color="primary"
+        @click="viewTemplate(row.filename)"
+      />
+      <GooseButton
+        :icon="faTrash"
+        transparent
+        color="danger"
+        @click="confirmDeleteRef?.show(`Удалить шаблон &quot;${row.filename}?&quot;`)"
+      />
+    </template>
+    <!-- On nothing found -->
+    <template #empty>
+      Шаблонов не найдено
+    </template>
+  </GooseTable>
+  <div
+    v-if="tableModel.rows.length"
+    class="pagination"
+  >
+    <GoosePagination
+      v-model="page"
+      :size
+      :total
+      :first-pages="5"
+      :middle-pages="1"
+      :last-pages="1"
+      :disabled="updating"
+      @update="update"
+    />
   </div>
 </template>
 

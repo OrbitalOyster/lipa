@@ -2,10 +2,8 @@
 import { faChevronLeft, faChevronRight, faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed } from 'vue'
-// import { useLocalStorage } from '@vueuse/core'
 
 const props = defineProps<{
-    // storage?: string
     size: number
     total: number
     firstPages: number
@@ -21,16 +19,14 @@ function isPageVisible(n: number, active: number, total: number) {
   /* First and last pages */
   if (n < props.firstPages || n >= total - props.lastPages)
     return true
-
   /* Pages around active */
   if (n >= active - 1 && n <= active + 1)
     return true
-
   /* Pages around middle section */
   const m = Math.round(total / 2)
   if (n + 1 >= m - props.middlePages && n + 1 <= m + props.middlePages)
     return true
-
+  /* Rest of them */
   return false
 }
 
@@ -51,13 +47,15 @@ function setPage(i: number) {
 
 <template>
   <ul :class="{ disabled }">
+    <!-- Arrow left -->
     <FontAwesomeIcon
+      v-if="totalPages > 1"
       class="arrow"
       :icon="faChevronLeft"
       size="lg"
       @click="model && setPage(model - 1)"
     />
-
+    <!-- Pages -->
     <template
       v-for="i in totalPages"
       :key="i"
@@ -70,15 +68,15 @@ function setPage(i: number) {
       >
         {{ i }}
       </li>
-      <template v-else-if="isPageVisible(i - 2, model, totalPages)">
-        <FontAwesomeIcon
-          :icon="faEllipsis"
-          size="lg"
-        />
-      </template>
+      <FontAwesomeIcon
+        v-else-if="isPageVisible(i - 2, model, totalPages)"
+        :icon="faEllipsis"
+        size="lg"
+      />
     </template>
-
+    <!-- Arrow right -->
     <FontAwesomeIcon
+      v-if="totalPages > 1"
       class="arrow"
       :icon="faChevronRight"
       size="lg"

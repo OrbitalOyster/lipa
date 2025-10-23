@@ -24,7 +24,7 @@ const accordionItems = [
     { id: 'complex', title: 'Сводные отчёты', icon: faClipboardList },
   ],
   sideBarToggled = useLocalStorage('sidebar-toggled', false),
-  sideBar = useLocalStorage('sidebar', undefined),
+  sideBar = useLocalStorage('sidebar', ''),
   tab = useLocalStorage('tab', 'initial')
 </script>
 

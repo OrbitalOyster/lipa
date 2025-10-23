@@ -3,6 +3,7 @@ import { computed, useSlots } from 'vue'
 import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseCheckbox from '#components/GooseCheckbox.vue'
+import GooseLoading from '#components/GooseLoading.vue'
 
 defineProps<{
   updating: boolean
@@ -102,6 +103,15 @@ const selectAllRef = computed({
       </tr>
     </tbody>
   </table>
+  <!-- Pretty animation on updating -->
+  <GooseLoading v-if="updating && model.rows.length === 0" />
+  <!-- On empty table -->
+  <div
+    v-if="!updating && model.rows.length === 0"
+    class="empty-table"
+  >
+    <slot name="empty" />
+  </div>
 </template>
 
 <style lang="sass" scoped>
@@ -160,4 +170,9 @@ const selectAllRef = computed({
 
   tr:nth-child(even)
     background-color:  #E8F8F5
+
+  .empty-table
+    display: flex
+    justify-content: center
+    padding: 2rem
   </style>

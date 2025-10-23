@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons'
+import { onMounted, ref } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
-import GooseLoading from '#components/GooseLoading.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import { ref } from 'vue'
 import useFetchReports from '#composables/useFetchReports.ts'
 import { useLocalStorage } from '@vueuse/core'
 
@@ -34,7 +33,6 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
     ],
     rows: [],
   }),
-  loading = ref(true), /* On first load */
   updating = ref(false) /* On page change */
 
 let total = 0
@@ -56,9 +54,7 @@ async function update() {
   updating.value = false
 }
 
-update()
-  .then(() => loading.value = false)
-  .catch((err) => { throw Error(`Error updating: ${err}`) })
+onMounted(async () => await update())
 </script>
 
 <template>
@@ -87,51 +83,46 @@ update()
       />
       <GooseButton
         :icon="faRotate"
+        :loading="updating"
         tooltip="Обновить список"
         tooltip-side="top"
-        :loading
-        @click="async () => { loading = true; await update(); loading = false }"
+        @click="async () => { await update() }"
       />
     </div>
   </div>
-  <!-- On loading -->
-  <div v-if="loading">
-    <GooseLoading />
-  </div>
-  <div v-else-if="tableModel.rows.length">
-    <GooseTable
-      v-model="tableModel"
-      v-model:sort-by="sortBy"
-      v-model:desc="desc"
-      :updating
-      @update="update"
-    >
-      <template #date="{td}">
-        {{ new Date(td).toLocaleString('ru') }}
-      </template>
-
-      <template #org="{td}">
-        Formatted: {{ td }} !
-      </template>
-    </GooseTable>
-    <div class="pagination">
-      <GoosePagination
-        v-model="page"
-        :size
-        :total
-        :first-pages="5"
-        :middle-pages="1"
-        :last-pages="1"
-        :disabled="loading || updating"
-        @update="update"
-      />
-    </div>
-  </div>
-  <div
-    v-else
-    class="nothing-found"
+  <GooseTable
+    v-model="tableModel"
+    v-model:sort-by="sortBy"
+    v-model:desc="desc"
+    :updating
+    @update="update"
   >
-    <p>Отчётов не найдено</p>
+    <template #date="{td}">
+      {{ new Date(td).toLocaleString('ru') }}
+    </template>
+
+    <template #org="{td}">
+      Formatted: {{ td }} !
+    </template>
+    <!-- On nothing found -->
+    <template #empty>
+      Отчётов не найдено
+    </template>
+  </GooseTable>
+  <div
+    v-if="tableModel.rows.length"
+    class="pagination"
+  >
+    <GoosePagination
+      v-model="page"
+      :size
+      :total
+      :first-pages="5"
+      :middle-pages="1"
+      :last-pages="1"
+      :disabled="updating"
+      @update="update"
+    />
   </div>
 </template>
 
@@ -152,15 +143,10 @@ update()
     gap: 1rem
     justify-content: space-between
 
-  .nothing-found
-    display: flex
-    justify-content: center
-    padding: 2rem
-
   .pagination
-    height: 3rem
-    display: flex
-    justify-content: center
     align-items: center
+    display: flex
+    height: 3rem
+    justify-content: center
     padding: 1rem
 </style>
