@@ -13,6 +13,7 @@ app.config.errorHandler = (err, vm, info) => {
 </script>
 
 <template>
+  <div id="tooltips" />
   <div id="modals" />
   <RouterView />
 </template>

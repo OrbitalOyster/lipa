@@ -51,6 +51,7 @@ if (!userId)
       />
       <GooseButton
         title="Сбросить"
+        tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
         @click="treeRef?.toggleAll(false)"
       />
     </div>

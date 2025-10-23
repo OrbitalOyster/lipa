@@ -28,26 +28,28 @@ const { floatingStyles, middlewareData, arrowStyle }
   >
     <slot />
   </div>
-  <!-- Pretty animation on toggle -->
-  <Transition name="fade">
-    <div
-      v-show="text && active && debounced && !middlewareData.hide?.referenceHidden"
-      ref="floating"
-      class="floating"
-      :style="{ ...floatingStyles }"
-    >
-      <!-- Arrow -->
+  <Teleport to="#modals">
+    <!-- Pretty animation on toggle -->
+    <Transition name="fade">
       <div
-        ref="arrow"
-        :style="arrowStyle"
-        class="arrow"
-      />
-      <!-- Actual tooltip -->
-      <div class="tooltip">
-        {{ text }}
+        v-show="text && debounced && !middlewareData.hide?.referenceHidden"
+        ref="floating"
+        class="floating"
+        :style="{ ...floatingStyles }"
+      >
+        <!-- Arrow -->
+        <div
+          ref="arrow"
+          :style="arrowStyle"
+          class="arrow"
+        />
+        <!-- Actual tooltip -->
+        <div class="tooltip">
+          {{ text }}
+        </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <style lang="sass" scoped>
