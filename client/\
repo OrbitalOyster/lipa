@@ -18,8 +18,7 @@ const useFloatingUI = (target: Ref<HTMLElement | null>, floating: Ref<HTMLElemen
     maxDistanceToEdge = 16,
     offsetValue = useArrow ? arrowSize : 8,
     autoPlacementOptions = side ? { allowedPlacements: [side] } : {},
-    /* TODO: Study this boolshit: https://floating-ui.com/docs/shift#limiter */
-    shiftOptions = { padding: arrowSize, limiter: limitShift({ offset: 32 }) },
+    shiftOptions = { padding: arrowSize, limiter: limitShift({ offset: 48 }) },
     arrowOptions = { element: arrow, padding: arrowSize }
 
   /* Floating UI */

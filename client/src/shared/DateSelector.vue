@@ -76,7 +76,6 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
     <GooseButton
       :icon="faEllipsisVertical"
       tooltip="Выбрать дату"
-      tooltip-side="right"
       transparent
       color="primary"
       @click="showPopup = !showPopup"

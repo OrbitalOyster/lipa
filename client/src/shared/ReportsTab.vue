@@ -79,13 +79,11 @@ onMounted(async () => await update())
       <GooseButton
         :icon="faPlus"
         tooltip="Создать первичный отчёт"
-        tooltip-side="top"
       />
       <GooseButton
         :icon="faRotate"
         :loading="updating"
         tooltip="Обновить список"
-        tooltip-side="top"
         @click="async () => { await update() }"
       />
     </div>

@@ -116,6 +116,7 @@ onMounted(async () => await update())
     <template #actions="{row}">
       <GooseButton
         :icon="faFile"
+        tooltip="Просмотреть шаблон"
         transparent
         color="primary"
         @click="viewTemplate(row.filename)"

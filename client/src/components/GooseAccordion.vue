@@ -39,8 +39,10 @@ const opened = defineModel<string>('opened')
         />
       </div>
       <div class="item-container">
-        <!-- <div v-if="model.opened === item.id" class="item-container">  <<< Lazy loading -->
-        <slot :name="item.id" />
+        <slot
+          v-if="opened === item.id"
+          :name="item.id"
+        />
       </div>
     </li>
   </ul>
