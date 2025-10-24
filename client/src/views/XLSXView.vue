@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import router from '../router.ts'
 const props = defineProps<{
   hash: string
 }>()

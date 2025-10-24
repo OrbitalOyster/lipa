@@ -1,7 +1,7 @@
 import type { Context, Next } from 'hono'
 import { auth, logout } from './routes/auth'
 import { check, getPayload } from './routes/cookies'
-import { checkFilenameExists, save, sync, templates, upload } from './routes/templates'
+import { checkFilenameExists, save, sync, template, templates, upload } from './routes/templates'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -71,6 +71,7 @@ const checkAuth = async (context: Context, next: Next) => {
 app.use(checkAuth)
 
 app.get('/templates', templates)
+app.get('/templates/:hash', template)
 /* Templates upload */
 app.post('/upload', upload)
 app.get('/sync', sync)

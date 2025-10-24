@@ -18,7 +18,7 @@ const attachmentName = 'attachment',
   uploadsFolder = '/tmp',
   templatesFolder = './templates'
 
-async function parseXLSXFile(buffer: ArrayBuffer) {
+const parseXLSXFile = async (buffer: ArrayBuffer) => {
   const workbook = new ExcelJS.Workbook()
   await workbook.xlsx.load(buffer)
   const worksheets: XLSXWorksheet[] = []
@@ -183,4 +183,15 @@ export const templates = async (context: Context) => {
     total,
     rows,
   })
+}
+
+export const template = async (context: Context) => {
+  const hash = context.req.param('hash'),
+    connection = await connect(),
+    query = `SELECT * FROM templates WHERE hash LIKE '${hash}%'`,
+    [rows] = await connection.query<RowDataPacket[]>(query)
+  await connection.end()
+  if (!rows.length)
+    return context.json('Nothing here', 404)
+  return context.json(rows[0])
 }
