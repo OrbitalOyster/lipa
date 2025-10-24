@@ -15,7 +15,9 @@ app.config.errorHandler = (err, vm, info) => {
 <template>
   <div id="tooltips" />
   <div id="modals" />
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <Component :is="Component" />
+  </RouterView>
 </template>
 
 <style lang="sass">

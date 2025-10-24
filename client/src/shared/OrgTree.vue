@@ -6,7 +6,7 @@ import GooseInput from '#components/GooseInput.vue'
 import GooseTree from '#components/GooseTree.vue'
 import type { Ref } from 'vue'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import useFetchOrgs from '#composables/useFetchOrgs.ts'
+import { fetchOrgs } from '#composables/useFetchData.ts'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Converts api array to object */
@@ -21,7 +21,7 @@ const toTree = (arr: APIOrg[], parent?: string): TreeLeaf[] =>
 
 const search = ref(''),
   debounced = refDebounced(search, 500),
-  apiOrgs = await useFetchOrgs(),
+  apiOrgs = await fetchOrgs(),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
   treeRef = useTemplateRef('tree'),
   isOrg = useUserStore().isOrg,

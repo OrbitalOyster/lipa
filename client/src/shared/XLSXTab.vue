@@ -9,7 +9,7 @@ import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import UploadXLSX from '#shared/UploadXLSX.vue'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import { useFetchTemplates } from '#composables/useFetchData.ts'
+import { fetchTemplates } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -46,13 +46,9 @@ const deleteTemplateConfirmed = (filename: string) => {
   console.log('Delete', filename)
 }
 
-const viewTemplate = (filename: string) => {
-  console.log('View', filename)
-}
-
 async function update() {
   updating.value = true
-  const apiTemplates = await useFetchTemplates(
+  const apiTemplates = await fetchTemplates(
     size.value,
     page.value,
     fromDate.value,

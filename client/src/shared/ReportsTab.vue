@@ -7,7 +7,7 @@ import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import useFetchReports from '#composables/useFetchReports.ts'
+import { fetchReports } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -39,7 +39,7 @@ let total = 0
 
 async function update() {
   updating.value = true
-  const apiReports = await useFetchReports(
+  const apiReports = await fetchReports(
     size.value,
     page.value,
     fromDate.value,

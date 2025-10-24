@@ -9,8 +9,8 @@ import GooseSwitch from '#components/GooseSwitch.vue'
 import type { Ref } from 'vue'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { fetchOrgs } from '#composables/useFetchData.ts'
 import { useAnimate } from '@vueuse/core'
-import useFetchOrgs from '#composables/useFetchOrgs.ts'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
 
@@ -54,7 +54,7 @@ async function auth() {
 }
 
 onMounted(async () => {
-  const apiOrgs = await useFetchOrgs()
+  const apiOrgs = await fetchOrgs()
   orgs.value = apiOrgs.map(o => ({
     id: o.id,
     title: `${o.id} - ${o.name}`,
