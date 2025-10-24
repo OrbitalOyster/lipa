@@ -3,6 +3,7 @@ import ClientError from '#views/ClientError.vue'
 import HomeView from '#views/HomeView.vue'
 import LoginView from '#views/LoginView.vue'
 import TestView from '#views/TestView.vue'
+import XLSXView from '#views/XLSXView.vue'
 import { useUserStore } from '#stores/useUserStore.ts'
 
 /* Routes */
@@ -16,6 +17,12 @@ const routes = [{
   name: 'Home',
   path: '/',
   meta: { title: 'Главная' },
+}, {
+  component: XLSXView,
+  name: 'XLSX',
+  path: '/xlsx/:hash',
+  meta: { title: 'Шаблон' },
+  props: true,
 }, {
   component: TestView,
   name: 'Test',

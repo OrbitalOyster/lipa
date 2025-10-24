@@ -30,9 +30,10 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
   confirmDeleteRef = useTemplateRef('confirmDelete'),
   tableModel = ref<TableModel<APITemplate>>({
     headers: [
-      { title: 'Дата', sortable: true, prop: 'date' },
+      { title: 'Загружен', sortable: true, prop: 'date' },
       { title: 'Пользователь', prop: 'userId' },
       { title: 'Имя файла', sortable: true, prop: 'filename' },
+      { title: 'Hash', prop: 'hash' },
       { title: 'Операции', prop: 'actions' },
     ],
     rows: [],
@@ -113,14 +114,19 @@ onMounted(async () => await update())
       {{ new Date(td).toLocaleString('ru') }}
     </template>
 
+    <template #hash="{td}">
+      {{ td }}...
+    </template>
+
     <template #actions="{row}">
-      <GooseButton
-        :icon="faFile"
-        tooltip="Просмотреть шаблон"
-        transparent
-        color="primary"
-        @click="viewTemplate(row.filename)"
-      />
+      <RouterLink :to="`/xlsx/${row.hash}`">
+        <GooseButton
+          :icon="faFile"
+          tooltip="Просмотреть шаблон"
+          transparent
+          color="primary"
+        />
+      </RouterLink>
       <GooseButton
         :icon="faTrash"
         transparent

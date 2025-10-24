@@ -20,7 +20,7 @@ export const templates = async (context: Context) => {
     connection = await connect(),
     [countRows] = await connection.query<CountRowsResult[]>('SELECT COUNT(*) as total FROM templates'),
     total = countRows[0]!.total,
-    query = `SELECT date, userId, filename `
+    query = `SELECT date, userId, filename, SUBSTRING(hash, 1, 8) AS hash `
       + `FROM templates `
       + `WHERE date BETWEEN '${getMySQLDate(fromDate)}' AND '${getMySQLDate(toDate)}' `
       + `ORDER BY ${sortBy} ${desc ? 'DESC ' : ''}`

@@ -63,6 +63,7 @@ declare global {
     date: string
     userId: string
     filename: string
+    hash: string
   }
 
   interface FetchTemplatesResult {
