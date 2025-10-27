@@ -9,7 +9,7 @@ import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import UploadXLSX from '#shared/UploadXLSX.vue'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import { fetchTemplates } from '#composables/useFetchData.ts'
+import { fetchXLSX } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -22,10 +22,10 @@ const pageSizes = [
 const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
   fromDate = useLocalStorage('from-date', currentMonth.fromDate),
   toDate = useLocalStorage('to-date', currentMonth.toDate),
-  sortBy = useLocalStorage('templates-sort-by', 'date'),
-  desc = useLocalStorage('templates-sort-desc', false),
-  size = useLocalStorage('templates-pagination-size', 10),
-  page = useLocalStorage('templates-page', 0),
+  sortBy = useLocalStorage('xlsx-sort-by', 'date'),
+  desc = useLocalStorage('xlsx-sort-desc', false),
+  size = useLocalStorage('xlsx-pagination-size', 10),
+  page = useLocalStorage('xlsx-page', 0),
   uploadModalRef = useTemplateRef('uploadModal'),
   confirmDeleteRef = useTemplateRef('confirmDelete'),
   tableModel = ref<TableModel<APITemplate>>({
@@ -48,7 +48,7 @@ const deleteTemplateConfirmed = (filename: string) => {
 
 async function update() {
   updating.value = true
-  const apiTemplates = await fetchTemplates(
+  const apiTemplates = await fetchXLSX(
     size.value,
     page.value,
     fromDate.value,

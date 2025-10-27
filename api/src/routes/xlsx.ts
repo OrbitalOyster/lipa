@@ -1,4 +1,4 @@
-import { getMySQLDate, parseQuery } from '../utils'
+import { getMySQLDate, parseQuery } from '../utils.ts'
 import type { Context } from 'hono'
 import ExcelJS from 'exceljs'
 import type { RowDataPacket } from 'mysql2'
@@ -16,7 +16,7 @@ interface CountRowsResult extends RowDataPacket {
 /* TODO: .env */
 const attachmentName = 'attachment',
   uploadsFolder = 'volume/tmp',
-  templatesFolder = 'volume/xlsx'
+  xlsxFolder = 'volume/xlsx'
 
 const parseXLSXFile = async (buffer: ArrayBuffer) => {
   const workbook = new ExcelJS.Workbook()
@@ -45,7 +45,7 @@ export const validate = async (buffer: ArrayBuffer) => {
 
 export const checkFilenameExists = async (filename: string) => {
   const connection = await connect(),
-    query = `SELECT COUNT(filename) AS filenameExists FROM templates WHERE filename = '${filename}'`,
+    query = `SELECT COUNT(filename) AS filenameExists FROM xlsx WHERE filename = '${filename}'`,
     [rows] = await connection.query<RowDataPacket[]>(query),
     result = !!(rows[0]! as CheckFilenameQueryResult)['filenameExists']
   await connection.end()
@@ -54,7 +54,7 @@ export const checkFilenameExists = async (filename: string) => {
 
 const checkHashExists = async (hash: string) => {
   const connection = await connect(),
-    query = `SELECT filename, COUNT(hash) AS hashExists FROM templates WHERE hash = '${hash}'`,
+    query = `SELECT filename, COUNT(hash) AS hashExists FROM xlsx WHERE hash = '${hash}'`,
     [rows] = await connection.query<RowDataPacket[]>(query),
     result = rows[0]! as CheckHashQueryResult
   await connection.end()
@@ -104,10 +104,10 @@ export const upload = async (context: Context) => {
 
 export const sync = async (context: Context) => {
   /* Actual files */
-  const files = await fs.readdir(templatesFolder)
+  const files = await fs.readdir(xlsxFolder)
   /* DB files */
   const connection = await connect(),
-    [rows] = await connection.query(`SELECT filename, hash FROM templates`)
+    [rows] = await connection.query(`SELECT filename, hash FROM xlsx`)
   await connection.end()
   console.log(files)
   console.log(rows)
@@ -117,7 +117,7 @@ export const sync = async (context: Context) => {
 export const save = async (context: Context) => {
   const payload = await getPayload(context),
     userId = payload['userId'],
-    { key, filename } = await context.req.json<SaveTemplateRequest>()
+    { key, filename } = await context.req.json<SaveXLSXRequest>()
   const srcFile = `${uploadsFolder}/${key}`
   try {
     /* Check if DB filename exists */
@@ -134,10 +134,10 @@ export const save = async (context: Context) => {
     if (hashExists)
       throw new Error(`Hash exists: ${hashExists}`)
     /* Copy from tmp folder */
-    await fs.copyFile(srcFile, `${templatesFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
+    await fs.copyFile(srcFile, `${xlsxFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
     /* Query DB */
     const connection = await connect(),
-      insertQuery = `INSERT INTO templates (userId, filename, hash) VALUES ("${userId}", "${filename}", "${hash}")`
+      insertQuery = `INSERT INTO xlsx (userId, filename, hash) VALUES ("${userId}", "${filename}", "${hash}")`
     await connection.query(insertQuery)
     await connection.end()
   }
@@ -148,7 +148,7 @@ export const save = async (context: Context) => {
   return context.json('Ok')
 }
 
-export const templates = async (context: Context) => {
+export const xlsx = async (context: Context) => {
   await sleep(500)
   const {
       size,
@@ -158,10 +158,10 @@ export const templates = async (context: Context) => {
       desc,
     } = parseQuery(context, ['date', 'filename']),
     connection = await connect(),
-    [countRows] = await connection.query<CountRowsResult[]>('SELECT COUNT(*) as total FROM templates'),
+    [countRows] = await connection.query<CountRowsResult[]>('SELECT COUNT(*) as total FROM xlsx'),
     total = countRows[0]!.total,
     query = `SELECT date, userId, filename, SUBSTRING(hash, 1, 8) AS hash `
-      + `FROM templates `
+      + `FROM xlsx `
       + `WHERE date BETWEEN '${getMySQLDate(fromDate)}' AND '${getMySQLDate(toDate)}' `
       + `ORDER BY ${sortBy} ${desc ? 'DESC ' : ''}`
       + `LIMIT ${size} `,
@@ -185,10 +185,10 @@ export const templates = async (context: Context) => {
   })
 }
 
-export const template = async (context: Context) => {
+export const xlsxByHash = async (context: Context) => {
   const hash = context.req.param('hash'),
     connection = await connect(),
-    query = `SELECT * FROM templates WHERE hash LIKE '${hash}%'`,
+    query = `SELECT * FROM xlsx WHERE hash LIKE '${hash}%'`,
     [rows] = await connection.query<RowDataPacket[]>(query)
   await connection.end()
   if (!rows.length)

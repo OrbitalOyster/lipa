@@ -46,7 +46,7 @@ declare global {
   // TODO: Unused
   type sortableCols = 'date' | 'year'
 
-  interface SaveTemplateRequest {
+  interface SaveXLSXRequest {
     key: string
     filename: string
   }

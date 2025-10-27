@@ -66,7 +66,7 @@ declare global {
     hash: string
   }
 
-  interface FetchTemplatesResult {
+  interface FetchXLSXResult {
     page: number
     size: number
     sortBy: string

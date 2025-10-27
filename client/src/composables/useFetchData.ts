@@ -6,17 +6,17 @@ export const fetchOrgs = async (): Promise<APIOrg[]> => {
   return axiosRes.data
 }
 
-export const fetchTemplates = async (
+export const fetchXLSX = async (
   size: number,
   page: number,
   fromDate: string,
   toDate: string,
   sortBy: string,
   desc: boolean,
-): Promise<FetchTemplatesResult> => {
+): Promise<FetchXLSXResult> => {
   const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URI }),
     params = { size, page, fromDate, toDate, sortBy, desc },
-    axiosRes = await axiosInstance.get(`/templates`, { params })
+    axiosRes = await axiosInstance.get(`/xlsx`, { params })
   return axiosRes.data
 }
 
