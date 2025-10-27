@@ -7,7 +7,7 @@ services:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MARIADB_DATABASE: ${DB_NAME}
     volumes:
-      - ${DB_STORAGE}:/var/lib/mysql
+      - ${DATA_FOLDER}/db:/var/lib/mysql
     ports:
       - ${DB_PORT}:${DB_PORT}
 
@@ -37,6 +37,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
       DB_HOST: db
+    volumes:
+      - ${DATA_FOLDER}/tmp:/usr/src/app/volume/tmp
+      - ${DATA_FOLDER}/xlsx:/usr/src/app/volume/xlsx
     ports: 
       - ${API_PORT}:${API_PORT}
     depends_on:

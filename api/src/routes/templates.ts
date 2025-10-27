@@ -15,8 +15,8 @@ interface CountRowsResult extends RowDataPacket {
 
 /* TODO: .env */
 const attachmentName = 'attachment',
-  uploadsFolder = '/tmp',
-  templatesFolder = './templates'
+  uploadsFolder = 'volume/tmp',
+  templatesFolder = 'volume/xlsx'
 
 const parseXLSXFile = async (buffer: ArrayBuffer) => {
   const workbook = new ExcelJS.Workbook()
