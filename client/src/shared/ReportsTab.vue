@@ -59,8 +59,8 @@ async function update() {
     params.sortBy = sortBy.value
   if (desc.value)
     params.desc = true
-  const axiosRes = await axios.get('/reports', { params }),
-    apiReports: FetchReportsResult = axiosRes.data
+  const apiReports: FetchReportsResult = await axios.get('/reports', { params })
+    .then(res => res.data)
   size.value = apiReports.size
   page.value = apiReports.page
   total = apiReports.total

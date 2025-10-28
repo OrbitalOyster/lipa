@@ -21,8 +21,7 @@ const toTree = (arr: APIOrg[], parent?: string): TreeLeaf[] =>
 
 const search = ref(''),
   debounced = refDebounced(search, 500),
-  apiOrgsRaw = await axios.get('/orgs'),
-  apiOrgs = apiOrgsRaw.data,
+  apiOrgs = await axios.get('/orgs').then(res => res.data),
   orgs: Ref<TreeLeaf[]> = ref(toTree(apiOrgs)),
   treeRef = useTemplateRef('tree'),
   isOrg = useUserStore().isOrg,

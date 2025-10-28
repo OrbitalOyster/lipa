@@ -1,4 +1,3 @@
-import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
@@ -12,9 +11,9 @@ const useUserStore = defineStore('user', {
   }),
   actions: {
     async getPayload() {
-      const res = await axios.get('/payload')
-      if (res.data)
-        Object.assign(this, res.data)
+      const payload = await axios.get('/payload').then(res => res.data)
+      if (payload)
+        Object.assign(this, payload)
     },
     /* Checks if user's logged in */
     async check() {
@@ -22,9 +21,7 @@ const useUserStore = defineStore('user', {
       if (this.userId)
         return true
       try {
-        const res: AxiosResponse<boolean>
-          = await axios.get('/check')
-        return (res.data)
+        return await axios.get('/check').then(res => res.data)
       }
       catch (err) {
         throw new Error(`Auth service error: ${(err as Error).toString()}`)
@@ -32,16 +29,16 @@ const useUserStore = defineStore('user', {
     },
     /* Logs user in */
     async auth(userId: string, isOrg: boolean, password: string, rememberMe: boolean) {
-      const res: AxiosResponse<boolean> = await axios.post(
+      const success = await axios.post(
         '/auth', {
           userId,
           isOrg,
           password,
           rememberMe,
         },
-      )
+      ).then(res => res.data)
       /* Failed login */
-      if (!res.data)
+      if (!success)
         return false
       await this.getPayload()
       return true

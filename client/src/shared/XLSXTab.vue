@@ -8,8 +8,8 @@ import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
 import UploadXLSX from '#shared/UploadXLSX.vue'
+import axios from 'axios'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import { fetchXLSX } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -48,14 +48,16 @@ const deleteTemplate = (hash: string) => {
 
 async function update() {
   updating.value = true
-  const apiTemplates = await fetchXLSX(
-    size.value,
-    page.value,
-    fromDate.value,
-    toDate.value,
-    sortBy.value,
-    desc.value,
-  )
+  const params = {
+    size: size.value,
+    page: page.value,
+    fromDate: fromDate.value,
+    toDate: toDate.value,
+    sortBy: sortBy.value,
+    desc: desc.value,
+  }
+  const apiTemplates: FetchXLSXResult = await axios.get('/xlsx', { params })
+    .then(res => res.data)
   size.value = apiTemplates.size
   page.value = apiTemplates.page
   total = apiTemplates.total
