@@ -55,9 +55,9 @@ async function update() {
     toDate: toDate.value,
   }
   /* sortBy=date and desc=false are defaults */
-  if (params.sortBy !== 'date')
+  if (sortBy.value !== 'date')
     params.sortBy = sortBy.value
-  if (params.desc)
+  if (desc.value)
     params.desc = true
   const axiosRes = await axios.get('/reports', { params }),
     apiReports: FetchReportsResult = axiosRes.data
