@@ -6,8 +6,8 @@ import GooseButton from '#components/GooseButton.vue'
 import GoosePagination from '#components/GoosePagination.vue'
 import GooseSelect from '#components/GooseSelect.vue'
 import GooseTable from '#components/GooseTable.vue'
+import axios from 'axios'
 import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
-import { fetchReports } from '#composables/useFetchData.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -37,16 +37,30 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
 
 let total = 0
 
+interface FetchReportsParams {
+  size: number
+  page: number
+  fromDate: string
+  toDate: string
+  sortBy?: string
+  desc?: boolean
+}
+
 async function update() {
   updating.value = true
-  const apiReports = await fetchReports(
-    size.value,
-    page.value,
-    fromDate.value,
-    toDate.value,
-    sortBy.value,
-    desc.value,
-  )
+  const params: FetchReportsParams = {
+    size: size.value,
+    page: page.value,
+    fromDate: fromDate.value,
+    toDate: toDate.value,
+  }
+  /* sortBy=date and desc=false are defaults */
+  if (params.sortBy !== 'date')
+    params.sortBy = sortBy.value
+  if (params.desc)
+    params.desc = true
+  const axiosRes = await axios.get('/reports', { params }),
+    apiReports: FetchReportsResult = axiosRes.data
   size.value = apiReports.size
   page.value = apiReports.page
   total = apiReports.total
