@@ -19,6 +19,7 @@ export default tseslint.config(
   {
     rules: {
       'sort-imports': 'error',
+
       /* Replaced by typecheck */
       'no-unreachable': 'off',
       'no-unused-vars': 'off',

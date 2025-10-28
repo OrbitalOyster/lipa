@@ -29,9 +29,9 @@ const parseXLSXFile = async (buffer: ArrayBuffer) => {
 export const validate = async (buffer: ArrayBuffer) => {
   try {
     const workbook = await parseXLSXFile(buffer)
+
     /* No worksheets, somehow */
-    if (!workbook.worksheets)
-      return { err: 'No worksheets' }
+    if (!workbook.worksheets) return { err: 'No worksheets' }
     return workbook.worksheets.map(w => ({
       name: w.name,
       tables: w.findTables(),
@@ -64,24 +64,30 @@ const checkHashExists = async (hash: string) => {
 export const upload = async (context: Context) => {
   await sleep(1000)
   const payload = await getPayload(context),
-    userId = payload['userId'], /* Who */
+    userId = payload['userId'] /* Who */,
     body = await context.req.parseBody(),
     attachment = body[attachmentName] /* What */
-  /* No attachment, somehow */
-  if (!attachment || !(attachment instanceof File))
-    return context.json('Missing attachment', 400)
+    /* No attachment, somehow */
+  if (!attachment || !(attachment instanceof File)) return context.json(
+    'Missing attachment',
+    400,
+  )
+
   /* Validate */
   const bufferArray = await attachment.arrayBuffer(),
     validation = await validate(bufferArray)
+
   /* Unable to parse or validate */
-  if ('err' in validation)
-    return context.json(validation)
+  if ('err' in validation) return context.json(validation)
+
   /* Save to tmp, return hash */
   const buffer = Buffer.from(bufferArray),
-    hash = createHash('sha256').update(buffer).digest('hex'),
+    hash = createHash('sha256').update(buffer)
+      .digest('hex'),
     time = new Date().valueOf(),
     fullFilename = `${uploadsFolder}/${userId}-${time}-${attachment.name}`,
-    filenameHash = createHash('sha256').update(fullFilename).digest('hex'),
+    filenameHash = createHash('sha256').update(fullFilename)
+      .digest('hex'),
     filenameExists = await checkFilenameExists(attachment.name),
     hashExists = await checkHashExists(hash)
 
@@ -93,10 +99,17 @@ export const upload = async (context: Context) => {
     filename exists: ${filenameExists}
     hash exists: ${hashExists}`)
 
-  await fs.writeFile(`${uploadsFolder}/${filenameHash}`, buffer)
-  console.log('Saved to disk: ', filenameHash)
+  await fs.writeFile(
+    `${uploadsFolder}/${filenameHash}`,
+    buffer,
+  )
+  console.log(
+    'Saved to disk: ',
+    filenameHash,
+  )
   return context.json({
-    filenameExists, hashExists,
+    filenameExists,
+    hashExists,
     worksheets: validation,
     key: filenameHash,
   })
@@ -105,9 +118,10 @@ export const upload = async (context: Context) => {
 export const sync = async (context: Context) => {
   /* Actual files */
   const files = await fs.readdir(xlsxFolder)
+
   /* DB files */
   const connection = await connect(),
-    [rows] = await connection.query(`SELECT filename, hash FROM xlsx`)
+    [rows] = await connection.query('SELECT filename, hash FROM xlsx')
   await connection.end()
   console.log(files)
   console.log(rows)
@@ -121,20 +135,31 @@ export const save = async (context: Context) => {
   const srcFile = `${uploadsFolder}/${key}`
   try {
     /* Check if DB filename exists */
-    if (await checkFilenameExists(filename))
-      throw new Error('Filename taken (says DB)')
+    if (await checkFilenameExists(filename)) throw new Error('Filename taken (says DB)')
+
     /* Check if src file exists */
-    await fs.access(srcFile, fs.constants.F_OK)
+    await fs.access(
+      srcFile,
+      fs.constants.F_OK,
+    )
+
     /* Get hash (again) */
     const file = await fs.readFile(srcFile),
       buffer = Buffer.from(file.buffer),
-      hash = createHash('sha256').update(buffer).digest('hex')
+      hash = createHash('sha256').update(buffer)
+        .digest('hex')
+
     /* Check if hash is already taken */
     const hashExists = await checkHashExists(hash)
-    if (hashExists)
-      throw new Error(`Hash exists: ${hashExists}`)
+    if (hashExists) throw new Error(`Hash exists: ${hashExists}`)
+
     /* Copy from tmp folder */
-    await fs.copyFile(srcFile, `${xlsxFolder}/${filename}`, fs.constants.COPYFILE_EXCL)
+    await fs.copyFile(
+      srcFile,
+      `${xlsxFolder}/${filename}`,
+      fs.constants.COPYFILE_EXCL,
+    )
+
     /* Query DB */
     const connection = await connect(),
       insertQuery = `INSERT INTO xlsx (userId, filename, hash) VALUES ("${userId}", "${filename}", "${hash}")`
@@ -143,37 +168,41 @@ export const save = async (context: Context) => {
   }
   catch (err) {
     console.error(err)
-    return context.json('Try again', 400)
+    return context.json(
+      'Try again',
+      400,
+    )
   }
   return context.json('Ok')
 }
 
 export const xlsx = async (context: Context) => {
   await sleep(500)
-  const {
-      size,
-      fromDate,
-      toDate,
-      sortBy,
-      desc,
-    } = parseQuery(context, ['date', 'filename']),
+  const { size, fromDate, toDate, sortBy, desc } = parseQuery(
+      context,
+      [
+        'date',
+        'filename',
+      ],
+    ),
     connection = await connect(),
     [countRows] = await connection.query<CountRowsResult[]>('SELECT COUNT(*) as total FROM xlsx'),
     total = countRows[0]!.total,
-    query = `SELECT date, userId, filename, SUBSTRING(hash, 1, 8) AS hash `
-      + `FROM xlsx `
-      + `WHERE date BETWEEN '${getMySQLDate(fromDate)}' AND '${getMySQLDate(toDate)}' `
-      + `ORDER BY ${sortBy} ${desc ? 'DESC ' : ''}`
-      + `LIMIT ${size} `,
+    query
+      = 'SELECT date, userId, filename, SUBSTRING(hash, 1, 8) AS hash '
+        + 'FROM xlsx '
+        + `WHERE date BETWEEN '${getMySQLDate(fromDate)}' AND '${getMySQLDate(toDate)}' `
+        + `ORDER BY ${sortBy} ${desc
+          ? 'DESC '
+          : ''}`
+          + `LIMIT ${size} `,
     [rows] = await connection.query(query)
   await connection.end()
 
   const totalPages = Math.ceil(total / size)
   let page = Number(context.req.query()['page']) || 0
-  if (totalPages === 0)
-    page = 0
-  else if (page >= totalPages)
-    page = totalPages - 1
+  if (totalPages === 0) page = 0
+  else if (page >= totalPages) page = totalPages - 1
 
   return context.json({
     page,
@@ -185,13 +214,38 @@ export const xlsx = async (context: Context) => {
   })
 }
 
-export const xlsxByHash = async (context: Context) => {
-  const hash = context.req.param('hash'),
-    connection = await connect(),
+const getXLSXByHash = async (hash: string) => {
+  const connection = await connect(),
     query = `SELECT * FROM xlsx WHERE hash LIKE '${hash}%'`,
     [rows] = await connection.query<RowDataPacket[]>(query)
   await connection.end()
-  if (!rows.length)
-    return context.json('Nothing here', 404)
-  return context.json(rows[0])
+  if (!rows.length) return null
+  else return rows[0]
+}
+
+export const xlsxByHash = async (context: Context) => {
+  const hash = context.req.param('hash'),
+    xlsx = await getXLSXByHash(hash)
+  if (xlsx === null) return context.json(
+    'Nothing here',
+    404,
+  )
+  else return context.json(xlsx)
+}
+
+export const xlsxDelete = async (context: Context) => {
+  const hash = context.req.param('hash'),
+    xlsx = await getXLSXByHash(hash)
+  if (!xlsx) return context.json(
+    'Nothing here',
+    404,
+  )
+  else {
+    const connection = await connect(),
+      query = `DELETE FROM xlsx WHERE hash = '${xlsx['hash']}%'`
+    await connection.query(query)
+    await connection.end()
+    await fs.unlink(`${xlsxFolder}/${xlsx['filename']}`)
+    return context.json('Ok')
+  }
 }

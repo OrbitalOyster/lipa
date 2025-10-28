@@ -12,28 +12,39 @@ export const reports = async (context: Context) => {
     toDate,
     sortBy,
     desc,
-  } = parseQuery(context, ['date', 'year'])
+  } = parseQuery(
+    context,
+    [
+      'date',
+      'year',
+    ],
+  )
 
   const cmpr = (a, b) => {
-    const order = desc ? -1 : 1
+    const order = desc
+      ? -1
+      : 1
     return (a[sortBy] - b[sortBy]) * order
   }
 
   const placeholderRaw = fs.readFileSync('reports.json').toString()
   let rows = (JSON.parse(placeholderRaw) as APIReport[])
-    .map((r: APIReport, i: number) => ({ ...r, i, date: new Date(r.date) })) // Add index, convert ISODate to date
+    .map((r: APIReport, i: number) => ({ ...r,
+      i,
+      date: new Date(r.date) })) // Add index, convert ISODate to date
     .filter(r => r.date > fromDate && r.date < toDate) // Filter by date
     .sort(cmpr) // Sort
   const total = rows.length
 
   let page = Number(context.req.query()['page']) || 0
   const totalPages = Math.ceil(total / size)
-  if (totalPages === 0)
-    page = 0
-  else if (page >= totalPages)
-    page = totalPages - 1
+  if (totalPages === 0) page = 0
+  else if (page >= totalPages) page = totalPages - 1
 
-  rows = rows.slice(page * size, (page + 1) * size) // Get page
+  rows = rows.slice(
+    page * size,
+    (page + 1) * size,
+  ) // Get page
 
   return context.json({
     page,

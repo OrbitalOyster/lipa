@@ -6,12 +6,19 @@ import { XLSXWorksheet } from './XLSXWorksheet'
 
 class XLSXCell {
   private worksheet
+
   public readonly rowNum
+
   public readonly colNum
+
   public readonly type
+
   public readonly address
+
   public readonly style
+
   public readonly value
+
   public borders
 
   constructor(worksheet: XLSXWorksheet, cell: Cell, rowNum: number, colNum: number) {
@@ -30,17 +37,18 @@ class XLSXCell {
 
   private parseBorders(cell: Cell) {
     const style = cell.style
+
     /*
-    if (!style.border)
-      return null
-    if (
-      !style.border.top
-      && !style.border.right
-      && !style.border.bottom
-      && !style.border.left
-    )
-      return null
-    */
+         *if (!style.border)
+         *  return null
+         *if (
+         *  !style.border.top
+         *  && !style.border.right
+         *  && !style.border.bottom
+         *  && !style.border.left
+         *)
+         *  return null
+         */
     return {
       top: style.border?.top || null,
       right: style.border?.right || null,
@@ -52,22 +60,34 @@ class XLSXCell {
   /* === */
 
   public hasTopBorder() {
-    const topNeighbor = this.worksheet.getCell(this.rowNum - 1, this.colNum)
+    const topNeighbor = this.worksheet.getCell(
+      this.rowNum - 1,
+      this.colNum,
+    )
     return !!(this.borders?.['top'] || topNeighbor?.borders?.['bottom'])
   }
 
   public hasRightBorder() {
-    const rightNeighbor = this.worksheet.getCell(this.rowNum, this.colNum + 1)
+    const rightNeighbor = this.worksheet.getCell(
+      this.rowNum,
+      this.colNum + 1,
+    )
     return !!(this.borders?.['right'] || rightNeighbor?.borders?.['left'])
   }
 
   public hasBottomBorder() {
-    const bottomNeighbor = this.worksheet.getCell(this.rowNum + 1, this.colNum)
+    const bottomNeighbor = this.worksheet.getCell(
+      this.rowNum + 1,
+      this.colNum,
+    )
     return !!(this.borders?.['bottom'] || bottomNeighbor?.borders?.['top'])
   }
 
   public hasLeftBorder() {
-    const leftNeighbor = this.worksheet.getCell(this.rowNum, this.colNum - 1)
+    const leftNeighbor = this.worksheet.getCell(
+      this.rowNum,
+      this.colNum - 1,
+    )
     return !!(this.borders?.['left'] || leftNeighbor?.borders?.['right'])
   }
 
@@ -84,30 +104,48 @@ class XLSXCell {
   /* === */
 
   public isRightSide() {
-    const rightNeighbor = this.worksheet.getCell(this.rowNum, this.colNum + 1)
+    const rightNeighbor = this.worksheet.getCell(
+      this.rowNum,
+      this.colNum + 1,
+    )
     return this.hasRightBorder() && !rightNeighbor?.hasHorizontalBorders()
   }
 
   public isBottomSide() {
-    const bottomNeighbor = this.worksheet.getCell(this.rowNum + 1, this.colNum)
+    const bottomNeighbor = this.worksheet.getCell(
+      this.rowNum + 1,
+      this.colNum,
+    )
     return this.hasBottomBorder() && !bottomNeighbor?.hasVerticalBorders()
   }
 
   public isLeftSide() {
-    const leftNeighbor = this.worksheet.getCell(this.rowNum, this.colNum - 1)
+    const leftNeighbor = this.worksheet.getCell(
+      this.rowNum,
+      this.colNum - 1,
+    )
     return this.hasLeftBorder() && !leftNeighbor?.hasHorizontalBorders()
   }
 
   public isTopSide() {
-    const topNeighbor = this.worksheet.getCell(this.rowNum - 1, this.colNum)
+    const topNeighbor = this.worksheet.getCell(
+      this.rowNum - 1,
+      this.colNum,
+    )
     return this.hasTopBorder() && !topNeighbor?.hasVerticalBorders()
   }
 
   /* === */
 
   public isTopRightCorner() {
-    const topNeighbor = this.worksheet.getCell(this.rowNum - 1, this.colNum),
-      rightNeighbor = this.worksheet.getCell(this.rowNum, this.colNum + 1)
+    const topNeighbor = this.worksheet.getCell(
+        this.rowNum - 1,
+        this.colNum,
+      ),
+      rightNeighbor = this.worksheet.getCell(
+        this.rowNum,
+        this.colNum + 1,
+      )
     return this.hasTopBorder()
       && this.hasRightBorder()
       && !topNeighbor?.hasVerticalBorders()
@@ -115,8 +153,14 @@ class XLSXCell {
   }
 
   public isBottomRightCorner() {
-    const bottomNeighbor = this.worksheet.getCell(this.rowNum + 1, this.colNum),
-      rightNeighbor = this.worksheet.getCell(this.rowNum, this.colNum + 1)
+    const bottomNeighbor = this.worksheet.getCell(
+        this.rowNum + 1,
+        this.colNum,
+      ),
+      rightNeighbor = this.worksheet.getCell(
+        this.rowNum,
+        this.colNum + 1,
+      )
     return this.hasBottomBorder()
       && this.hasRightBorder()
       && !bottomNeighbor?.hasVerticalBorders()
@@ -124,8 +168,14 @@ class XLSXCell {
   }
 
   public isBottomLeftCorner() {
-    const bottomNeighbor = this.worksheet.getCell(this.rowNum + 1, this.colNum),
-      leftNeighbor = this.worksheet.getCell(this.rowNum, this.colNum - 1)
+    const bottomNeighbor = this.worksheet.getCell(
+        this.rowNum + 1,
+        this.colNum,
+      ),
+      leftNeighbor = this.worksheet.getCell(
+        this.rowNum,
+        this.colNum - 1,
+      )
     return this.hasBottomBorder()
       && this.hasLeftBorder()
       && !bottomNeighbor?.hasVerticalBorders()
@@ -133,8 +183,14 @@ class XLSXCell {
   }
 
   public isTopLeftCorner() {
-    const topNeighbor = this.worksheet.getCell(this.rowNum - 1, this.colNum),
-      leftNeighbor = this.worksheet.getCell(this.rowNum, this.colNum - 1)
+    const topNeighbor = this.worksheet.getCell(
+        this.rowNum - 1,
+        this.colNum,
+      ),
+      leftNeighbor = this.worksheet.getCell(
+        this.rowNum,
+        this.colNum - 1,
+      )
     return this.hasTopBorder()
       && this.hasLeftBorder()
       && !topNeighbor?.hasVerticalBorders()
@@ -147,8 +203,7 @@ class XLSXCell {
     /* Cell has string value */
     if (this.type === ValueType.String && this.value) {
       const tableNameRegexp = /\([0-9]{1,5}\)/
-      if ((this.value as string)?.match(tableNameRegexp))
-        return true
+      if ((this.value as string)?.match(tableNameRegexp)) return true
     }
     return false
   }

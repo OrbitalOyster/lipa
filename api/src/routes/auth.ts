@@ -7,12 +7,14 @@ import { setTimeout as sleep } from 'node:timers/promises'
 
 export const auth = async (context: Context) => {
   await sleep(2000)
+
   /* Get user credentials from request */
   const { userId, isOrg, password, rememberMe } = await context.req.json<AuthRequest>()
   try {
     /* Query DB */
     const connection = await connect(),
-      passwordHash = crypto.createHash('sha256').update(password).digest('hex'),
+      passwordHash = crypto.createHash('sha256').update(password)
+        .digest('hex'),
       query = isOrg
         ? `SELECT * FROM orgs WHERE id = '${userId}' AND passwordHash = '${passwordHash}'`
         : `SELECT * FROM users WHERE name = '${userId}' AND passwordHash = '${passwordHash}'`,
@@ -24,9 +26,20 @@ export const auth = async (context: Context) => {
     }
     else {
       const name = (rows[0] as AuthSQLResult).name
-      console.log('Auth OK', userId, name)
+      console.log(
+        'Auth OK',
+        userId,
+        name,
+      )
+
       /* Update cookie and return ok */
-      await updateCookie(context, { userId, isOrg, name, rememberMe })
+      await updateCookie(
+        context,
+        { userId,
+          isOrg,
+          name,
+          rememberMe },
+      )
       return context.json(true)
     }
   }
