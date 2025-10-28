@@ -5,14 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
-defineProps<{
-  title: string
-}>()
-
 const emit = defineEmits(['submit']),
   active = ref(false),
   dialog = useTemplateRef('dialog'),
-  altTitle = ref('')
+  titleRef = ref('')
+
+let onSubmit: () => void
 
 const { activate, deactivate } = useFocusTrap(dialog, {
   /* On escape */
@@ -22,10 +20,11 @@ const { activate, deactivate } = useFocusTrap(dialog, {
   },
 })
 
-async function show(newAltTitle?: string) {
+async function show(title: string, callback?: () => void) {
   active.value = true
-  if (newAltTitle)
-    altTitle.value = newAltTitle
+  titleRef.value = title
+  if (callback)
+    onSubmit = callback
   await nextTick()
   activate()
 }
@@ -54,13 +53,13 @@ defineExpose({ show })
               :icon="faTriangleExclamation"
               size="3x"
             />
-            {{ altTitle || title }}
+            {{ titleRef }}
           </div>
           <footer>
             <GooseButton
               title="Ok"
               :icon="faCheck"
-              @click="emit('submit'); hide()"
+              @click="emit('submit'); onSubmit && onSubmit(); hide()"
             />
             <GooseButton
               title="Отмена"

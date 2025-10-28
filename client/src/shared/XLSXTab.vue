@@ -42,8 +42,8 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
 
 let total = 0
 
-const deleteTemplateConfirmed = (filename: string) => {
-  console.log('Delete', filename)
+const deleteTemplate = (hash: string) => {
+  console.log('Delete', hash)
 }
 
 async function update() {
@@ -67,11 +67,7 @@ onMounted(async () => await update())
 </script>
 
 <template>
-  <GooseConfirm
-    ref="confirmDelete"
-    title="Удалить шаблон?"
-    @submit="deleteTemplateConfirmed"
-  />
+  <GooseConfirm ref="confirmDelete" />
   <UploadXLSX ref="uploadModal" />
   <div>
     <div class="filters">
@@ -127,7 +123,10 @@ onMounted(async () => await update())
         :icon="faTrash"
         transparent
         color="danger"
-        @click="confirmDeleteRef?.show(`Удалить шаблон &quot;${row.filename}?&quot;`)"
+        @click="confirmDeleteRef?.show(
+          `Удалить шаблон &quot;${row.filename}?&quot;`,
+          () => deleteTemplate(row.hash)
+        )"
       />
     </template>
     <!-- On nothing found -->

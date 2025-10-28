@@ -21,7 +21,6 @@ async function logout() {
 <template>
   <GooseConfirm
     ref="logoutConfirm"
-    title="Выйти из системы?"
     @submit="logout"
   />
   <header>
@@ -50,7 +49,7 @@ async function logout() {
         :icon="faRightFromBracket"
         tooltip="Выйти из системы"
         color="warning"
-        @click="logoutConfirm?.show()"
+        @click="logoutConfirm?.show('Выйти из системы?')"
       />
     </div>
   </header>
