@@ -7,6 +7,7 @@ import connect from '../mysqlConnection.ts'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
 import { getPayload } from './cookies.ts'
+import path from 'node:path'
 import { setTimeout as sleep } from 'node:timers/promises'
 
 interface CountRowsResult extends RowDataPacket {
@@ -15,8 +16,8 @@ interface CountRowsResult extends RowDataPacket {
 
 /* TODO: .env */
 const attachmentName = 'attachment',
-  uploadsFolder = 'volume/tmp',
-  xlsxFolder = 'volume/xlsx'
+  uploadsFolder = path.join('volume', 'tmp'),
+  xlsxFolder = path.join('volume', 'xlsx')
 
 const parseXLSXFile = async (buffer: ArrayBuffer) => {
   const workbook = new ExcelJS.Workbook()
@@ -85,9 +86,8 @@ export const upload = async (context: Context) => {
     hash = createHash('sha256').update(buffer)
       .digest('hex'),
     time = new Date().valueOf(),
-    fullFilename = `${uploadsFolder}/${userId}-${time}-${attachment.name}`,
-    filenameHash = createHash('sha256').update(fullFilename)
-      .digest('hex'),
+    fullFilename = path.join(uploadsFolder, `${userId}-${time}-${attachment.name}`),
+    filenameHash = createHash('sha256').update(fullFilename).digest('hex'),
     filenameExists = await checkFilenameExists(attachment.name),
     hashExists = await checkHashExists(hash)
 
@@ -99,14 +99,9 @@ export const upload = async (context: Context) => {
     filename exists: ${filenameExists}
     hash exists: ${hashExists}`)
 
-  await fs.writeFile(
-    `${uploadsFolder}/${filenameHash}`,
-    buffer,
-  )
-  console.log(
-    'Saved to disk: ',
-    filenameHash,
-  )
+  await fs.writeFile(path.join(uploadsFolder, filenameHash), buffer)
+  console.log('Saved to disk: ', filenameHash)
+
   return context.json({
     filenameExists,
     hashExists,
@@ -118,7 +113,6 @@ export const upload = async (context: Context) => {
 export const sync = async (context: Context) => {
   /* Actual files */
   const files = await fs.readdir(xlsxFolder)
-
   /* DB files */
   const connection = await connect(),
     [rows] = await connection.query('SELECT filename, hash FROM xlsx')
@@ -132,7 +126,7 @@ export const save = async (context: Context) => {
   const payload = await getPayload(context),
     userId = payload['userId'],
     { key, filename } = await context.req.json<SaveXLSXRequest>()
-  const srcFile = `${uploadsFolder}/${key}`
+  const srcFile = path.join(uploadsFolder, key)
   try {
     /* Check if DB filename exists */
     if (await checkFilenameExists(filename)) throw new Error('Filename taken (says DB)')
@@ -155,8 +149,7 @@ export const save = async (context: Context) => {
 
     /* Copy from tmp folder */
     await fs.copyFile(
-      srcFile,
-      `${xlsxFolder}/${filename}`,
+      srcFile, path.join(xlsxFolder, filename),
       fs.constants.COPYFILE_EXCL,
     )
 
@@ -192,10 +185,8 @@ export const xlsx = async (context: Context) => {
       = 'SELECT date, userId, filename, SUBSTRING(hash, 1, 8) AS hash '
         + 'FROM xlsx '
         + `WHERE date BETWEEN '${getMySQLDate(fromDate)}' AND '${getMySQLDate(toDate)}' `
-        + `ORDER BY ${sortBy} ${desc
-          ? 'DESC '
-          : ''}`
-          + `LIMIT ${size} `,
+        + `ORDER BY ${sortBy} ${desc ? 'DESC ' : ''}`
+        + `LIMIT ${size} `,
     [rows] = await connection.query(query)
   await connection.end()
 
@@ -214,10 +205,15 @@ export const xlsx = async (context: Context) => {
   })
 }
 
+interface XLSXQueryResult extends RowDataPacket {
+  filename: string
+  hash: string
+}
+
 const getXLSXByHash = async (hash: string) => {
   const connection = await connect(),
     query = `SELECT * FROM xlsx WHERE hash LIKE '${hash}%'`,
-    [rows] = await connection.query<RowDataPacket[]>(query)
+    [rows] = await connection.query<XLSXQueryResult[]>(query)
   await connection.end()
   if (!rows.length) return null
   else return rows[0]
@@ -245,7 +241,7 @@ export const xlsxDelete = async (context: Context) => {
       query = `DELETE FROM xlsx WHERE hash = '${xlsx['hash']}%'`
     await connection.query(query)
     await connection.end()
-    await fs.unlink(`${xlsxFolder}/${xlsx['filename']}`)
+    await fs.unlink(path.join(xlsxFolder, xlsx['filename']))
     return context.json('Ok')
   }
 }
