@@ -2,10 +2,6 @@ import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
-const apiEndpoint = import.meta.env.VITE_API_URI
-if (!apiEndpoint)
-  throw new Error('Missing api endpoint')
-
 const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     userId: null,
@@ -16,7 +12,7 @@ const useUserStore = defineStore('user', {
   }),
   actions: {
     async getPayload() {
-      const res = await axios.get(`${apiEndpoint}/payload`)
+      const res = await axios.get('/payload')
       if (res.data)
         Object.assign(this, res.data)
     },
@@ -27,7 +23,7 @@ const useUserStore = defineStore('user', {
         return true
       try {
         const res: AxiosResponse<boolean>
-          = await axios.get(`${apiEndpoint}/check`)
+          = await axios.get('/check')
         return (res.data)
       }
       catch (err) {
@@ -37,7 +33,7 @@ const useUserStore = defineStore('user', {
     /* Logs user in */
     async auth(userId: string, isOrg: boolean, password: string, rememberMe: boolean) {
       const res: AxiosResponse<boolean> = await axios.post(
-        `${apiEndpoint}/auth`, {
+        '/auth', {
           userId,
           isOrg,
           password,
@@ -51,7 +47,7 @@ const useUserStore = defineStore('user', {
       return true
     },
     async logout() {
-      await axios.get(`${apiEndpoint}/logout`)
+      await axios.get('/logout')
       this.userId = null
       this.isOrg = null
       this.name = null

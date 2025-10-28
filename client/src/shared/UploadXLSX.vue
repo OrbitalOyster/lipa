@@ -22,8 +22,7 @@ interface XLSXParseSuccess {
   key: string
 }
 
-const apiEndpoint = import.meta.env.VITE_API_URI,
-  modal = useTemplateRef('modal'),
+const modal = useTemplateRef('modal'),
   uploading = ref(false),
   xlsxFile = ref<null | File>(null),
   parseResult = ref<XLSXParseSuccess | null>(null),
@@ -32,9 +31,6 @@ const apiEndpoint = import.meta.env.VITE_API_URI,
   saveAsFilename = ref(''),
   filenameExists = ref(false),
   hashExists = ref<string | false>(false)
-
-if (!apiEndpoint)
-  throw new Error('Missing api endpoint')
 
 const { open, reset, onChange } = useFileDialog({
   accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -61,7 +57,7 @@ onChange((files) => {
   formData.append('attachment', files[0])
 
   axios.post(
-    `${apiEndpoint}/upload`,
+    '/upload',
     formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -93,7 +89,7 @@ onChange((files) => {
 const upload = async () => {
   console.log({ key, saveAsFilename })
   const result = await axios.post(
-    `${apiEndpoint}/save`, {
+    '/save', {
       key: key.value,
       filename: saveAsFilename.value,
     },
@@ -103,7 +99,7 @@ const upload = async () => {
 
 /* Filename check */
 const checkFilename = async () => {
-  const check = await axios.get(`${apiEndpoint}/check-filename?q=${saveAsFilename.value}`)
+  const check = await axios.get(`/check-filename?q=${saveAsFilename.value}`)
   filenameExists.value = check.data
   console.log(saveAsFilename.value, filenameExists.value)
 }

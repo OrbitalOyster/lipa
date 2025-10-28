@@ -7,9 +7,9 @@ import GooseForm from '#components/GooseForm.vue'
 import GooseFormInput from '#components/GooseFormInput.vue'
 import GooseSwitch from '#components/GooseSwitch.vue'
 import type { Ref } from 'vue'
+import axios from 'axios'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
-import { fetchOrgs } from '#composables/useFetchData.ts'
 import { useAnimate } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
@@ -54,7 +54,8 @@ async function auth() {
 }
 
 onMounted(async () => {
-  const apiOrgs = await fetchOrgs()
+  const apiOrgsRaw = await axios.get('/orgs'),
+    apiOrgs: APIOrg[] = apiOrgsRaw.data
   orgs.value = apiOrgs.map(o => ({
     id: o.id,
     title: `${o.id} - ${o.name}`,
