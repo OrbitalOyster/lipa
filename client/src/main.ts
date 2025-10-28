@@ -1,4 +1,5 @@
 import '@fontsource-variable/exo-2'
+import * as globals from '#composables/useGlobals.ts'
 import App from './App.vue'
 import axios from 'axios'
 import { createApp } from 'vue'

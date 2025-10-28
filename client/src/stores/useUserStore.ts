@@ -3,7 +3,6 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 const apiEndpoint = import.meta.env.VITE_API_URI
-
 if (!apiEndpoint)
   throw new Error('Missing api endpoint')
 

@@ -59,7 +59,7 @@ defineExpose({ show })
             <GooseButton
               title="Ok"
               :icon="faCheck"
-              @click="emit('submit'); onSubmit && onSubmit(); hide()"
+              @click="emit('submit'); onSubmit?.(); hide()"
             />
             <GooseButton
               title="Отмена"
