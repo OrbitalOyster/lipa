@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faFile, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faFile, faPlus, faRotate, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -42,8 +42,10 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
 
 let total = 0
 
-const deleteTemplate = (hash: string) => {
-  console.log('Delete', hash)
+const deleteTemplate = async (hash: string) => {
+  const deleteRes = await axios.delete(`/xlsx/${hash}`)
+  console.log({ deleteRes })
+  await update()
 }
 
 async function update() {
@@ -70,7 +72,10 @@ onMounted(async () => await update())
 
 <template>
   <GooseConfirm ref="confirmDelete" />
-  <UploadXLSX ref="uploadModal" />
+  <UploadXLSX
+    ref="uploadModal"
+    @submit="update"
+  />
   <div>
     <div class="filters">
       <div class="page-size-select">
@@ -88,11 +93,17 @@ onMounted(async () => await update())
           @update="update"
         />
       </div>
-      <div>
+      <div style="display: flex; gap: .5rem">
         <GooseButton
           :icon="faPlus"
           tooltip="Загрузить .xlsx"
           @click="uploadModalRef?.show()"
+        />
+        <GooseButton
+          :icon="faRotate"
+          :loading="updating"
+          tooltip="Обновить список"
+          @click="update"
         />
       </div>
     </div>

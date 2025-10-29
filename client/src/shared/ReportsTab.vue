@@ -98,7 +98,7 @@ onMounted(async () => await update())
         :icon="faRotate"
         :loading="updating"
         tooltip="Обновить список"
-        @click="async () => { await update() }"
+        @click="update"
       />
     </div>
   </div>

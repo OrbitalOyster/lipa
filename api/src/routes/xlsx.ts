@@ -238,7 +238,7 @@ export const xlsxDelete = async (context: Context) => {
   )
   else {
     const connection = await connect(),
-      query = `DELETE FROM xlsx WHERE hash = '${xlsx['hash']}%'`
+      query = `DELETE FROM xlsx WHERE hash = '${xlsx['hash']}'`
     await connection.query(query)
     await connection.end()
     await fs.unlink(path.join(xlsxFolder, xlsx['filename']))

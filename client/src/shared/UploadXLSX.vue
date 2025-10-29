@@ -94,6 +94,7 @@ const upload = async () => {
       filename: saveAsFilename.value,
     },
   )
+  modal.value?.submit()
   console.log(result)
 }
 
@@ -105,7 +106,12 @@ const checkFilename = async () => {
 }
 watchDebounced(saveAsFilename, checkFilename, { debounce: 500 })
 
-defineExpose({ show: () => modal.value?.show() })
+defineExpose({
+  show: () => {
+    resetUploadForm()
+    modal.value?.show()
+  },
+})
 </script>
 
 <template>

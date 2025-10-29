@@ -42,7 +42,7 @@ function close() {
   emit('close')
 }
 
-defineExpose({ show })
+defineExpose({ show, submit, close })
 </script>
 
 <template>
