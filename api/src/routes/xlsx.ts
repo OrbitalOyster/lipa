@@ -33,10 +33,7 @@ export const validate = async (buffer: ArrayBuffer) => {
 
     /* No worksheets, somehow */
     if (!workbook.worksheets) return { err: 'No worksheets' }
-    return workbook.worksheets.map(w => ({
-      name: w.name,
-      tables: w.findTables(),
-    }))
+    return workbook.worksheets.map(w => w.serialize())
   }
   catch (err) {
     console.error(err)
@@ -143,6 +140,9 @@ export const save = async (context: Context) => {
       hash = createHash('sha256').update(buffer)
         .digest('hex')
 
+    const serialized = await validate(new Uint8Array(buffer).buffer) /* Voodoo */
+    // console.log(serialized)
+
     /* Check if hash is already taken */
     const hashExists = await checkHashExists(hash)
     if (hashExists) throw new Error(`Hash exists: ${hashExists}`)
@@ -155,7 +155,10 @@ export const save = async (context: Context) => {
 
     /* Query DB */
     const connection = await connect(),
-      insertQuery = `INSERT INTO xlsx (userId, filename, hash) VALUES ("${userId}", "${filename}", "${hash}")`
+      insertQuery
+        = 'INSERT INTO xlsx (userId, filename, hash, serialized) '
+          + `VALUES ('${userId}', '${filename}', '${hash}', '${JSON.stringify(serialized)}')`
+
     await connection.query(insertQuery)
     await connection.end()
   }

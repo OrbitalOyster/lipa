@@ -118,10 +118,16 @@ app.post(
   '/upload',
   upload,
 )
+app.post(
+  '/save',
+  save,
+)
 app.delete(
   '/xlsx/:hash',
   xlsxDelete,
 )
+
+/* Sync DB state and actual files */
 app.get(
   '/sync',
   sync,
@@ -137,11 +143,6 @@ app.get(
     )
     return context.json(await checkFilenameExists(filename))
   },
-)
-
-app.post(
-  '/save',
-  save,
 )
 
 /* Reports */

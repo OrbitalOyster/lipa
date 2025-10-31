@@ -37,18 +37,6 @@ class XLSXCell {
 
   private parseBorders(cell: Cell) {
     const style = cell.style
-
-    /*
-         *if (!style.border)
-         *  return null
-         *if (
-         *  !style.border.top
-         *  && !style.border.right
-         *  && !style.border.bottom
-         *  && !style.border.left
-         *)
-         *  return null
-         */
     return {
       top: style.border?.top || null,
       right: style.border?.right || null,
@@ -206,6 +194,15 @@ class XLSXCell {
       if ((this.value as string)?.match(tableNameRegexp)) return true
     }
     return false
+  }
+
+  /* === */
+  public serialize() {
+    return {
+      address: this.address,
+      type: this.type,
+      value: this.value,
+    }
   }
 }
 

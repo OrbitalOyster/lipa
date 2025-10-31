@@ -9,12 +9,10 @@ type XLSXRow = XLSXCell[]
 
 class XLSXWorksheet {
   public name = ''
-
   public rows: XLSXRow[] = []
-
-  private readonly merges
-
-  private readonly colWidths
+  public readonly merges
+  public readonly rowHeights: number[]
+  public readonly colWidths
 
   constructor(worksheet: Worksheet) {
     this.name = worksheet.name
@@ -22,13 +20,14 @@ class XLSXWorksheet {
     const dimensions = worksheet.dimensions,
       merges = worksheet.model.merges,
       defaultRowHeight = worksheet.properties.defaultRowHeight,
-      defaultColWidth = worksheet.properties.defaultColWidth || -1,
-      rowHeights = []
+      defaultColWidth = worksheet.properties.defaultColWidth || -1
+
+    this.rowHeights = []
 
     /* Fill row heights */
     worksheet.eachRow(
       { includeEmpty: true },
-      row => rowHeights.push(row.height || defaultRowHeight),
+      row => this.rowHeights.push(row.height || defaultRowHeight),
     )
 
     /* Fill col widths */
@@ -79,7 +78,7 @@ class XLSXWorksheet {
         row,
         col,
       )
-    while (currentCell && currentCell.isRightSide()) currentCell = this.getCell(
+    while (currentCell?.isRightSide()) currentCell = this.getCell(
       ++row,
       col,
     )
@@ -87,7 +86,7 @@ class XLSXWorksheet {
       row - 1,
       col,
     )
-    if (bottomRightCorner && bottomRightCorner.isBottomRightCorner()) return bottomRightCorner
+    if (bottomRightCorner?.isBottomRightCorner()) return bottomRightCorner
     else return null
   }
 
@@ -98,7 +97,7 @@ class XLSXWorksheet {
         row,
         col,
       )
-    while (currentCell && currentCell.isBottomSide()) currentCell = this.getCell(
+    while (currentCell?.isBottomSide()) currentCell = this.getCell(
       row,
       --col,
     )
@@ -106,7 +105,7 @@ class XLSXWorksheet {
       row,
       col + 1,
     )
-    if (bottomLeftCorner && bottomLeftCorner.isBottomLeftCorner()) return bottomLeftCorner
+    if (bottomLeftCorner?.isBottomLeftCorner()) return bottomLeftCorner
     else return null
   }
 
@@ -117,7 +116,7 @@ class XLSXWorksheet {
         row,
         col,
       )
-    while (currentCell && currentCell.isLeftSide()) currentCell = this.getCell(
+    while (currentCell?.isLeftSide()) currentCell = this.getCell(
       --row,
       col,
     )
@@ -125,7 +124,7 @@ class XLSXWorksheet {
       row + 1,
       col,
     )
-    if (topLeftCorner && topLeftCorner.isTopLeftCorner()) return topLeftCorner
+    if (topLeftCorner?.isTopLeftCorner()) return topLeftCorner
     else return null
   }
 
@@ -136,7 +135,7 @@ class XLSXWorksheet {
         row,
         col,
       )
-    while (currentCell && currentCell.isTopSide()) currentCell = this.getCell(
+    while (currentCell?.isTopSide()) currentCell = this.getCell(
       row,
       ++col,
     )
@@ -144,13 +143,13 @@ class XLSXWorksheet {
       row,
       col - 1,
     )
-    if (topRightCorner && topRightCorner.isTopRightCorner()) return topRightCorner
+    if (topRightCorner?.isTopRightCorner()) return topRightCorner
     else return null
   }
 
   public findTables() {
     const result = []
-    for (const row of this.rows) for (const cell of row) if (cell && cell.isTableName()) {
+    for (const row of this.rows) for (const cell of row) if (cell?.isTableName()) {
       /* Table name */
       const name = cell.value
       const topRightCorner = this.getCell(
@@ -159,7 +158,7 @@ class XLSXWorksheet {
       )
 
       /* Found top right corner */
-      if (topRightCorner && topRightCorner.isTopRightCorner()) {
+      if (topRightCorner?.isTopRightCorner()) {
         const bottomRightCorner = this.findBottomRightCorner(topRightCorner),
           bottomLeftCorner = bottomRightCorner && this.findBottomLeftCorner(bottomRightCorner),
           topLeftCorner = bottomLeftCorner && this.findTopLeftCorner(bottomLeftCorner)
@@ -178,6 +177,18 @@ class XLSXWorksheet {
       }
     }
     return result
+  }
+
+  public serialize() {
+    const rows = this.rows.map(r => r.map(c => c.serialize()))
+    return {
+      name: this.name,
+      rows,
+      tables: this.findTables(),
+      merges: this.merges,
+      rowHeights: this.rowHeights,
+      colWidths: this.colWidths,
+    }
   }
 }
 

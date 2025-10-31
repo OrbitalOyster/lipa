@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import axios from 'axios'
+import { onMounted } from 'vue'
+
 const props = defineProps<{
   hash: string
 }>()
-console.log(props.hash)
+
+onMounted(async () => {
+  const xlsx = await axios.get(`/xlsx/${props.hash}`)
+  console.log(xlsx.data)
+})
 </script>
 
 <template>
