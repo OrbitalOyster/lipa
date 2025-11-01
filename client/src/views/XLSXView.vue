@@ -1,20 +1,23 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import XLSXWorksheet from '#components/xlsx/XLSXWorksheet.vue'
 import axios from 'axios'
-import { onMounted } from 'vue'
 
 const props = defineProps<{
   hash: string
 }>()
 
+const xlsx = ref(null)
+
 onMounted(async () => {
-  const xlsx = await axios.get(`/xlsx/${props.hash}`)
-  console.log(xlsx.data)
+  const axiosRes = await axios.get(`/xlsx/${props.hash}`)
+  xlsx.value = axiosRes.data.serialized[0]
 })
 </script>
 
 <template>
   <div>
-    Hello, xlsx
+    <XLSXWorksheet v-model="xlsx" />
   </div>
 </template>
 

@@ -229,7 +229,11 @@ export const xlsxByHash = async (context: Context) => {
     'Nothing here',
     404,
   )
-  else return context.json(xlsx)
+  else {
+    const result = xlsx
+    result['serialized'] = JSON.parse(xlsx['serialized'])
+    return context.json(result)
+  }
 }
 
 export const xlsxDelete = async (context: Context) => {
