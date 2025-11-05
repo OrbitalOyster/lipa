@@ -16,6 +16,7 @@ const fromDate = defineModel<string>('fromDate', { required: true }),
     { id: 'today', title: 'Сегодня' },
     { id: 'yesterday', title: 'Вчера' },
     { id: 'fromJan1', title: 'С начала года' },
+    { id: 'all', title: 'С начала времён' },
   ],
   selectedPeriod = ref(timePeriods[0]!.id)
 

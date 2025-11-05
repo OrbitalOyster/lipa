@@ -116,5 +116,5 @@ declare global {
     rows: TableRow<T>[]
   }
 
-  type Period = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1'
+  type Period = 'currentMonth' | 'previousMonth' | 'today' | 'yesterday' | 'fromJan1' | 'all'
 }

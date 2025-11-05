@@ -37,6 +37,11 @@ export const dateToPeriod = (date: Date, period: Period) => {
       fromDate = dateToYYYYMMDD(new Date(year, 0, 1))
       toDate = dateToYYYYMMDD(new Date(year, month, day))
       break
+
+    case 'all':
+      fromDate = dateToYYYYMMDD(new Date(2000, 0, 1))
+      toDate = dateToYYYYMMDD(new Date(year, month, day))
+      break
   }
 
   return { fromDate, toDate }
