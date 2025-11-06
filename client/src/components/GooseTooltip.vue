@@ -28,7 +28,7 @@ const { floatingStyles, middlewareData, arrowStyle }
   >
     <slot />
   </div>
-  <Teleport to="#modals">
+  <Teleport to="#tooltips">
     <!-- Pretty animation on toggle -->
     <Transition name="fade">
       <div

@@ -101,7 +101,7 @@ defineExpose({ show, submit, close })
     justify-content: center
     position: fixed
     width: 100vw
-    z-index: 100
+    z-index: 99
 
   .dialog
     background-color: colors.$card
