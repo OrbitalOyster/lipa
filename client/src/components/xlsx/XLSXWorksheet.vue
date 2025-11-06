@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import type { CellValue } from 'exceljs'
 import { ValueType } from 'exceljs'
 
 interface XLSXCell {
   address: string
   type: ValueType
-  value: any
+  value: CellValue
+  rowSpan: number
+  colSpan: number
 }
 
 interface XLSXWorksheet {
   name: string
+  width: number
+  height: number
   rowHeights: number[]
   colWidths: number[]
   merges: string[]
@@ -21,10 +26,15 @@ const getCell = (r: number, c: number) => {
   if (!row)
     return null
   const cell = row[c]
-  if (!cell?.value)
+  if (!cell)
     return null
 
   return cell
+}
+
+const isMergedCell = (r: number, c: number) => {
+  const cell = getCell(r, c)
+  return cell?.type === ValueType.Merge
 }
 
 const getCellValue = (r: number, c: number) => {
@@ -36,9 +46,7 @@ const getCellValue = (r: number, c: number) => {
 
 const getCellStyle = (r: number, c: number) => {
   const WIDTH_M = 1 / 2.2 * 16,
-    HEIGHT_M = 1 / 12 * 16
-
-  const cell = getCell(r, c),
+    HEIGHT_M = 1 / 12 * 16,
     style = {
       backgroundColor: 'white',
       width: (model.value?.colWidths[c] * WIDTH_M) + 'px',
@@ -53,19 +61,23 @@ const getCellStyle = (r: number, c: number) => {
   <div>
     <table>
       <tbody>
-        <!-- TODO: Stoopid -->
         <tr
-          v-for="row in model?.rowHeights.length"
+          v-for="row in model?.height"
           :key="row"
         >
-          <!-- TODO: More stoopid -->
-          <td
-            v-for="col in model?.colWidths.length"
+          <template
+            v-for="col in model?.width"
             :key="col"
-            :style="getCellStyle(row - 1, col - 1)"
           >
-            {{ getCellValue(row - 1, col - 1) }}
-          </td>
+            <td
+              v-if="!isMergedCell(row - 1, col - 1)"
+              :style="getCellStyle(row - 1, col - 1)"
+              :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
+              :colSpan="getCell(row - 1, col - 1)?.colSpan"
+            >
+              {{ getCellValue(row - 1, col - 1) }}
+            </td>
+          </template>
         </tr>
       </tbody>
     </table>
