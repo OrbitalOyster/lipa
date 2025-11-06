@@ -18,7 +18,7 @@ const attachmentName = 'attachment',
   uploadsFolder = path.join('volume', 'tmp'),
   xlsxFolder = path.join('volume', 'xlsx')
 
-export const validate = async (buffer: ArrayBuffer) => {
+export const serializeBuffer = async (buffer: ArrayBuffer) => {
   try {
     const book = new XLSXBook(buffer)
     await book.load()
@@ -60,12 +60,12 @@ export const upload = async (context: Context) => {
     400,
   )
 
-  /* Validate */
+  /* Serialize */
   const bufferArray = await attachment.arrayBuffer(),
-    validation = await validate(bufferArray)
+    serialized = await serializeBuffer(bufferArray)
 
-  /* Unable to parse or validate */
-  if ('err' in validation) return context.json(validation)
+  /* Unable to parse or serialize */
+  if ('err' in serialized) return context.json(serialized)
 
   /* Save to tmp, return hash */
   const buffer = Buffer.from(bufferArray),
@@ -91,7 +91,7 @@ export const upload = async (context: Context) => {
   return context.json({
     filenameExists,
     hashExists,
-    worksheets: validation,
+    worksheets: serialized,
     key: filenameHash,
   })
 }
@@ -127,7 +127,7 @@ export const save = async (context: Context) => {
       hash = createHash('sha256').update(buffer)
         .digest('hex')
     /* Get useful content */
-    const serialized = await validate(new Uint8Array(buffer).buffer) /* Voodoo */
+    const serialized = await serializeBuffer(new Uint8Array(buffer).buffer) /* Voodoo */
     /* Check if hash is already taken */
     const hashExists = await checkHashExists(hash)
     if (hashExists) throw new Error(`Hash exists: ${hashExists}`)
