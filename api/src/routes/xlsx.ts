@@ -65,7 +65,7 @@ export const upload = async (context: Context) => {
     serialized = await serializeBuffer(bufferArray)
 
   /* Unable to parse or serialize */
-  if ('err' in serialized) return context.json(serialized)
+  if ('err' in serialized) return context.json(serialized, 400)
 
   /* Save to tmp, return hash */
   const buffer = Buffer.from(bufferArray),

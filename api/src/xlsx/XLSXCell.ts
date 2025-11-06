@@ -10,7 +10,7 @@ export class XLSXCell {
   public readonly address
   public readonly style
   public readonly value
-  public borders
+  public readonly borders
 
   constructor(worksheet: XLSXWorksheet, cell: Cell, rowNum: number, colNum: number) {
     this.worksheet = worksheet
@@ -22,7 +22,11 @@ export class XLSXCell {
     this.type = cell.model.type
     this.address = cell.address
     this.style = cell.model.style
-    this.value = cell.value
+
+    /* Don't set value on merged on empty cells */
+    if (this.type !== ValueType.Null && this.type !== ValueType.Merge)
+      this.value = cell.value
+
     this.borders = this.parseBorders(cell)
   }
 

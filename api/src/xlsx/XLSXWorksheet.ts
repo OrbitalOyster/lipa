@@ -1,4 +1,5 @@
 import type {
+  CellValue,
   Row,
   Worksheet,
 } from 'exceljs'
@@ -6,13 +7,31 @@ import type {
 import { XLSXCell } from './XLSXCell.ts'
 
 type XLSXRow = XLSXCell[]
+type SafeDataType = null | number | string | boolean | Date
 
-class XLSXWorksheet {
-  public name = ''
+const isSafeDataType = (value: unknown) => {
+  if (
+    value === null
+    || typeof value === 'number'
+    || typeof value === 'string'
+    || typeof value === 'boolean'
+  )
+    return true
+
+  if (value instanceof Date)
+    return true
+
+  return false
+}
+
+export class XLSXWorksheet {
+  public readonly name
   public rows: XLSXRow[] = []
   public readonly merges
   public readonly rowHeights: number[]
   public readonly colWidths
+  public readonly width
+  public readonly height
 
   constructor(worksheet: Worksheet) {
     this.name = worksheet.name
@@ -37,6 +56,9 @@ class XLSXWorksheet {
         0,
         dimensions.right,
       )
+
+    this.width = worksheet.columnCount
+    this.height = worksheet.rowCount
 
     this.merges = merges
     this.colWidths = colWidths
@@ -65,6 +87,21 @@ class XLSXWorksheet {
       )),
     )
     return parsedRow
+  }
+
+  public getData() {
+    const result = new Array(this.height)
+    for (let r = 0; r < this.height; r++) {
+      const newRow = new Array(this.width).fill(null)
+      for (let c = 0; c < this.width; c++) {
+        /* Exceljs counts from 1 */
+        const value = this.getCell(r + 1, c + 1)?.value
+        if (value && isSafeDataType(value))
+          newRow[c] = value
+      }
+      result[r] = newRow
+    }
+    return result as ((SafeDataType)[])[]
   }
 
   public getCell(rowNum: number, colNum: number) {
@@ -183,6 +220,8 @@ class XLSXWorksheet {
     const rows = this.rows.map(r => r.map(c => c.serialize()))
     return {
       name: this.name,
+      width: this.width,
+      height: this.height,
       rows,
       tables: this.findTables(),
       merges: this.merges,
@@ -191,5 +230,3 @@ class XLSXWorksheet {
     }
   }
 }
-
-export { XLSXWorksheet }
