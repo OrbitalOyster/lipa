@@ -1,24 +1,15 @@
-import type {
-  Cell,
-} from 'exceljs'
+import type { Cell } from 'exceljs'
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
 
-class XLSXCell {
+export class XLSXCell {
   private worksheet
-
   public readonly rowNum
-
   public readonly colNum
-
   public readonly type
-
   public readonly address
-
   public readonly style
-
   public readonly value
-
   public borders
 
   constructor(worksheet: XLSXWorksheet, cell: Cell, rowNum: number, colNum: number) {
@@ -205,5 +196,3 @@ class XLSXCell {
     }
   }
 }
-
-export { XLSXCell }

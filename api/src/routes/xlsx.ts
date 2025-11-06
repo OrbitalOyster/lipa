@@ -1,8 +1,7 @@
 import { getMySQLDate, parseQuery } from '../utils.ts'
 import type { Context } from 'hono'
-import ExcelJS from 'exceljs'
 import type { RowDataPacket } from 'mysql2'
-import { XLSXWorksheet } from '../xlsx/XLSXWorksheet.ts'
+import { XLSXBook } from '../xlsx/XLSXBook.ts'
 import connect from '../mysqlConnection.ts'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
@@ -19,21 +18,11 @@ const attachmentName = 'attachment',
   uploadsFolder = path.join('volume', 'tmp'),
   xlsxFolder = path.join('volume', 'xlsx')
 
-const parseXLSXFile = async (buffer: ArrayBuffer) => {
-  const workbook = new ExcelJS.Workbook()
-  await workbook.xlsx.load(buffer)
-  const worksheets: XLSXWorksheet[] = []
-  workbook.eachSheet(w => worksheets.push(new XLSXWorksheet(w)))
-  return { worksheets }
-}
-
 export const validate = async (buffer: ArrayBuffer) => {
   try {
-    const workbook = await parseXLSXFile(buffer)
-
-    /* No worksheets, somehow */
-    if (!workbook.worksheets) return { err: 'No worksheets' }
-    return workbook.worksheets.map(w => w.serialize())
+    const book = new XLSXBook(buffer)
+    await book.load()
+    return book.serialize()
   }
   catch (err) {
     console.error(err)
@@ -127,38 +116,31 @@ export const save = async (context: Context) => {
   try {
     /* Check if DB filename exists */
     if (await checkFilenameExists(filename)) throw new Error('Filename taken (says DB)')
-
     /* Check if src file exists */
     await fs.access(
       srcFile,
       fs.constants.F_OK,
     )
-
     /* Get hash (again) */
     const file = await fs.readFile(srcFile),
       buffer = Buffer.from(file.buffer),
       hash = createHash('sha256').update(buffer)
         .digest('hex')
-
+    /* Get useful content */
     const serialized = await validate(new Uint8Array(buffer).buffer) /* Voodoo */
-    // console.log(serialized)
-
     /* Check if hash is already taken */
     const hashExists = await checkHashExists(hash)
     if (hashExists) throw new Error(`Hash exists: ${hashExists}`)
-
     /* Copy from tmp folder */
     await fs.copyFile(
       srcFile, path.join(xlsxFolder, filename),
       fs.constants.COPYFILE_EXCL,
     )
-
     /* Query DB */
     const connection = await connect(),
       insertQuery
         = 'INSERT INTO xlsx (userId, filename, hash, serialized) '
           + `VALUES ('${userId}', '${filename}', '${hash}', '${JSON.stringify(serialized)}')`
-
     await connection.query(insertQuery)
     await connection.end()
   }

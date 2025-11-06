@@ -20,6 +20,7 @@
   "dependencies": {
     "exceljs": "4.4.0",
     "hono": "4.8.12",
+    "hyperformula": "^3.1.0",
     "mysql2": "3.14.3"
   }
 }
