@@ -21,16 +21,27 @@ export class XLSXBook {
       const sheetName = this.hyperformula.addSheet(xlsxWorksheet.name),
         sheetId = this.hyperformula.getSheetId(sheetName),
         tableData = xlsxWorksheet.getData()
-
       /* Should not happen */
       if (sheetId === undefined)
         throw new Error('Major screwup')
-
+      /* Create Hyperformula sheet */
       this.hyperformula.setCellContents({
         row: 0,
         col: 0,
         sheet: sheetId,
       }, tableData)
+      /* Handle spans */
+      for (const merge of xlsxWorksheet.merges) {
+        const address = this.hyperformula.simpleCellRangeFromString(merge, sheetId)
+        if (!address)
+          throw new Error('Major screwup')
+        const [rowSpan, colSpan] = [
+          address.end.row - address.start.row + 1,
+          address.end.col - address.start.col + 1,
+        ]
+        xlsxWorksheet.getCell(address.start.row + 1, address.start.col + 1)
+          ?.setSpans(rowSpan, colSpan)
+      }
 
       this.worksheets.push(xlsxWorksheet)
     })

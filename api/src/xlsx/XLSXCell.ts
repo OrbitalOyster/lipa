@@ -11,6 +11,8 @@ export class XLSXCell {
   public readonly style
   public readonly value
   public readonly borders
+  private rowSpan = 1
+  private colSpan = 1
 
   constructor(worksheet: XLSXWorksheet, cell: Cell, rowNum: number, colNum: number) {
     this.worksheet = worksheet
@@ -28,6 +30,11 @@ export class XLSXCell {
       this.value = cell.value
 
     this.borders = this.parseBorders(cell)
+  }
+
+  public setSpans(rowSpan: number, colSpan: number) {
+    this.rowSpan = rowSpan
+    this.colSpan = colSpan
   }
 
   private parseBorders(cell: Cell) {
@@ -192,11 +199,14 @@ export class XLSXCell {
   }
 
   /* === */
+
   public serialize() {
     return {
       address: this.address,
       type: this.type,
       value: this.value,
+      rowSpan: this.rowSpan,
+      colSpan: this.colSpan,
     }
   }
 }
