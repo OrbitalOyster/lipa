@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faFile, faPlus, faRotate, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faFile, faPlus, faRotate, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import DateSelector from '#shared/DateSelector.vue'
 import GooseButton from '#components/GooseButton.vue'
@@ -42,9 +42,25 @@ const currentMonth = dateToPeriod(new Date(), 'currentMonth'),
 
 let total = 0
 
+const downloadTemplate = async (hash: string) => {
+  const axiosRes = await axios.get(`/xlsx/${hash}/download`, {
+      responseType: 'blob',
+    }),
+    blob = new Blob([axiosRes.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    }),
+    /* Filename is hidden in 'Content-Disposition' header */
+    filename = axiosRes.headers['content-disposition'].match(/filename="([^"]+)"/i)[1],
+    link = document.createElement('a')
+  /* Invoke download */
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
 const deleteTemplate = async (hash: string) => {
-  const deleteRes = await axios.delete(`/xlsx/${hash}`)
-  console.log({ deleteRes })
+  await axios.delete(`/xlsx/${hash}`)
   await update()
 }
 
@@ -132,6 +148,13 @@ onMounted(async () => await update())
           color="primary"
         />
       </RouterLink>
+      <GooseButton
+        :icon="faDownload"
+        transparent
+        color="primary"
+        tooltip="Скачать шаблон"
+        @click="downloadTemplate(row.hash)"
+      />
       <GooseButton
         :icon="faTrash"
         transparent

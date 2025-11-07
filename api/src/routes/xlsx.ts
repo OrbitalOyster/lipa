@@ -96,6 +96,29 @@ export const upload = async (context: Context) => {
   })
 }
 
+export const download = async (context: Context) => {
+  const hash = context.req.param('hash'),
+    fileStats = await getXLSXByHash(hash)
+  /* Bogus hash */
+  if (!fileStats)
+    throw new Error('File not found')
+  const fullFilename = path.join(xlsxFolder, fileStats.filename)
+  /* Check if file exists */
+  await fs.access(
+    fullFilename,
+    fs.constants.F_OK,
+  )
+  const buffer = await fs.readFile(fullFilename)
+
+  return context.body(buffer, {
+    headers: {
+      'Access-Control-Expose-Headers': 'Content-Disposition',
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="${fileStats.filename}"`,
+    },
+  })
+}
+
 export const sync = async (context: Context) => {
   /* Actual files */
   const files = await fs.readdir(xlsxFolder)

@@ -57,7 +57,7 @@ onChange((files) => {
   formData.append('attachment', files[0])
 
   axios.post(
-    '/upload',
+    '/xlsx',
     formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

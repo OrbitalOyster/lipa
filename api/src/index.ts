@@ -1,7 +1,7 @@
 import type { Context, Next } from 'hono'
 import { auth, logout } from './routes/auth'
 import { check, getPayload } from './routes/cookies'
-import { checkFilenameExists, save, sync, upload, xlsx, xlsxByHash, xlsxDelete } from './routes/xlsx'
+import { checkFilenameExists, download, save, sync, upload, xlsx, xlsxByHash, xlsxDelete } from './routes/xlsx'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
@@ -115,8 +115,12 @@ app.get(
   xlsxByHash,
 )
 app.post(
-  '/upload',
+  '/xlsx',
   upload,
+)
+app.get(
+  '/xlsx/:hash/download',
+  download,
 )
 app.post(
   '/save',
