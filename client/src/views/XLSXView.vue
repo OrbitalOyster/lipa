@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const xlsx = ref([]),
-  activeSheet = ref(0)
+  activeSheet = ref('0')
 
 onMounted(async () => {
   const axiosRes = await axios.get(`/xlsx/${props.hash}`)
@@ -19,7 +19,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <XLSXWorksheet v-model="xlsx[activeSheet]" />
+    <XLSXWorksheet v-model="xlsx[Number(activeSheet)]" />
     <div style="display: flex; margin-top: 1rem">
       <GooseInput v-model="activeSheet" />
     </div>

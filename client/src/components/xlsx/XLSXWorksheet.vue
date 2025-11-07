@@ -41,6 +41,8 @@ const getCellValue = (r: number, c: number) => {
   const cell = getCell(r, c)
   if (!cell)
     return ''
+  if (cell.type === ValueType.Formula)
+    return 'Σ'
   return cell.value
 }
 

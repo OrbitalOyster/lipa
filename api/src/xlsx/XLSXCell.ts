@@ -1,6 +1,20 @@
-import type { Cell } from 'exceljs'
+import type { Cell, CellValue } from 'exceljs'
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
+
+interface SerializedCell {
+  address: string
+  type: ValueType
+  value: CellValue
+  borders: {
+    top?: string
+    right?: string
+    bottom?: string
+    left?: string
+  }
+  rowSpan?: number
+  colSpan?: number
+}
 
 export class XLSXCell {
   private worksheet
@@ -30,6 +44,7 @@ export class XLSXCell {
       this.value = cell.value
 
     this.borders = this.parseBorders(cell)
+    console.log(this.borders)
   }
 
   public setSpans(rowSpan: number, colSpan: number) {
@@ -40,10 +55,10 @@ export class XLSXCell {
   private parseBorders(cell: Cell) {
     const style = cell.style
     return {
-      top: style.border?.top || null,
-      right: style.border?.right || null,
-      bottom: style.border?.bottom || null,
-      left: style.border?.left || null,
+      top: style.border?.top?.style || undefined,
+      right: style.border?.right?.style || undefined,
+      bottom: style.border?.bottom?.style || undefined,
+      left: style.border?.left?.style || undefined,
     }
   }
 
@@ -201,12 +216,19 @@ export class XLSXCell {
   /* === */
 
   public serialize() {
-    return {
+    const result: SerializedCell = {
       address: this.address,
       type: this.type,
       value: this.value,
-      rowSpan: this.rowSpan,
-      colSpan: this.colSpan,
+      borders: this.borders,
     }
+
+    /* Ignore spans less than 2 */
+    if (this.rowSpan > 1)
+      result.rowSpan = this.rowSpan
+    if (this.colSpan > 1)
+      result.colSpan = this.colSpan
+
+    return result
   }
 }

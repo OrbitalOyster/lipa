@@ -109,7 +109,6 @@ export const download = async (context: Context) => {
     fs.constants.F_OK,
   )
   const buffer = await fs.readFile(fullFilename)
-
   return context.body(buffer, {
     headers: {
       'Access-Control-Expose-Headers': 'Content-Disposition',
