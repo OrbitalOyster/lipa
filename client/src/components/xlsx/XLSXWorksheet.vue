@@ -2,12 +2,23 @@
 import type { CellValue } from 'exceljs'
 import { ValueType } from 'exceljs'
 
+type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
+
 interface XLSXCell {
   address: string
   type: ValueType
   value: CellValue
   rowSpan: number
   colSpan: number
+  borders?: {
+    top?: Border
+    right?: Border
+    bottom?: Border
+    left?: Border
+  }
+  backgroundColor: string
+  textAlign: 'center' | 'left' | 'right'
+  verticalAlign: 'middle' | 'top' | 'bottom'
 }
 
 interface XLSXWorksheet {
@@ -49,10 +60,35 @@ const getCellValue = (r: number, c: number) => {
 const getCellStyle = (r: number, c: number) => {
   const WIDTH_M = 1 / 2.2 * 16,
     HEIGHT_M = 1 / 12 * 16,
+    BORDER_DEFAULT = '1px solid #DDD',
+    BORDER_MAP = {
+      hair: '1px solid darkslategray',
+      thin: '1px solid darkslategray',
+      medium: '2px solid darkslategray',
+      thick: '2px solid darkslategray',
+      dotted: '2px dotted darkslategray',
+      default: BORDER_DEFAULT,
+    },
+    width = (model.value?.colWidths[c] ?? 0) * WIDTH_M,
+    height = (model.value?.rowHeights[r] ?? 0) * HEIGHT_M,
+    cell = getCell(r, c),
+    borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
+    borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
+    borderBottom = BORDER_MAP[cell?.borders?.bottom ?? 'default'],
+    borderLeft = BORDER_MAP[cell?.borders?.left ?? 'default'],
+    backgroundColor = cell?.backgroundColor ?? 'white',
+    textAlign = cell?.textAlign,
+    verticalAlign = cell?.verticalAlign,
     style = {
-      backgroundColor: 'white',
-      width: (model.value?.colWidths[c] * WIDTH_M) + 'px',
-      height: (model.value?.rowHeights[r] * HEIGHT_M) + 'px',
+      backgroundColor,
+      textAlign,
+      verticalAlign,
+      width: width + 'px',
+      height: height + 'px',
+      borderTop,
+      borderRight,
+      borderBottom,
+      borderLeft,
     }
   return style
 }
@@ -87,8 +123,6 @@ const getCellStyle = (r: number, c: number) => {
 </template>
 
 <style lang="sass" scoped>
-
-td
-  border: 1px solid #DDD
-
+  table
+    border-collapse: collapse
 </style>

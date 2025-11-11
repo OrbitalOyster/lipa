@@ -1,19 +1,27 @@
-import type { Cell, CellValue } from 'exceljs'
+import type { Cell, CellValue, Style } from 'exceljs'
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
+
+interface CellBorders {
+  top?: string
+  right?: string
+  bottom?: string
+  left?: string
+}
+
+type TextAlign = 'left' | 'center' | 'right'
+type VerticalAlign = 'top' | 'middle' | 'bottom'
 
 interface SerializedCell {
   address: string
   type: ValueType
   value: CellValue
-  borders: {
-    top?: string
-    right?: string
-    bottom?: string
-    left?: string
-  }
+  borders?: CellBorders
+  backgroundColor?: string
   rowSpan?: number
   colSpan?: number
+  textAlign?: TextAlign
+  verticalAlign?: VerticalAlign
 }
 
 export class XLSXCell {
@@ -25,6 +33,9 @@ export class XLSXCell {
   public readonly style
   public readonly value
   public readonly borders
+  public readonly backgroundColor
+  public readonly textAlign?: TextAlign
+  public readonly verticalAlign?: VerticalAlign
   private rowSpan = 1
   private colSpan = 1
 
@@ -43,8 +54,16 @@ export class XLSXCell {
     if (this.type !== ValueType.Null && this.type !== ValueType.Merge)
       this.value = cell.value
 
-    this.borders = this.parseBorders(cell)
-    console.log(this.borders)
+    /* Borders */
+    this.borders = this.parseBorders(this.style)
+
+    /* Background color */
+    this.backgroundColor = this.parseBackgroundColor(this.style)
+
+    if (this.style.alignment) {
+      this.textAlign = this.parseHorizontalAlignment(this.style)
+      this.verticalAlign = this.parseVerticalAlignment(this.style)
+    }
   }
 
   public setSpans(rowSpan: number, colSpan: number) {
@@ -52,13 +71,57 @@ export class XLSXCell {
     this.colSpan = colSpan
   }
 
-  private parseBorders(cell: Cell) {
-    const style = cell.style
-    return {
-      top: style.border?.top?.style || undefined,
-      right: style.border?.right?.style || undefined,
-      bottom: style.border?.bottom?.style || undefined,
-      left: style.border?.left?.style || undefined,
+  private parseBorders(style: Style) {
+    const result: CellBorders = {}
+
+    if (style.border?.top?.style)
+      result.top = style.border.top.style
+    if (style.border?.right?.style)
+      result.right = style.border.right.style
+    if (style.border?.bottom?.style)
+      result.bottom = style.border.bottom.style
+    if (style.border?.left?.style)
+      result.left = style.border.left.style
+
+    return result
+  }
+
+  private parseBackgroundColor(style: Style) {
+    if (style?.fill
+      && 'pattern' in style.fill
+      && style?.fill.pattern === 'solid'
+      && style?.fill.fgColor?.argb)
+      return `#${style.fill.fgColor.argb.slice(2)}`
+    else
+      return null
+  }
+
+  private parseHorizontalAlignment(style: Style) {
+    switch (style.alignment.horizontal) {
+      case 'general':
+      case 'left':
+        return 'left'
+      case 'center':
+        return 'center'
+      case 'right':
+        return 'right'
+      default:
+        /* Unsupported */
+        throw new Error('Unsupported horizontal alignment: ' + style.alignment.horizontal)
+    }
+  }
+
+  private parseVerticalAlignment(style: Style) {
+    switch (style.alignment.vertical) {
+      case 'top':
+        return 'top'
+      case 'middle':
+        return 'middle'
+      case 'bottom':
+        return 'bottom'
+      default:
+        /* Unsupported */
+        throw new Error('Unsupported vertical alignment')
     }
   }
 
@@ -220,8 +283,19 @@ export class XLSXCell {
       address: this.address,
       type: this.type,
       value: this.value,
-      borders: this.borders,
     }
+
+    if (Object.keys(this.borders).length)
+      result.borders = this.borders
+
+    if (this.backgroundColor)
+      result.backgroundColor = this.backgroundColor
+
+    if (this.verticalAlign)
+      result.verticalAlign = this.verticalAlign
+
+    if (this.textAlign)
+      result.textAlign = this.textAlign
 
     /* Ignore spans less than 2 */
     if (this.rowSpan > 1)
