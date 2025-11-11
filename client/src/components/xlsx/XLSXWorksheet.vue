@@ -16,6 +16,11 @@ interface XLSXCell {
     bottom?: Border
     left?: Border
   }
+  font?: {
+    bold?: boolean
+    italic?: boolean
+    underline?: boolean
+  }
   backgroundColor: string
   textAlign: 'center' | 'left' | 'right'
   verticalAlign: 'middle' | 'top' | 'bottom'
@@ -60,7 +65,8 @@ const getCellValue = (r: number, c: number) => {
 const getCellStyle = (r: number, c: number) => {
   const WIDTH_M = 1 / 2.2 * 16,
     HEIGHT_M = 1 / 12 * 16,
-    BORDER_DEFAULT = '1px solid #DDD',
+    // BORDER_DEFAULT = '1px solid #DDD',
+    BORDER_DEFAULT = 'none',
     BORDER_MAP = {
       hair: '1px solid darkslategray',
       thin: '1px solid darkslategray',
@@ -76,6 +82,9 @@ const getCellStyle = (r: number, c: number) => {
     borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
     borderBottom = BORDER_MAP[cell?.borders?.bottom ?? 'default'],
     borderLeft = BORDER_MAP[cell?.borders?.left ?? 'default'],
+    fontWeight = cell?.font?.bold ? 'bold' : 'normal',
+    fontStyle = cell?.font?.italic ? 'italic' : 'normal',
+    textDecoration = cell?.font?.underline ? 'underline' : 'none',
     backgroundColor = cell?.backgroundColor ?? 'white',
     textAlign = cell?.textAlign,
     verticalAlign = cell?.verticalAlign,
@@ -89,6 +98,9 @@ const getCellStyle = (r: number, c: number) => {
       borderRight,
       borderBottom,
       borderLeft,
+      fontWeight,
+      fontStyle,
+      textDecoration,
     }
   return style
 }
@@ -123,6 +135,4 @@ const getCellStyle = (r: number, c: number) => {
 </template>
 
 <style lang="sass" scoped>
-  table
-    border-collapse: collapse
 </style>

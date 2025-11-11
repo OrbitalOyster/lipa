@@ -1,22 +1,30 @@
-import type { Cell, CellValue, Style } from 'exceljs'
+import type { Alignment, Borders, BorderStyle, Cell, CellValue, Font, Style } from 'exceljs'
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
 
-interface CellBorders {
-  top?: string
-  right?: string
-  bottom?: string
-  left?: string
-}
-
+type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 type TextAlign = 'left' | 'center' | 'right'
 type VerticalAlign = 'top' | 'middle' | 'bottom'
+
+interface CellBorders {
+  top?: Border
+  right?: Border
+  bottom?: Border
+  left?: Border
+}
+
+interface CellFont {
+  bold?: boolean
+  italic?: boolean
+  underline?: boolean
+}
 
 interface SerializedCell {
   address: string
   type: ValueType
   value: CellValue
   borders?: CellBorders
+  font?: CellFont
   backgroundColor?: string
   rowSpan?: number
   colSpan?: number
@@ -33,6 +41,7 @@ export class XLSXCell {
   public readonly style
   public readonly value
   public readonly borders
+  public readonly font
   public readonly backgroundColor
   public readonly textAlign?: TextAlign
   public readonly verticalAlign?: VerticalAlign
@@ -55,7 +64,12 @@ export class XLSXCell {
       this.value = cell.value
 
     /* Borders */
-    this.borders = this.parseBorders(this.style)
+    if (this.style.border)
+      this.borders = this.parseBorders(this.style.border)
+
+    /* Font */
+    if (this.style.font)
+      this.font = this.parseFont(this.style.font)
 
     /* Background color */
     this.backgroundColor = this.parseBackgroundColor(this.style)
@@ -71,18 +85,34 @@ export class XLSXCell {
     this.colSpan = colSpan
   }
 
-  private parseBorders(style: Style) {
+  private checkBorderStyle(style: BorderStyle) {
+    const supportedStyles = ['thin', 'dotted', 'hair', 'medium', 'thick', 'dashed']
+    return supportedStyles.includes(style)
+  }
+
+  private parseBorders(border: Borders) {
     const result: CellBorders = {}
 
-    if (style.border?.top?.style)
-      result.top = style.border.top.style
-    if (style.border?.right?.style)
-      result.right = style.border.right.style
-    if (style.border?.bottom?.style)
-      result.bottom = style.border.bottom.style
-    if (style.border?.left?.style)
-      result.left = style.border.left.style
+    if (border.top?.style)
+      result.top = border.top.style
+    if (border.right?.style)
+      result.right = border.right.style
+    if (border?.bottom?.style)
+      result.bottom = border.bottom.style
+    if (border?.left?.style)
+      result.left = border.left.style
 
+    return result
+  }
+
+  private parseFont(font: Partial<Font>) {
+    const result: CellFont = {}
+    if (font.bold)
+      result.bold = true
+    if (font.italic)
+      result.italic = true
+    if (font.underline)
+      result.underline = true
     return result
   }
 
@@ -97,7 +127,8 @@ export class XLSXCell {
   }
 
   private parseHorizontalAlignment(style: Style) {
-    switch (style.alignment.horizontal) {
+    /* 'general' somehow not included in horizontal alignment */
+    switch (style.alignment.horizontal as Alignment['horizontal'] | 'general') {
       case 'general':
       case 'left':
         return 'left'
@@ -285,8 +316,11 @@ export class XLSXCell {
       value: this.value,
     }
 
-    if (Object.keys(this.borders).length)
+    if (this.borders && Object.keys(this.borders).length)
       result.borders = this.borders
+
+    if (this.font && Object.keys(this.font).length)
+      result.font = this.font
 
     if (this.backgroundColor)
       result.backgroundColor = this.backgroundColor
