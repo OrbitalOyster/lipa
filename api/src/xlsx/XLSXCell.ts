@@ -2,7 +2,7 @@ import type { Alignment, BorderStyle, Borders, Cell, CellValue, Font, Style } fr
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
 
-type Border = 'thin' | 'dotted' | 'hair' | 'medium' | 'double' | 'thick'
+type Border = 'thin' | 'hair' | 'medium' | 'thick'
 type TextAlign = 'left' | 'center' | 'right'
 type VerticalAlign = 'top' | 'middle' | 'bottom'
 
@@ -14,6 +14,7 @@ interface CellBorders {
 }
 
 interface CellFont {
+  color?: string
   bold?: boolean
   italic?: boolean
   underline?: boolean
@@ -86,7 +87,7 @@ export class XLSXCell {
   }
 
   private checkBorderStyle(style: BorderStyle) {
-    const supportedStyles = ['thin', 'dotted', 'hair', 'medium', 'thick']
+    const supportedStyles = ['thin', 'hair', 'medium', 'thick']
     if (supportedStyles.includes(style))
       return style as Border
     else {
@@ -118,6 +119,9 @@ export class XLSXCell {
       result.italic = true
     if (font.underline)
       result.underline = true
+    if (font.color?.argb)
+      result.color = '#' + font.color.argb.slice(2)
+
     return result
   }
 
@@ -126,7 +130,7 @@ export class XLSXCell {
       && 'pattern' in style.fill
       && style?.fill.pattern === 'solid'
       && style?.fill.fgColor?.argb)
-      return `#${style.fill.fgColor.argb.slice(2)}`
+      return '#' + style.fill.fgColor.argb.slice(2)
     else
       return null
   }

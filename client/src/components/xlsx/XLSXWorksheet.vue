@@ -17,6 +17,7 @@ interface XLSXCell {
     left?: Border
   }
   font?: {
+    color?: string
     bold?: boolean
     italic?: boolean
     underline?: boolean
@@ -85,11 +86,13 @@ const getCellStyle = (r: number, c: number) => {
     fontWeight = cell?.font?.bold ? 'bold' : 'normal',
     fontStyle = cell?.font?.italic ? 'italic' : 'normal',
     textDecoration = cell?.font?.underline ? 'underline' : 'none',
-    backgroundColor = cell?.backgroundColor ?? 'white',
+    backgroundColor = cell?.backgroundColor,
+    color = cell?.font?.color,
     textAlign = cell?.textAlign,
     verticalAlign = cell?.verticalAlign,
     style = {
       backgroundColor,
+      color,
       textAlign,
       verticalAlign,
       width: width + 'px',
@@ -135,4 +138,6 @@ const getCellStyle = (r: number, c: number) => {
 </template>
 
 <style lang="sass" scoped>
+  td
+    line-height: 1.2rem
 </style>
