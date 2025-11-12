@@ -1,8 +1,8 @@
-import type { Alignment, Borders, BorderStyle, Cell, CellValue, Font, Style } from 'exceljs'
+import type { Alignment, BorderStyle, Borders, Cell, CellValue, Font, Style } from 'exceljs'
 import { ValueType } from 'exceljs'
 import { XLSXWorksheet } from './XLSXWorksheet'
 
-type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
+type Border = 'thin' | 'dotted' | 'hair' | 'medium' | 'double' | 'thick'
 type TextAlign = 'left' | 'center' | 'right'
 type VerticalAlign = 'top' | 'middle' | 'bottom'
 
@@ -86,21 +86,26 @@ export class XLSXCell {
   }
 
   private checkBorderStyle(style: BorderStyle) {
-    const supportedStyles = ['thin', 'dotted', 'hair', 'medium', 'thick', 'dashed']
-    return supportedStyles.includes(style)
+    const supportedStyles = ['thin', 'dotted', 'hair', 'medium', 'thick']
+    if (supportedStyles.includes(style))
+      return style as Border
+    else {
+      console.warn('Unsupported border style', style)
+      return 'thin'
+    }
   }
 
-  private parseBorders(border: Borders) {
+  private parseBorders(border: Partial<Borders>) {
     const result: CellBorders = {}
 
     if (border.top?.style)
-      result.top = border.top.style
+      result.top = this.checkBorderStyle(border.top.style)
     if (border.right?.style)
-      result.right = border.right.style
+      result.right = this.checkBorderStyle(border.right.style)
     if (border?.bottom?.style)
-      result.bottom = border.bottom.style
+      result.bottom = this.checkBorderStyle(border.bottom.style)
     if (border?.left?.style)
-      result.left = border.left.style
+      result.left = this.checkBorderStyle(border.left.style)
 
     return result
   }
