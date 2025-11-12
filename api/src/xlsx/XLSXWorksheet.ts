@@ -183,28 +183,55 @@ export class XLSXWorksheet {
     else return null
   }
 
+  private findTableAliasRow(rowNum: number, colNum: number, width: number, height: number) {
+    /* Find first "1" */
+    for (let row = rowNum; row < rowNum + height; row++) {
+      if (this.rows[row]?.[colNum]?.isTableCellAlias()) {
+        /* Check whole row */
+        let checkedCells = 0
+        for (let col = colNum; col < colNum + width; col++) {
+          const isAlias = this.rows[row]?.[col]?.isTableCellAlias()
+          if (!isAlias)
+            break
+          checkedCells++
+        }
+        if (checkedCells === width)
+          return row
+      }
+    }
+    /* Bad */
+    return -1
+  }
+
+  private findTableAliasCol(aliasRow: number, colNum: number, width: number) {
+
+  }
+
   public findTables() {
     const result = []
     for (const row of this.rows) for (const cell of row) if (cell?.isTableName()) {
       /* Table name */
-      const name = cell.value
-      const topRightCorner = this.getCell(
-        cell.rowNum + 1,
-        cell.colNum,
-      )
-
+      const name = cell.value,
+        topRightCorner = this.getCell(cell.rowNum + 1, cell.colNum)
       /* Found top right corner */
       if (topRightCorner?.isTopRightCorner()) {
         const bottomRightCorner = this.findBottomRightCorner(topRightCorner),
           bottomLeftCorner = bottomRightCorner && this.findBottomLeftCorner(bottomRightCorner),
           topLeftCorner = bottomLeftCorner && this.findTopLeftCorner(bottomLeftCorner)
-
         /* Success */
         if (topLeftCorner && this.findTopRightCorner(topLeftCorner) === topRightCorner) {
           const width = topRightCorner.colNum - topLeftCorner.colNum + 1,
-            height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1
+            height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1,
+            rowNum = topLeftCorner.rowNum - 1,
+            colNum = topLeftCorner.colNum - 1
+
+          const aliasRow = this.findTableAliasRow(rowNum, colNum, width, height)
+          console.log({ aliasRow })
+
           result.push({
             name,
+            rowNum,
+            colNum,
             width,
             height,
             range: `${topLeftCorner.address}:${bottomRightCorner.address}`,

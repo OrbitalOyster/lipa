@@ -76,6 +76,7 @@ export class XLSXCell {
       /* Background color */
       this.backgroundColor = this.parseBackgroundColor(this.style)
 
+      /* Text alignment */
       if (this.style.alignment) {
         this.textAlign = this.parseHorizontalAlignment(this.style)
         this.verticalAlign = this.parseVerticalAlignment(this.style)
@@ -316,6 +317,17 @@ export class XLSXCell {
       if ((this.value as string)?.match(tableNameRegexp)) return true
     }
     return false
+  }
+
+  /* "1", "1.2.3", "5.6", ... */
+  public isTableCellAlias() {
+    if (!this.value)
+      return false
+    if (this.type !== ValueType.Number && this.type !== ValueType.String)
+      return false
+    const aliasRegexp = /^\d+(\.\d+)*$/,
+      value = (this.value as string).toString().trim()
+    return aliasRegexp.test(value)
   }
 
   /* === */
