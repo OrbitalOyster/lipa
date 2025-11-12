@@ -60,24 +60,26 @@ export class XLSXCell {
     this.address = cell.address
     this.style = cell.model.style
 
-    /* Don't set value on merged on empty cells */
-    if (this.type !== ValueType.Null && this.type !== ValueType.Merge)
-      this.value = cell.value
+    /* Don't set extra properties on merged on empty cells */
+    if (this.type !== ValueType.Merge) {
+      if (this.type !== ValueType.Null)
+        this.value = cell.value
 
-    /* Borders */
-    if (this.style.border)
-      this.borders = this.parseBorders(this.style.border)
+      /* Borders */
+      if (this.style.border)
+        this.borders = this.parseBorders(this.style.border)
 
-    /* Font */
-    if (this.style.font)
-      this.font = this.parseFont(this.style.font)
+      /* Font */
+      if (this.style.font)
+        this.font = this.parseFont(this.style.font)
 
-    /* Background color */
-    this.backgroundColor = this.parseBackgroundColor(this.style)
+      /* Background color */
+      this.backgroundColor = this.parseBackgroundColor(this.style)
 
-    if (this.style.alignment) {
-      this.textAlign = this.parseHorizontalAlignment(this.style)
-      this.verticalAlign = this.parseVerticalAlignment(this.style)
+      if (this.style.alignment) {
+        this.textAlign = this.parseHorizontalAlignment(this.style)
+        this.verticalAlign = this.parseVerticalAlignment(this.style)
+      }
     }
   }
 
@@ -334,10 +336,12 @@ export class XLSXCell {
     if (this.backgroundColor)
       result.backgroundColor = this.backgroundColor
 
-    if (this.verticalAlign)
+    /* Bottom align is default */
+    if (this.verticalAlign && this.verticalAlign !== 'bottom')
       result.verticalAlign = this.verticalAlign
 
-    if (this.textAlign)
+    /* Left align is default */
+    if (this.textAlign && this.textAlign !== 'left')
       result.textAlign = this.textAlign
 
     /* Ignore spans less than 2 */

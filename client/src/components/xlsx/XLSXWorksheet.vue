@@ -88,8 +88,8 @@ const getCellStyle = (r: number, c: number) => {
     textDecoration = cell?.font?.underline ? 'underline' : 'none',
     backgroundColor = cell?.backgroundColor,
     color = cell?.font?.color,
-    textAlign = cell?.textAlign,
-    verticalAlign = cell?.verticalAlign,
+    textAlign = cell?.textAlign ?? 'left',
+    verticalAlign = cell?.verticalAlign ?? 'bottom',
     style = {
       backgroundColor,
       color,
