@@ -190,8 +190,7 @@ export class XLSXWorksheet {
         /* Check whole row */
         let checkedCells = 0
         for (let col = colNum; col < colNum + width; col++) {
-          const isAlias = this.rows[row]?.[col]?.isTableCellAlias()
-          if (!isAlias)
+          if (!this.rows[row]?.[col]?.isTableCellAlias())
             break
           checkedCells++
         }
@@ -203,8 +202,22 @@ export class XLSXWorksheet {
     return -1
   }
 
-  private findTableAliasCol(aliasRow: number, colNum: number, width: number) {
-
+  private findTableAliasCol(rowNum: number, colNum: number, width: number, height: number, aliasRow: number) {
+    for (let col = colNum; col < colNum + width; col++) {
+      if (this.rows[aliasRow + 1]?.[col]?.isTableCellAlias()) {
+        /* Check whole col */
+        let checkedCells = 0
+        for (let row = aliasRow + 1; row < rowNum + height; row++) {
+          if (!this.rows[row]?.[col]?.isTableCellAlias())
+            break
+          checkedCells++
+        }
+        if (checkedCells === rowNum + height - aliasRow - 1)
+          return col
+      }
+    }
+    /* Bad */
+    return -1
   }
 
   public findTables() {
@@ -226,7 +239,21 @@ export class XLSXWorksheet {
             colNum = topLeftCorner.colNum - 1
 
           const aliasRow = this.findTableAliasRow(rowNum, colNum, width, height)
-          console.log({ aliasRow })
+          if (aliasRow === -1)
+            throw new Error('Invalid table (missing alias row)')
+          const aliasCol = this.findTableAliasCol(rowNum, colNum, width, height, aliasRow)
+          if (aliasCol === -1)
+            throw new Error('Invalid table (missing alias col)')
+          const editables = []
+
+          for (let row = aliasRow + 1; row < rowNum + height; row++)
+            for (let col = aliasCol + 1; col < colNum + width; col++) {
+              const cell = this.rows[row]?.[col]
+              if (!cell?.value)
+                editables.push(cell?.address)
+            }
+
+          console.log({ aliasRow, aliasCol, editables })
 
           result.push({
             name,
