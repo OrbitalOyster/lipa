@@ -218,7 +218,7 @@ export class XLSXWorksheet {
     return -1
   }
 
-  public findTables() {
+  private findTables() {
     const result = []
     for (const row of this.rows) for (const cell of row) if (cell?.isTableName()) {
       /* Table name */
@@ -270,6 +270,10 @@ export class XLSXWorksheet {
       }
     }
     return result
+  }
+
+  private findEditables(tables) {
+
   }
 
   public serialize() {

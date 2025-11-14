@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { CellValue } from 'exceljs'
+import GooseInput from '#components/GooseInput.vue'
 import { ValueType } from 'exceljs'
+import { ref } from 'vue'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 
@@ -35,8 +37,15 @@ interface XLSXWorksheet {
   colWidths: number[]
   merges: string[]
   rows: XLSXCell[][]
+  tables: {
+    name: string
+    rowNum: number
+    colNum: number
+  }
 }
-const model = defineModel<XLSXWorksheet>()
+const model = defineModel<XLSXWorksheet>(),
+  activeCell = ref('body'),
+  editable = ref('foo')
 
 const getCell = (r: number, c: number) => {
   const row = model.value?.rows[r]
@@ -108,6 +117,8 @@ const getCellStyle = (r: number, c: number) => {
   return style
 }
 
+console.log(model)
+
 </script>
 
 <template>
@@ -124,9 +135,11 @@ const getCellStyle = (r: number, c: number) => {
           >
             <td
               v-if="!isMergedCell(row - 1, col - 1)"
+              :id="getCell(row - 1, col - 1)?.address"
               :style="getCellStyle(row - 1, col - 1)"
               :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
               :colSpan="getCell(row - 1, col - 1)?.colSpan"
+              @click="activeCell = '#' + getCell(row - 1, col - 1)?.address"
             >
               {{ getCellValue(row - 1, col - 1) }}
             </td>
@@ -134,10 +147,17 @@ const getCellStyle = (r: number, c: number) => {
         </tr>
       </tbody>
     </table>
+    <Teleport :to="activeCell">
+      <GooseInput v-model="editable" />
+    </Teleport>
   </div>
 </template>
 
 <style lang="sass" scoped>
   td
     line-height: 1.2rem
+    transition: height .5s ease-in-out
+
+  td.editable
+    cursor: pointer
 </style>
