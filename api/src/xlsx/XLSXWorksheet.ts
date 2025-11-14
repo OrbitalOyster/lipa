@@ -185,37 +185,35 @@ export class XLSXWorksheet {
 
   private findTableAliasRow(rowNum: number, colNum: number, width: number, height: number) {
     /* Find first "1" */
-    for (let row = rowNum; row < rowNum + height; row++) {
-      if (this.rows[row]?.[colNum]?.isTableCellAlias()) {
+    for (let row = rowNum; row < rowNum + height; row++)
+      if (this.getCell(row, colNum)?.isTableCellAlias()) {
         /* Check whole row */
         let checkedCells = 0
-        for (let col = colNum; col < colNum + width; col++) {
-          if (!this.rows[row]?.[col]?.isTableCellAlias())
+        for (let col = colNum; col < colNum + width; col++)
+          if (!this.getCell(row, col)?.isTableCellAlias())
             break
-          checkedCells++
-        }
+          else
+            checkedCells++
         if (checkedCells === width)
           return row
       }
-    }
     /* Bad */
     return -1
   }
 
   private findTableAliasCol(rowNum: number, colNum: number, width: number, height: number, aliasRow: number) {
-    for (let col = colNum; col < colNum + width; col++) {
-      if (this.rows[aliasRow + 1]?.[col]?.isTableCellAlias()) {
+    for (let col = colNum; col < colNum + width; col++)
+      if (this.getCell(aliasRow + 1, col)?.isTableCellAlias()) {
         /* Check whole col */
         let checkedCells = 0
-        for (let row = aliasRow + 1; row < rowNum + height; row++) {
-          if (!this.rows[row]?.[col]?.isTableCellAlias())
+        for (let row = aliasRow + 1; row < rowNum + height; row++)
+          if (!this.getCell(row, col)?.isTableCellAlias())
             break
-          checkedCells++
-        }
+          else
+            checkedCells++
         if (checkedCells === rowNum + height - aliasRow - 1)
           return col
       }
-    }
     /* Bad */
     return -1
   }
@@ -235,8 +233,8 @@ export class XLSXWorksheet {
         if (topLeftCorner && this.findTopRightCorner(topLeftCorner) === topRightCorner) {
           const width = topRightCorner.colNum - topLeftCorner.colNum + 1,
             height = bottomLeftCorner.rowNum - topLeftCorner.rowNum + 1,
-            rowNum = topLeftCorner.rowNum - 1,
-            colNum = topLeftCorner.colNum - 1
+            rowNum = topLeftCorner.rowNum,
+            colNum = topLeftCorner.colNum
 
           const aliasRow = this.findTableAliasRow(rowNum, colNum, width, height)
           if (aliasRow === -1)
@@ -246,12 +244,12 @@ export class XLSXWorksheet {
             throw new Error('Invalid table (missing alias col)')
           const editables = []
 
-          for (let row = aliasRow + 1; row < rowNum + height; row++)
-            for (let col = aliasCol + 1; col < colNum + width; col++) {
-              const cell = this.rows[row]?.[col]
+          for (let row = aliasRow; row < rowNum + height; row++)
+            for (let col = aliasCol; col < colNum + width; col++) {
+              const cell = this.getCell(row, col)
               if (!cell?.value) {
-                const aliasC = this.rows[aliasRow]?.[col]?.value?.toString(),
-                  aliasR = this.rows[row]?.[aliasCol]?.value?.toString()
+                const aliasC = this.getCell(aliasRow, col)?.value?.toString(),
+                  aliasR = this.getCell(row, aliasCol)?.value?.toString()
                 editables.push({
                   alias: [aliasR, aliasC],
                   address: cell?.address,
