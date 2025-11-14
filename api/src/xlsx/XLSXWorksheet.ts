@@ -249,11 +249,15 @@ export class XLSXWorksheet {
           for (let row = aliasRow + 1; row < rowNum + height; row++)
             for (let col = aliasCol + 1; col < colNum + width; col++) {
               const cell = this.rows[row]?.[col]
-              if (!cell?.value)
-                editables.push(cell?.address)
+              if (!cell?.value) {
+                const aliasC = this.rows[aliasRow]?.[col]?.value?.toString(),
+                  aliasR = this.rows[row]?.[aliasCol]?.value?.toString()
+                editables.push({
+                  alias: [aliasR, aliasC],
+                  address: cell?.address,
+                })
+              }
             }
-
-          console.log({ aliasRow, aliasCol, editables })
 
           result.push({
             name,
@@ -262,6 +266,7 @@ export class XLSXWorksheet {
             width,
             height,
             range: `${topLeftCorner.address}:${bottomRightCorner.address}`,
+            editables,
           })
         }
       }
