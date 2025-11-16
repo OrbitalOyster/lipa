@@ -24,6 +24,10 @@ const text = defineModel<string>({ required: true }),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
   { focused } = useFocus(input)
+
+const focus = () => focused.value = true,
+  selectAll = () => input.value?.select()
+defineExpose({ focus, selectAll })
 </script>
 
 <template>

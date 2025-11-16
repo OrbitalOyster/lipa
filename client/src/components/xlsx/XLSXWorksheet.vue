@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { nextTick, ref, useTemplateRef } from 'vue'
 import type { CellValue } from 'exceljs'
 import GooseInput from '#components/GooseInput.vue'
 import { ValueType } from 'exceljs'
-import { ref } from 'vue'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 
@@ -45,7 +45,8 @@ interface XLSXWorksheet {
 }
 const model = defineModel<XLSXWorksheet>(),
   activeCell = ref('body'),
-  editable = ref('foo')
+  editable = ref('foo'),
+  editableInput = useTemplateRef('editableInput')
 
 const getCell = (r: number, c: number) => {
   const row = model.value?.rows[r]
@@ -61,6 +62,23 @@ const getCell = (r: number, c: number) => {
 const isMergedCell = (r: number, c: number) => {
   const cell = getCell(r, c)
   return cell?.type === ValueType.Merge
+}
+
+const isEditableCell = (r: number, c: number) => {
+  const cell = getCell(r, c),
+    address = cell?.address
+  return model.value?.editables.find(e => e.address === address)
+}
+
+const onClick = async (r: number, c: number) => {
+  if (!editableInput.value)
+    throw new Error('Majow screwup')
+  if (!isEditableCell(r, c))
+    return
+  activeCell.value = '#' + getCell(r, c)?.address
+  await nextTick()
+  editableInput.value.focus()
+  editableInput.value.selectAll()
 }
 
 const getCellValue = (r: number, c: number) => {
@@ -136,10 +154,11 @@ console.log(model)
             <td
               v-if="!isMergedCell(row - 1, col - 1)"
               :id="getCell(row - 1, col - 1)?.address"
+              :class="[isEditableCell(row - 1, col - 1) && 'editable']"
               :style="getCellStyle(row - 1, col - 1)"
               :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
               :colSpan="getCell(row - 1, col - 1)?.colSpan"
-              @click="activeCell = '#' + getCell(row - 1, col - 1)?.address"
+              @click="onClick(row - 1, col - 1)"
             >
               {{ getCellValue(row - 1, col - 1) }}
             </td>
@@ -148,7 +167,10 @@ console.log(model)
       </tbody>
     </table>
     <Teleport :to="activeCell">
-      <GooseInput v-model="editable" />
+      <GooseInput
+        ref="editableInput"
+        v-model="editable"
+      />
     </Teleport>
   </div>
 </template>

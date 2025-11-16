@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "lipa",
@@ -15,7 +16,7 @@
         "@vueuse/core": "14.0.0",
         "@vueuse/integrations": "14.0.0",
         "axios": "1.12.2",
-        "exceljs": "^4.4.0",
+        "exceljs": "4.4.0",
         "focus-trap": "7.6.5",
         "pinia": "3.0.3",
         "sass": "1.93.2",
