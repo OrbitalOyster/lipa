@@ -29,6 +29,11 @@ interface XLSXCell {
   verticalAlign: 'middle' | 'top' | 'bottom'
 }
 
+interface Editable {
+  alias: string[]
+  address: string
+}
+
 interface XLSXWorksheet {
   name: string
   width: number
@@ -42,9 +47,10 @@ interface XLSXWorksheet {
     rowNum: number
     colNum: number
   }
+  editables: Editable[]
 }
 const model = defineModel<XLSXWorksheet>(),
-  activeCell = ref('body'),
+  activeCell = ref(null),
   editable = ref('foo'),
   editableInput = useTemplateRef('editableInput')
 
@@ -135,6 +141,10 @@ const getCellStyle = (r: number, c: number) => {
   return style
 }
 
+const activateCell = (r: number, c: number) => {
+
+}
+
 console.log(model)
 
 </script>
@@ -158,6 +168,7 @@ console.log(model)
               :style="getCellStyle(row - 1, col - 1)"
               :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
               :colSpan="getCell(row - 1, col - 1)?.colSpan"
+              @mousedown.prevent
               @click="onClick(row - 1, col - 1)"
             >
               {{ getCellValue(row - 1, col - 1) }}
@@ -166,11 +177,15 @@ console.log(model)
         </tr>
       </tbody>
     </table>
-    <Teleport :to="activeCell">
-      <GooseInput
-        ref="editableInput"
-        v-model="editable"
-      />
+    <Teleport :to="activeCell === null ? 'body' : activeCell">
+      <div style="display: flex; align-items: center; height: 40px; padding: 8px">
+        <GooseInput
+          ref="editableInput"
+          v-model="editable"
+          @blur="activeCell = null"
+          @esc="activeCell = null"
+        />
+      </div>
     </Teleport>
   </div>
 </template>
@@ -178,7 +193,6 @@ console.log(model)
 <style lang="sass" scoped>
   td
     line-height: 1.2rem
-    transition: height .5s ease-in-out
 
   td.editable
     cursor: pointer

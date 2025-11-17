@@ -21,13 +21,15 @@ defineProps<{
 }>()
 
 const text = defineModel<string>({ required: true }),
+  emit = defineEmits(['blur', 'esc', 'enter', 'tab', 'up', 'down', 'left', 'right']),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
-  { focused } = useFocus(input)
-
-const focus = () => focused.value = true,
+  { focused } = useFocus(input),
+  focus = () => focused.value = true,
+  blur = () => focused.value = false,
   selectAll = () => input.value?.select()
-defineExpose({ focus, selectAll })
+
+defineExpose({ focus, blur, selectAll })
 </script>
 
 <template>
@@ -46,6 +48,14 @@ defineExpose({ focus, selectAll })
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
           :disabled
           :type="password && passwordHidden ? 'password' : 'text'"
+          @blur="emit('blur')"
+          @keydown.esc="emit('esc')"
+          @keydown.enter="emit('enter')"
+          @keydown.tab="emit('tab')"
+          @keydown.up="emit('up')"
+          @keydown.down="emit('down')"
+          @keydown.left="emit('left')"
+          @keydown.right="emit('right')"
         >
         <!-- Placeholder -->
         <GooseInputPlaceholder
