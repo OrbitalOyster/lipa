@@ -56,7 +56,7 @@ const model = defineModel<XLSXWorksheet>(),
   editable = ref('foo'),
   editableInput = useTemplateRef('editableInput')
 
-const data = ref({
+const data = ref<Record<string, number>>({
   '1 3': 100,
   '3.1 4': 200,
 })
@@ -83,14 +83,26 @@ const isEditableCell = (r: number, c: number) => {
   return model.value?.editables.find(e => e.address === address)
 }
 
+const isActiveCell = (r: number, c: number) => {
+  return activeRow.value === r && activeCol.value === c
+}
+
 const activateCell = async (r: number, c: number) => {
   if (!editableInput.value)
     throw new Error('Majow screwup')
+  if (activeRow.value === r && activeCol.value === c)
+    return
   if (!isEditableCell(r, c))
     return
-  activeCell.value = '#' + getCell(r, c)?.address
-  await nextTick()
+  const cell = getCell(r, c)
+  if (!cell)
+    throw new Error('Majow screwup')
+  activeCell.value = '#' + cell.address
+
+  editable.value = getCellValue(r, c)?.toString() ?? ''
+
   editableInput.value.focus()
+  await nextTick()
   editableInput.value.selectAll()
 
   activeRow.value = r
@@ -112,7 +124,21 @@ const getCellValue = (r: number, c: number) => {
     return ''
   if (cell.type === ValueType.Formula)
     return 'Σ'
+  if (isEditableCell(r, c)) {
+    const editable = model.value?.editables.find(e => e.address === cell.address),
+      fullAlias = `${editable?.alias[0]} ${editable?.alias[1]}`,
+      cellData = data.value[fullAlias] ?? ''
+    return cellData
+  }
   return cell.value
+}
+
+const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
+  const cell = getCell(row, col)
+  if (!cell)
+    throw new Error('Majow screwup')
+  if (isEditableCell(row, col) && !isActiveCell(row, col))
+    e.preventDefault()
 }
 
 const getCellStyle = (r: number, c: number) => {
@@ -159,7 +185,6 @@ const getCellStyle = (r: number, c: number) => {
     }
   return style
 }
-
 </script>
 
 <template>
@@ -167,24 +192,24 @@ const getCellStyle = (r: number, c: number) => {
     <table>
       <tbody>
         <tr
-          v-for="row in model?.height"
-          :key="row"
+          v-for="(r, row) in model?.height"
+          :key="r"
         >
           <template
-            v-for="col in model?.width"
-            :key="col"
+            v-for="(c, col) in model?.width"
+            :key="c"
           >
             <td
-              v-if="!isMergedCell(row - 1, col - 1)"
-              :id="getCell(row - 1, col - 1)?.address"
-              :class="[isEditableCell(row - 1, col - 1) && 'editable']"
-              :style="getCellStyle(row - 1, col - 1)"
-              :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
-              :colSpan="getCell(row - 1, col - 1)?.colSpan"
-              @mousedown.prevent
-              @click="activateCell(row - 1, col - 1)"
+              v-if="!isMergedCell(row, col)"
+              :id="getCell(row, col)?.address"
+              :class="[isEditableCell(row, col) && 'editable']"
+              :style="getCellStyle(row, col)"
+              :rowSpan="getCell(row, col)?.rowSpan"
+              :colSpan="getCell(row, col)?.colSpan"
+              @mousedown="e => onTdMouseDown(e, row, col)"
+              @click="activateCell(row, col)"
             >
-              {{ getCellValue(row - 1, col - 1) }}
+              {{ getCellValue(row, col) }}
             </td>
           </template>
         </tr>
@@ -213,4 +238,8 @@ const getCellStyle = (r: number, c: number) => {
 
   td.editable
     cursor: pointer
+
+  td.editable:hover
+    box-shadow: inset 1px 1px 4px gray
+
 </style>
