@@ -1,5 +1,5 @@
+import { type FormatInfo, getFormatInfo } from 'numfmt'
 import type { Row, Worksheet } from 'exceljs'
-
 import { XLSXCell } from './XLSXCell.ts'
 
 type XLSXRow = XLSXCell[]
@@ -19,6 +19,7 @@ interface Table {
 interface Editable {
   alias: string[]
   address: string
+  numfmt: FormatInfo
 }
 
 const isSafeDataType = (value: unknown) => {
@@ -237,10 +238,12 @@ export class XLSXWorksheet {
           if (!cell?.value) {
             const aliasC = this.getCell(table.aliasRow, col)?.value?.toString(),
               aliasR = this.getCell(row, table.aliasCol)?.value?.toString(),
-              address = cell?.address
+              address = cell?.address,
+              numfmt = getFormatInfo(cell?.numFmt)
             result.push({
               alias: [aliasR, aliasC],
               address,
+              numfmt,
             })
           }
         }

@@ -52,8 +52,8 @@ defineExpose({ focus, blur, selectAll })
           @keydown.esc="emit('esc')"
           @keydown.enter="emit('enter')"
           @keydown.tab="emit('tab')"
-          @keydown.prevent.up="emit('up')"
-          @keydown.prevent.down="emit('down')"
+          @keydown.up="emit('up')"
+          @keydown.down="emit('down')"
           @keydown.left="emit('left')"
           @keydown.right="emit('right')"
         >

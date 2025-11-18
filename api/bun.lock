@@ -9,6 +9,7 @@
         "hono": "4.10.6",
         "hyperformula": "^3.1.0",
         "mysql2": "3.15.3",
+        "numfmt": "^3.2.3",
       },
       "devDependencies": {
         "@stylistic/eslint-plugin": "5.5.0",
@@ -406,6 +407,8 @@
     "natural-compare": ["natural-compare@1.4.0", "", {}, "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="],
 
     "normalize-path": ["normalize-path@3.0.0", "", {}, "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA=="],
+
+    "numfmt": ["numfmt@3.2.3", "", {}, "sha512-q5vjJSiuomxYNNVhB/TWqjtctZz+fnscUchvwonutXZ/neY2XLw6z4q3DS4ijLDrP5Y/tgrVeP1/7PjgHRoZuw=="],
 
     "once": ["once@1.4.0", "", { "dependencies": { "wrappy": "1" } }, "sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w=="],
 

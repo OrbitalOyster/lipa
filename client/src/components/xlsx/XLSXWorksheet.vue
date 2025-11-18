@@ -53,7 +53,8 @@ const model = defineModel<XLSXWorksheet>(),
   activeCell = ref<null | string>(null),
   activeRow = ref<null | number>(null),
   activeCol = ref<null | number>(null),
-  editable = ref('foo'),
+  previous = ref(''),
+  editable = ref(''),
   editableInput = useTemplateRef('editableInput')
 
 const data = ref<Record<string, number>>({
@@ -87,11 +88,36 @@ const isActiveCell = (r: number, c: number) => {
   return activeRow.value === r && activeCol.value === c
 }
 
+const getCellValue = (r: number, c: number) => {
+  const cell = getCell(r, c)
+  if (!cell)
+    return ''
+  if (cell.type === ValueType.Formula)
+    return 'Σ'
+  if (isEditableCell(r, c)) {
+    const ed = model.value?.editables.find(e => e.address === cell.address),
+      fullAlias = `${ed?.alias[0]} ${ed?.alias[1]}`,
+      cellData = data.value[fullAlias] ?? ''
+    return cellData
+  }
+  return cell.value as string
+}
+
+const revertActiveCell = () => {
+  const cell = getCell(activeRow.value, activeCol.value)
+}
+
 const activateCell = async (r: number, c: number) => {
   if (!editableInput.value)
     throw new Error('Majow screwup')
+  /* Trying to activate already active cell */
   if (activeRow.value === r && activeCol.value === c)
     return
+
+  /* Deactivate previous cell */
+  if (activeRow.value !== null && activeCol.value !== null)
+    deactivateCell()
+
   if (!isEditableCell(r, c))
     return
   const cell = getCell(r, c)
@@ -100,6 +126,7 @@ const activateCell = async (r: number, c: number) => {
   activeCell.value = '#' + cell.address
 
   editable.value = getCellValue(r, c)?.toString() ?? ''
+  previous.value = getCellValue(r, c)?.toString() ?? ''
 
   editableInput.value.focus()
   await nextTick()
@@ -112,25 +139,19 @@ const activateCell = async (r: number, c: number) => {
 const deactivateCell = () => {
   if (!editableInput.value)
     throw new Error('Majow screwup')
-  editableInput.value.blur()
+  // editableInput.value.blur()
+
+  if (previous.value !== editable.value) {
+    // console.log(previous.value, editable.value)
+    const cell = getCell(activeRow.value, activeCol.value),
+      ed = model.value?.editables.find(e => e.address === cell.address),
+      fullAlias = `${ed?.alias[0]} ${ed?.alias[1]}`
+      data.value[fullAlias] = editable.value
+  }
+
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
-}
-
-const getCellValue = (r: number, c: number) => {
-  const cell = getCell(r, c)
-  if (!cell)
-    return ''
-  if (cell.type === ValueType.Formula)
-    return 'Σ'
-  if (isEditableCell(r, c)) {
-    const editable = model.value?.editables.find(e => e.address === cell.address),
-      fullAlias = `${editable?.alias[0]} ${editable?.alias[1]}`,
-      cellData = data.value[fullAlias] ?? ''
-    return cellData
-  }
-  return cell.value
 }
 
 const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
@@ -209,7 +230,9 @@ const getCellStyle = (r: number, c: number) => {
               @mousedown="e => onTdMouseDown(e, row, col)"
               @click="activateCell(row, col)"
             >
-              {{ getCellValue(row, col) }}
+              <template v-if="!isActiveCell(row, col)">
+                {{ getCellValue(row, col) }}
+              </template>
             </td>
           </template>
         </tr>
@@ -240,6 +263,6 @@ const getCellStyle = (r: number, c: number) => {
     cursor: pointer
 
   td.editable:hover
-    box-shadow: inset 1px 1px 4px gray
+    box-shadow: inset 0px 0px 0px 2px #76D7C4
 
 </style>

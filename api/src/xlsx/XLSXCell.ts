@@ -39,7 +39,7 @@ export class XLSXCell {
   public readonly colNum
   public readonly type
   public readonly address
-  public readonly style
+  public readonly numFmt
   public readonly value
   public readonly borders
   public readonly font
@@ -58,7 +58,11 @@ export class XLSXCell {
 
     this.type = cell.model.type
     this.address = cell.address
-    this.style = cell.model.style
+
+    const style = cell.model.style
+
+    /* Numfmt */
+    this.numFmt = style.numFmt
 
     /* Don't set extra properties on merged on empty cells */
     if (this.type !== ValueType.Merge) {
@@ -66,20 +70,20 @@ export class XLSXCell {
         this.value = cell.value
 
       /* Borders */
-      if (this.style.border)
-        this.borders = this.parseBorders(this.style.border)
+      if (style.border)
+        this.borders = this.parseBorders(style.border)
 
       /* Font */
-      if (this.style.font)
-        this.font = this.parseFont(this.style.font)
+      if (style.font)
+        this.font = this.parseFont(style.font)
 
       /* Background color */
-      this.backgroundColor = this.parseBackgroundColor(this.style)
+      this.backgroundColor = this.parseBackgroundColor(style)
 
       /* Text alignment */
-      if (this.style.alignment) {
-        this.textAlign = this.parseHorizontalAlignment(this.style)
-        this.verticalAlign = this.parseVerticalAlignment(this.style)
+      if (style.alignment) {
+        this.textAlign = this.parseHorizontalAlignment(style)
+        this.verticalAlign = this.parseVerticalAlignment(style)
       }
     }
   }
@@ -142,6 +146,11 @@ export class XLSXCell {
     /* 'general' somehow not included in horizontal alignment */
     switch (style.alignment.horizontal as Alignment['horizontal'] | 'general') {
       case 'general':
+        /* Align numbers to right */
+        if (this.type === ValueType.Number)
+          return 'right'
+        else
+          return 'left'
       case 'left':
         return 'left'
       case 'center':
