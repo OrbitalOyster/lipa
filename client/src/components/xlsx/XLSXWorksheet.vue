@@ -50,9 +50,16 @@ interface XLSXWorksheet {
   editables: Editable[]
 }
 const model = defineModel<XLSXWorksheet>(),
-  activeCell = ref(null),
+  activeCell = ref<null | string>(null),
+  activeRow = ref<null | number>(null),
+  activeCol = ref<null | number>(null),
   editable = ref('foo'),
   editableInput = useTemplateRef('editableInput')
+
+const data = ref({
+  '1 3': 100,
+  '3.1 4': 200,
+})
 
 const getCell = (r: number, c: number) => {
   const row = model.value?.rows[r]
@@ -76,7 +83,7 @@ const isEditableCell = (r: number, c: number) => {
   return model.value?.editables.find(e => e.address === address)
 }
 
-const onClick = async (r: number, c: number) => {
+const activateCell = async (r: number, c: number) => {
   if (!editableInput.value)
     throw new Error('Majow screwup')
   if (!isEditableCell(r, c))
@@ -85,6 +92,18 @@ const onClick = async (r: number, c: number) => {
   await nextTick()
   editableInput.value.focus()
   editableInput.value.selectAll()
+
+  activeRow.value = r
+  activeCol.value = c
+}
+
+const deactivateCell = () => {
+  if (!editableInput.value)
+    throw new Error('Majow screwup')
+  editableInput.value.blur()
+  activeCell.value = null
+  activeRow.value = null
+  activeCol.value = null
 }
 
 const getCellValue = (r: number, c: number) => {
@@ -141,12 +160,6 @@ const getCellStyle = (r: number, c: number) => {
   return style
 }
 
-const activateCell = (r: number, c: number) => {
-
-}
-
-console.log(model)
-
 </script>
 
 <template>
@@ -169,7 +182,7 @@ console.log(model)
               :rowSpan="getCell(row - 1, col - 1)?.rowSpan"
               :colSpan="getCell(row - 1, col - 1)?.colSpan"
               @mousedown.prevent
-              @click="onClick(row - 1, col - 1)"
+              @click="activateCell(row - 1, col - 1)"
             >
               {{ getCellValue(row - 1, col - 1) }}
             </td>
@@ -182,12 +195,16 @@ console.log(model)
         <GooseInput
           ref="editableInput"
           v-model="editable"
-          @blur="activeCell = null"
-          @esc="activeCell = null"
+          @blur="deactivateCell"
+          @esc="deactivateCell"
+          @down="activateCell(activeRow + 1, activeCol)"
+          @up="activateCell(activeRow - 1, activeCol)"
         />
       </div>
     </Teleport>
   </div>
+  {{ activeRow }}
+  {{ activeCol }}
 </template>
 
 <style lang="sass" scoped>
