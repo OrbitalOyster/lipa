@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { format, isTextFormat, parseNumber } from 'numfmt'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import type { CellValue } from 'exceljs'
 import GooseInput from '#components/GooseInput.vue'
 import { ValueType } from 'exceljs'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
+
+// console.log(format('0.00', 123.456, { locale: 'ru-RU' }))
 
 interface XLSXCell {
   address: string
@@ -32,6 +35,7 @@ interface XLSXCell {
 interface Editable {
   alias: string[]
   address: string
+  fmt: string
 }
 
 interface XLSXWorksheet {
@@ -172,8 +176,26 @@ const submitActiveCell = () => {
     return
   const editable = getEditable(activeRow.value, activeCol.value),
     fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`
-  console.log('New value: ', editableRef.value)
-  data.value[fullAlias] = editableRef.value
+  const rawValue = editableRef.value
+  console.log('User input: ', { rawValue })
+  const fmt = editable?.fmt
+  if (!fmt)
+    throw new Error('Invalid xlsx sheet')
+  console.log('fmt: ', { fmt })
+  let parsed
+  if (!isTextFormat(fmt)) {
+    console.log('Not text')
+    parsed = parseNumber(rawValue, { locale: 'ru-RU' })
+    /* Bogus input */
+    if (parsed === null)
+      return
+    console.log({ parsed })
+  }
+  const formatted = format(fmt, rawValue)
+  console.log({ formatted })
+  data.value[fullAlias] = parsed?.v ?? rawValue
+
+  // data.value[fullAlias] = format(fmt, parsed?.v ?? rawValue, { locale: 'ru-RU' })
 }
 
 const keyNavigation = async (e: KeyboardEvent) => {
@@ -300,6 +322,7 @@ const getCellStyle = (r: number, c: number) => {
           v-model="editableRef"
           @blur="deactivateCell"
           @esc="deactivateCell(true)"
+          @enter="submitActiveCell(); deactivateCell()"
           @keydown="keyNavigation"
         />
       </div>
