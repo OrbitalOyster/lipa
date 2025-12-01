@@ -113,16 +113,16 @@ const activateCell = async (r: number, c: number) => {
   /* Trying to activate already active cell */
   if (activeRow.value === r && activeCol.value === c)
     return
-
-  /* Deactivate previous cell */
-  if (activeRow.value !== null && activeCol.value !== null)
-    deactivateCell()
-
+  /* Ignore uneditable cells */
   if (!isEditableCell(r, c))
     return
   const cell = getCell(r, c)
   if (!cell)
     throw new Error('Majow screwup')
+  /* Deactivate previous cell */
+  if (activeRow.value !== null && activeCol.value !== null)
+    deactivateCell()
+
   activeCell.value = '#' + cell.address
 
   editable.value = getCellValue(r, c)?.toString() ?? ''
@@ -142,11 +142,10 @@ const deactivateCell = () => {
   // editableInput.value.blur()
 
   if (previous.value !== editable.value) {
-    // console.log(previous.value, editable.value)
     const cell = getCell(activeRow.value, activeCol.value),
       ed = model.value?.editables.find(e => e.address === cell.address),
       fullAlias = `${ed?.alias[0]} ${ed?.alias[1]}`
-      data.value[fullAlias] = editable.value
+    data.value[fullAlias] = editable.value
   }
 
   activeCell.value = null
@@ -160,6 +159,31 @@ const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
     throw new Error('Majow screwup')
   if (isEditableCell(row, col) && !isActiveCell(row, col))
     e.preventDefault()
+}
+
+const keyNavigation = async (e: KeyboardEvent) => {
+  if (activeRow.value === null || activeCol.value === null)
+    return
+  const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
+  if (navigationKeys.includes(e.key))
+    e.preventDefault()
+  else
+    return
+  switch (e.key) {
+    case 'ArrowUp':
+      await activateCell(activeRow.value - 1, activeCol.value)
+      break
+    case 'ArrowDown':
+    case 'Enter':
+      await activateCell(activeRow.value + 1, activeCol.value)
+      break
+    case 'ArrowLeft':
+      await activateCell(activeRow.value, activeCol.value - 1)
+      break
+    case 'ArrowRight':
+      await activateCell(activeRow.value, activeCol.value + 1)
+      break
+  }
 }
 
 const getCellStyle = (r: number, c: number) => {
@@ -245,8 +269,7 @@ const getCellStyle = (r: number, c: number) => {
           v-model="editable"
           @blur="deactivateCell"
           @esc="deactivateCell"
-          @down="activateCell(activeRow + 1, activeCol)"
-          @up="activateCell(activeRow - 1, activeCol)"
+          @keydown="keyNavigation"
         />
       </div>
     </Teleport>
@@ -264,5 +287,4 @@ const getCellStyle = (r: number, c: number) => {
 
   td.editable:hover
     box-shadow: inset 0px 0px 0px 2px #76D7C4
-
 </style>

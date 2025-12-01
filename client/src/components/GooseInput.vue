@@ -21,7 +21,7 @@ defineProps<{
 }>()
 
 const text = defineModel<string>({ required: true }),
-  emit = defineEmits(['blur', 'esc', 'enter', 'tab', 'up', 'down', 'left', 'right']),
+  emit = defineEmits(['blur', 'keydown', 'esc', 'enter']),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
   { focused } = useFocus(input),
@@ -49,13 +49,9 @@ defineExpose({ focus, blur, selectAll })
           :disabled
           :type="password && passwordHidden ? 'password' : 'text'"
           @blur="emit('blur')"
+          @keydown="e => emit('keydown', e)"
           @keydown.esc="emit('esc')"
           @keydown.enter="emit('enter')"
-          @keydown.tab="emit('tab')"
-          @keydown.up="emit('up')"
-          @keydown.down="emit('down')"
-          @keydown.left="emit('left')"
-          @keydown.right="emit('right')"
         >
         <!-- Placeholder -->
         <GooseInputPlaceholder
