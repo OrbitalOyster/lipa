@@ -137,12 +137,12 @@ const activateCell = async (r: number, c: number) => {
   activeCol.value = c
 }
 
-const deactivateCell = (saveValue: boolean) => {
+const deactivateCell = (discardValue?: boolean) => {
   /* Should not happen */
   if (!editableInput.value)
     throw new Error('Majow screwup')
 
-  if (saveValue && previousRef.value !== editableRef.value) {
+  if (!discardValue && previousRef.value !== editableRef.value) {
     if (activeRow.value === null || activeCol.value === null)
       return
     const editable = getEditable(activeRow.value, activeCol.value),
@@ -181,25 +181,25 @@ const keyNavigation = async (e: KeyboardEvent) => {
     case 'ArrowUp':
       if (!getEditable(r - 1, c))
         return
-      deactivateCell(true)
+      deactivateCell()
       await activateCell(r - 1, c)
       break
     case 'ArrowDown':
       if (!getEditable(r + 1, c))
         return
-      deactivateCell(true)
+      deactivateCell()
       await activateCell(r + 1, c)
       break
     case 'ArrowLeft':
       if (!getEditable(r, c - 1))
         return
-      deactivateCell(true)
+      deactivateCell()
       await activateCell(r, c - 1)
       break
     case 'ArrowRight':
       if (!getEditable(r, c + 1))
         return
-      deactivateCell(true)
+      deactivateCell()
       await activateCell(r, c + 1)
       break
   }
@@ -271,7 +271,7 @@ const getCellStyle = (r: number, c: number) => {
               :rowSpan="getCell(row, col)?.rowSpan"
               :colSpan="getCell(row, col)?.colSpan"
               @mousedown="e => onTdMouseDown(e, row, col)"
-              @click="activateCell(row, col)"
+              @click="deactivateCell(); activateCell(row, col)"
             >
               <template v-if="!isActiveCell(row, col)">
                 {{ getCellValue(row, col) }}
@@ -287,7 +287,7 @@ const getCellStyle = (r: number, c: number) => {
           ref="editableInput"
           v-model="editableRef"
           @blur="deactivateCell"
-          @esc="deactivateCell"
+          @esc="deactivateCell(true)"
           @keydown="keyNavigation"
         />
       </div>
@@ -305,6 +305,7 @@ const getCellStyle = (r: number, c: number) => {
   td.editable
     cursor: pointer
 
+  /*
   td.editable:hover
-    box-shadow: inset 0px 0px 0px 2px #76D7C4
+    box-shadow: inset 0px 0px 0px 2px #76D7C4 */
 </style>
