@@ -19,6 +19,7 @@ interface Table {
 interface Editable {
   alias: string[]
   address: string
+  fmt: string
   numfmt: FormatInfo
 }
 
@@ -239,10 +240,12 @@ export class XLSXWorksheet {
             const aliasC = this.getCell(table.aliasRow, col)?.value?.toString(),
               aliasR = this.getCell(row, table.aliasCol)?.value?.toString(),
               address = cell?.address,
+              fmt = cell?.numFmt,
               numfmt = getFormatInfo(cell?.numFmt)
             result.push({
               alias: [aliasR, aliasC],
               address,
+              fmt,
               numfmt,
             })
           }
