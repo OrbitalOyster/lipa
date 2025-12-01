@@ -58,8 +58,8 @@ const model = defineModel<XLSXWorksheet>(),
   editableInput = useTemplateRef('editableInput')
 
 const data = ref<Record<string, number | string>>({
-  '1 3': 100,
-  '3.1 4': 200,
+  '1_3': 100,
+  '3.1_4': 200,
 })
 
 const getEditable = (r: number, c: number) => {
@@ -104,7 +104,7 @@ const getCellValue = (r: number, c: number) => {
     return 'Σ'
   if (isEditableCell(r, c)) {
     const ed = model.value?.editables.find(e => e.address === cell.address),
-      fullAlias = `${ed?.alias[0]} ${ed?.alias[1]}`,
+      fullAlias = `${ed?.alias[0]}_${ed?.alias[1]}`,
       cellData = data.value[fullAlias] ?? ''
     return cellData
   }
@@ -141,16 +141,9 @@ const deactivateCell = (discardValue?: boolean) => {
   /* Should not happen */
   if (!editableInput.value)
     throw new Error('Majow screwup')
-
-  if (!discardValue && previousRef.value !== editableRef.value) {
-    if (activeRow.value === null || activeCol.value === null)
-      return
-    const editable = getEditable(activeRow.value, activeCol.value),
-      fullAlias = `${editable?.alias[0]} ${editable?.alias[1]}`
-    console.log(`New value: ${editableRef.value}`)
-    data.value[fullAlias] = editableRef.value
-  }
-
+  /* Value changed */
+  if (!discardValue && previousRef.value !== editableRef.value)
+    submitActiveCell()
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
@@ -162,6 +155,25 @@ const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
     throw new Error('Majow screwup')
   if (isEditableCell(row, col) && !isActiveCell(row, col))
     e.preventDefault()
+}
+
+const onTdClick = async (row: number, col: number) => {
+  const cell = getCell(row, col)
+  if (!cell)
+    throw new Error('Majow screwup')
+  if (isEditableCell(row, col) && isActiveCell(row, col))
+    return
+  deactivateCell()
+  await activateCell(row, col)
+}
+
+const submitActiveCell = () => {
+  if (activeRow.value === null || activeCol.value === null)
+    return
+  const editable = getEditable(activeRow.value, activeCol.value),
+    fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`
+  console.log('New value: ', editableRef.value)
+  data.value[fullAlias] = editableRef.value
 }
 
 const keyNavigation = async (e: KeyboardEvent) => {
@@ -271,7 +283,7 @@ const getCellStyle = (r: number, c: number) => {
               :rowSpan="getCell(row, col)?.rowSpan"
               :colSpan="getCell(row, col)?.colSpan"
               @mousedown="e => onTdMouseDown(e, row, col)"
-              @click="deactivateCell(); activateCell(row, col)"
+              @click="onTdClick(row, col)"
             >
               <template v-if="!isActiveCell(row, col)">
                 {{ getCellValue(row, col) }}
@@ -294,8 +306,7 @@ const getCellStyle = (r: number, c: number) => {
     </Teleport>
   </div>
   {{ previousRef }}
-  {{ activeRow }}
-  {{ activeCol }}
+  {{ data }}
 </template>
 
 <style lang="sass" scoped>
