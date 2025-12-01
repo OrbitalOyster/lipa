@@ -53,14 +53,22 @@ const model = defineModel<XLSXWorksheet>(),
   activeCell = ref<null | string>(null),
   activeRow = ref<null | number>(null),
   activeCol = ref<null | number>(null),
-  previous = ref(''),
-  editable = ref(''),
+  previousRef = ref(''),
+  editableRef = ref(''),
   editableInput = useTemplateRef('editableInput')
 
 const data = ref<Record<string, number | string>>({
   '1 3': 100,
   '3.1 4': 200,
 })
+
+const getEditable = (r: number, c: number) => {
+  const cell = getCell(r, c)
+  if (!cell)
+    return null
+  const editable = model.value?.editables.find(e => e.address === cell.address)
+  return editable ?? null
+}
 
 const getCell = (r: number, c: number) => {
   const row = model.value?.rows[r]
@@ -116,14 +124,10 @@ const activateCell = async (r: number, c: number) => {
   if (!cell)
     throw new Error('Majow screwup')
 
-  /* Deactivate previous cell */
-  // if (activeRow.value !== null && activeCol.value !== null)
-  //   deactivateCell()
-
   activeCell.value = '#' + cell.address
 
-  editable.value = getCellValue(r, c)?.toString() ?? ''
-  previous.value = getCellValue(r, c)?.toString() ?? ''
+  editableRef.value = getCellValue(r, c)?.toString() ?? ''
+  previousRef.value = getCellValue(r, c)?.toString() ?? ''
 
   editableInput.value.focus()
   await nextTick()
@@ -137,16 +141,14 @@ const deactivateCell = (saveValue: boolean) => {
   /* Should not happen */
   if (!editableInput.value)
     throw new Error('Majow screwup')
-  // editableInput.value.blur()
 
-  if (saveValue && previous.value !== editable.value) {
+  if (saveValue && previousRef.value !== editableRef.value) {
     if (activeRow.value === null || activeCol.value === null)
       return
-    const cell = getCell(activeRow.value, activeCol.value),
-      ed = model.value?.editables.find(e => e.address === cell.address),
-      fullAlias = `${ed?.alias[0]} ${ed?.alias[1]}`
-    console.log(`New value: ${editable.value}`)
-    data.value[fullAlias] = editable.value
+    const editable = getEditable(activeRow.value, activeCol.value),
+      fullAlias = `${editable?.alias[0]} ${editable?.alias[1]}`
+    console.log(`New value: ${editableRef.value}`)
+    data.value[fullAlias] = editableRef.value
   }
 
   activeCell.value = null
@@ -177,19 +179,26 @@ const keyNavigation = async (e: KeyboardEvent) => {
 
   switch (e.key) {
     case 'ArrowUp':
+      if (!getEditable(r - 1, c))
+        return
       deactivateCell(true)
       await activateCell(r - 1, c)
       break
     case 'ArrowDown':
-    case 'Enter':
+      if (!getEditable(r + 1, c))
+        return
       deactivateCell(true)
       await activateCell(r + 1, c)
       break
     case 'ArrowLeft':
+      if (!getEditable(r, c - 1))
+        return
       deactivateCell(true)
       await activateCell(r, c - 1)
       break
     case 'ArrowRight':
+      if (!getEditable(r, c + 1))
+        return
       deactivateCell(true)
       await activateCell(r, c + 1)
       break
@@ -276,7 +285,7 @@ const getCellStyle = (r: number, c: number) => {
       <div style="display: flex; align-items: center; height: 40px; padding: 8px">
         <GooseInput
           ref="editableInput"
-          v-model="editable"
+          v-model="editableRef"
           @blur="deactivateCell"
           @esc="deactivateCell"
           @keydown="keyNavigation"
@@ -284,7 +293,7 @@ const getCellStyle = (r: number, c: number) => {
       </div>
     </Teleport>
   </div>
-  {{ previous }}
+  {{ previousRef }}
   {{ activeRow }}
   {{ activeCol }}
 </template>
