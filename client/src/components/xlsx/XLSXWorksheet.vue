@@ -263,8 +263,8 @@ const keyNavigation = async (e: KeyboardEvent) => {
 const getCellStyle = (r: number, c: number) => {
   const WIDTH_M = 1 / 2.2 * 16,
     HEIGHT_M = 1 / 12 * 16,
-    // BORDER_DEFAULT = '1px solid #DDD',
-    BORDER_DEFAULT = 'none',
+    BORDER_DEFAULT = '1px solid #DDD',
+    // BORDER_DEFAULT = 'none',
     BORDER_MAP = {
       hair: '1px solid darkslategray',
       thin: '1px solid darkslategray',
@@ -356,6 +356,7 @@ const getCellStyle = (r: number, c: number) => {
 <style lang="sass" scoped>
   td
     line-height: 1.2rem
+    border-width: .5px
 
   td.editable
     cursor: pointer
