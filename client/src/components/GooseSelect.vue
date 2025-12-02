@@ -68,7 +68,10 @@ function keyScroll(direction: number) {
           @keydown.down.prevent="keyScroll(1)"
           @keydown.esc="active = false"
         >
-          <div class="item">
+          <div
+            v-if="selectedId"
+            class="item"
+          >
             {{ items.find(i => i.id === selectedId)?.title }}
           </div>
         </button>
@@ -114,6 +117,7 @@ function keyScroll(direction: number) {
     align-items: center
     display: flex
     position: relative
+    min-width: 3.25rem
 
   button
     align-items: center
@@ -126,7 +130,7 @@ function keyScroll(direction: number) {
     font: inherit
     height: 2.5rem
     outline: colors.$outline solid 0px
-    padding: .25rem 3rem 0.25rem .75rem
+    padding: .25rem 2rem 0.25rem .75rem
     transition: transitions.$focusable, transitions.$colors
     white-space: nowrap
     width: 100%
@@ -153,7 +157,7 @@ function keyScroll(direction: number) {
   .item
     line-height: 1.25rem
     overflow: hidden
-    padding-right: .5rem
+    padding-right: 1rem
     text-overflow: ellipsis
 
   .icons
