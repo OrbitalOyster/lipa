@@ -64,8 +64,8 @@ function keyScroll(direction: number) {
           :autofocus
           @blur="active = false"
           @click="active = !active"
-          @keydown.up.prevent="keyScroll(-1)"
-          @keydown.down.prevent="keyScroll(1)"
+          @keydown.up="keyScroll(-1)"
+          @keydown.down="keyScroll(1)"
           @keydown.esc="active = false"
         >
           <div

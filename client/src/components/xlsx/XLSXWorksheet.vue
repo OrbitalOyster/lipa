@@ -315,21 +315,21 @@ const getCellStyle = (r: number, c: number) => {
         </tr>
       </tbody>
     </table>
-    <Teleport :to="activeCell === null ? 'body' : activeCell">
-      <div style="display: flex; align-items: center; height: 40px; padding: 8px">
-        <GooseInput
-          ref="editableInput"
-          v-model="editableRef"
-          @blur="deactivateCell"
-          @esc="deactivateCell(true)"
-          @enter="submitActiveCell(); deactivateCell()"
-          @keydown="keyNavigation"
-        />
-      </div>
-    </Teleport>
   </div>
-  {{ previousRef }}
+  {{ activeCell }}
   {{ data }}
+  <Teleport :to="activeCell === null ? '#hidden' : activeCell">
+    <div style="display: flex; align-items: center; height: 40px; padding: 8px">
+      <GooseInput
+        ref="editableInput"
+        v-model="editableRef"
+        @blur="deactivateCell"
+        @esc="deactivateCell(true)"
+        @enter="submitActiveCell(); deactivateCell()"
+        @keydown="keyNavigation"
+      />
+    </div>
+  </Teleport>
 </template>
 
 <style lang="sass" scoped>
