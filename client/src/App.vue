@@ -15,7 +15,6 @@ app.config.errorHandler = (err, vm, info) => {
 <template>
   <div id="tooltips" />
   <div id="modals" />
-  <div id="hidden" />
   <RouterView v-slot="{ Component }">
     <Component :is="Component" />
   </RouterView>
@@ -32,7 +31,4 @@ app.config.errorHandler = (err, vm, info) => {
   #tooltips
     position: absolute
     z-index: 100
-
-  #hidden
-    display: none
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { format, isTextFormat, parseNumber } from 'numfmt'
+import { format, isTextFormat, parseNumber, parseValue } from 'numfmt'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import type { CellValue } from 'exceljs'
 import GooseInput from '#components/GooseInput.vue'
@@ -7,7 +7,20 @@ import { ValueType } from 'exceljs'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 
-// console.log(format('0.00', 123.456, { locale: 'ru-RU' }))
+const bogus = '123,45'
+const parsedBogus = parseValue(bogus, { locale: 'ru-RU' })
+console.debug({ parsedBogus })
+
+/*
+const checkFmt = (input: string, fmt: string) => {
+  const parsedInput = parseValue(input, { locale: 'ru-RU' })
+  if (parsedInput === null)
+    return null
+  const formattedInput = format(fmt, parsedInput.v, { locale: 'ru-RU' })
+  console.log({ formattedInput, input })
+  return input === formattedInput
+}
+*/
 
 interface XLSXCell {
   address: string
@@ -53,7 +66,7 @@ interface XLSXWorksheet {
   }
   editables: Editable[]
 }
-const model = defineModel<XLSXWorksheet>(),
+const model = defineModel<XLSXWorksheet>({ required: true }),
   activeCell = ref<null | string>(null),
   activeRow = ref<null | number>(null),
   activeCol = ref<null | number>(null),
@@ -61,21 +74,27 @@ const model = defineModel<XLSXWorksheet>(),
   editableRef = ref(''),
   editableInput = useTemplateRef('editableInput')
 
+// if (model.value === undefined)
+//   throw new Error('Major screwup')
+
 const data = ref<Record<string, number | string>>({
   '1_3': 100,
   '3.1_4': 200,
+  '4_3': 1.5,
 })
 
 const getEditable = (r: number, c: number) => {
   const cell = getCell(r, c)
   if (!cell)
-    return null
-  const editable = model.value?.editables.find(e => e.address === cell.address)
-  return editable ?? null
+    throw new Error('Major screwup')
+  const editable = model.value.editables.find(e => e.address === cell.address)
+  if (!editable)
+    throw new Error('Major screwup')
+  return editable
 }
 
 const getCell = (r: number, c: number) => {
-  const row = model.value?.rows[r]
+  const row = model.value.rows[r]
   if (!row)
     return null
   const cell = row[c]
@@ -93,7 +112,7 @@ const isMergedCell = (r: number, c: number) => {
 const isEditableCell = (r: number, c: number) => {
   const cell = getCell(r, c),
     address = cell?.address
-  return model.value?.editables.find(e => e.address === address)
+  return model.value.editables.find(e => e.address === address)
 }
 
 const isActiveCell = (r: number, c: number) => {
@@ -107,10 +126,13 @@ const getCellValue = (r: number, c: number) => {
   if (cell.type === ValueType.Formula)
     return 'Σ'
   if (isEditableCell(r, c)) {
-    const ed = model.value?.editables.find(e => e.address === cell.address),
-      fullAlias = `${ed?.alias[0]}_${ed?.alias[1]}`,
-      cellData = data.value[fullAlias] ?? ''
-    return cellData
+    const editable = model.value.editables.find(e => e.address === cell.address),
+      fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`,
+      cellData = data.value[fullAlias] ?? '',
+      fmt = editable?.fmt
+    if (!fmt)
+      throw new Error('Invalid xlsx sheet')
+    return format(fmt, cellData, { locale: 'ru-RU' })
   }
   return cell.value as string
 }
@@ -141,7 +163,7 @@ const activateCell = async (r: number, c: number) => {
   activeCol.value = c
 }
 
-const deactivateCell = (discardValue?: boolean) => {
+const deactivateCell = async (discardValue?: boolean) => {
   /* Should not happen */
   if (!editableInput.value)
     throw new Error('Majow screwup')
@@ -151,6 +173,7 @@ const deactivateCell = (discardValue?: boolean) => {
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
+  await nextTick()
 }
 
 const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
@@ -167,7 +190,7 @@ const onTdClick = async (row: number, col: number) => {
     throw new Error('Majow screwup')
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
-  deactivateCell()
+  await deactivateCell()
   await activateCell(row, col)
 }
 
@@ -175,12 +198,10 @@ const submitActiveCell = () => {
   if (activeRow.value === null || activeCol.value === null)
     return
   const editable = getEditable(activeRow.value, activeCol.value),
-    fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`
+    fullAlias = `${editable.alias[0]}_${editable.alias[1]}`
   const rawValue = editableRef.value
   console.log('User input: ', { rawValue })
-  const fmt = editable?.fmt
-  if (!fmt)
-    throw new Error('Invalid xlsx sheet')
+  const fmt = editable.fmt
   console.log('fmt: ', { fmt })
   let parsed
   if (!isTextFormat(fmt)) {
@@ -191,8 +212,8 @@ const submitActiveCell = () => {
       return
     console.log({ parsed })
   }
-  const formatted = format(fmt, rawValue)
-  console.log({ formatted })
+  // const formatted = format(fmt, rawValue)
+  // console.log({ formatted })
   data.value[fullAlias] = parsed?.v ?? rawValue
 
   // data.value[fullAlias] = format(fmt, parsed?.v ?? rawValue, { locale: 'ru-RU' })
@@ -213,27 +234,27 @@ const keyNavigation = async (e: KeyboardEvent) => {
 
   switch (e.key) {
     case 'ArrowUp':
-      if (!getEditable(r - 1, c))
+      if (!isEditableCell(r - 1, c))
         return
-      deactivateCell()
+      await deactivateCell()
       await activateCell(r - 1, c)
       break
     case 'ArrowDown':
-      if (!getEditable(r + 1, c))
+      if (!isEditableCell(r + 1, c))
         return
-      deactivateCell()
+      await deactivateCell()
       await activateCell(r + 1, c)
       break
     case 'ArrowLeft':
-      if (!getEditable(r, c - 1))
+      if (!isEditableCell(r, c - 1))
         return
-      deactivateCell()
+      await deactivateCell()
       await activateCell(r, c - 1)
       break
     case 'ArrowRight':
-      if (!getEditable(r, c + 1))
+      if (!isEditableCell(r, c + 1))
         return
-      deactivateCell()
+      await deactivateCell()
       await activateCell(r, c + 1)
       break
   }
@@ -252,8 +273,8 @@ const getCellStyle = (r: number, c: number) => {
       dotted: '2px dotted darkslategray',
       default: BORDER_DEFAULT,
     },
-    width = (model.value?.colWidths[c] ?? 0) * WIDTH_M + 'px',
-    height = (model.value?.rowHeights[r] ?? 0) * HEIGHT_M + 'px',
+    width = (model.value.colWidths[c] ?? 0) * WIDTH_M + 'px',
+    height = (model.value.rowHeights[r] ?? 0) * HEIGHT_M + 'px',
     cell = getCell(r, c),
     borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
     borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
