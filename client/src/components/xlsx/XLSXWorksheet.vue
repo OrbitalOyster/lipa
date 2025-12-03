@@ -7,20 +7,23 @@ import { ValueType } from 'exceljs'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 
-const bogus = '123,45'
-const parsedBogus = parseValue(bogus, { locale: 'ru-RU' })
-console.debug({ parsedBogus })
+const locale = 'ru-RU'
 
-/*
 const checkFmt = (input: string, fmt: string) => {
-  const parsedInput = parseValue(input, { locale: 'ru-RU' })
+  const parsedInput = parseValue(input, { locale })
+  // console.debug({ parsedInput })
+  /* Bogus input */
   if (parsedInput === null)
-    return null
-  const formattedInput = format(fmt, parsedInput.v, { locale: 'ru-RU' })
-  console.log({ formattedInput, input })
-  return input === formattedInput
+    return false
+  const formattedInput = format(fmt, parsedInput.v, { locale })
+  // console.debug({ formattedInput })
+  const parsedAgainInput = parseValue(formattedInput, { locale })
+  /* Should not happen */
+  if (parsedAgainInput === null)
+    throw new Error('Major screwup')
+  // console.debug({ parsedAgainInput })
+  return parsedInput.v === parsedAgainInput.v
 }
-*/
 
 interface XLSXCell {
   address: string
@@ -74,10 +77,7 @@ const model = defineModel<XLSXWorksheet>({ required: true }),
   editableRef = ref(''),
   editableInput = useTemplateRef('editableInput')
 
-// if (model.value === undefined)
-//   throw new Error('Major screwup')
-
-const data = ref<Record<string, number | string>>({
+const data = ref<Record<string, number | string | boolean>>({
   '1_3': 100,
   '3.1_4': 200,
   '4_3': 1.5,
@@ -100,7 +100,6 @@ const getCell = (r: number, c: number) => {
   const cell = row[c]
   if (!cell)
     return null
-
   return cell
 }
 
@@ -126,13 +125,13 @@ const getCellValue = (r: number, c: number) => {
   if (cell.type === ValueType.Formula)
     return 'Σ'
   if (isEditableCell(r, c)) {
-    const editable = model.value.editables.find(e => e.address === cell.address),
+    const editable = getEditable(r, c),
       fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`,
       cellData = data.value[fullAlias] ?? '',
       fmt = editable?.fmt
     if (!fmt)
       throw new Error('Invalid xlsx sheet')
-    return format(fmt, cellData, { locale: 'ru-RU' })
+    return format(fmt, cellData, { locale })
   }
   return cell.value as string
 }
@@ -190,33 +189,31 @@ const onTdClick = async (row: number, col: number) => {
     throw new Error('Majow screwup')
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
-  await deactivateCell()
+  if (activeCell.value)
+    await deactivateCell()
   await activateCell(row, col)
 }
 
 const submitActiveCell = () => {
   if (activeRow.value === null || activeCol.value === null)
-    return
+    throw new Error('Major screwup')
   const editable = getEditable(activeRow.value, activeCol.value),
-    fullAlias = `${editable.alias[0]}_${editable.alias[1]}`
-  const rawValue = editableRef.value
-  console.log('User input: ', { rawValue })
-  const fmt = editable.fmt
-  console.log('fmt: ', { fmt })
-  let parsed
-  if (!isTextFormat(fmt)) {
-    console.log('Not text')
-    parsed = parseNumber(rawValue, { locale: 'ru-RU' })
-    /* Bogus input */
-    if (parsed === null)
-      return
-    console.log({ parsed })
+    fullAlias = `${editable.alias[0]}_${editable.alias[1]}`,
+    rawValue = editableRef.value,
+    fmt = editable.fmt
+  // console.log('User input: ', { rawValue })
+  // console.log('fmt: ', { fmt })
+
+  if (!isTextFormat(fmt) && !checkFmt(rawValue, fmt)) {
+    console.error('Bogus input:', rawValue)
+    return
   }
-  // const formatted = format(fmt, rawValue)
-  // console.log({ formatted })
-  data.value[fullAlias] = parsed?.v ?? rawValue
+
+  const parsed = parseValue(rawValue, { locale })
+  data.value[fullAlias] = parsed.v
 
   // data.value[fullAlias] = format(fmt, parsed?.v ?? rawValue, { locale: 'ru-RU' })
+  console.log('Submitted value', data.value[fullAlias])
 }
 
 const keyNavigation = async (e: KeyboardEvent) => {
@@ -346,7 +343,7 @@ const getCellStyle = (r: number, c: number) => {
         v-model="editableRef"
         @blur="deactivateCell"
         @esc="deactivateCell(true)"
-        @enter="submitActiveCell(); deactivateCell()"
+        @enter="submitActiveCell(); deactivateCell(true)"
         @keydown="keyNavigation"
       />
     </div>
