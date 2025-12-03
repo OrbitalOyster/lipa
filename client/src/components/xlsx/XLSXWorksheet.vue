@@ -7,21 +7,6 @@ import { ValueType } from 'exceljs'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'
 
-const locale = 'ru-RU'
-
-const checkFmt = (input: string, fmt: string) => {
-  const parsedInput = parseValue(input, { locale })
-  /* Bogus input */
-  if (parsedInput === null)
-    return false
-  const formattedInput = format(fmt, parsedInput.v, { locale })
-  const parsedAgainInput = parseValue(formattedInput, { locale })
-  /* Should not happen */
-  if (parsedAgainInput === null)
-    throw new Error('Major screwup')
-  return parsedInput.v === parsedAgainInput.v
-}
-
 interface XLSXCell {
   address: string
   type: ValueType
@@ -66,6 +51,22 @@ interface XLSXWorksheet {
   }
   editables: Editable[]
 }
+
+const locale = 'ru-RU'
+
+const checkFmt = (input: string, fmt: string) => {
+  const parsedInput = parseValue(input, { locale })
+  /* Bogus input */
+  if (parsedInput === null)
+    return false
+  const formattedInput = format(fmt, parsedInput.v, { locale })
+  const parsedAgainInput = parseValue(formattedInput, { locale })
+  /* Should not happen */
+  if (parsedAgainInput === null)
+    throw new Error('Major screwup')
+  return parsedInput.v === parsedAgainInput.v
+}
+
 const model = defineModel<XLSXWorksheet>({ required: true }),
   activeCell = ref<null | string>(null),
   activeRow = ref<null | number>(null),
@@ -142,7 +143,7 @@ const getCellValue = (rowIndex: number, colIndex: number) => {
 
 const activateCell = async (rowIndex: number, colIndex: number) => {
   if (!editableInput.value)
-    throw new Error('Majow screwup')
+    throw new Error('Major screwup')
   /* Trying to activate already active cell */
   if (activeRow.value === rowIndex && activeCol.value === colIndex)
     return
@@ -162,7 +163,7 @@ const activateCell = async (rowIndex: number, colIndex: number) => {
 const deactivateCell = async () => {
   /* Should not happen */
   if (!editableInput.value)
-    throw new Error('Majow screwup')
+    throw new Error('Major screwup')
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
@@ -178,7 +179,7 @@ const onTdMouseDown = (e: MouseEvent, rowIndex: number, colIndex: number) => {
 const onTdClick = async (row: number, col: number) => {
   const cell = getCell(row, col)
   if (!cell)
-    throw new Error('Majow screwup')
+    throw new Error('Major screwup')
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
   /* Handle previously active cell */
@@ -217,7 +218,6 @@ const keyNavigation = async (e: KeyboardEvent) => {
     e.preventDefault()
   else
     return
-
   /* Active cell */
   let rowIndex = activeRow.value,
     colIndex = activeCol.value
@@ -227,7 +227,6 @@ const keyNavigation = async (e: KeyboardEvent) => {
       rowIndex -= 1
       break
     case 'ArrowDown':
-    // case 'Enter':
       rowIndex += 1
       break
     case 'ArrowLeft':
@@ -237,8 +236,6 @@ const keyNavigation = async (e: KeyboardEvent) => {
       colIndex += 1
       break
   }
-
-  /* 'Enter' already submitted value */
   if (cellChanged)
     submitActiveCell()
   if (cellExists(rowIndex, colIndex) && isEditableCell(rowIndex, colIndex)) {
