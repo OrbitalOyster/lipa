@@ -70,9 +70,10 @@ const model = defineModel<XLSXWorksheet>({ required: true }),
   activeCell = ref<null | string>(null),
   activeRow = ref<null | number>(null),
   activeCol = ref<null | number>(null),
-  previousRef = ref(''),
   editableRef = ref(''),
   editableInput = useTemplateRef('editableInput')
+
+let cellChanged = false
 
 const data = ref<Record<string, number | string | boolean>>({
   '1_3': 100,
@@ -151,16 +152,11 @@ const activateCell = async (rowIndex: number, colIndex: number) => {
   const cell = getCell(rowIndex, colIndex)
   activeCell.value = '#' + cell.address
   editableRef.value = getCellValue(rowIndex, colIndex).toString()
-  previousRef.value = getCellValue(rowIndex, colIndex).toString()
   editableInput.value.focus()
   await nextTick()
   editableInput.value.selectAll()
   activeRow.value = rowIndex
   activeCol.value = colIndex
-}
-
-const activeCellChanged = () => {
-  return previousRef.value !== editableRef.value
 }
 
 const deactivateCell = async () => {
@@ -170,6 +166,7 @@ const deactivateCell = async () => {
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
+  cellChanged = false
   await nextTick()
 }
 
@@ -186,7 +183,7 @@ const onTdClick = async (row: number, col: number) => {
     return
   /* Handle previously active cell */
   if (activeCell.value) {
-    if (activeCellChanged())
+    if (cellChanged)
       submitActiveCell()
     await deactivateCell()
   }
@@ -205,14 +202,17 @@ const submitActiveCell = () => {
     return
   }
   const parsed = parseValue(rawValue, { locale })
+  if (!parsed)
+    throw new Error('Major screwup')
   data.value[fullAlias] = parsed.v
   console.log('Submitted value', data.value[fullAlias])
+  cellChanged = false
 }
 
 const keyNavigation = async (e: KeyboardEvent) => {
   if (activeRow.value === null || activeCol.value === null)
     return
-  const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
+  const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
   if (navigationKeys.includes(e.key))
     e.preventDefault()
   else
@@ -227,6 +227,7 @@ const keyNavigation = async (e: KeyboardEvent) => {
       rowIndex -= 1
       break
     case 'ArrowDown':
+    // case 'Enter':
       rowIndex += 1
       break
     case 'ArrowLeft':
@@ -237,12 +238,13 @@ const keyNavigation = async (e: KeyboardEvent) => {
       break
   }
 
-  if (!cellExists(rowIndex, colIndex) || !isEditableCell(rowIndex, colIndex))
-    return
-  if (activeCellChanged())
+  /* 'Enter' already submitted value */
+  if (cellChanged)
     submitActiveCell()
-  await deactivateCell()
-  await activateCell(rowIndex, colIndex)
+  if (cellExists(rowIndex, colIndex) && isEditableCell(rowIndex, colIndex)) {
+    await deactivateCell()
+    await activateCell(rowIndex, colIndex)
+  }
 }
 
 const getCellStyle = (rowIndex: number, colIndex: number) => {
@@ -329,9 +331,10 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       <GooseInput
         ref="editableInput"
         v-model="editableRef"
-        @blur="activeCellChanged() && submitActiveCell(); deactivateCell()"
+        @input="cellChanged = true"
+        @blur="cellChanged && submitActiveCell(); deactivateCell()"
         @esc="deactivateCell"
-        @enter="submitActiveCell(); deactivateCell()"
+        @enter="cellChanged && submitActiveCell()"
         @keydown="keyNavigation"
       />
     </div>

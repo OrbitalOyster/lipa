@@ -21,7 +21,7 @@ defineProps<{
 }>()
 
 const text = defineModel<string>({ required: true }),
-  emit = defineEmits(['blur', 'keydown', 'esc', 'enter']),
+  emit = defineEmits(['input', 'blur', 'keydown', 'esc', 'enter']),
   input = useTemplateRef('input'),
   passwordHidden = ref(true),
   { focused } = useFocus(input),
@@ -48,6 +48,7 @@ defineExpose({ focus, blur, selectAll })
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
           :disabled
           :type="password && passwordHidden ? 'password' : 'text'"
+          @input="emit('input')"
           @blur="emit('blur')"
           @keydown="e => emit('keydown', e)"
           @keydown.esc="emit('esc')"
