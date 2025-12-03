@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { format, isTextFormat, parseNumber, parseValue } from 'numfmt'
+import { format, isTextFormat, parseValue } from 'numfmt'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import type { CellValue } from 'exceljs'
 import GooseInput from '#components/GooseInput.vue'
@@ -11,17 +11,14 @@ const locale = 'ru-RU'
 
 const checkFmt = (input: string, fmt: string) => {
   const parsedInput = parseValue(input, { locale })
-  // console.debug({ parsedInput })
   /* Bogus input */
   if (parsedInput === null)
     return false
   const formattedInput = format(fmt, parsedInput.v, { locale })
-  // console.debug({ formattedInput })
   const parsedAgainInput = parseValue(formattedInput, { locale })
   /* Should not happen */
   if (parsedAgainInput === null)
     throw new Error('Major screwup')
-  // console.debug({ parsedAgainInput })
   return parsedInput.v === parsedAgainInput.v
 }
 
@@ -83,52 +80,58 @@ const data = ref<Record<string, number | string | boolean>>({
   '4_3': 1.5,
 })
 
-const getEditable = (r: number, c: number) => {
-  const cell = getCell(r, c)
+const cellExists = (rowIndex: number, colIndex: number) => {
+  const row = model.value.rows[rowIndex]
+  if (!row)
+    return false
+  const cell = row[colIndex]
+  if (!cell)
+    return false
+  return true
+}
+
+const getCell = (rowIndex: number, colIndex: number) => {
+  const row = model.value.rows[rowIndex]
+  if (!row)
+    throw new Error('Major screwup')
+  const cell = row[colIndex]
   if (!cell)
     throw new Error('Major screwup')
-  const editable = model.value.editables.find(e => e.address === cell.address)
+  return cell
+}
+
+const getEditable = (rowIndex: number, colIndex: number) => {
+  const cell = getCell(rowIndex, colIndex),
+    editable = model.value.editables.find(e => e.address === cell.address)
   if (!editable)
     throw new Error('Major screwup')
   return editable
 }
 
-const getCell = (r: number, c: number) => {
-  const row = model.value.rows[r]
-  if (!row)
-    return null
-  const cell = row[c]
-  if (!cell)
-    return null
-  return cell
+const isMergedCell = (rowIndex: number, colIndex: number) => {
+  const cell = getCell(rowIndex, colIndex)
+  return cell.type === ValueType.Merge
 }
 
-const isMergedCell = (r: number, c: number) => {
-  const cell = getCell(r, c)
-  return cell?.type === ValueType.Merge
+const isEditableCell = (rowIndex: number, colIndex: number) => {
+  const cell = getCell(rowIndex, colIndex),
+    address = cell.address
+  return !!model.value.editables.find(e => e.address === address)
 }
 
-const isEditableCell = (r: number, c: number) => {
-  const cell = getCell(r, c),
-    address = cell?.address
-  return model.value.editables.find(e => e.address === address)
+const isActiveCell = (rowIndex: number, colIndex: number) => {
+  return activeRow.value === rowIndex && activeCol.value === colIndex
 }
 
-const isActiveCell = (r: number, c: number) => {
-  return activeRow.value === r && activeCol.value === c
-}
-
-const getCellValue = (r: number, c: number) => {
-  const cell = getCell(r, c)
-  if (!cell)
-    return ''
+const getCellValue = (rowIndex: number, colIndex: number) => {
+  const cell = getCell(rowIndex, colIndex)
   if (cell.type === ValueType.Formula)
     return 'Σ'
-  if (isEditableCell(r, c)) {
-    const editable = getEditable(r, c),
-      fullAlias = `${editable?.alias[0]}_${editable?.alias[1]}`,
+  if (isEditableCell(rowIndex, colIndex)) {
+    const editable = getEditable(rowIndex, colIndex),
+      fullAlias = `${editable.alias[0]}_${editable.alias[1]}`,
       cellData = data.value[fullAlias] ?? '',
-      fmt = editable?.fmt
+      fmt = editable.fmt
     if (!fmt)
       throw new Error('Invalid xlsx sheet')
     return format(fmt, cellData, { locale })
@@ -136,50 +139,42 @@ const getCellValue = (r: number, c: number) => {
   return cell.value as string
 }
 
-const activateCell = async (r: number, c: number) => {
+const activateCell = async (rowIndex: number, colIndex: number) => {
   if (!editableInput.value)
     throw new Error('Majow screwup')
   /* Trying to activate already active cell */
-  if (activeRow.value === r && activeCol.value === c)
+  if (activeRow.value === rowIndex && activeCol.value === colIndex)
     return
   /* Ignore uneditable cells */
-  if (!isEditableCell(r, c))
+  if (!isEditableCell(rowIndex, colIndex))
     return
-  const cell = getCell(r, c)
-  if (!cell)
-    throw new Error('Majow screwup')
-
+  const cell = getCell(rowIndex, colIndex)
   activeCell.value = '#' + cell.address
-
-  editableRef.value = getCellValue(r, c)?.toString() ?? ''
-  previousRef.value = getCellValue(r, c)?.toString() ?? ''
-
+  editableRef.value = getCellValue(rowIndex, colIndex).toString()
+  previousRef.value = getCellValue(rowIndex, colIndex).toString()
   editableInput.value.focus()
   await nextTick()
   editableInput.value.selectAll()
-
-  activeRow.value = r
-  activeCol.value = c
+  activeRow.value = rowIndex
+  activeCol.value = colIndex
 }
 
-const deactivateCell = async (discardValue?: boolean) => {
+const activeCellChanged = () => {
+  return previousRef.value !== editableRef.value
+}
+
+const deactivateCell = async () => {
   /* Should not happen */
   if (!editableInput.value)
     throw new Error('Majow screwup')
-  /* Value changed */
-  if (!discardValue && previousRef.value !== editableRef.value)
-    submitActiveCell()
   activeCell.value = null
   activeRow.value = null
   activeCol.value = null
   await nextTick()
 }
 
-const onTdMouseDown = (e: MouseEvent, row: number, col: number) => {
-  const cell = getCell(row, col)
-  if (!cell)
-    throw new Error('Majow screwup')
-  if (isEditableCell(row, col) && !isActiveCell(row, col))
+const onTdMouseDown = (e: MouseEvent, rowIndex: number, colIndex: number) => {
+  if (!isActiveCell(rowIndex, colIndex) && isEditableCell(rowIndex, colIndex))
     e.preventDefault()
 }
 
@@ -189,8 +184,12 @@ const onTdClick = async (row: number, col: number) => {
     throw new Error('Majow screwup')
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
-  if (activeCell.value)
+  /* Handle previously active cell */
+  if (activeCell.value) {
+    if (activeCellChanged())
+      submitActiveCell()
     await deactivateCell()
+  }
   await activateCell(row, col)
 }
 
@@ -201,18 +200,12 @@ const submitActiveCell = () => {
     fullAlias = `${editable.alias[0]}_${editable.alias[1]}`,
     rawValue = editableRef.value,
     fmt = editable.fmt
-  // console.log('User input: ', { rawValue })
-  // console.log('fmt: ', { fmt })
-
   if (!isTextFormat(fmt) && !checkFmt(rawValue, fmt)) {
     console.error('Bogus input:', rawValue)
     return
   }
-
   const parsed = parseValue(rawValue, { locale })
   data.value[fullAlias] = parsed.v
-
-  // data.value[fullAlias] = format(fmt, parsed?.v ?? rawValue, { locale: 'ru-RU' })
   console.log('Submitted value', data.value[fullAlias])
 }
 
@@ -225,39 +218,34 @@ const keyNavigation = async (e: KeyboardEvent) => {
   else
     return
 
-  /* Remember active cell */
-  const r = activeRow.value,
-    c = activeCol.value
+  /* Active cell */
+  let rowIndex = activeRow.value,
+    colIndex = activeCol.value
 
   switch (e.key) {
     case 'ArrowUp':
-      if (!isEditableCell(r - 1, c))
-        return
-      await deactivateCell()
-      await activateCell(r - 1, c)
+      rowIndex -= 1
       break
     case 'ArrowDown':
-      if (!isEditableCell(r + 1, c))
-        return
-      await deactivateCell()
-      await activateCell(r + 1, c)
+      rowIndex += 1
       break
     case 'ArrowLeft':
-      if (!isEditableCell(r, c - 1))
-        return
-      await deactivateCell()
-      await activateCell(r, c - 1)
+      colIndex -= 1
       break
     case 'ArrowRight':
-      if (!isEditableCell(r, c + 1))
-        return
-      await deactivateCell()
-      await activateCell(r, c + 1)
+      colIndex += 1
       break
   }
+
+  if (!cellExists(rowIndex, colIndex) || !isEditableCell(rowIndex, colIndex))
+    return
+  if (activeCellChanged())
+    submitActiveCell()
+  await deactivateCell()
+  await activateCell(rowIndex, colIndex)
 }
 
-const getCellStyle = (r: number, c: number) => {
+const getCellStyle = (rowIndex: number, colIndex: number) => {
   const WIDTH_M = 1 / 2.2 * 16,
     HEIGHT_M = 1 / 12 * 16,
     BORDER_DEFAULT = '1px solid #DDD',
@@ -270,9 +258,9 @@ const getCellStyle = (r: number, c: number) => {
       dotted: '2px dotted darkslategray',
       default: BORDER_DEFAULT,
     },
-    width = (model.value.colWidths[c] ?? 0) * WIDTH_M + 'px',
-    height = (model.value.rowHeights[r] ?? 0) * HEIGHT_M + 'px',
-    cell = getCell(r, c),
+    width = (model.value.colWidths[colIndex] ?? 0) * WIDTH_M + 'px',
+    height = (model.value.rowHeights[rowIndex] ?? 0) * HEIGHT_M + 'px',
+    cell = getCell(rowIndex, colIndex),
     borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
     borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
     borderBottom = BORDER_MAP[cell?.borders?.bottom ?? 'default'],
@@ -341,9 +329,9 @@ const getCellStyle = (r: number, c: number) => {
       <GooseInput
         ref="editableInput"
         v-model="editableRef"
-        @blur="deactivateCell"
-        @esc="deactivateCell(true)"
-        @enter="submitActiveCell(); deactivateCell(true)"
+        @blur="activeCellChanged() && submitActiveCell(); deactivateCell()"
+        @esc="deactivateCell"
+        @enter="submitActiveCell(); deactivateCell()"
         @keydown="keyNavigation"
       />
     </div>
@@ -357,8 +345,4 @@ const getCellStyle = (r: number, c: number) => {
 
   td.editable
     cursor: pointer
-
-  /*
-  td.editable:hover
-    box-shadow: inset 0px 0px 0px 2px #76D7C4 */
 </style>
