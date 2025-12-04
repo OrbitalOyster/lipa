@@ -177,9 +177,6 @@ const onTdMouseDown = (e: MouseEvent, rowIndex: number, colIndex: number) => {
 }
 
 const onTdClick = async (row: number, col: number) => {
-  const cell = getCell(row, col)
-  if (!cell)
-    throw new Error('Major screwup')
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
   /* Handle previously active cell */
@@ -210,32 +207,14 @@ const submitActiveCell = () => {
   cellChanged = false
 }
 
-const keyNavigation = async (e: KeyboardEvent) => {
+const navigate = async (rowShift: number, colShift: number) => {
   if (activeRow.value === null || activeCol.value === null)
-    return
-  const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
-  if (navigationKeys.includes(e.key))
-    e.preventDefault()
-  else
-    return
+    throw new Error('Major screwup')
   /* Active cell */
   let rowIndex = activeRow.value,
     colIndex = activeCol.value
-
-  switch (e.key) {
-    case 'ArrowUp':
-      rowIndex -= 1
-      break
-    case 'ArrowDown':
-      rowIndex += 1
-      break
-    case 'ArrowLeft':
-      colIndex -= 1
-      break
-    case 'ArrowRight':
-      colIndex += 1
-      break
-  }
+  rowIndex += rowShift
+  colIndex += colShift
   if (cellChanged)
     submitActiveCell()
   if (cellExists(rowIndex, colIndex) && isEditableCell(rowIndex, colIndex)) {
@@ -244,11 +223,39 @@ const keyNavigation = async (e: KeyboardEvent) => {
   }
 }
 
+const onTdKeyDown = async (e: KeyboardEvent) => {
+  // if (activeRow.value === null || activeCol.value === null)
+  //   return
+  const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
+  if (navigationKeys.includes(e.key)) {
+    e.preventDefault()
+    let rowShift = 0,
+      colShift = 0
+    switch (e.key) {
+      case 'ArrowUp':
+        rowShift -= 1
+        break
+      case 'ArrowDown':
+      case 'Enter':
+        rowShift += 1
+        break
+      case 'ArrowLeft':
+        colShift -= 1
+        break
+      case 'ArrowRight':
+        colShift += 1
+        break
+    }
+    await navigate(rowShift, colShift)
+  }
+}
+
+const WIDTH_M = ref('7.07'),
+  HEIGHT_M = ref('1.156')
+
 const getCellStyle = (rowIndex: number, colIndex: number) => {
-  const WIDTH_M = 1 / 2.2 * 16,
-    HEIGHT_M = 1 / 12 * 16,
-    BORDER_DEFAULT = '1px solid #DDD',
-    // BORDER_DEFAULT = 'none',
+  // BORDER_DEFAULT = '1px solid #DDD',
+  const BORDER_DEFAULT = 'none',
     BORDER_MAP = {
       hair: '1px solid darkslategray',
       thin: '1px solid darkslategray',
@@ -257,8 +264,8 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       dotted: '2px dotted darkslategray',
       default: BORDER_DEFAULT,
     },
-    width = (model.value.colWidths[colIndex] ?? 0) * WIDTH_M + 'px',
-    height = (model.value.rowHeights[rowIndex] ?? 0) * HEIGHT_M + 'px',
+    width = (model.value.colWidths[colIndex] ?? 0) * Number(WIDTH_M.value) + 'px',
+    height = (model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 'px',
     cell = getCell(rowIndex, colIndex),
     borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
     borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
@@ -286,6 +293,24 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       fontStyle,
       textDecoration,
     }
+
+  if (!cell.borders?.top && cellExists(rowIndex - 1, colIndex)) {
+    const topCell = getCell(rowIndex - 1, colIndex)
+    style.borderTop = BORDER_MAP[topCell?.borders?.bottom ?? 'default']
+  }
+  if (!cell.borders?.right && cellExists(rowIndex, colIndex + 1)) {
+    const rightCell = getCell(rowIndex, colIndex + 1)
+    style.borderRight = BORDER_MAP[rightCell?.borders?.left ?? 'default']
+  }
+  if (!cell.borders?.bottom && cellExists(rowIndex + 1, colIndex)) {
+    const bottomCell = getCell(rowIndex + 1, colIndex)
+    style.borderBottom = BORDER_MAP[bottomCell?.borders?.top ?? 'default']
+  }
+  if (!cell.borders?.left && cellExists(rowIndex, colIndex - 1)) {
+    const leftCell = getCell(rowIndex, colIndex - 1)
+    style.borderLeft = BORDER_MAP[leftCell?.borders?.right ?? 'default']
+  }
+
   return style
 }
 </script>
@@ -313,13 +338,19 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
               @click="onTdClick(row, col)"
             >
               <template v-if="!isActiveCell(row, col)">
-                {{ getCellValue(row, col) }}
+                <div class="content">
+                  {{ getCellValue(row, col) }}
+                </div>
               </template>
             </td>
           </template>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div style="display: flex">
+    <GooseInput v-model="WIDTH_M" />
+    <GooseInput v-model="HEIGHT_M" />
   </div>
   {{ activeCell }}
   {{ data }}
@@ -331,17 +362,27 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
         @input="cellChanged = true"
         @blur="cellChanged && submitActiveCell(); deactivateCell()"
         @esc="deactivateCell"
-        @enter="cellChanged && submitActiveCell()"
-        @keydown="keyNavigation"
+        @keydown="onTdKeyDown"
       />
     </div>
   </Teleport>
 </template>
 
 <style lang="sass" scoped>
+  tr
+    border-top: 1px solid #0000
+
   td
-    line-height: 1.2rem
-    border-width: .5px
+    padding-top: 0px
+    padding-bottom: 0px
+    padding-left: 0px
+    padding-right: 0px
+
+  div.content
+    padding-top: 2px
+    padding-bottom: 2px
+    padding-left: 2px
+    padding-right: 2px
 
   td.editable
     cursor: pointer
