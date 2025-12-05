@@ -29,6 +29,7 @@ const modal = useTemplateRef('modal'),
   error = ref(''),
   key = ref(''),
   saveAsFilename = ref(''),
+  checkingFilename = ref(false),
   filenameExists = ref(false),
   hashExists = ref<string | false>(false)
 
@@ -100,9 +101,11 @@ const upload = async () => {
 
 /* Filename check */
 const checkFilename = async () => {
+  checkingFilename.value = true
   const check = await axios.get(`/check-filename?q=${saveAsFilename.value}`)
   filenameExists.value = check.data
   console.log(saveAsFilename.value, filenameExists.value)
+  checkingFilename.value = false
 }
 watchDebounced(saveAsFilename, checkFilename, { debounce: 500 })
 
@@ -181,6 +184,7 @@ defineExpose({
             <p>Сохранить шаблон как:</p>
             <GooseInput
               v-model="saveAsFilename"
+              :loading="checkingFilename"
               style="flex-grow: 1"
               :error="filenameExists ? 'Имя занято' : ''"
             />

@@ -83,6 +83,9 @@ const data = ref<Record<string, number | string | boolean>>({
 })
 
 const cellExists = (rowIndex: number, colIndex: number) => {
+  return rowIndex >= 0 && rowIndex < model.value.height
+    && colIndex >= 0 && colIndex < model.value.width
+/*
   const row = model.value.rows[rowIndex]
   if (!row)
     return false
@@ -90,6 +93,17 @@ const cellExists = (rowIndex: number, colIndex: number) => {
   if (!cell)
     return false
   return true
+*/
+}
+
+const cellEmpty = (rowIndex: number, colIndex: number) => {
+  const row = model.value.rows[rowIndex]
+  if (!row)
+    throw new Error('Major screwup')
+  const cell = row[colIndex]
+  if (!cell)
+    return true
+  return false
 }
 
 const getCell = (rowIndex: number, colIndex: number) => {
@@ -258,7 +272,7 @@ const onTdKeyDown = async (e: KeyboardEvent) => {
 }
 
 const WIDTH_M = ref('7.07'),
-  HEIGHT_M = ref('1.156')
+  HEIGHT_M = ref('1.25')
 
 const getRowStyle = (rowIndex: number) => {
   const height = (model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 'px',
@@ -281,17 +295,17 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
     },
     width = (model.value.colWidths[colIndex] ?? 0) * Number(WIDTH_M.value) + 'px',
     cell = getCell(rowIndex, colIndex),
-    borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
-    borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
-    borderBottom = BORDER_MAP[cell?.borders?.bottom ?? 'default'],
-    borderLeft = BORDER_MAP[cell?.borders?.left ?? 'default'],
-    fontWeight = cell?.font?.bold ? 'bold' : 'normal',
-    fontStyle = cell?.font?.italic ? 'italic' : 'normal',
-    textDecoration = cell?.font?.underline ? 'underline' : 'none',
-    backgroundColor = cell?.backgroundColor,
-    color = cell?.font?.color,
-    textAlign = cell?.textAlign ?? 'left',
-    verticalAlign = cell?.verticalAlign ?? 'bottom',
+    borderTop = BORDER_MAP[cell.borders?.top ?? 'default'],
+    borderRight = BORDER_MAP[cell.borders?.right ?? 'default'],
+    borderBottom = BORDER_MAP[cell.borders?.bottom ?? 'default'],
+    borderLeft = BORDER_MAP[cell.borders?.left ?? 'default'],
+    fontWeight = cell.font?.bold ? 'bold' : 'normal',
+    fontStyle = cell.font?.italic ? 'italic' : 'normal',
+    textDecoration = cell.font?.underline ? 'underline' : 'none',
+    backgroundColor = cell.backgroundColor,
+    color = cell.font?.color,
+    textAlign = cell.textAlign ?? 'left',
+    verticalAlign = cell.verticalAlign ?? 'bottom',
     style = {
       backgroundColor,
       color,
@@ -307,21 +321,21 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       textDecoration,
     }
 
-  if (!cell.borders?.top && cellExists(rowIndex - 1, colIndex)) {
+  if (!cell.borders?.top && cellExists(rowIndex - 1, colIndex) && !cellEmpty(rowIndex - 1, colIndex)) {
     const topCell = getCell(rowIndex - 1, colIndex)
-    style.borderTop = BORDER_MAP[topCell?.borders?.bottom ?? 'default']
+    style.borderTop = BORDER_MAP[topCell.borders?.bottom ?? 'default']
   }
-  if (!cell.borders?.right && cellExists(rowIndex, colIndex + 1)) {
+  if (!cell.borders?.right && cellExists(rowIndex, colIndex + 1) && !cellEmpty(rowIndex, colIndex + 1)) {
     const rightCell = getCell(rowIndex, colIndex + 1)
-    style.borderRight = BORDER_MAP[rightCell?.borders?.left ?? 'default']
+    style.borderRight = BORDER_MAP[rightCell.borders?.left ?? 'default']
   }
-  if (!cell.borders?.bottom && cellExists(rowIndex + 1, colIndex)) {
+  if (!cell.borders?.bottom && cellExists(rowIndex + 1, colIndex) && !cellEmpty(rowIndex + 1, colIndex)) {
     const bottomCell = getCell(rowIndex + 1, colIndex)
-    style.borderBottom = BORDER_MAP[bottomCell?.borders?.top ?? 'default']
+    style.borderBottom = BORDER_MAP[bottomCell.borders?.top ?? 'default']
   }
-  if (!cell.borders?.left && cellExists(rowIndex, colIndex - 1)) {
+  if (!cell.borders?.left && cellExists(rowIndex, colIndex - 1) && !cellEmpty(rowIndex, colIndex)) {
     const leftCell = getCell(rowIndex, colIndex - 1)
-    style.borderLeft = BORDER_MAP[leftCell?.borders?.right ?? 'default']
+    style.borderLeft = BORDER_MAP[leftCell.borders?.right ?? 'default']
   }
 
   return style
@@ -342,12 +356,12 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
             :key="c"
           >
             <td
-              v-if="!isMergedCell(row, col)"
-              :id="getCell(row, col)?.address"
+              v-if="!cellEmpty(row, col) && !isMergedCell(row, col)"
+              :id="getCell(row, col).address"
               :class="[isEditableCell(row, col) && 'editable']"
               :style="getCellStyle(row, col)"
-              :rowSpan="getCell(row, col)?.rowSpan"
-              :colSpan="getCell(row, col)?.colSpan"
+              :rowSpan="getCell(row, col).rowSpan"
+              :colSpan="getCell(row, col).colSpan"
               @mousedown="e => onTdMouseDown(e, row, col)"
               @click="onTdClick(row, col)"
             >
@@ -362,6 +376,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       </tbody>
     </table>
   </div>
+  <hr>
   <div style="display: flex">
     <GooseInput v-model="WIDTH_M" />
     <GooseInput v-model="HEIGHT_M" />
