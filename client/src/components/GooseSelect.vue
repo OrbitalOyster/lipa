@@ -11,6 +11,7 @@ const props = defineProps<{
     autofocus?: boolean
     checks?: FormCheck[]
     disabled?: boolean
+    disabledOnLoading?: boolean
     error?: string
     loading?: boolean
     items: SelectItem[]
@@ -60,7 +61,7 @@ function keyScroll(direction: number) {
         <button
           type="button"
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
-          :disabled
+          :disabled="disabled || loading && disabledOnLoading"
           :autofocus
           @blur="active = false"
           @click="active = !active"

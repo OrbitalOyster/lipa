@@ -9,10 +9,12 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 type ButtonColor = 'primary' | 'warning' | 'danger'
 
 const props = defineProps<{
+    color?: ButtonColor
+    disabled?: boolean
+    disabledOnLoading?: boolean
+    icon?: IconDefinition
     inline?: boolean
     large?: boolean
-    disabled?: boolean
-    icon?: IconDefinition
     loading?: boolean
     round?: boolean
     submit?: boolean
@@ -20,7 +22,6 @@ const props = defineProps<{
     tooltip?: string
     tooltipSide?: Side
     transparent?: boolean
-    color?: ButtonColor
   }>(),
   type = props.submit ? 'submit' : 'button',
   emit = defineEmits(['click', 'blur']),
@@ -41,7 +42,7 @@ const props = defineProps<{
       :text="tooltip"
     >
       <button
-        :disabled
+        :disabled="disabled || loading && disabledOnLoading"
         :type
         :class="classObject"
         :tabindex="transparent ? -1 : 0"

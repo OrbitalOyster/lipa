@@ -16,8 +16,8 @@ import { useUserStore } from '#stores/useUserStore.ts'
 
 const router = useRouter(),
   userStore = useUserStore(),
-  disabled = ref(false),
-  loadingOrgs = ref(true),
+  busy = ref(true),
+  // loadingOrgs = ref(true),
   main = useTemplateRef('main'),
   usernameRef = useTemplateRef('usernameRef'),
   orgRef = useTemplateRef('orgRef'),
@@ -43,14 +43,14 @@ const { play: shake } = useAnimate(main, [
 ], { immediate: false, duration: 400 })
 
 async function auth() {
-  disabled.value = true
+  busy.value = true
   const isOrg = loginAsOrg.value,
     userId = isOrg ? org.value : username.value
   if (await userStore.auth(userId, isOrg, password.value, rememberMe.value))
     await router.push('/')
   else
     shake()
-  disabled.value = false
+  busy.value = false
 }
 
 onMounted(async () => {
@@ -60,7 +60,7 @@ onMounted(async () => {
     id: o.id,
     title: `${o.id} - ${o.name}`,
   }))
-  loadingOrgs.value = false
+  busy.value = false
 })
 </script>
 
@@ -82,9 +82,9 @@ onMounted(async () => {
             ref="orgRef"
             v-model="org"
             :checks="['required']"
-            :disabled="disabled || loadingOrgs"
             :items="orgs"
-            :loading="loadingOrgs"
+            :loading="busy"
+            disabled-on-loading
             placeholder="Организация"
             tag="select"
           />
@@ -94,7 +94,7 @@ onMounted(async () => {
             ref="usernameRef"
             v-model="username"
             :checks="['required', 'notBogus']"
-            :disabled
+            :disabled="busy"
             name="username"
             autocomplete="username"
             placeholder="Имя пользователя"
@@ -106,7 +106,7 @@ onMounted(async () => {
             ref="passwordRef"
             v-model="password"
             :checks="['required']"
-            :disabled
+            :disabled="busy"
             name="password"
             autocomplete="current-password"
             password
@@ -116,20 +116,20 @@ onMounted(async () => {
           <footer>
             <GooseCheckbox
               v-model="rememberMe"
-              :disabled
+              :disabled="busy"
             >
               <div>Запомнить меня</div>
             </GooseCheckbox>
             <GooseSwitch
               v-model="loginAsOrg"
-              :disabled
+              :disabled="busy"
             >
               <div>Войти как организация</div>
             </GooseSwitch>
             <GooseButton
-              :disabled="disabled || loadingOrgs"
               :icon="faRightToBracket"
-              :loading="disabled"
+              :loading="busy"
+              disabled-on-loading
               submit
               title="Войти"
               tooltip="А ещё можно нажать на Enter"

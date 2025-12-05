@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
+import { useElementSize, useFocus } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
 import GooseTooltip from '#components/GooseTooltip.vue'
 import type { Side } from '@floating-ui/core'
-import { useFocus } from '@vueuse/core'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 defineProps<{
   autocomplete?: string
   autofocus?: boolean
   disabled?: boolean
+  disabledOnLoading?: boolean
   error?: string
-  icon?: object
+  loading?: boolean
   password?: boolean
   placeholder?: string
   tooltip?: string
@@ -23,6 +25,7 @@ defineProps<{
 const text = defineModel<string>({ required: true }),
   emit = defineEmits(['input', 'blur', 'keydown', 'esc', 'enter']),
   input = useTemplateRef('input'),
+  icons = useTemplateRef('icons'),
   passwordHidden = ref(true),
   { focused } = useFocus(input),
   focus = () => focused.value = true,
@@ -31,6 +34,9 @@ const text = defineModel<string>({ required: true }),
     input.value?.select()
     console.log('Selected all')
   }
+
+/* Icons width */
+const { width } = useElementSize(icons, { width: 0, height: 0 }, { box: 'border-box' })
 
 defineExpose({ focus, blur, selectAll })
 </script>
@@ -49,8 +55,9 @@ defineExpose({ focus, blur, selectAll })
           :autocomplete
           :autofocus
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
-          :disabled
+          :disabled="disabled || disabledOnLoading && loading"
           :type="password && passwordHidden ? 'password' : 'text'"
+          :style="{ paddingRight: width + 'px' }"
           @input="emit('input')"
           @blur="emit('blur')"
           @keydown="e => emit('keydown', e)"
@@ -64,16 +71,21 @@ defineExpose({ focus, blur, selectAll })
           :title="placeholder"
           :active="focused || text !== ''"
         />
-        <div class="icons">
+        <div
+          ref="icons"
+          class="icons"
+        >
           <!-- Validation icon -->
           <GooseErrorIcon
             v-if="error"
             :message="error"
           />
-          <!-- Custom icon -->
+          <!-- Loading icon -->
           <FontAwesomeIcon
-            v-if="icon"
-            :icon="icon"
+            v-if="loading"
+            class="fa-pulse"
+            :icon="faSpinner"
+            size="xl"
           />
           <!-- Password show/hide icon -->
           <GooseTogglePassword
@@ -109,7 +121,9 @@ defineExpose({ focus, blur, selectAll })
     min-width: 3.25rem
     outline: colors.$outline solid 0px
     overflow: hidden
-    padding: .25rem .75rem .25rem .75rem
+    padding-top: .25rem
+    padding-bottom: .25rem
+    padding-left: .75rem
     text-overflow: ellipsis
     transition: transitions.$focusable, transitions.$colors
     width: 100%
@@ -137,6 +151,7 @@ defineExpose({ focus, blur, selectAll })
     align-items: center
     display: flex
     gap: .25rem
+    padding-right: .75rem
     position: absolute
-    right: 1rem
+    right: 0rem
 </style>

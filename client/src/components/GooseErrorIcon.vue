@@ -28,9 +28,4 @@ defineProps<{
   .error-icon
     color: colors.$danger
     cursor: help
-
-  p
-    padding: .5rem
-    margin: .5rem
-    white-space: nowrap
 </style>
