@@ -155,9 +155,9 @@ const activateCell = async (rowIndex: number, colIndex: number) => {
   editableRef.value = getCellValue(rowIndex, colIndex).toString()
   editableInput.value.focus()
   await nextTick()
-  editableInput.value.selectAll()
   activeRow.value = rowIndex
   activeCol.value = colIndex
+  // editableInput.value.selectAll()
 }
 
 const deactivateCell = async () => {
@@ -182,13 +182,18 @@ const onTdClick = async (row: number, col: number) => {
   /* Handle previously active cell */
   if (activeCell.value) {
     if (cellChanged)
-      submitActiveCell()
+      await submitActiveCell()
     await deactivateCell()
   }
   await activateCell(row, col)
+  editableInput.value?.selectAll()
 }
 
-const submitActiveCell = () => {
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+const submitActiveCell = async () => {
   if (activeRow.value === null || activeCol.value === null)
     throw new Error('Major screwup')
   const editable = getEditable(activeRow.value, activeCol.value),
@@ -203,6 +208,9 @@ const submitActiveCell = () => {
   if (!parsed)
     throw new Error('Major screwup')
   data.value[fullAlias] = parsed.v
+
+  await sleep(1000)
+
   console.log('Submitted value', data.value[fullAlias])
   cellChanged = false
 }
@@ -216,16 +224,15 @@ const navigate = async (rowShift: number, colShift: number) => {
   rowIndex += rowShift
   colIndex += colShift
   if (cellChanged)
-    submitActiveCell()
+    await submitActiveCell()
   if (cellExists(rowIndex, colIndex) && isEditableCell(rowIndex, colIndex)) {
     await deactivateCell()
     await activateCell(rowIndex, colIndex)
   }
+  editableInput.value?.selectAll()
 }
 
 const onTdKeyDown = async (e: KeyboardEvent) => {
-  // if (activeRow.value === null || activeCol.value === null)
-  //   return
   const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
   if (navigationKeys.includes(e.key)) {
     e.preventDefault()
@@ -253,6 +260,14 @@ const onTdKeyDown = async (e: KeyboardEvent) => {
 const WIDTH_M = ref('7.07'),
   HEIGHT_M = ref('1.156')
 
+const getRowStyle = (rowIndex: number) => {
+  const height = (model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 'px',
+    style = {
+      height,
+    }
+  return style
+}
+
 const getCellStyle = (rowIndex: number, colIndex: number) => {
   // BORDER_DEFAULT = '1px solid #DDD',
   const BORDER_DEFAULT = 'none',
@@ -265,7 +280,6 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       default: BORDER_DEFAULT,
     },
     width = (model.value.colWidths[colIndex] ?? 0) * Number(WIDTH_M.value) + 'px',
-    height = (model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 'px',
     cell = getCell(rowIndex, colIndex),
     borderTop = BORDER_MAP[cell?.borders?.top ?? 'default'],
     borderRight = BORDER_MAP[cell?.borders?.right ?? 'default'],
@@ -284,7 +298,6 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       textAlign,
       verticalAlign,
       width,
-      height,
       borderTop,
       borderRight,
       borderBottom,
@@ -322,6 +335,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
         <tr
           v-for="(r, row) in model?.height"
           :key="r"
+          :style="activeRow === row ? 'height: auto' : getRowStyle(row)"
         >
           <template
             v-for="(c, col) in model?.width"

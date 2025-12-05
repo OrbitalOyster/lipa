@@ -27,7 +27,10 @@ const text = defineModel<string>({ required: true }),
   { focused } = useFocus(input),
   focus = () => focused.value = true,
   blur = () => focused.value = false,
-  selectAll = () => input.value?.select()
+  selectAll = () => {
+    input.value?.select()
+    console.log('Selected all')
+  }
 
 defineExpose({ focus, blur, selectAll })
 </script>
