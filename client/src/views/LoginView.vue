@@ -17,7 +17,6 @@ import { useUserStore } from '#stores/useUserStore.ts'
 const router = useRouter(),
   userStore = useUserStore(),
   busy = ref(true),
-  // loadingOrgs = ref(true),
   main = useTemplateRef('main'),
   usernameRef = useTemplateRef('usernameRef'),
   orgRef = useTemplateRef('orgRef'),
@@ -83,8 +82,8 @@ onMounted(async () => {
             v-model="org"
             :checks="['required']"
             :items="orgs"
-            :loading="busy"
-            disabled-on-loading
+            :loading="!orgs.length"
+            :disabled="busy"
             placeholder="Организация"
             tag="select"
           />
@@ -177,7 +176,7 @@ onMounted(async () => {
     align-items: center
     display: flex
     justify-content: space-between
-    margin-bottom: 1rem
+    margin-bottom: .5rem
 
   hgroup
     display: flex
@@ -194,8 +193,8 @@ onMounted(async () => {
 
   img
     border-radius: 100%
-    height: 4rem
     box-shadow: 0px 0px 2px 1px
+    height: 4rem
     width: 4rem
 
   footer
