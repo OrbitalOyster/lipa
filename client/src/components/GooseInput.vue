@@ -30,10 +30,7 @@ const text = defineModel<string>({ required: true }),
   { focused } = useFocus(input),
   focus = () => focused.value = true,
   blur = () => focused.value = false,
-  selectAll = () => {
-    input.value?.select()
-    console.log('Selected all')
-  }
+  selectAll = () => input.value?.select()
 
 /* Icons width */
 const { width } = useElementSize(icons, { width: 0, height: 0 }, { box: 'border-box' })

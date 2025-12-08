@@ -171,7 +171,6 @@ const activateCell = async (rowIndex: number, colIndex: number) => {
   await nextTick()
   activeRow.value = rowIndex
   activeCol.value = colIndex
-  // editableInput.value.selectAll()
 }
 
 const deactivateCell = async () => {
@@ -207,6 +206,8 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+const submitting = ref(false)
+
 const submitActiveCell = async () => {
   if (activeRow.value === null || activeCol.value === null)
     throw new Error('Major screwup')
@@ -223,7 +224,10 @@ const submitActiveCell = async () => {
     throw new Error('Major screwup')
   data.value[fullAlias] = parsed.v
 
+  console.log('Submitting...')
+  submitting.value = true
   await sleep(1000)
+  submitting.value = false
 
   console.log('Submitted value', data.value[fullAlias])
   cellChanged = false
@@ -275,11 +279,16 @@ const WIDTH_M = ref('7.07'),
   HEIGHT_M = ref('1.25')
 
 const getRowStyle = (rowIndex: number) => {
-  const height = (model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 'px',
+  /* Actual lunacy */
+  const height = Math.round((model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 1) + 'px',
     style = {
       height,
     }
   return style
+}
+
+const getCellWidth = (colIndex: number) => {
+  return (model.value.colWidths[colIndex] ?? 0) * Number(WIDTH_M.value) + 'px'
 }
 
 const getCellStyle = (rowIndex: number, colIndex: number) => {
@@ -293,7 +302,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       dotted: '2px dotted darkslategray',
       default: BORDER_DEFAULT,
     },
-    width = (model.value.colWidths[colIndex] ?? 0) * Number(WIDTH_M.value) + 'px',
+    width = getCellWidth(colIndex),
     cell = getCell(rowIndex, colIndex),
     borderTop = BORDER_MAP[cell.borders?.top ?? 'default'],
     borderRight = BORDER_MAP[cell.borders?.right ?? 'default'],
@@ -356,7 +365,11 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
             :key="c"
           >
             <td
-              v-if="!cellEmpty(row, col) && !isMergedCell(row, col)"
+              v-if="cellEmpty(row, col)"
+              :style="{ width: getCellWidth(col) }"
+            />
+            <td
+              v-else-if="!isMergedCell(row, col)"
               :id="getCell(row, col).address"
               :class="[isEditableCell(row, col) && 'editable']"
               :style="getCellStyle(row, col)"
@@ -366,9 +379,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
               @click="onTdClick(row, col)"
             >
               <template v-if="!isActiveCell(row, col)">
-                <div class="content">
-                  {{ getCellValue(row, col) }}
-                </div>
+                {{ getCellValue(row, col) }}
               </template>
             </td>
           </template>
@@ -388,8 +399,10 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       <GooseInput
         ref="editableInput"
         v-model="editableRef"
+        :loading="submitting"
+        disabled-on-loading
         @input="cellChanged = true"
-        @blur="cellChanged && submitActiveCell(); deactivateCell()"
+        @blur="async () => cellChanged && await submitActiveCell() && await deactivateCell()"
         @esc="deactivateCell"
         @keydown="onTdKeyDown"
       />
@@ -402,10 +415,10 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
     border-top: 1px solid #0000
 
   td
-    padding-top: 0px
-    padding-bottom: 0px
-    padding-left: 0px
-    padding-right: 0px
+    padding-top: 1px
+    padding-bottom: 2px
+    padding-left: 2px
+    padding-right: 2px
 
   div.content
     padding-top: 2px

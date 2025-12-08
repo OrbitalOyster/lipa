@@ -12,6 +12,5 @@ defineProps<{
   </Suspense>
   <div
     id="hidden"
-    style="display: none"
   />
 </template>
