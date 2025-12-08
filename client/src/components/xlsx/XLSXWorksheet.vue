@@ -236,6 +236,7 @@ const submitActiveCell = async () => {
 const navigate = async (rowShift: number, colShift: number) => {
   if (activeRow.value === null || activeCol.value === null)
     throw new Error('Major screwup')
+  console.log('Navigating', rowShift, colShift)
   /* Active cell */
   let rowIndex = activeRow.value,
     colIndex = activeCol.value
@@ -251,6 +252,7 @@ const navigate = async (rowShift: number, colShift: number) => {
 }
 
 const onTdKeyDown = async (e: KeyboardEvent) => {
+  console.log('TdKeyDown')
   const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
   if (navigationKeys.includes(e.key)) {
     e.preventDefault()
@@ -273,6 +275,14 @@ const onTdKeyDown = async (e: KeyboardEvent) => {
     }
     await navigate(rowShift, colShift)
   }
+}
+
+const onTdBlur = async () => {
+  if (submitting.value)
+    return
+  if (cellChanged)
+    await submitActiveCell()
+  await deactivateCell()
 }
 
 const WIDTH_M = ref('7.07'),
@@ -402,7 +412,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
         :loading="submitting"
         disabled-on-loading
         @input="cellChanged = true"
-        @blur="async () => cellChanged && await submitActiveCell() && await deactivateCell()"
+        @blur="onTdBlur"
         @esc="deactivateCell"
         @keydown="onTdKeyDown"
       />
