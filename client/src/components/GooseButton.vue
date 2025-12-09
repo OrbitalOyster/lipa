@@ -87,7 +87,6 @@ const props = defineProps<{
     display: flex
     font-family: inherit
     font-size: 1.25rem
-    font-weight: 500
     gap: .5rem
     justify-content: space-around
     min-height: 3.25rem
@@ -102,12 +101,6 @@ const props = defineProps<{
     font-size: xx-large
     min-height: 4rem
     min-width: 4rem
-
-  .title
-    display: flex
-
-  .icon
-    display: flex
 
   .primary
     background-color: colors.$primary

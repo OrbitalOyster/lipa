@@ -82,7 +82,6 @@ defineExpose({ focus, blur, selectAll })
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
-            size="xl"
           />
           <!-- Password show/hide icon -->
           <GooseTogglePassword
@@ -138,7 +137,7 @@ defineExpose({ focus, blur, selectAll })
     cursor: not-allowed
 
   .has-placeholder
-    height: 3.25rem
+    height: 3.5rem
     padding-top: 1.25rem
 
   .placeholder

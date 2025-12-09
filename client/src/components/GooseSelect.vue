@@ -101,7 +101,6 @@ function keyScroll(direction: number) {
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
-            size="xl"
           />
         </div>
       </div>
@@ -149,7 +148,7 @@ function keyScroll(direction: number) {
     cursor: not-allowed
 
   .has-placeholder
-    height: 3.25rem
+    height: 3.5rem
     padding-top: 1.5rem
 
   .placeholder
@@ -169,12 +168,11 @@ function keyScroll(direction: number) {
     right: 2.8rem
 
   .chevron
-    height: 1.5rem
     pointer-events: none
     position: absolute
-    right: 1rem
+    right: .75rem
     transition: transitions.$transform
-    width: 1.5rem
+    font-size: 1.25rem
 
   button:disabled ~ .chevron
     color: colors.$disabled-primary
