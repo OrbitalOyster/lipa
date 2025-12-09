@@ -7,6 +7,7 @@
       "dependencies": {
         "@floating-ui/vue": "1.1.9",
         "@fontsource-variable/exo-2": "5.2.8",
+        "@fontsource-variable/golos-text": "^5.2.8",
         "@fortawesome/fontawesome-svg-core": "7.1.0",
         "@fortawesome/free-brands-svg-icons": "7.1.0",
         "@fortawesome/free-regular-svg-icons": "7.1.0",
@@ -136,6 +137,8 @@
     "@floating-ui/vue": ["@floating-ui/vue@1.1.9", "", { "dependencies": { "@floating-ui/dom": "^1.7.4", "@floating-ui/utils": "^0.2.10", "vue-demi": ">=0.13.0" } }, "sha512-BfNqNW6KA83Nexspgb9DZuz578R7HT8MZw1CfK9I6Ah4QReNWEJsXWHN+SdmOVLNGmTPDi+fDT535Df5PzMLbQ=="],
 
     "@fontsource-variable/exo-2": ["@fontsource-variable/exo-2@5.2.8", "", {}, "sha512-P3k8XX+RE1E8QA4/EpR0wSmcvenHjYd7NUNbPNH8iUSA9mGDkPVxE6cxOsx7ksRKY1p0R1ExndDNTpzwwLgkVg=="],
+
+    "@fontsource-variable/golos-text": ["@fontsource-variable/golos-text@5.2.8", "", {}, "sha512-cLT8Gu9tSQTOjfPY+qnrqQwafUUJkZu0s9hTbQbtaeknTyV36c/FQc5hvTRvgeUOT4cp/Xf0dkHdZatwj3g2Nw=="],
 
     "@fortawesome/fontawesome-common-types": ["@fortawesome/fontawesome-common-types@7.1.0", "", {}, "sha512-l/BQM7fYntsCI//du+6sEnHOP6a74UixFyOYUyz2DLMXKx+6DEhfR3F2NYGE45XH1JJuIamacb4IZs9S0ZOWLA=="],
 

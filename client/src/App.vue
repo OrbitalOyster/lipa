@@ -26,7 +26,7 @@ app.config.errorHandler = (err, vm, info) => {
   body
     background-color: #F6F2F0
     color: colors.$text
-    font-family: 'Exo 2 Variable'
+    font-family: 'Golos Text Variable'
 
   #tooltips
     position: absolute
