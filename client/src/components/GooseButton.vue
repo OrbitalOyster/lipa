@@ -55,10 +55,7 @@ const props = defineProps<{
         >
           {{ title }}
         </div>
-        <div
-          v-if="icon || loading"
-          class="icon"
-        >
+        <div v-if="icon || loading">
           <FontAwesomeIcon
             :class="loading && 'fa-pulse'"
             :icon="loading ? faSpinner : icon!"

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GoosePopupMenu from '#components/GoosePopupMenu.vue'
 import type { Side } from '@floating-ui/core'
-import { ref } from 'vue'
+import { useElementSize } from '@vueuse/core'
 
 const props = defineProps<{
     autofocus?: boolean
@@ -18,9 +19,13 @@ const props = defineProps<{
     placeholder?: string
     side?: Side
   }>(),
+  icons = useTemplateRef('icons'),
   emit = defineEmits(['update']),
   active = ref(false),
   selectedId = defineModel<SelectId>({ required: true })
+
+/* Icons width */
+const { width } = useElementSize(icons, { width: 0, height: 0 }, { box: 'border-box' })
 
 function update(newId: SelectId) {
   if (newId === selectedId.value)
@@ -60,9 +65,10 @@ function keyScroll(direction: number) {
         <!-- Pseudo-input -->
         <button
           type="button"
+          :autofocus
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
           :disabled="disabled || loading && disabledOnLoading"
-          :autofocus
+          :style="{ paddingRight: width + 'px' }"
           @blur="active = false"
           @click="active = !active"
           @keydown.up="keyScroll(-1)"
@@ -79,18 +85,15 @@ function keyScroll(direction: number) {
         <!-- Placeholder -->
         <GooseInputPlaceholder
           v-if="placeholder"
-          :title="placeholder"
           :active="!!selectedId"
-          class="placeholder"
-        />
-        <!-- Chevron -->
-        <FontAwesomeIcon
-          class="chevron"
-          :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
-          :icon="faChevronDown"
+          :style="{ width: `calc(100% - ${width}px - .75rem)` }"
+          :title="placeholder"
         />
         <!-- Icons -->
-        <div class="icons">
+        <div
+          ref="icons"
+          class="icons"
+        >
           <!-- Validation icon -->
           <GooseErrorIcon
             v-if="error"
@@ -101,6 +104,12 @@ function keyScroll(direction: number) {
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
+          />
+          <!-- Chevron -->
+          <FontAwesomeIcon
+            class="chevron"
+            :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
+            :icon="faChevronDown"
           />
         </div>
       </div>
@@ -151,9 +160,6 @@ function keyScroll(direction: number) {
     height: 3.5rem
     padding-top: 1.5rem
 
-  .placeholder
-    width: calc(100% - 3.5rem)
-
   .item
     line-height: 1.25rem
     overflow: hidden
@@ -162,17 +168,16 @@ function keyScroll(direction: number) {
 
   .icons
     align-items: center
-    display: inline-flex
+    display: flex
     gap: .25rem
+    padding-right: .75rem
     position: absolute
-    right: 2.8rem
+    right: 0rem
 
   .chevron
-    pointer-events: none
-    position: absolute
-    right: .75rem
-    transition: transitions.$transform
     font-size: 1.25rem
+    pointer-events: none
+    transition: transitions.$transform
 
   button:disabled ~ .chevron
     color: colors.$disabled-primary

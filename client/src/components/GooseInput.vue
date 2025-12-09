@@ -53,8 +53,8 @@ defineExpose({ focus, blur, selectAll })
           :autofocus
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
           :disabled="disabled || disabledOnLoading && loading"
-          :type="password && passwordHidden ? 'password' : 'text'"
           :style="{ paddingRight: width + 'px' }"
+          :type="password && passwordHidden ? 'password' : 'text'"
           @input="emit('input')"
           @blur="emit('blur')"
           @keydown="e => emit('keydown', e)"
@@ -65,8 +65,9 @@ defineExpose({ focus, blur, selectAll })
         <GooseInputPlaceholder
           v-if="placeholder"
           class="placeholder"
-          :title="placeholder"
           :active="focused || text !== ''"
+          :style="{ width: `calc(100% - ${width}px - .75rem)` }"
+          :title="placeholder"
         />
         <div
           ref="icons"
@@ -139,9 +140,6 @@ defineExpose({ focus, blur, selectAll })
   .has-placeholder
     height: 3.5rem
     padding-top: 1.25rem
-
-  .placeholder
-    width: calc(100% - 1.5rem)
 
   .icons
     align-items: center
