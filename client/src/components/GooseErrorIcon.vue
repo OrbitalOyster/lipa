@@ -28,4 +28,5 @@ defineProps<{
   .error-icon
     color: colors.$danger
     cursor: help
+    pointer-events: all
 </style>

@@ -10,6 +10,12 @@ const toggled = defineModel<boolean>({ required: true })
     transparent
     tooltip="Показать/скрыть пароль"
     :icon="toggled ? faEye : faEyeSlash"
+    class="toggle-password"
     @click="toggled = !toggled"
   />
 </template>
+
+<style lang="sass">
+  .toggle-password
+    pointer-events: all
+</style>

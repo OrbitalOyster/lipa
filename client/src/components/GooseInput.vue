@@ -153,6 +153,7 @@ defineExpose({ focus, blur, selectAll })
     display: flex
     gap: .25rem
     padding-right: .75rem
+    pointer-events: none
     position: absolute
     right: 0rem
 </style>

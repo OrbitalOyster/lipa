@@ -172,6 +172,7 @@ function keyScroll(direction: number) {
     padding-right: .75rem
     position: absolute
     right: 0rem
+    pointer-events: none
 
   .chevron
     font-size: 1.25rem
