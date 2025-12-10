@@ -125,9 +125,9 @@ defineExpose({ focus, blur, selectAll })
     min-width: 3.25rem
     outline: colors.$outline solid 0px
     overflow: hidden
-    padding-top: .25rem
     padding-bottom: .25rem
     padding-left: .75rem
+    padding-top: .25rem
     text-overflow: ellipsis
     transition: transitions.$focusable, transitions.$colors
     width: 100%
@@ -152,6 +152,7 @@ defineExpose({ focus, blur, selectAll })
     align-items: center
     display: flex
     gap: .25rem
+    padding-left: .75rem
     padding-right: .75rem
     pointer-events: none
     position: absolute

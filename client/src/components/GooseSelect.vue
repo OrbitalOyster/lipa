@@ -139,7 +139,9 @@ function keyScroll(direction: number) {
     font: inherit
     height: 2.5rem
     outline: colors.$outline solid 0px
-    padding: .25rem 2rem 0.25rem .75rem
+    padding-bottom: .25rem
+    padding-left: .75rem
+    padding-top: .25rem
     transition: transitions.$focusable, transitions.$colors
     white-space: nowrap
     width: 100%
@@ -169,10 +171,11 @@ function keyScroll(direction: number) {
     align-items: center
     display: flex
     gap: .25rem
+    padding-left: .75rem
     padding-right: .75rem
+    pointer-events: none
     position: absolute
     right: 0rem
-    pointer-events: none
 
   .chevron
     font-size: 1.25rem
