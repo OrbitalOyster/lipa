@@ -163,7 +163,6 @@ function keyScroll(direction: number) {
   .item
     line-height: 1.25rem
     overflow: hidden
-    padding-right: 1rem
     text-overflow: ellipsis
 
   .icons
@@ -176,7 +175,6 @@ function keyScroll(direction: number) {
 
   .chevron
     font-size: 1.25rem
-    pointer-events: none
     transition: transitions.$transform
 
   button:disabled ~ .chevron

@@ -6,6 +6,7 @@ import GooseErrorIcon from '#components/GooseErrorIcon.vue'
 import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
 import GooseTogglePassword from '#components/GooseTogglePassword.vue'
 import GooseTooltip from '#components/GooseTooltip.vue'
+import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
@@ -15,6 +16,7 @@ defineProps<{
   disabled?: boolean
   disabledOnLoading?: boolean
   error?: string
+  icon?: IconDefinition
   loading?: boolean
   password?: boolean
   placeholder?: string
@@ -83,6 +85,11 @@ defineExpose({ focus, blur, selectAll })
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
+          />
+          <!-- Custom icon -->
+          <FontAwesomeIcon
+            v-if="icon"
+            :icon
           />
           <!-- Password show/hide icon -->
           <GooseTogglePassword
