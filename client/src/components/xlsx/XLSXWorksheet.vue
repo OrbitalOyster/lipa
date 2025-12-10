@@ -52,19 +52,21 @@ interface XLSXWorksheet {
   editables: Editable[]
 }
 
-const locale = 'ru-RU'
+const locale = 'ru-RU',
+  WIDTH_M = ref('7.07'),
+  HEIGHT_M = ref('1.25')
 
 const checkFmt = (input: string, fmt: string) => {
   const parsedInput = parseValue(input, { locale })
   /* Bogus input */
   if (parsedInput === null)
-    return false
+    return null
   const formattedInput = format(fmt, parsedInput.v, { locale })
   const parsedAgainInput = parseValue(formattedInput, { locale })
   /* Should not happen */
   if (parsedAgainInput === null)
     throw new Error('Major screwup')
-  return parsedInput.v === parsedAgainInput.v
+  return parsedInput.v === parsedAgainInput.v ? formattedInput : null
 }
 
 const model = defineModel<XLSXWorksheet>({ required: true }),
@@ -72,7 +74,8 @@ const model = defineModel<XLSXWorksheet>({ required: true }),
   activeRow = ref<null | number>(null),
   activeCol = ref<null | number>(null),
   editableRef = ref(''),
-  editableInput = useTemplateRef('editableInput')
+  editableInput = useTemplateRef('editableInput'),
+  submitting = ref(false)
 
 let cellChanged = false
 
@@ -85,15 +88,6 @@ const data = ref<Record<string, number | string | boolean>>({
 const cellExists = (rowIndex: number, colIndex: number) => {
   return rowIndex >= 0 && rowIndex < model.value.height
     && colIndex >= 0 && colIndex < model.value.width
-/*
-  const row = model.value.rows[rowIndex]
-  if (!row)
-    return false
-  const cell = row[colIndex]
-  if (!cell)
-    return false
-  return true
-*/
 }
 
 const cellEmpty = (rowIndex: number, colIndex: number) => {
@@ -148,8 +142,8 @@ const getCellValue = (rowIndex: number, colIndex: number) => {
       fullAlias = `${editable.alias[0]}_${editable.alias[1]}`,
       cellData = data.value[fullAlias] ?? '',
       fmt = editable.fmt
-    if (!fmt)
-      throw new Error('Invalid xlsx sheet')
+    // if (!fmt)
+    //   throw new Error('Invalid xlsx sheet')
     return format(fmt, cellData, { locale })
   }
   return cell.value as string
@@ -190,6 +184,7 @@ const onTdMouseDown = (e: MouseEvent, rowIndex: number, colIndex: number) => {
 }
 
 const onTdClick = async (row: number, col: number) => {
+  /* Skip click on already active cell */
   if (isEditableCell(row, col) && isActiveCell(row, col))
     return
   /* Handle previously active cell */
@@ -206,8 +201,6 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const submitting = ref(false)
-
 const submitActiveCell = async () => {
   if (activeRow.value === null || activeCol.value === null)
     throw new Error('Major screwup')
@@ -215,9 +208,14 @@ const submitActiveCell = async () => {
     fullAlias = `${editable.alias[0]}_${editable.alias[1]}`,
     rawValue = editableRef.value,
     fmt = editable.fmt
-  if (!isTextFormat(fmt) && !checkFmt(rawValue, fmt)) {
-    console.error('Bogus input:', rawValue)
-    return
+  if (!isTextFormat(fmt)) {
+    const formattedValue = checkFmt(rawValue, fmt)
+    if (formattedValue === null) {
+      console.error('Bogus input:', rawValue)
+      // throw new Error('Bogus input')
+      return
+    }
+    editableRef.value = formattedValue
   }
   const parsed = parseValue(rawValue, { locale })
   if (!parsed)
@@ -236,7 +234,6 @@ const submitActiveCell = async () => {
 const navigate = async (rowShift: number, colShift: number) => {
   if (activeRow.value === null || activeCol.value === null)
     throw new Error('Major screwup')
-  console.log('Navigating', rowShift, colShift)
   /* Active cell */
   let rowIndex = activeRow.value,
     colIndex = activeCol.value
@@ -252,7 +249,6 @@ const navigate = async (rowShift: number, colShift: number) => {
 }
 
 const onTdKeyDown = async (e: KeyboardEvent) => {
-  console.log('TdKeyDown')
   const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter']
   if (navigationKeys.includes(e.key)) {
     e.preventDefault()
@@ -285,9 +281,6 @@ const onTdBlur = async () => {
   await deactivateCell()
 }
 
-const WIDTH_M = ref('7.07'),
-  HEIGHT_M = ref('1.25')
-
 const getRowStyle = (rowIndex: number) => {
   /* Actual lunacy */
   const height = Math.round((model.value.rowHeights[rowIndex] ?? 0) * Number(HEIGHT_M.value) + 1) + 'px',
@@ -302,15 +295,13 @@ const getCellWidth = (colIndex: number) => {
 }
 
 const getCellStyle = (rowIndex: number, colIndex: number) => {
-  // BORDER_DEFAULT = '1px solid #DDD',
-  const BORDER_DEFAULT = 'none',
-    BORDER_MAP = {
+  const BORDER_MAP = {
       hair: '1px solid darkslategray',
       thin: '1px solid darkslategray',
       medium: '2px solid darkslategray',
       thick: '2px solid darkslategray',
       dotted: '2px dotted darkslategray',
-      default: BORDER_DEFAULT,
+      default: 'none',
     },
     width = getCellWidth(colIndex),
     cell = getCell(rowIndex, colIndex),
@@ -340,22 +331,25 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
       textDecoration,
     }
 
-  if (!cell.borders?.top && cellExists(rowIndex - 1, colIndex) && !cellEmpty(rowIndex - 1, colIndex)) {
-    const topCell = getCell(rowIndex - 1, colIndex)
+  /* TODO: Might need this later
+
+  const topCell = cellExists(rowIndex - 1, colIndex) && !cellEmpty(rowIndex - 1, colIndex) && getCell(rowIndex - 1, colIndex),
+    rightCell = cellExists(rowIndex, colIndex + 1) && !cellEmpty(rowIndex, colIndex + 1) && getCell(rowIndex, colIndex + 1),
+    bottomCell = cellExists(rowIndex + 1, colIndex) && !cellEmpty(rowIndex + 1, colIndex) && getCell(rowIndex + 1, colIndex),
+    leftCell = cellExists(rowIndex, colIndex - 1) && !cellEmpty(rowIndex, colIndex - 1) && getCell(rowIndex, colIndex - 1)
+
+  if (!cell.borders?.top && topCell)
     style.borderTop = BORDER_MAP[topCell.borders?.bottom ?? 'default']
-  }
-  if (!cell.borders?.right && cellExists(rowIndex, colIndex + 1) && !cellEmpty(rowIndex, colIndex + 1)) {
-    const rightCell = getCell(rowIndex, colIndex + 1)
+
+  if (!cell.borders?.right && rightCell)
     style.borderRight = BORDER_MAP[rightCell.borders?.left ?? 'default']
-  }
-  if (!cell.borders?.bottom && cellExists(rowIndex + 1, colIndex) && !cellEmpty(rowIndex + 1, colIndex)) {
-    const bottomCell = getCell(rowIndex + 1, colIndex)
+
+  if (!cell.borders?.bottom && bottomCell)
     style.borderBottom = BORDER_MAP[bottomCell.borders?.top ?? 'default']
-  }
-  if (!cell.borders?.left && cellExists(rowIndex, colIndex - 1) && !cellEmpty(rowIndex, colIndex)) {
-    const leftCell = getCell(rowIndex, colIndex - 1)
+
+  if (!cell.borders?.left && leftCell)
     style.borderLeft = BORDER_MAP[leftCell.borders?.right ?? 'default']
-  }
+  */
 
   return style
 }
@@ -368,7 +362,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
         <tr
           v-for="(r, row) in model?.height"
           :key="r"
-          :style="activeRow === row ? 'height: auto' : getRowStyle(row)"
+          :style="activeRow === row ? 'height: 3rem' : getRowStyle(row)"
         >
           <template
             v-for="(c, col) in model?.width"
@@ -405,7 +399,7 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
   {{ activeCell }}
   {{ data }}
   <Teleport :to="activeCell === null ? '#hidden' : activeCell">
-    <div style="display: flex; align-items: center; height: 40px; padding: 8px">
+    <div style="display: flex; align-items: center">
       <GooseInput
         ref="editableInput"
         v-model="editableRef"
