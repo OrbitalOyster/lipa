@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { faRightToBracket, faUser } from '@fortawesome/free-solid-svg-icons'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
@@ -10,6 +9,7 @@ import GooseSwitch from '#components/GooseSwitch.vue'
 import type { Ref } from 'vue'
 import axios from 'axios'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { useAnimate } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '#stores/useUserStore.ts'
@@ -94,7 +94,6 @@ onMounted(async () => {
             v-model="username"
             :checks="['required', 'notBogus']"
             :disabled="busy"
-            :icon="faUser"
             name="username"
             autocomplete="username"
             placeholder="Имя пользователя"

@@ -126,7 +126,6 @@ function keyScroll(direction: number) {
     align-items: center
     display: flex
     position: relative
-    min-width: 3.25rem
 
   button
     align-items: center
