@@ -102,6 +102,7 @@ onMounted(async () => await update())
           @update="update"
         />
       </div>
+      <!-- Date selector -->
       <div style="display: flex; align-items: center">
         <DateSelector
           v-model:from-date="fromDate"
@@ -109,6 +110,7 @@ onMounted(async () => await update())
           @update="update"
         />
       </div>
+      <!-- Add/refresh buttons -->
       <div style="display: flex; gap: .5rem">
         <GooseButton
           :icon="faPlus"
@@ -138,27 +140,30 @@ onMounted(async () => await update())
     <template #hash="{td}">
       {{ td }}...
     </template>
-
+    <!-- Individual actions -->
     <template #actions="{row}">
       <RouterLink :to="`/xlsx/${row.hash}`">
         <GooseButton
           :icon="faFile"
+          color="primary"
+          small
           tooltip="Просмотреть шаблон"
           transparent
-          color="primary"
         />
       </RouterLink>
       <GooseButton
         :icon="faDownload"
-        transparent
         color="primary"
+        small
         tooltip="Скачать шаблон"
+        transparent
         @click="downloadTemplate(row.hash)"
       />
       <GooseButton
         :icon="faTrash"
-        transparent
         color="danger"
+        small
+        transparent
         @click="confirmDeleteRef?.show(
           `Удалить шаблон &quot;${row.filename}?&quot;`,
           () => deleteTemplate(row.hash)

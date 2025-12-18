@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faPoo, faTruckFast } from '@fortawesome/free-solid-svg-icons'
+import { faPoo, faTruckFast, faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
@@ -22,7 +22,19 @@ const testSelect = ref('')
   <hr>
   <div>
     <GooseButton title="Button 1" />
-    <GooseButton :icon="faTruckFast" />
+    <div style="display: flex; padding: 1rem; align-items: center">
+      <GooseButton
+        :icon="faTruckFast"
+        round
+      />
+      <FontAwesomeIcon
+        :icon="faTruckFast"
+        size="2xl"
+      />
+      <button>
+        Hello!
+      </button>
+    </div>
     <GooseButton
       :icon="faPoo"
       title="Button 3"

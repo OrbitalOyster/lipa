@@ -77,6 +77,7 @@ const { floatingStyles, middlewareData, arrowStyle }
     z-index: 99
 
   .tooltip
+    display: flex
     padding: 1rem
-    white-space: nowrap
+    text-align: center
 </style>

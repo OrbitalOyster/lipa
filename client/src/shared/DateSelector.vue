@@ -51,7 +51,6 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       :class="{ invalid: !dateValid }"
       type="date"
       :max="toDate"
-      title=""
     >
     -
     <input
@@ -60,7 +59,6 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       :class="{ invalid: !dateValid }"
       type="date"
       :min="fromDate"
-      title=""
     >
   </GooseTooltip>
   <GoosePopupMenu
@@ -77,6 +75,7 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
     <GooseButton
       :icon="faEllipsisVertical"
       tooltip="Выбрать дату"
+      tooltip-side="top"
       transparent
       color="primary"
       @click="showPopup = !showPopup"

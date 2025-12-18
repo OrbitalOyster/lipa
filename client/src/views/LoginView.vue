@@ -98,6 +98,7 @@ onMounted(async () => {
             autocomplete="username"
             placeholder="Имя пользователя"
             tooltip="Логин латинскими символами"
+            tooltip-side="right"
             tag="input"
           />
           <!-- Password -->

@@ -360,12 +360,12 @@ const getCellStyle = (rowIndex: number, colIndex: number) => {
     <table>
       <tbody>
         <tr
-          v-for="(r, row) in model?.height"
+          v-for="(r, row) in model.height"
           :key="r"
           :style="activeRow === row ? 'height: 3rem' : getRowStyle(row)"
         >
           <template
-            v-for="(c, col) in model?.width"
+            v-for="(c, col) in model.width"
             :key="c"
           >
             <td

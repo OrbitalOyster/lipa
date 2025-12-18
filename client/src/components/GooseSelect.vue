@@ -110,6 +110,7 @@ function keyScroll(direction: number) {
             class="chevron"
             :style="{ transform: active ? 'rotate(180deg)' : 'rotate(0)' }"
             :icon="faChevronDown"
+            size="xl"
           />
         </div>
       </div>
@@ -135,7 +136,7 @@ function keyScroll(direction: number) {
     color: colors.$text
     cursor: pointer
     display: flex
-    font: inherit
+    font-family: inherit
     height: 2.5rem
     outline: colors.$outline solid 0px
     padding-bottom: .25rem
@@ -177,7 +178,6 @@ function keyScroll(direction: number) {
     right: 0rem
 
   .chevron
-    font-size: 1.25rem
     transition: transitions.$transform
 
   button:disabled ~ .chevron

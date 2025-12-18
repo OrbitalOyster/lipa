@@ -19,12 +19,12 @@ const props = defineProps<{
     = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth }),
   emit = defineEmits(['update'])
 
-function update(newId: SelectId) {
+const update = (newId: SelectId) => {
   selectedId.value = newId
   emit('update', newId)
 }
 
-async function scrollToSelected(instant: boolean) {
+const scrollToSelected = async (instant: boolean) => {
   await nextTick()
   const behavior = instant ? 'instant' : 'smooth',
     selectedIndex = props.items.findIndex(i => i.id === selectedId.value),

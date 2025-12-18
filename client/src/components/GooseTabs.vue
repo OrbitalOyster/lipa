@@ -48,6 +48,7 @@ const selected = defineModel<string>()
 <style lang="sass" scoped>
   @use '../assets/colors'
   @use '../assets/borders'
+  @use '../assets/transitions'
 
   .tabs-wrapper
     display: flex
@@ -63,21 +64,18 @@ const selected = defineModel<string>()
     background-color: white
     border-radius: borders.$radius
     border: borders.$card-inactive
-
     border-bottom-left-radius: 0
     border-bottom-right-radius: 0
     border-bottom: none
-
     color: colors.$text-inactive
     cursor: pointer
     display: flex
     margin-top: 1rem
     padding: .5rem
     position: relative
-    transition: margin 100ms ease-in-out, transform 100ms ease-in-out
+    transition: margin transitions.$time transitions.$function, transitions.$colors
     user-select: none
     white-space: nowrap
-    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
 
   li.selected
     border: borders.$card

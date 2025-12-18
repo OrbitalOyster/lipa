@@ -95,6 +95,7 @@ defineExpose({ focus, blur, selectAll })
           <GooseTogglePassword
             v-if="password"
             v-model="passwordHidden"
+            small
             :disabled
           />
         </div>

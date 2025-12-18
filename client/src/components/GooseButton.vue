@@ -14,9 +14,9 @@ const props = defineProps<{
     disabledOnLoading?: boolean
     icon?: IconDefinition
     inline?: boolean
-    large?: boolean
     loading?: boolean
     round?: boolean
+    small?: boolean
     submit?: boolean
     title?: string
     tooltip?: string
@@ -26,7 +26,6 @@ const props = defineProps<{
   type = props.submit ? 'submit' : 'button',
   emit = defineEmits(['click', 'blur']),
   classObject = computed(() => ({
-    large: props.large,
     primary: props.color === 'primary' || (!props.color && !props.transparent),
     warning: props.color === 'warning',
     danger: props.color === 'danger',
@@ -55,12 +54,12 @@ const props = defineProps<{
         >
           {{ title }}
         </div>
-        <div v-if="icon || loading">
-          <FontAwesomeIcon
-            :class="loading && 'fa-pulse'"
-            :icon="loading ? faSpinner : icon!"
-          />
-        </div>
+        <FontAwesomeIcon
+          v-if="icon || loading"
+          :class="loading && 'fa-pulse'"
+          :icon="loading ? faSpinner : icon!"
+          :size="small ? 'xl' : '2xl'"
+        />
       </button>
     </GooseTooltip>
   </div>
@@ -70,6 +69,7 @@ const props = defineProps<{
   @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/transitions'
+  @use '../assets/sizings'
 
   .inline
     display: inline-flex
@@ -82,40 +82,46 @@ const props = defineProps<{
     color: colors.$button
     cursor: pointer
     display: flex
-    font-family: inherit
-    font-size: 1.25rem
     gap: .5rem
     justify-content: space-around
-    min-height: 3.25rem
-    min-width: 3.25rem
-    outline: colors.$outline solid 0px
-    padding-left: .75rem
-    padding-right: .75rem
-    transition: transitions.$focusable, transitions.$colors
+    min-height: sizings.$input-min-height
+    min-width: sizings.$input-min-width
+    outline: colors.$outline solid 0
+    transition: transitions.$focusable, transitions.$filter
     width: 100%
 
-  .large
-    font-size: xx-large
-    min-height: 4rem
-    min-width: 4rem
+  button:has(.title)
+    padding-left: 1rem
+    padding-right: 1rem
+
+  /* On hover */
+  button:hover
+    filter: brightness(1.1)
+
+  /* On focus */
+  button:focus
+    outline-width: .25rem
+
+  /* On active */
+  button:active
+    filter: brightness(.9)
+
+  /* On disabled */
+  button:disabled
+    cursor: not-allowed
+    filter: grayscale(.8) brightness(.8)
+
+  .title
+    font-size: 1.25rem
 
   .primary
     background-color: colors.$primary
 
-  .primary:active
-    background-color: colors.$active
-
   .warning
     background-color: colors.$warning
 
-  .warning:active
-    background-color: colors.$warning-active
-
   .danger
     background-color: colors.$danger
-
-  .danger:active
-    background-color: colors.$danger-active
 
   .transparent
     background-color: transparent
@@ -135,28 +141,16 @@ const props = defineProps<{
   .transparent.danger
     color: colors.$danger
 
+  .transparent:hover
+    filter: brightness(1.1)
+
   .transparent:active
     background-color: transparent
 
   .transparent:disabled
     background-color: transparent
-    color: colors.$text-inactive
     cursor: not-allowed
 
   .round
     border-radius: 100%
-
-  /* On hover */
-  button:hover:not(:disabled)
-    filter: brightness(1.1)
-
-  /* On focus */
-  button:focus
-    outline-width: .25rem
-
-  /* On disabled */
-  button:disabled
-    background-color: colors.$disabled-primary
-    color: colors.$disabled
-    cursor: not-allowed
 </style>
