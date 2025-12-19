@@ -29,8 +29,4 @@ app.config.errorHandler = (err, vm, info) => {
 
   body, button, input
     font: 400 1rem 'Golos Text Variable'
-
-  #tooltips
-    position: absolute
-    z-index: 100
 </style>

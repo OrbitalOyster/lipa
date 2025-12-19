@@ -54,18 +54,26 @@ const toggled = defineModel<boolean>({ required: true }),
     outline: colors.$outline solid 0px
     padding: 0
     position: relative
-    transition: transitions.$focusable, transitions.$colors
+    transition: transitions.$focusable, transitions.$filter
+
+  /* On hover */
+  button:hover:not(:disabled)::after
+    filter: brightness(1.1)
 
   /* On focus */
   button:focus
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 
+  /* On active */
+  button:not(:disabled):active::after
+    filter: brightness(.9)
+
   /* On disabled */
   button:disabled
-    background-color: colors.$input-disabled
     border: 1px solid colors.$input-disabled
     cursor: not-allowed
+    filter: grayscale(.8) brightness(.8)
 
   /* Mark */
   button::after
@@ -76,25 +84,13 @@ const toggled = defineModel<boolean>({ required: true }),
     left: calc($height / 2 - $mark-size / 2)
     position: absolute
     top: calc($height / 2 - $mark-size / 2)
-    transition: left transitions.$time transitions.$function, transitions.$focusable, transitions.$colors, transitions.$filter
+    transition: left transitions.$time transitions.$function, transitions.$focusable, transitions.$filter
     width: $mark-size
 
   /* On toggled */
   button.toggled::after
     background-color: colors.$primary
     left: calc($width - $height / 2 - $mark-size / 2)
-
-  /* On hover */
-  button:not(:disabled):hover::after
-    filter: brightness(1.1)
-
-  /* On active */
-  button:active::after
-    background-color: colors.$active
-
-  /* On disabled */
-  button:disabled::after
-    background-color: colors.$disabled-primary
 
   /* Label */
   label

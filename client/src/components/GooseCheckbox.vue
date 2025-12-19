@@ -64,10 +64,6 @@ const toggled = defineModel<boolean>({ required: true }),
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 
-  /* On active */
-  button:active
-    background-color: colors.$active
-
   /* On disabled */
   button:disabled
     background-color: colors.$input-disabled
@@ -93,6 +89,10 @@ const toggled = defineModel<boolean>({ required: true }),
   /* On hover */
   button:not(:disabled):hover::after
     filter: brightness(1.1)
+
+  /* On active */
+  button:not(:disabled):active::after
+    filter: brightness(.9)
 
   /* On toggled */
   button.toggled::after

@@ -25,7 +25,10 @@ const testSelect = ref('')
     <div style="display: flex; padding: 1rem; align-items: center">
       <GooseButton
         :icon="faTruckFast"
+        color="danger"
+        transparent
         round
+        disabled
       />
       <FontAwesomeIcon
         :icon="faTruckFast"

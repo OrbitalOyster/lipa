@@ -35,7 +35,10 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div :class="{ inline }">
+  <div
+    class="button-wrapper"
+    :class="{ inline }"
+  >
     <GooseTooltip
       :side="tooltipSide"
       :text="tooltip"
@@ -71,6 +74,15 @@ const props = defineProps<{
   @use '../assets/transitions'
   @use '../assets/sizings'
 
+  .button-wrapper
+    border-radius: borders.$radius
+    outline: colors.$outline solid 0
+    transition: transitions.$focusable
+
+  /* On focus */
+  .button-wrapper:has(button:focus)
+    outline-width: .25rem
+
   .inline
     display: inline-flex
 
@@ -86,7 +98,6 @@ const props = defineProps<{
     justify-content: space-around
     min-height: sizings.$input-min-height
     min-width: sizings.$input-min-width
-    outline: colors.$outline solid 0
     transition: transitions.$focusable, transitions.$filter
     width: 100%
 
@@ -100,7 +111,7 @@ const props = defineProps<{
 
   /* On focus */
   button:focus
-    outline-width: .25rem
+    outline: none
 
   /* On active */
   button:active
@@ -140,16 +151,6 @@ const props = defineProps<{
 
   .transparent.danger
     color: colors.$danger
-
-  .transparent:hover
-    filter: brightness(1.1)
-
-  .transparent:active
-    background-color: transparent
-
-  .transparent:disabled
-    background-color: transparent
-    cursor: not-allowed
 
   .round
     border-radius: 100%
