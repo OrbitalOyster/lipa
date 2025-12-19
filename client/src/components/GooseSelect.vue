@@ -136,7 +136,6 @@ function keyScroll(direction: number) {
     color: colors.$text
     cursor: pointer
     display: flex
-    font-family: inherit
     height: 2.5rem
     outline: colors.$outline solid 0px
     padding-bottom: .25rem

@@ -26,12 +26,9 @@ app.config.errorHandler = (err, vm, info) => {
   body
     background-color: #F6F2F0
     color: colors.$text
-    font-family: 'Golos Text Variable'
 
-  button
-    font-family: 'Golos Text Variable'
-    /* It's 0.833333333rem by default for some reason */
-    font-size: 1rem
+  body, button, input
+    font: 400 1rem 'Golos Text Variable'
 
   #tooltips
     position: absolute

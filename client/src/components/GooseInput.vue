@@ -121,7 +121,6 @@ defineExpose({ focus, blur, selectAll })
     border: 1px solid colors.$input-border
     box-sizing: border-box
     color: colors.$text
-    font: inherit
     height: 2.5rem
     min-width: 3.25rem
     outline: colors.$outline solid 0px
