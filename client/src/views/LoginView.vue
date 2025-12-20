@@ -201,6 +201,7 @@ onMounted(async () => {
   footer
     align-items: center
     display: flex
+    gap: 1rem
     justify-content: space-between
     margin-top: .5rem
 

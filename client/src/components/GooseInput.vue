@@ -139,10 +139,9 @@ defineExpose({ focus, blur, selectAll })
 
   /* On disabled */
   input:disabled
-    background-color: colors.$input-disabled
     border-color: colors.$input-disabled
-    color: colors.$disabled-primary
     cursor: not-allowed
+    filter: grayscale(.9) brightness(.9)
 
   .has-placeholder
     height: 3.5rem

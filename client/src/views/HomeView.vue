@@ -32,7 +32,7 @@ const accordionItems = [
   <div class="home-view-wrapper">
     <GooseSidebar
       :toggled="sideBarToggled"
-      width="36rem"
+      width="38rem"
     >
       <template #sidebar>
         <div class="accordion-wrapper">

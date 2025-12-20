@@ -66,9 +66,9 @@ const toggled = defineModel<boolean>({ required: true }),
 
   /* On disabled */
   button:disabled
-    background-color: colors.$input-disabled
     border: 1px solid colors.$input-disabled
     cursor: not-allowed
+    filter: grayscale(.9) brightness(.9)
 
   /* Mark */
   button::after
@@ -101,10 +101,6 @@ const toggled = defineModel<boolean>({ required: true }),
   button.indeterminate::after
     height: $mark-indeterminate-height
     top: calc(($button-size - $mark-indeterminate-height) / 2)
-
-  /* On disabled */
-  button:disabled::after
-    background-color: colors.$disabled-primary
 
   /* Label */
   label

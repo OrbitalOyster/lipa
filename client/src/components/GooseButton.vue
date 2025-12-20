@@ -80,7 +80,7 @@ const props = defineProps<{
     transition: transitions.$focusable
 
   /* On focus */
-  .button-wrapper:has(button:focus)
+  .button-wrapper:not(:has(.transparent)):has(button:focus)
     outline-width: .25rem
 
   .inline
@@ -120,10 +120,10 @@ const props = defineProps<{
   /* On disabled */
   button:disabled
     cursor: not-allowed
-    filter: grayscale(.8) brightness(.8)
+    filter: grayscale(.9) brightness(.9)
 
   .title
-    font-size: 1.25rem
+    font-size: 1.5rem
 
   .primary
     background-color: colors.$primary

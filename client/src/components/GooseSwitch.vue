@@ -73,11 +73,11 @@ const toggled = defineModel<boolean>({ required: true }),
   button:disabled
     border: 1px solid colors.$input-disabled
     cursor: not-allowed
-    filter: grayscale(.8) brightness(.8)
+    filter: grayscale(.9) brightness(.9)
 
   /* Mark */
   button::after
-    background-color: colors.$disabled
+    background-color: colors.$toggled-off
     border-radius: 1rem
     content: ""
     height: $mark-size

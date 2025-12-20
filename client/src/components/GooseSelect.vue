@@ -152,10 +152,9 @@ function keyScroll(direction: number) {
 
   /* On disabled */
   button:disabled
-    background-color: colors.$input-disabled
     border-color: colors.$input-disabled
-    color: colors.$disabled-primary
     cursor: not-allowed
+    filter: grayscale(.9) brightness(.9)
 
   .has-placeholder
     height: 3.5rem
@@ -178,7 +177,4 @@ function keyScroll(direction: number) {
 
   .chevron
     transition: transitions.$transform
-
-  button:disabled ~ .chevron
-    color: colors.$disabled-primary
 </style>
