@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faPoo, faTruckFast, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faPoo, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GooseButton from '#components/GooseButton.vue'
 import GooseInput from '#components/GooseInput.vue'
@@ -43,12 +43,15 @@ const testSelect = ref('')
       title="Button 3"
     />
   </div>
-  <div style="display: flex">
+  <div style="display: flex; align-items: center; padding: 1rem; gap: 1rem">
     <GooseInput
       v-model="inputValue"
       placeholder="Type something here"
     />
-    <GooseInput v-model="inputValue" />
+    <GooseInput
+      v-model="inputValue"
+      @keydown.tab="console.log('Pressed tab')"
+    />
     <GooseSelect
       v-model="testSelect"
       :items="testSelectItems"
@@ -63,8 +66,8 @@ const testSelect = ref('')
   />
   <hr>
 
-  <div style="display: flex; align-items: center; justify-content: center; background-color: black; height: 35rem">
-    <div style="background-color: gray; width: 25rem; height: 25rem">
+  <div style="display: flex; align-items: center; justify-content: center; background-color: black; height: 25rem">
+    <div style="background-color: gray; width: 25rem; height: 15rem">
       <h1>Hello</h1>
     </div>
   </div>

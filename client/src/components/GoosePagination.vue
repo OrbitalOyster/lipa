@@ -116,6 +116,6 @@ function setPage(i: number) {
     user-select: none
 
   li.page.active
-    color: colors.$button
+    color: colors.$button-title
     background-color: colors.$primary
 </style>

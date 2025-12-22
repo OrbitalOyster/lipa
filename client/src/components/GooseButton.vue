@@ -71,17 +71,21 @@ const props = defineProps<{
 <style scoped lang="sass">
   @use '../assets/borders'
   @use '../assets/colors'
+  @use '../assets/filters'
   @use '../assets/transitions'
   @use '../assets/sizings'
 
   .button-wrapper
     border-radius: borders.$radius
-    outline: colors.$outline solid 0
+    outline: 0 solid colors.$outline
     transition: transitions.$focusable
+
+  .button-wrapper:has(.round)
+    border-radius: 100%
 
   /* On focus */
   .button-wrapper:not(:has(.transparent)):has(button:focus)
-    outline-width: .25rem
+    outline-width: borders.$focus-outline-width
 
   .inline
     display: inline-flex
@@ -91,10 +95,10 @@ const props = defineProps<{
     align-items: center
     border-radius: borders.$radius
     border: none
-    color: colors.$button
+    color: colors.$button-title
     cursor: pointer
     display: flex
-    gap: .5rem
+    gap: sizings.$button-gap
     justify-content: space-around
     min-height: sizings.$input-min-height
     min-width: sizings.$input-min-width
@@ -102,12 +106,12 @@ const props = defineProps<{
     width: 100%
 
   button:has(.title)
-    padding-left: 1rem
-    padding-right: 1rem
+    padding-left: sizings.$button-padding
+    padding-right: sizings.$button-padding
 
   /* On hover */
   button:hover
-    filter: brightness(1.1)
+    filter: filters.$hover
 
   /* On focus */
   button:focus
@@ -115,15 +119,15 @@ const props = defineProps<{
 
   /* On active */
   button:active
-    filter: brightness(.9)
+    filter: filters.$active
 
   /* On disabled */
   button:disabled
     cursor: not-allowed
-    filter: grayscale(.9) brightness(.9)
+    filter: filters.$disabled
 
   .title
-    font-size: 1.5rem
+    font-size: sizings.$button-font-size
 
   .primary
     background-color: colors.$primary

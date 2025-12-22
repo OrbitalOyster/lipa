@@ -29,7 +29,9 @@ const scrollToSelected = async (instant: boolean) => {
   const behavior = instant ? 'instant' : 'smooth',
     selectedIndex = props.items.findIndex(i => i.id === selectedId.value),
     highlightedElement = itemsRef.value?.[selectedIndex]
-  highlightedElement?.scrollIntoView({ behavior, block: 'center' })
+  /* TODO: Cocks up viewport scrolling */
+  // highlightedElement?.scrollIntoView({ behavior, block: 'center' })
+  highlightedElement?.scrollIntoView({ behavior, block: 'nearest' })
   /* Scroll to top if nothing is selected */
   if (!highlightedElement)
     floating.value?.scrollTo(0, 0)
@@ -73,6 +75,8 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
 <style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
+  @use '../assets/filters'
+  @use '../assets/sizings'
   @use '../assets/transitions'
 
   ul
@@ -80,23 +84,19 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
     border-radius: borders.$radius
     border: borders.$card
     box-sizing: border-box
-    filter: drop-shadow(colors.$card-shadow 0 .1rem .1rem)
-    margin-bottom: .25rem
+    filter: filters.$card-shadow
     overflow-y: auto
-    overscroll-behavior: none
-    position: absolute
     user-select: none
-    z-index: 99
+    z-index: 10
 
   li
     cursor: pointer
-    display: block
-    padding: 1rem
+    padding: sizings.$menu-item-padding
     user-select: none
 
   li:hover
-    background-color: #EAECEE
+    background-color: colors.$menu-item-hover
 
   li.selected
-    background-color: #D5D8DC
+    background-color: colors.$menu-item-select
 </style>

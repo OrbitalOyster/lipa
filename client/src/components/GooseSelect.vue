@@ -71,8 +71,8 @@ function keyScroll(direction: number) {
           :style="{ paddingRight: width + 'px' }"
           @blur="active = false"
           @click="active = !active"
-          @keydown.up="keyScroll(-1)"
-          @keydown.down="keyScroll(1)"
+          @keydown.up.prevent="keyScroll(-1)"
+          @keydown.down.prevent="keyScroll(1)"
           @keydown.esc="active = false"
         >
           <div
@@ -104,6 +104,7 @@ function keyScroll(direction: number) {
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
+            size="xl"
           />
           <!-- Chevron -->
           <FontAwesomeIcon
@@ -132,7 +133,7 @@ function keyScroll(direction: number) {
     align-items: center
     background-color: colors.$input-background
     border-radius: borders.$radius
-    border: 1px solid colors.$input-border
+    border: borders.$form-input
     color: colors.$text
     cursor: pointer
     display: flex
