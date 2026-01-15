@@ -41,6 +41,8 @@ const testSelect = ref('')
     <GooseButton
       :icon="faPoo"
       title="Button 3"
+      inline
+      color="danger"
     />
   </div>
   <div style="display: flex; align-items: center; padding: 1rem; gap: 1rem">

@@ -59,7 +59,7 @@ const props = defineProps<{
         </div>
         <FontAwesomeIcon
           v-if="icon || loading"
-          :class="loading && 'fa-pulse'"
+          :class="['icon', loading && 'fa-pulse']"
           :icon="loading ? faSpinner : icon!"
           :size="small ? 'xl' : '2xl'"
         />
@@ -75,8 +75,16 @@ const props = defineProps<{
   @use '../assets/transitions'
   @use '../assets/sizings'
 
-  .inline
-    display: inline-flex
+  .button-wrapper
+    border-radius: borders.$radius
+    outline: colors.$outline solid 0px
+    transition: transitions.$focusable
+
+    &.inline
+      display: inline-flex
+
+    &:has(button:focus):not(:has(.transparent))
+      outline-width: borders.$focus-outline-width
 
   button
     align-items: center
@@ -85,36 +93,32 @@ const props = defineProps<{
     color: colors.$button-title
     cursor: pointer
     display: flex
-    gap: sizings.$button-gap
     justify-content: space-around
+    gap: sizings.$button-padding
     min-height: sizings.$input-min-height
     min-width: sizings.$input-min-width
-    outline: colors.$outline solid 0px
-    transition: transitions.$focusable, transitions.$filter
+    outline: none
+    transition: transitions.$filter
     width: 100%
 
-  button:has(.title)
-    padding-left: sizings.$button-padding
-    padding-right: sizings.$button-padding
+    &:has(.title)
+      padding: sizings.$button-padding
 
-  button:hover
-    filter: filters.$hover
+    &:hover
+      filter: filters.$hover
 
-  button:focus
-    outline-width: borders.$focus-outline-width
+    &:active
+      filter: filters.$active
 
-  button:active
-    filter: filters.$active
+    &:disabled
+      cursor: not-allowed
+      filter: filters.$disabled
 
-  button:disabled
-    cursor: not-allowed
-    filter: filters.$disabled
+    .title
+      font-size: sizings.$button-font-size
 
   .round
     border-radius: 100%
-
-  .title
-    font-size: sizings.$button-font-size
 
   .primary
     background-color: colors.$primary
@@ -125,19 +129,23 @@ const props = defineProps<{
   .danger
     background-color: colors.$danger
 
+  /* Transparent buttons */
   .transparent
     background-color: transparent
     color: colors.$text
-    outline: none
-    padding-left: 0px
-    padding-right: 0px
+    min-height: 0px
+    min-width: 0px
+    padding: 0px
 
-  .transparent.primary
-    color: colors.$primary
+    &.primary
+      .title, .icon
+        color: colors.$primary
 
-  .transparent.warning
-    color: colors.$warning
+    &.warning
+      .title, .icon
+        color: colors.$warning
 
-  .transparent.danger
-    color: colors.$danger
+    &.danger
+      .title, .icon
+        color: colors.$danger
 </style>

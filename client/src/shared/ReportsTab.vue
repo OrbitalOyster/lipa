@@ -94,7 +94,6 @@ onMounted(async () => await update())
         :icon="faPlus"
         tooltip="Создать первичный отчёт"
         tooltip-side="top"
-        round
       />
       <GooseButton
         :icon="faRotate"
