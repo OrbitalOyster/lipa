@@ -29,4 +29,7 @@ app.config.errorHandler = (err, vm, info) => {
 
   body, button, input
     font: 400 1rem 'Golos Text Variable'
+
+  a
+    outline: none
 </style>

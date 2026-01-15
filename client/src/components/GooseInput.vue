@@ -118,7 +118,7 @@ defineExpose({ focus, blur, selectAll })
   input
     background-color: colors.$input-background
     border-radius: borders.$radius
-    border: 1px solid colors.$input-border
+    border: borders.$form-input
     box-sizing: border-box
     color: colors.$text
     height: 2.5rem
@@ -132,12 +132,10 @@ defineExpose({ focus, blur, selectAll })
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 
-  /* On focus */
   input:focus
     border-color: colors.$outline
     outline-width: borders.$focus-outline-width
 
-  /* On disabled */
   input:disabled
     border-color: colors.$input-disabled
     cursor: not-allowed

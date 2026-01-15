@@ -75,22 +75,9 @@ const props = defineProps<{
   @use '../assets/transitions'
   @use '../assets/sizings'
 
-  .button-wrapper
-    border-radius: borders.$radius
-    outline: 0 solid colors.$outline
-    transition: transitions.$focusable
-
-  .button-wrapper:has(.round)
-    border-radius: 100%
-
-  /* On focus */
-  .button-wrapper:not(:has(.transparent)):has(button:focus)
-    outline-width: borders.$focus-outline-width
-
   .inline
     display: inline-flex
 
-  /* Base */
   button
     align-items: center
     border-radius: borders.$radius
@@ -102,6 +89,7 @@ const props = defineProps<{
     justify-content: space-around
     min-height: sizings.$input-min-height
     min-width: sizings.$input-min-width
+    outline: colors.$outline solid 0px
     transition: transitions.$focusable, transitions.$filter
     width: 100%
 
@@ -109,22 +97,21 @@ const props = defineProps<{
     padding-left: sizings.$button-padding
     padding-right: sizings.$button-padding
 
-  /* On hover */
   button:hover
     filter: filters.$hover
 
-  /* On focus */
   button:focus
-    outline: none
+    outline-width: borders.$focus-outline-width
 
-  /* On active */
   button:active
     filter: filters.$active
 
-  /* On disabled */
   button:disabled
     cursor: not-allowed
     filter: filters.$disabled
+
+  .round
+    border-radius: 100%
 
   .title
     font-size: sizings.$button-font-size
@@ -141,11 +128,9 @@ const props = defineProps<{
   .transparent
     background-color: transparent
     color: colors.$text
-    min-height: 0
-    min-width: 0
     outline: none
-    padding-left: 0
-    padding-right: 0
+    padding-left: 0px
+    padding-right: 0px
 
   .transparent.primary
     color: colors.$primary
@@ -155,7 +140,4 @@ const props = defineProps<{
 
   .transparent.danger
     color: colors.$danger
-
-  .round
-    border-radius: 100%
 </style>
