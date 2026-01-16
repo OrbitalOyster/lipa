@@ -114,38 +114,38 @@ const props = defineProps<{
       cursor: not-allowed
       filter: filters.$disabled
 
+    &.round
+      border-radius: 100%
+
+    &.primary
+      background-color: colors.$primary
+
+    &.warning
+      background-color: colors.$warning
+
+    &.danger
+      background-color: colors.$danger
+
     .title
       font-size: sizings.$button-font-size
 
-  .round
-    border-radius: 100%
+    /* Transparent buttons */
+    &.transparent
+      background-color: transparent
+      color: colors.$text
+      min-height: 0px
+      min-width: 0px
+      padding: 0px
 
-  .primary
-    background-color: colors.$primary
+      &.primary
+        .title, .icon
+          color: colors.$primary
 
-  .warning
-    background-color: colors.$warning
+      &.warning
+        .title, .icon
+          color: colors.$warning
 
-  .danger
-    background-color: colors.$danger
-
-  /* Transparent buttons */
-  .transparent
-    background-color: transparent
-    color: colors.$text
-    min-height: 0px
-    min-width: 0px
-    padding: 0px
-
-    &.primary
-      .title, .icon
-        color: colors.$primary
-
-    &.warning
-      .title, .icon
-        color: colors.$warning
-
-    &.danger
-      .title, .icon
-        color: colors.$danger
+      &.danger
+        .title, .icon
+          color: colors.$danger
 </style>
