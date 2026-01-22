@@ -66,9 +66,9 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
     :active="showPopup"
     :items="timePeriods"
     @update="
-      (d) => {
-        showPopup = false;
-        setDate(d);
+      d => {
+        showPopup = false
+        setDate(d)
       }
     "
   >
@@ -76,8 +76,8 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
       :icon="faEllipsisVertical"
       tooltip="Выбрать дату"
       tooltip-side="top"
-      transparent
       color="primary"
+      transparent
       @click="showPopup = !showPopup"
       @blur="showPopup = false"
     />

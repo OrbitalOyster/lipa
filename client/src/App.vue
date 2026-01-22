@@ -32,4 +32,7 @@ app.config.errorHandler = (err, vm, info) => {
 
   a
     outline: none
+
+  button
+    padding: 0
 </style>

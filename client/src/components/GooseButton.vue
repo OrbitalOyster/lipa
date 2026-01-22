@@ -72,8 +72,8 @@ const props = defineProps<{
   @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/filters'
-  @use '../assets/transitions'
   @use '../assets/sizings'
+  @use '../assets/transitions'
 
   .button-wrapper
     border-radius: borders.$radius
@@ -86,6 +86,9 @@ const props = defineProps<{
     &:has(button:focus):not(:has(.transparent))
       outline-width: borders.$focus-outline-width
 
+    &:has(.round)
+      border-radius: 100%
+
   button
     align-items: center
     border-radius: borders.$radius
@@ -94,15 +97,15 @@ const props = defineProps<{
     cursor: pointer
     display: flex
     justify-content: space-around
-    gap: sizings.$button-padding
-    min-height: sizings.$input-min-height
-    min-width: sizings.$input-min-width
+    gap: sizings.$padding
+    min-height: sizings.$min-height
+    min-width: sizings.$min-width
     outline: none
     transition: transitions.$filter
     width: 100%
 
     &:has(.title)
-      padding: sizings.$button-padding
+      padding: sizings.$padding
 
     &:hover
       filter: filters.$hover
@@ -126,7 +129,7 @@ const props = defineProps<{
     &.danger
       background-color: colors.$danger
 
-    .title
+    >.title
       font-size: sizings.$button-font-size
 
     /* Transparent buttons */
@@ -135,7 +138,6 @@ const props = defineProps<{
       color: colors.$text
       min-height: 0px
       min-width: 0px
-      padding: 0px
 
       &.primary
         .title, .icon

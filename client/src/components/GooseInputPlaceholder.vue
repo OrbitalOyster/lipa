@@ -28,6 +28,6 @@ defineProps<{
     user-select: none
     white-space: nowrap
 
-  .active
-    transform: translateY(calc(-50%)) scale(.9)
+    &.active
+      transform: translateY(calc(-50%)) scale(.9)
 </style>
