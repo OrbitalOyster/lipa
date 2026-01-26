@@ -10,12 +10,14 @@ const arrowAngles = {
   left: 135,
 }
 
-const useFloatingUI = (target: Ref<HTMLElement | null>,
+const useFloatingUI = (
+  target: Ref<HTMLElement | null>,
   floating: Ref<HTMLElement | null>,
   arrowRef: Ref<HTMLElement | null> | null,
   /* Options and parameters */
-  options: FloatingUIOptions) => {
-  const { active, side, fitTargetWidth, useArrow } = options,
+  options: FloatingUIOptions,
+) => {
+  const { active, side, fitTargetWidth, useArrow, shiftPadding } = options,
     arrowSize = 16,
     minWidth = 32,
     minHeight = 32,
@@ -23,7 +25,10 @@ const useFloatingUI = (target: Ref<HTMLElement | null>,
     offsetValue = useArrow ? arrowSize : 8,
     autoPlacementOptions = side ? { allowedPlacements: [side] } : {},
     /* TODO: Study this boolshit: https://floating-ui.com/docs/shift#limiter */
-    shiftOptions = { padding: arrowSize, limiter: limitShift({ offset: 32 }) },
+    shiftOptions = {
+      limiter: limitShift({ offset: 32 }),
+      padding: shiftPadding,
+    },
     arrowOptions = { element: arrowRef, padding: arrowSize }
   /* Actual magic */
   const { floatingStyles, isPositioned, middlewareData } = useFloating(target, floating, {

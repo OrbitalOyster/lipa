@@ -9,6 +9,7 @@ const props = defineProps<{
     items: SelectItem[]
     showSelected?: boolean
     side?: Side
+    shiftPadding?: number
   }>(),
   target = useTemplateRef('target'),
   floating = useTemplateRef('floating'),
@@ -21,7 +22,9 @@ const props = defineProps<{
     null,
     {
       active: props.active,
-      side, fitTargetWidth: props.fitTargetWidth,
+      fitTargetWidth: props.fitTargetWidth,
+      side,
+      shiftPadding: props.shiftPadding,
     },
   ),
   emit = defineEmits(['update'])
@@ -45,10 +48,16 @@ const scrollToSelected = async (instant: boolean) => {
 }
 
 /* Fast scroll to selected item on open */
-watch(() => props.active, async () => props.active && await scrollToSelected(true))
+watch(
+  () => props.active,
+  async () => props.active && await scrollToSelected(true),
+)
 
-/* Slow scroll on selected change */
-watch(() => selectedId.value, async () => props.active && await scrollToSelected(false))
+/* Slow scroll on update */
+watch(
+  () => selectedId.value,
+  async () => props.active && await scrollToSelected(false),
+)
 </script>
 
 <template>
@@ -101,9 +110,9 @@ watch(() => selectedId.value, async () => props.active && await scrollToSelected
     padding: sizings.$menu-item-padding
     user-select: none
 
-  li:hover
-    background-color: colors.$menu-item-hover
+    &:hover
+      background-color: colors.$menu-item-hover
 
-  li.selected
-    background-color: colors.$menu-item-select
+    &.selected
+      background-color: colors.$menu-item-select
 </style>

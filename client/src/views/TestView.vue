@@ -72,6 +72,8 @@ const testSelect = ref('')
     />
     <GooseButton
       title="Another button"
+      tooltip="Lorem ipsum"
+      tooltip-side="top"
       inline
     />
   </div>

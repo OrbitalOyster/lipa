@@ -110,6 +110,8 @@ defineExpose({ focus, blur, selectAll })
 <style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
+  @use '../assets/filters'
+  @use '../assets/sizings'
   @use '../assets/transitions'
 
   .inline
@@ -128,11 +130,11 @@ defineExpose({ focus, blur, selectAll })
     box-sizing: border-box
     color: colors.$text
     height: 2.5rem
-    min-width: 3.25rem
+    min-width: sizings.$min-width
     outline: colors.$outline solid 0px
     overflow: hidden
     padding-bottom: .25rem
-    padding-left: .75rem
+    padding-left: sizings.$padding
     padding-top: .25rem
     text-overflow: ellipsis
     transition: transitions.$focusable, transitions.$colors
@@ -145,7 +147,7 @@ defineExpose({ focus, blur, selectAll })
     &:disabled
       border-color: colors.$input-disabled
       cursor: not-allowed
-      filter: grayscale(.9) brightness(.9)
+      filter: filters.$disabled
 
   .has-placeholder
     height: 3.5rem
@@ -154,9 +156,9 @@ defineExpose({ focus, blur, selectAll })
   .icons
     align-items: center
     display: flex
-    gap: .25rem
-    padding-left: .75rem
-    padding-right: .75rem
+    gap: sizings.$icons-gaps
+    padding-left: sizings.$padding
+    padding-right: sizings.$padding
     pointer-events: none
     position: absolute
     right: 0rem

@@ -31,26 +31,22 @@ const { width } = useElementSize(
   { box: 'border-box' },
 )
 
-function update(newId: SelectId) {
+const update = (newId: SelectId) => {
   if (newId === selectedId.value)
     return
   selectedId.value = newId
   emit('update', newId)
 }
 
-function keyScroll(direction: number) {
+const keyScroll = (direction: -1 | 1) => {
   let selectedIndex = props.items.findIndex(i => i.id === selectedId.value)
   /* Edge case - nothing selected */
   if (selectedIndex === -1)
     selectedIndex = direction > 0 ? -1 : 0
   /* Wrap around items */
-  selectedIndex = (selectedIndex + direction + props.items.length) % props.items.length
-  /* Set actual value */
-  const selectedItem = props.items[selectedIndex]
-  /* Should not happen */
-  if (!selectedItem)
-    throw new Error('Major screwup')
-  update(selectedItem.id)
+  selectedIndex = (selectedIndex + direction + props.items.length)
+    % props.items.length
+  update(props.items[selectedIndex]!.id)
 }
 </script>
 
@@ -59,10 +55,10 @@ function keyScroll(direction: number) {
     <GoosePopupMenu
       v-model="selectedId"
       :active
-      :items
-      :side
       :fit-target-width="true"
+      :items
       :show-selected="true"
+      :side
       @update="newId => { active = false; update(newId) }"
     >
       <div class="select-wrapper">
@@ -143,11 +139,9 @@ function keyScroll(direction: number) {
     color: colors.$text
     cursor: pointer
     display: flex
-    height: 2.5rem
+    height: sizings.$input-height
     outline: colors.$outline solid 0px
-    padding-bottom: .25rem
     padding-left: sizings.$padding
-    padding-top: .25rem
     transition: transitions.$focusable, transitions.$colors
     white-space: nowrap
     width: 100%
@@ -163,20 +157,19 @@ function keyScroll(direction: number) {
 
     /* Has placeholder */
     &:has(~label)
-      height: 3.5rem
-      padding-top: 1.5rem
+      height: sizings.$input-has-placeholder-height
+      padding-top: sizings.$input-has-placeholder-padding-top
 
-  .item
-    line-height: 1.25rem
-    overflow: hidden
-    text-overflow: ellipsis
+    &>.item
+      overflow: hidden
+      text-overflow: ellipsis
 
   .icons
     align-items: center
     display: flex
-    gap: .25rem
-    padding-left: .75rem
-    padding-right: .75rem
+    gap: sizings.$icons-gaps
+    padding-left: sizings.$padding
+    padding-right: sizings.$padding
     pointer-events: none
     position: absolute
     right: 0rem

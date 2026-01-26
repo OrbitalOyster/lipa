@@ -16,7 +16,15 @@ const props = defineProps<{
   arrow = useTemplateRef('arrow')
 
 const { floatingStyles, middlewareData, arrowStyle }
-  = useFloatingUI(target, floating, arrow, { active, side: props.side, useArrow: true })
+  = useFloatingUI(
+    target,
+    floating,
+    arrow, {
+      active,
+      shiftPadding: 16, /* TODO: Import from somewhere */
+      side: props.side,
+      useArrow: true,
+    })
 </script>
 
 <template>

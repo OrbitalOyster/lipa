@@ -12,13 +12,14 @@ defineProps<{
 </template>
 
 <style lang="sass" scoped>
+  @use '../assets/borders'
   @use '../assets/colors'
   @use '../assets/sizings'
   @use '../assets/transitions'
 
   label
     color: colors.$input-label
-    left: sizings.$padding
+    left: calc(sizings.$padding + borders.$form-input-width)
     overflow: hidden
     pointer-events: none
     position: absolute
