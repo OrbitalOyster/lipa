@@ -25,7 +25,11 @@ const props = defineProps<{
   selectedId = defineModel<SelectId>({ required: true })
 
 /* Icons width */
-const { width } = useElementSize(icons, { width: 0, height: 0 }, { box: 'border-box' })
+const { width } = useElementSize(
+  icons,
+  { width: 0, height: 0 },
+  { box: 'border-box' },
+)
 
 function update(newId: SelectId) {
   if (newId === selectedId.value)
@@ -146,16 +150,14 @@ function keyScroll(direction: number) {
     white-space: nowrap
     width: 100%
 
-  /* On focus */
-  button:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
+    &:focus
+      border-color: colors.$outline
+      outline-width: borders.$focus-outline-width
 
-  /* On disabled */
-  button:disabled
-    border-color: colors.$input-disabled
-    cursor: not-allowed
-    filter: grayscale(.9) brightness(.9)
+    &:disabled
+      border-color: colors.$input-disabled
+      cursor: not-allowed
+      filter: grayscale(.9) brightness(.9)
 
   .has-placeholder
     height: 3.5rem
