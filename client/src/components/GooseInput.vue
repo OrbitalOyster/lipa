@@ -17,6 +17,7 @@ defineProps<{
   disabledOnLoading?: boolean
   error?: string
   icon?: IconDefinition
+  inline?: boolean
   loading?: boolean
   password?: boolean
   placeholder?: string
@@ -25,7 +26,7 @@ defineProps<{
 }>()
 
 const text = defineModel<string>({ required: true }),
-  emit = defineEmits(['input', 'blur', 'keydown', 'esc', 'enter']),
+  emit = defineEmits(['input', 'blur', 'keydown']),
   input = useTemplateRef('input'),
   icons = useTemplateRef('icons'),
   passwordHidden = ref(true),
@@ -35,13 +36,17 @@ const text = defineModel<string>({ required: true }),
   selectAll = () => input.value?.select()
 
 /* Icons width */
-const { width } = useElementSize(icons, { width: 0, height: 0 }, { box: 'border-box' })
+const iconsWidth = useElementSize(
+  icons,
+  { width: 0, height: 0 },
+  { box: 'border-box' },
+).width
 
 defineExpose({ focus, blur, selectAll })
 </script>
 
 <template>
-  <div>
+  <div :class="{ inline }">
     <GooseTooltip
       :side="tooltipSide"
       :text="tooltip"
@@ -55,20 +60,17 @@ defineExpose({ focus, blur, selectAll })
           :autofocus
           :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
           :disabled="disabled || disabledOnLoading && loading"
-          :style="{ paddingRight: width + 'px' }"
+          :style="{ paddingRight: iconsWidth + 'px' }"
           :type="password && passwordHidden ? 'password' : 'text'"
           @input="emit('input')"
           @blur="emit('blur')"
           @keydown="e => emit('keydown', e)"
-          @keydown.esc="emit('esc')"
-          @keydown.enter="emit('enter')"
         >
         <!-- Placeholder -->
         <GooseInputPlaceholder
           v-if="placeholder"
-          class="placeholder"
           :active="focused || text !== ''"
-          :style="{ width: `calc(100% - ${width}px - .75rem)` }"
+          :style="{ width: `calc(100% - ${iconsWidth}px - .75rem)` }"
           :title="placeholder"
         />
         <div
@@ -85,6 +87,7 @@ defineExpose({ focus, blur, selectAll })
             v-if="loading"
             class="fa-pulse"
             :icon="faSpinner"
+            size="xl"
           />
           <!-- Custom icon -->
           <FontAwesomeIcon
@@ -109,6 +112,9 @@ defineExpose({ focus, blur, selectAll })
   @use '../assets/colors'
   @use '../assets/transitions'
 
+  .inline
+    display: inline-flex
+
   .input-wrapper
     align-items: center
     display: flex
@@ -132,14 +138,14 @@ defineExpose({ focus, blur, selectAll })
     transition: transitions.$focusable, transitions.$colors
     width: 100%
 
-  input:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
+    &:focus
+      border-color: colors.$outline
+      outline-width: borders.$focus-outline-width
 
-  input:disabled
-    border-color: colors.$input-disabled
-    cursor: not-allowed
-    filter: grayscale(.9) brightness(.9)
+    &:disabled
+      border-color: colors.$input-disabled
+      cursor: not-allowed
+      filter: grayscale(.9) brightness(.9)
 
   .has-placeholder
     height: 3.5rem

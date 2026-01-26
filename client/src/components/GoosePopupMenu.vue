@@ -15,8 +15,15 @@ const props = defineProps<{
   itemsRef = useTemplateRef('itemsRef'),
   selectedId = defineModel<SelectId>({ required: true }),
   side = props.side ?? 'bottom',
-  { floatingStyles, middlewareData }
-    = useFloatingUI(target, floating, null, { active: props.active, side, fitTargetWidth: props.fitTargetWidth }),
+  { floatingStyles, middlewareData } = useFloatingUI(
+    target,
+    floating,
+    null,
+    {
+      active: props.active,
+      side, fitTargetWidth: props.fitTargetWidth,
+    },
+  ),
   emit = defineEmits(['update'])
 
 const update = (newId: SelectId) => {

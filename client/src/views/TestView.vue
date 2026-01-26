@@ -49,30 +49,46 @@ const testSelect = ref('')
     <GooseInput
       v-model="inputValue"
       placeholder="Type something here"
+      tooltip="Hello, tooltip"
+      loading
     />
     <GooseInput
       v-model="inputValue"
-      @keydown.tab="console.log('Pressed tab')"
-    />
-    <GooseSelect
-      v-model="testSelect"
-      :items="testSelectItems"
-      placeholder="Select something"
-      style="width: 20rem"
+      @keydown.tab.prevent="console.log('Pressed tab')"
+      @keydown.esc="console.log('Pressed esc')"
     />
   </div>
   <GooseInput
     v-model="inputValue"
-    placeholder="Type something here"
+    placeholder="Type something here ggYY"
     password
   />
   <hr>
-
+  <div>
+    <GooseInput
+      v-model="inputValue"
+      placeholder="Another input"
+      inline
+    />
+    <GooseButton
+      title="Another button"
+      inline
+    />
+  </div>
+  <hr>
+  <GooseSelect
+    v-model="testSelect"
+    :items="testSelectItems"
+    placeholder="Select something"
+    style="width: 20rem"
+  />
+  <!--
   <div style="display: flex; align-items: center; justify-content: center; background-color: black; height: 25rem">
     <div style="background-color: gray; width: 25rem; height: 15rem">
       <h1>Hello</h1>
     </div>
   </div>
+  -->
 </template>
 
 <style lang="sass" scoped>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  title: string
   active: boolean
+  title: string
 }>()
 </script>
 
@@ -12,13 +12,13 @@ defineProps<{
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/transitions'
   @use '../assets/colors'
+  @use '../assets/sizings'
+  @use '../assets/transitions'
 
   label
     color: colors.$input-label
-    left: .75rem
-    line-height: 1.5rem
+    left: sizings.$padding
     overflow: hidden
     pointer-events: none
     position: absolute
@@ -29,5 +29,5 @@ defineProps<{
     white-space: nowrap
 
     &.active
-      transform: translateY(calc(-50%)) scale(.9)
+      transform: sizings.$placeholder-transform
 </style>

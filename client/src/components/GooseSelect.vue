@@ -14,8 +14,8 @@ const props = defineProps<{
     disabled?: boolean
     disabledOnLoading?: boolean
     error?: string
-    loading?: boolean
     items: SelectItem[]
+    loading?: boolean
     placeholder?: string
     side?: Side
   }>(),
@@ -70,7 +70,7 @@ function keyScroll(direction: number) {
         <button
           type="button"
           :autofocus
-          :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
+          :class="{ invalid: error, valid: !error }"
           :disabled="disabled || loading && disabledOnLoading"
           :style="{ paddingRight: width + 'px' }"
           @blur="active = false"
@@ -126,6 +126,8 @@ function keyScroll(direction: number) {
 <style lang="sass" scoped>
   @use '../assets/borders'
   @use '../assets/colors'
+  @use '../assets/filters'
+  @use '../assets/sizings'
   @use '../assets/transitions'
 
   .select-wrapper
@@ -144,7 +146,7 @@ function keyScroll(direction: number) {
     height: 2.5rem
     outline: colors.$outline solid 0px
     padding-bottom: .25rem
-    padding-left: .75rem
+    padding-left: sizings.$padding
     padding-top: .25rem
     transition: transitions.$focusable, transitions.$colors
     white-space: nowrap
@@ -157,11 +159,12 @@ function keyScroll(direction: number) {
     &:disabled
       border-color: colors.$input-disabled
       cursor: not-allowed
-      filter: grayscale(.9) brightness(.9)
+      filter: filters.$disabled
 
-  .has-placeholder
-    height: 3.5rem
-    padding-top: 1.5rem
+    /* Has placeholder */
+    &:has(~label)
+      height: 3.5rem
+      padding-top: 1.5rem
 
   .item
     line-height: 1.25rem
