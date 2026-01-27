@@ -141,7 +141,7 @@ const keyScroll = (direction: -1 | 1) => {
     height: sizings.$input-height
     outline: colors.$outline solid 0px
     padding-left: sizings.$padding
-    transition: transitions.$focusable, transitions.$colors
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
     white-space: nowrap
     width: 100%
 
@@ -172,7 +172,7 @@ const keyScroll = (direction: -1 | 1) => {
     padding-right: sizings.$padding
     pointer-events: none
     position: absolute
-    right: 0rem
+    right: 0px
 
   .chevron
     transition: transitions.$transform

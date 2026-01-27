@@ -1,17 +1,21 @@
-$time: 100ms
+$time: 150ms
+$time-fast: 100ms
 $function: ease-in-out
+$t-f: $time $function
+$tf-f: $time-fast $function
 
-$colors: background-color $time $function, color $time $function
-$filter: filter $time $function
-$focusable: outline-width $time $function
+$colors: background-color $t-f, color $t-f, border-color $t-f
+$filter: filter $t-f
+$focusable: outline-width $tf-f
 /* For switch component */
-$left: left $time $function
-$position: position $time $function
-$transform: transform $time $function
+$left: left $t-f
+$checkbox: top $tf-f, scale $tf-f, height $tf-f
+$position: position $t-f
+$transform: transform $t-f
 
 /* Vue's "fade" transition */
 .fade-enter-active, .fade-leave-active
-  transition: opacity $time $function
+  transition: opacity $t-f
 
 .fade-enter-from, .fade-leave-to
   opacity: 0

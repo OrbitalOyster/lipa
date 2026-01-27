@@ -32,75 +32,67 @@ const toggled = defineModel<boolean>({ required: true }),
 <style lang="sass" scoped>
   @use '@/assets/borders'
   @use '@/assets/colors'
+  @use '@/assets/filters'
   @use '@/assets/transitions'
+  @use '@/assets/sizings'
 
   /* Checkbox sizings */
-  $button-size: 2rem
-  $mark-size: 1rem
+  $button-size: sizings.$checkbox-size
+  $mark-size: sizings.$checkbox-mark-size
   $mark-indeterminate-height: .5rem
 
   .checkbox-wrapper
     align-items: center
     display: flex
-    gap: .5rem
+    gap: sizings.$checkbox-gap
     width: fit-content
 
-  /* Base */
   button
     background-color: colors.$input-background
     border-radius: borders.$radius
-    border: 1px solid colors.$input-border
+    border: borders.$form-input
     box-sizing: content-box
     cursor: pointer
     height: $button-size
     outline: colors.$outline solid 0px
-    padding: 0
     position: relative
-    transition: transitions.$focusable, transitions.$colors
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
     width: $button-size
 
-  /* On focus */
-  button:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
+    &:focus
+      border-color: colors.$outline
+      outline-width: borders.$focus-outline-width
 
-  /* On disabled */
-  button:disabled
-    border: 1px solid colors.$input-disabled
-    cursor: not-allowed
-    filter: grayscale(.9) brightness(.9)
+    &:disabled
+      border-color: colors.$input-disabled
+      cursor: not-allowed
+      filter: filters.$disabled
 
-  /* Mark */
-  button::after
-    background-color: colors.$primary
-    border-radius: borders.$radius
-    content: ""
-    height: $mark-size
-    left: calc(($button-size - $mark-size) / 2)
-    position: absolute
-    scale: 0%
-    top: calc(($button-size - $mark-size) / 2)
-    transition: transitions.$focusable, transitions.$colors, transitions.$filter
-    transition-duration: transitions.$time
-    transition-property: top, scale, height,
-    transition-timing-function: transitions.$function
-    width: $mark-size
+    /* Mark */
+    &::after
+      background-color: colors.$primary
+      border-radius: borders.$radius
+      content: ""
+      height: $mark-size
+      left: calc(($button-size - $mark-size) / 2)
+      position: absolute
+      scale: 0%
+      top: calc(($button-size - $mark-size) / 2)
+      transition: transitions.$checkbox, transitions.$colors, transitions.$filter
+      width: $mark-size
 
-  /* On hover */
-  button:not(:disabled):hover::after
-    filter: brightness(1.1)
+    &:not(:disabled):hover::after
+      filter: filters.$hover
 
-  /* On active */
-  button:not(:disabled):active::after
-    filter: brightness(.9)
+    &:not(:disabled):active::after
+        filter: filters.$active
 
-  /* On toggled */
-  button.toggled::after
-    scale: 100%
+    &.toggled::after
+      scale: 100%
 
-  button.indeterminate::after
-    height: $mark-indeterminate-height
-    top: calc(($button-size - $mark-indeterminate-height) / 2)
+    &.indeterminate::after
+      height: $mark-indeterminate-height
+      top: calc(($button-size - $mark-indeterminate-height) / 2)
 
   /* Label */
   label

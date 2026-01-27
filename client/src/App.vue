@@ -34,5 +34,5 @@ app.config.errorHandler = (err, vm, info) => {
     outline: none
 
   button
-    padding: 0
+    padding: 0px
 </style>

@@ -131,7 +131,7 @@ defineExpose({ focus, blur, selectAll })
     overflow: hidden
     padding-left: sizings.$padding
     text-overflow: ellipsis
-    transition: transitions.$focusable, transitions.$colors
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
     width: 100%
 
     &:focus
@@ -155,5 +155,5 @@ defineExpose({ focus, blur, selectAll })
     padding-right: sizings.$padding
     pointer-events: none
     position: absolute
-    right: 0rem
+    right: 0px
 </style>

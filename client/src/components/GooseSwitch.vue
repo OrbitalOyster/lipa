@@ -53,9 +53,8 @@ const toggled = defineModel<boolean>({ required: true }),
     height: sizings.$switch-height
     min-width: sizings.$switch-width
     outline: colors.$outline solid 0px
-    padding: 0px
     position: relative
-    transition: transitions.$focusable
+    transition: transitions.$focusable, transitions.$colors, transitions.$filter
 
     &:focus
       border-color: colors.$outline
