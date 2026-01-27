@@ -60,7 +60,7 @@ const testSelect = ref('')
   </div>
   <GooseInput
     v-model="inputValue"
-    placeholder="Type something here ggYY"
+    placeholder="Type something here"
     password
   />
   <hr>
@@ -82,7 +82,6 @@ const testSelect = ref('')
     v-model="testSelect"
     :items="testSelectItems"
     placeholder="Select something"
-    style="width: 20rem"
   />
   <!--
   <div style="display: flex; align-items: center; justify-content: center; background-color: black; height: 25rem">

@@ -17,7 +17,6 @@ defineProps<{
   disabledOnLoading?: boolean
   error?: string
   icon?: IconDefinition
-  inline?: boolean
   loading?: boolean
   password?: boolean
   placeholder?: string
@@ -46,7 +45,7 @@ defineExpose({ focus, blur, selectAll })
 </script>
 
 <template>
-  <div :class="{ inline }">
+  <div>
     <GooseTooltip
       :side="tooltipSide"
       :text="tooltip"
@@ -114,9 +113,6 @@ defineExpose({ focus, blur, selectAll })
   @use '@/assets/sizings'
   @use '@/assets/transitions'
 
-  .inline
-    display: inline-flex
-
   .input-wrapper
     align-items: center
     display: flex
@@ -129,13 +125,11 @@ defineExpose({ focus, blur, selectAll })
     border: borders.$form-input
     box-sizing: border-box
     color: colors.$text
-    height: 2.5rem
+    height: sizings.$input-height
     min-width: sizings.$min-width
     outline: colors.$outline solid 0px
     overflow: hidden
-    padding-bottom: .25rem
     padding-left: sizings.$padding
-    padding-top: .25rem
     text-overflow: ellipsis
     transition: transitions.$focusable, transitions.$colors
     width: 100%
@@ -149,9 +143,9 @@ defineExpose({ focus, blur, selectAll })
       cursor: not-allowed
       filter: filters.$disabled
 
-  .has-placeholder
-    height: 3.5rem
-    padding-top: 1.25rem
+    &:has(~label)
+      height: sizings.$input-has-placeholder-height
+      padding-top: sizings.$input-has-placeholder-padding-top
 
   .icons
     align-items: center

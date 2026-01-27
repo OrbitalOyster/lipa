@@ -31,68 +31,64 @@ const toggled = defineModel<boolean>({ required: true }),
 <style lang="sass" scoped>
   @use '@/assets/borders'
   @use '@/assets/colors'
+  @use '@/assets/filters'
+  @use '@/assets/sizings'
   @use '@/assets/transitions'
 
-  $height: 2rem
-  $width: 3rem
-  $mark-size: 1.5rem
+  $width: sizings.$switch-width
+  $height: sizings.$switch-height
+  $mark-size: sizings.$switch-mark-size
 
   .switch-wrapper
     align-items: center
     display: flex
-    gap: .5rem
+    gap: sizings.$switch-gap
 
-  /* Base */
   button
     background-color: colors.$input-background
-    border-radius: 1rem
-    border: 1px solid colors.$input-border
+    border-radius: borders.$switch-border-radius
+    border: borders.$form-input
     box-sizing: content-box
     cursor: pointer
-    height: $height
-    min-width: $width
+    height: sizings.$switch-height
+    min-width: sizings.$switch-width
     outline: colors.$outline solid 0px
-    padding: 0
+    padding: 0px
     position: relative
-    transition: transitions.$focusable, transitions.$filter
+    transition: transitions.$focusable
 
-  /* On hover */
-  button:hover:not(:disabled)::after
-    filter: brightness(1.1)
+    &:focus
+      border-color: colors.$outline
+      outline-width: borders.$focus-outline-width
 
-  /* On focus */
-  button:focus
-    border-color: colors.$outline
-    outline-width: borders.$focus-outline-width
+    &:disabled, &:disabled::after
+      border-color: colors.$input-disabled
+      cursor: not-allowed
+      filter: filters.$disabled
 
-  /* On active */
-  button:not(:disabled):active::after
-    filter: brightness(.9)
+    /* Mark */
+    &::after
+      background-color: colors.$toggled-off
+      border-radius: borders.$switch-border-radius
+      content: ""
+      height: $mark-size
+      left: calc($height / 2 - $mark-size / 2)
+      position: absolute
+      top: calc($height / 2 - $mark-size / 2)
+      transition: transitions.$left, transitions.$filter
+      width: $mark-size
 
-  /* On disabled */
-  button:disabled
-    border: 1px solid colors.$input-disabled
-    cursor: not-allowed
-    filter: grayscale(.9) brightness(.9)
+    &:hover::after
+      filter: filters.$hover
 
-  /* Mark */
-  button::after
-    background-color: colors.$toggled-off
-    border-radius: 1rem
-    content: ""
-    height: $mark-size
-    left: calc($height / 2 - $mark-size / 2)
-    position: absolute
-    top: calc($height / 2 - $mark-size / 2)
-    transition: left transitions.$time transitions.$function, transitions.$focusable, transitions.$filter
-    width: $mark-size
+    &:active::after
+      filter: filters.$active
 
-  /* On toggled */
-  button.toggled::after
-    background-color: colors.$primary
-    left: calc($width - $height / 2 - $mark-size / 2)
+    /* Toggled mark */
+    &.toggled::after
+      background-color: colors.$primary
+      left: calc($width - $height / 2 - $mark-size / 2)
 
-  /* Label */
   label
     cursor: pointer
     user-select: none

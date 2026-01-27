@@ -132,7 +132,6 @@ const keyScroll = (direction: -1 | 1) => {
     position: relative
 
   button
-    align-items: center
     background-color: colors.$input-background
     border-radius: borders.$radius
     border: borders.$form-input
@@ -161,6 +160,7 @@ const keyScroll = (direction: -1 | 1) => {
       padding-top: sizings.$input-has-placeholder-padding-top
 
     &>.item
+      align-content: center
       overflow: hidden
       text-overflow: ellipsis
 
