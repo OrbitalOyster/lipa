@@ -61,7 +61,7 @@ const toggled = defineModel<boolean>({ required: true }),
       border-color: colors.$outline
       outline-width: borders.$focus-outline-width
 
-    &:disabled, &:disabled::after
+    &:disabled
       border-color: colors.$input-disabled
       cursor: not-allowed
       filter: filters.$disabled
@@ -83,6 +83,9 @@ const toggled = defineModel<boolean>({ required: true }),
 
     &:active::after
       filter: filters.$active
+
+    &:disabled::after
+      filter: filters.$disabled
 
     /* Toggled mark */
     &.toggled::after
