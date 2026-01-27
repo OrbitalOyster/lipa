@@ -2,7 +2,7 @@
 import { ref, useTemplateRef } from 'vue'
 import type { Side } from '@floating-ui/core'
 import { refDebounced } from '@vueuse/core'
-import { useFloatingUI } from '#composables/useFloatingUI.ts'
+import { useFloatingUI } from '@/composables/useFloatingUI.ts'
 
 const props = defineProps<{
     side?: Side
@@ -61,10 +61,10 @@ const { floatingStyles, middlewareData, arrowStyle }
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders.sass'
-  @use '../assets/colors.sass'
+  @use '@/assets/borders.sass'
+  @use '@/assets/colors.sass'
   /* Do not remove this line, needed for transition effect */
-  @use '../assets/transitions.sass'
+  @use '@/assets/transitions.sass'
 
   .arrow
     background-color: colors.$info

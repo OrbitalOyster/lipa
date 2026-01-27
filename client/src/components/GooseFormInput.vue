@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import GooseInput from '#components/GooseInput.vue'
-import GooseSelect from '#components/GooseSelect.vue'
+import GooseInput from '@/components/GooseInput.vue'
+import GooseSelect from '@/components/GooseSelect.vue'
 import { ref } from 'vue'
 
 const messages = {

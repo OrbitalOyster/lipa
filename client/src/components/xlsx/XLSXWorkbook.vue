@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import GooseInput from '#components/GooseInput.vue'
-import XLSXWorksheet from '#components/xlsx/XLSXWorksheet.vue'
+import GooseInput from '@/components/GooseInput.vue'
+import XLSXWorksheet from '@/components/xlsx/XLSXWorksheet.vue'
 import axios from 'axios'
 import { ref } from 'vue'
 

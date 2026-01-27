@@ -21,7 +21,7 @@ app.config.errorHandler = (err, vm, info) => {
 </template>
 
 <style lang="sass">
-  @use 'assets/colors'
+  @use '@/assets/colors'
 
   body
     background-color: #F6F2F0

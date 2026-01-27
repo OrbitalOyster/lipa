@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { faBuilding, faClipboard, faClipboardList, faFileExcel, faPencil, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseAccordion from '#components/GooseAccordion.vue'
-import GooseLoading from '#components/GooseLoading.vue'
-import GooseScrollToTop from '#components/GooseScrollToTop.vue'
-import GooseSidebar from '#components/GooseSidebar.vue'
-import GooseTabs from '#components/GooseTabs.vue'
-import MainLogo from '#shared/MainLogo.vue'
-import OrgTree from '#shared/OrgTree.vue'
-import ReportsTab from '#shared/ReportsTab.vue'
-import TopBar from '#shared/TopBar.vue'
-import XLSXTab from '#shared/XLSXTab.vue'
+import GooseAccordion from '@/components/GooseAccordion.vue'
+import GooseLoading from '@/components/GooseLoading.vue'
+import GooseScrollToTop from '@/components/GooseScrollToTop.vue'
+import GooseSidebar from '@/components/GooseSidebar.vue'
+import GooseTabs from '@/components/GooseTabs.vue'
+import MainLogo from '@/shared/MainLogo.vue'
+import OrgTree from '@/shared/OrgTree.vue'
+import ReportsTab from '@/shared/ReportsTab.vue'
+import TopBar from '@/shared/TopBar.vue'
+import XLSXTab from '@/shared/XLSXTab.vue'
 import { useLocalStorage } from '@vueuse/core'
 
 const accordionItems = [
@@ -83,8 +83,8 @@ const accordionItems = [
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
 
   .home-view-wrapper
     box-sizing: border-box

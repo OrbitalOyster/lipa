@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ClientError from '#views/ClientError.vue'
-import HomeView from '#views/HomeView.vue'
-import LoginView from '#views/LoginView.vue'
-import TestView from '#views/TestView.vue'
-import XLSXView from '#views/XLSXView.vue'
-import { useUserStore } from '#stores/useUserStore.ts'
+import ClientError from '@/views/ClientError.vue'
+import HomeView from '@/views/HomeView.vue'
+import LoginView from '@/views/LoginView.vue'
+import TestView from '@/views/TestView.vue'
+import XLSXView from '@/views/XLSXView.vue'
+import { useUserStore } from '@/stores/useUserStore.ts'
 
 /* Routes */
 const routes = [{

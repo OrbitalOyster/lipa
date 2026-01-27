@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseTooltip from '#components/GooseTooltip.vue'
+import GooseTooltip from '@/components/GooseTooltip.vue'
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 defineProps<{
@@ -23,7 +23,7 @@ defineProps<{
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   .error-icon
     color: colors.$danger

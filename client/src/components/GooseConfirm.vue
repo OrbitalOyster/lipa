@@ -2,7 +2,7 @@
 import { faCheck, faMultiply, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseButton from '#components/GooseButton.vue'
+import GooseButton from '@/components/GooseButton.vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 const emit = defineEmits(['submit']),
@@ -74,9 +74,9 @@ defineExpose({ show })
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/transitions'
 
   .confirm-wrapper
     align-items: center

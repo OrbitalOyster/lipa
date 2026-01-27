@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseButton from '#components/GooseButton.vue'
-import GooseCheckbox from '#components/GooseCheckbox.vue'
-import GooseForm from '#components/GooseForm.vue'
-import GooseFormInput from '#components/GooseFormInput.vue'
-import GooseSwitch from '#components/GooseSwitch.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GooseCheckbox from '@/components/GooseCheckbox.vue'
+import GooseForm from '@/components/GooseForm.vue'
+import GooseFormInput from '@/components/GooseFormInput.vue'
+import GooseSwitch from '@/components/GooseSwitch.vue'
 import type { Ref } from 'vue'
 import axios from 'axios'
 import { faCopyright } from '@fortawesome/free-regular-svg-icons'
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { useAnimate } from '@vueuse/core'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '#stores/useUserStore.ts'
+import { useUserStore } from '@/stores/useUserStore.ts'
 
 const router = useRouter(),
   userStore = useUserStore(),
@@ -149,8 +149,8 @@ onMounted(async () => {
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
 
   .login-view-wrapper
     align-items: center

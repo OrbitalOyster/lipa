@@ -2,8 +2,8 @@
 import { computed, useSlots } from 'vue'
 import { faArrowDownShortWide, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseCheckbox from '#components/GooseCheckbox.vue'
-import GooseLoading from '#components/GooseLoading.vue'
+import GooseCheckbox from '@/components/GooseCheckbox.vue'
+import GooseLoading from '@/components/GooseLoading.vue'
 
 defineProps<{
   updating: boolean
@@ -115,7 +115,7 @@ const selectAllRef = computed({
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   table
     filter: blur(0px)

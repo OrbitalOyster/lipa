@@ -2,10 +2,10 @@
 import { ref, useTemplateRef } from 'vue'
 import { useElementSize, useFocus } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseErrorIcon from '#components/GooseErrorIcon.vue'
-import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
-import GooseTogglePassword from '#components/GooseTogglePassword.vue'
-import GooseTooltip from '#components/GooseTooltip.vue'
+import GooseErrorIcon from '@/components/GooseErrorIcon.vue'
+import GoosePlaceholder from '@/components/parts/GoosePlaceholder.vue'
+import GooseTogglePassword from '@/components/GooseTogglePassword.vue'
+import GooseTooltip from '@/components/GooseTooltip.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
@@ -67,7 +67,7 @@ defineExpose({ focus, blur, selectAll })
           @keydown="e => emit('keydown', e)"
         >
         <!-- Placeholder -->
-        <GooseInputPlaceholder
+        <GoosePlaceholder
           v-if="placeholder"
           :active="focused || text !== ''"
           :style="{ width: `calc(100% - ${iconsWidth}px - .75rem)` }"
@@ -108,11 +108,11 @@ defineExpose({ focus, blur, selectAll })
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/filters'
-  @use '../assets/sizings'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/filters'
+  @use '@/assets/sizings'
+  @use '@/assets/transitions'
 
   .inline
     display: inline-flex

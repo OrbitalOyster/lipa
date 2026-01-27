@@ -12,10 +12,10 @@ defineProps<{
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/sizings'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/sizings'
+  @use '@/assets/transitions'
 
   label
     color: colors.$input-label

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, useTemplateRef, watch } from 'vue'
 import type { Side } from '@floating-ui/core'
-import { useFloatingUI } from '#composables/useFloatingUI.ts'
+import { useFloatingUI } from '@/composables/useFloatingUI.ts'
 
 const props = defineProps<{
     active: boolean
@@ -89,11 +89,11 @@ watch(
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/filters'
-  @use '../assets/sizings'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/filters'
+  @use '@/assets/sizings'
+  @use '@/assets/transitions'
 
   ul
     background-color: colors.$card

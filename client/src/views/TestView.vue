@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { faPoo, faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseButton from '#components/GooseButton.vue'
-import GooseInput from '#components/GooseInput.vue'
-import GooseSelect from '#components/GooseSelect.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GooseInput from '@/components/GooseInput.vue'
+import GooseSelect from '@/components/GooseSelect.vue'
 import { ref } from 'vue'
 
 const inputValue = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')

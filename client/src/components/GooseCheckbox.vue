@@ -30,9 +30,9 @@ const toggled = defineModel<boolean>({ required: true }),
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/transitions'
 
   /* Checkbox sizings */
   $button-size: 2rem

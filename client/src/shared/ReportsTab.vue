@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { faPlus, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { onMounted, ref } from 'vue'
-import DateSelector from '#shared/DateSelector.vue'
-import GooseButton from '#components/GooseButton.vue'
-import GoosePagination from '#components/GoosePagination.vue'
-import GooseSelect from '#components/GooseSelect.vue'
-import GooseTable from '#components/GooseTable.vue'
+import DateSelector from '@/shared/DateSelector.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GoosePagination from '@/components/GoosePagination.vue'
+import GooseSelect from '@/components/GooseSelect.vue'
+import GooseTable from '@/components/GooseTable.vue'
 import axios from 'axios'
-import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
+import { dateToPeriod } from '@/composables/useDateTimeUtils.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [
@@ -142,9 +142,9 @@ onMounted(async () => await update())
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/transitions'
 
   .filters
     align-items: center

@@ -86,7 +86,7 @@ function setPage(i: number) {
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   ul
     align-items: center

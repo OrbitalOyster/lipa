@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import GooseButton from '#components/GooseButton.vue'
-import GoosePopupMenu from '#components/GoosePopupMenu.vue'
-import GooseTooltip from '#components/GooseTooltip.vue'
-import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
+import GooseButton from '@/components/GooseButton.vue'
+import GoosePopupMenu from '@/components/GoosePopupMenu.vue'
+import GooseTooltip from '@/components/GooseTooltip.vue'
+import { dateToPeriod } from '@/composables/useDateTimeUtils.ts'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 
 const fromDate = defineModel<string>('fromDate', { required: true }),
@@ -85,9 +85,9 @@ watch([fromDate, toDate], () => checkDate() && emit('update'))
 </template>
 
 <style lang="sass" scoped>
-@use '../assets/borders'
-@use '../assets/colors'
-@use '../assets/transitions'
+@use '@/assets/borders'
+@use '@/assets/colors'
+@use '@/assets/transitions'
 
 .calendar
   background-color: colors.$input-background

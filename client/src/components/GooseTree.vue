@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseCheckbox from '#components/GooseCheckbox.vue'
-import GooseMarkable from '#components/GooseMarkable.vue'
+import GooseCheckbox from '@/components/GooseCheckbox.vue'
+import GooseMarkable from '@/components/GooseMarkable.vue'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { watch } from 'vue'
 
@@ -113,8 +113,8 @@ defineExpose({ toggleAll, toggleSome: (ids: string[], value: boolean) => toggleS
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/transitions'
 
   ul
     margin: .0rem

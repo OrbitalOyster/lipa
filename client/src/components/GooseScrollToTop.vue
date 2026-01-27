@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GooseButton from '#components/GooseButton.vue'
+import GooseButton from '@/components/GooseButton.vue'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { useWindowScroll } from '@vueuse/core'
 
@@ -25,7 +25,7 @@ const { y } = useWindowScroll(),
 
 <style lang="sass">
   /* Do not remove this line, needed for transition effect */
-  @use '../assets/transitions.sass'
+  @use '@/assets/transitions.sass'
 
   .scroll-to-to-top-wrapper
     bottom: 2rem

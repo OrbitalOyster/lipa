@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
 import { refDebounced, useLocalStorage } from '@vueuse/core'
-import GooseButton from '#components/GooseButton.vue'
-import GooseInput from '#components/GooseInput.vue'
-import GooseTree from '#components/GooseTree.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GooseInput from '@/components/GooseInput.vue'
+import GooseTree from '@/components/GooseTree.vue'
 import type { Ref } from 'vue'
 import axios from 'axios'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { useUserStore } from '#stores/useUserStore.ts'
+import { useUserStore } from '@/stores/useUserStore.ts'
 
 /* Converts api array to object */
 const toTree = (arr: APIOrg[], parent?: string): TreeLeaf[] =>
@@ -65,8 +65,8 @@ if (!userId)
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
 
   .sticky-bar
     box-sizing: border-box

@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { faDownload, faFile, faPlus, faRotate, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { onMounted, ref, useTemplateRef } from 'vue'
-import DateSelector from '#shared/DateSelector.vue'
-import GooseButton from '#components/GooseButton.vue'
-import GooseConfirm from '#components/GooseConfirm.vue'
-import GoosePagination from '#components/GoosePagination.vue'
-import GooseSelect from '#components/GooseSelect.vue'
-import GooseTable from '#components/GooseTable.vue'
-import UploadXLSX from '#shared/UploadXLSX.vue'
+import DateSelector from '@/shared/DateSelector.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GooseConfirm from '@/components/GooseConfirm.vue'
+import GoosePagination from '@/components/GoosePagination.vue'
+import GooseSelect from '@/components/GooseSelect.vue'
+import GooseTable from '@/components/GooseTable.vue'
+import UploadXLSX from '@/shared/UploadXLSX.vue'
 import axios from 'axios'
-import { dateToPeriod } from '#composables/useDateTimeUtils.ts'
+import { dateToPeriod } from '@/composables/useDateTimeUtils.ts'
 import { useLocalStorage } from '@vueuse/core'
 
 const pageSizes = [

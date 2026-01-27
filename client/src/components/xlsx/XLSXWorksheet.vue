@@ -2,7 +2,7 @@
 import { format, isTextFormat, parseValue } from 'numfmt'
 import { nextTick, ref, useTemplateRef } from 'vue'
 import type { CellValue } from 'exceljs'
-import GooseInput from '#components/GooseInput.vue'
+import GooseInput from '@/components/GooseInput.vue'
 import { ValueType } from 'exceljs'
 
 type Border = 'hair' | 'thin' | 'medium' | 'thick' | 'dotted'

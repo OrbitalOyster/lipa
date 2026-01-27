@@ -46,9 +46,9 @@ const selected = defineModel<string>()
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
-  @use '../assets/borders'
-  @use '../assets/transitions'
+  @use '@/assets/colors'
+  @use '@/assets/borders'
+  @use '@/assets/transitions'
 
   .tabs-wrapper
     display: flex

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseTooltip from '#components/GooseTooltip.vue'
+import GooseTooltip from '@/components/GooseTooltip.vue'
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types'
 import type { Side } from '@floating-ui/core'
 import { computed } from 'vue'
@@ -69,11 +69,11 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="sass">
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/filters'
-  @use '../assets/sizings'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/filters'
+  @use '@/assets/sizings'
+  @use '@/assets/transitions'
 
   .button-wrapper
     border-radius: borders.$radius

@@ -49,9 +49,9 @@ const opened = defineModel<string>('opened')
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/transitions'
 
   ul
     display: flex

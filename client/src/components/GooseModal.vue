@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { faCheck, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import { nextTick, ref, useTemplateRef } from 'vue'
-import GooseButton from '#components/GooseButton.vue'
+import GooseButton from '@/components/GooseButton.vue'
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 
 defineProps<{
@@ -89,9 +89,9 @@ defineExpose({ show, submit, close })
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/transitions'
 
   .modal-wrapper
     align-items: center

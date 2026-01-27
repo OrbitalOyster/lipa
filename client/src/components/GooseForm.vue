@@ -30,7 +30,7 @@ function submit() {
 
 <style lang="sass">
   /* Rare non-scoped style block */
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   /* Hide error icons */
   .unvalidated

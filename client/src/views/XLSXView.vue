@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import XLSXWorkbook from '#components/xlsx/XLSXWorkbook.vue'
+import XLSXWorkbook from '@/components/xlsx/XLSXWorkbook.vue'
 
 defineProps<{
   hash: string

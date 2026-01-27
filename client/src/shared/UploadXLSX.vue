@@ -3,10 +3,10 @@ import { faFileExcel, faTriangleExclamation, faUpload } from '@fortawesome/free-
 import { ref, useTemplateRef } from 'vue'
 import { useFileDialog, watchDebounced } from '@vueuse/core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseButton from '#components/GooseButton.vue'
-import GooseInput from '#components/GooseInput.vue'
-import GooseLoading from '#components/GooseLoading.vue'
-import GooseModal from '#components/GooseModal.vue'
+import GooseButton from '@/components/GooseButton.vue'
+import GooseInput from '@/components/GooseInput.vue'
+import GooseLoading from '@/components/GooseLoading.vue'
+import GooseModal from '@/components/GooseModal.vue'
 import axios from 'axios'
 
 interface XLSXParseSuccess {
@@ -202,7 +202,7 @@ defineExpose({
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   .upload-modal
     width: 42rem

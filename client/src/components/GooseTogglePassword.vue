@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import GooseButton from '#components/GooseButton.vue'
+import GooseButton from '@/components/GooseButton.vue'
 
 const toggled = defineModel<boolean>({ required: true })
 </script>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GooseTooltip from '#components/GooseTooltip.vue'
+import GooseTooltip from '@/components/GooseTooltip.vue'
 </script>
 
 <template>
@@ -22,7 +22,7 @@ import GooseTooltip from '#components/GooseTooltip.vue'
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/colors'
+  @use '@/assets/colors'
 
   .logo-wrapper
     align-items: center

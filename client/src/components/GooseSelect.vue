@@ -2,9 +2,9 @@
 import { faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { ref, useTemplateRef } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import GooseErrorIcon from '#components/GooseErrorIcon.vue'
-import GooseInputPlaceholder from '#components/GooseInputPlaceholder.vue'
-import GoosePopupMenu from '#components/GoosePopupMenu.vue'
+import GooseErrorIcon from '@/components/GooseErrorIcon.vue'
+import GoosePlaceholder from '@/components/parts/GoosePlaceholder.vue'
+import GoosePopupMenu from '@/components/GoosePopupMenu.vue'
 import type { Side } from '@floating-ui/core'
 import { useElementSize } from '@vueuse/core'
 
@@ -83,7 +83,7 @@ const keyScroll = (direction: -1 | 1) => {
           </div>
         </button>
         <!-- Placeholder -->
-        <GooseInputPlaceholder
+        <GoosePlaceholder
           v-if="placeholder"
           :active="!!selectedId"
           :style="{ width: `calc(100% - ${width}px - .75rem)` }"
@@ -120,11 +120,11 @@ const keyScroll = (direction: -1 | 1) => {
 </template>
 
 <style lang="sass" scoped>
-  @use '../assets/borders'
-  @use '../assets/colors'
-  @use '../assets/filters'
-  @use '../assets/sizings'
-  @use '../assets/transitions'
+  @use '@/assets/borders'
+  @use '@/assets/colors'
+  @use '@/assets/filters'
+  @use '@/assets/sizings'
+  @use '@/assets/transitions'
 
   .select-wrapper
     align-items: center

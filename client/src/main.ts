@@ -4,7 +4,7 @@ import axios from 'axios'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router.ts'
-import { useUserStore } from '#stores/useUserStore.ts'
+import { useUserStore } from '@/stores/useUserStore.ts'
 
 /* Most important part first */
 const apiEndpoint = import.meta.env.VITE_API_URI
