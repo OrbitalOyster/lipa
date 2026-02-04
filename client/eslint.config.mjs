@@ -1,4 +1,5 @@
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import { defineConfigWithVueTs, vueTsConfigs }
+  from '@vue/eslint-config-typescript'
 import eslintPluginImportX from 'eslint-plugin-import-x'
 import pluginVue from 'eslint-plugin-vue'
 import stylistic from '@stylistic/eslint-plugin'
@@ -17,6 +18,7 @@ export default defineConfigWithVueTs(
       'no-unreachable': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      'vue/max-len': 'error',
     },
     settings: {
       'import-x/resolver': {

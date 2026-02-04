@@ -63,7 +63,11 @@ function toggleSome(branch: TreeLeaf[], ids: string[], value: boolean) {
   })
 }
 
-defineExpose({ toggleAll, toggleSome: (ids: string[], value: boolean) => toggleSome(branch.value, ids, value) })
+defineExpose({
+  toggleAll,
+  toggleSome:
+    (ids: string[], value: boolean) => toggleSome(branch.value, ids, value),
+})
 </script>
 
 <template>

@@ -57,7 +57,10 @@ defineExpose({ focus, blur, selectAll })
           v-model="text"
           :autocomplete
           :autofocus
-          :class="{ invalid: error, valid: !error, 'has-placeholder': !!placeholder }"
+          :class="{
+            invalid: error,
+            valid: !error,
+          }"
           :disabled="disabled || disabledOnLoading && loading"
           :style="{ paddingRight: iconsWidth + 'px' }"
           :type="password && passwordHidden ? 'password' : 'text'"
