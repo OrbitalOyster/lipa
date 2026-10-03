@@ -1,7 +1,0 @@
-.dockerignore
-.env.development
-.gitignore
-Dockerfile
-eslint.config.mjs
-node_modules
-tsconfig.json
