@@ -7,7 +7,7 @@ run:
 	docker compose up
 
 debug:
-	cd http && $(cat ../.env | xargs) $(DEBUG_CONFIG) go run .
+	cd http && export $$(cat ../.env | xargs) && $(DEBUG_CONFIG) go run .
 
 stop:
 	docker compose down
