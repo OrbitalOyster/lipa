@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -51,5 +52,6 @@ func CreateEngine() (engine *gin.Engine) {
 }
 
 func main() {
+	log.Printf("Starting http server on port %d", config.Port)
 	CreateEngine().Run(fmt.Sprintf(":%d", config.Port))
 }

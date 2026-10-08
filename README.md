@@ -13,3 +13,8 @@ Running as service:
 ```bash
 make service
 ```
+
+Stopping:
+```bash
+make stop
+```
