@@ -25,3 +25,12 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - db
+
+  nginx:
+    build: nginx
+    volumes:
+      - ./static:/usr/share/nginx/html
+    ports:
+      - 80:80
+    depends_on:
+      - http
