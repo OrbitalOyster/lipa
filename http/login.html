@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- css -->
+		<link href="/css/style.css" rel="stylesheet" />
+		<!-- Bootstrap theme -->
+		<link rel="stylesheet" href="/bootswatch/minty/bootstrap.min.css" />
+		<!-- Bootstrap icons -->
+		<link
+			rel="stylesheet"
+			href="/bootstrap-icons/bootstrap-icons.min.css"
+		/>
+		<!-- htmx -->
+		<script src="/htmx/htmx.min.js"></script>
+		<!-- Bootstrap js -->
+		<script type="module" src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- js -->
+		<script src="/js/script.js"></script>
+		<title>Login</title>
+	</head>
+	<body>
+		<div class="d-flex flex-column vh-100">
+			<main class="m-auto" style="width: 32rem">
+				<div class="card shadow shadow-sm">
+					<form
+						hx-disabled-elt=".htmx-disable"
+						hx-indicator="#login-btn-icon"
+						hx-post="/login"
+						hx-swap="none"
+					>
+						<div class="card-header text-center position-relative">
+							Lipa
+						</div>
+						<div class="card-body">
+							<div class="d-flex flex-column gap-2">
+								<!-- Username -->
+								<div class="input-group">
+									<!-- Cute icon -->
+									<i class="input-group-text bi bi-person-fill fs-5 text-primary"></i>
+									<div class="form-floating">
+										<input
+											class="form-control htmx-disable"
+											type="text"
+											id="username"
+											name="username"
+											autocomplete="username"
+											placeholder="username"
+											size="48"
+											autofocus
+										/>
+										<label for="username">
+											Username
+										</label>
+									</div>
+								</div>
+								<!-- Password -->
+								<div class="input-group htmx-disable">
+									<!-- Another cute icon -->
+									<i class="input-group-text bi bi-lock-fill fs-5 text-primary"></i>
+									<div class="form-floating">
+										<input
+											class="form-control htmx-disable"
+											type="password"
+											id="password-input"
+											name="password"
+											autocomplete="current-password"
+											placeholder="password"
+										/>
+										<label for="password-input">
+											Password
+										</label>
+									</div>
+									<!-- Show/hide password -->
+									<button
+										class="btn btn-primary htmx-disable"
+										type="button"
+										id="toggle-password-btn"
+										data-bs-toggle="tooltip"
+										data-bs-placement="right"
+										data-bs-trigger="hover"
+										title="Show or hide password"
+									>
+										<i class="bi bi-eye-fill fs-5"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer d-flex flex-row align-items-center justify-content-between">
+							<!-- Remember me -->
+							<div class="form-check">
+								<input
+									class="form-check-input htmx-disable"
+									type="checkbox"
+									id="remember-me"
+									name="remember-me"
+									value="true"
+								/>
+								<label class="form-check-label" for="remember-me">
+									Remember me
+								</label>
+							</div>
+							<button class="btn btn-primary htmx-disable" type="submit">
+								<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
+								<span class="spinner-border spinner-border-sm"></span>
+								Log in
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="text-end p-2">
+					<i class="bi bi-c-circle"></i>
+					{{ .Year }}
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

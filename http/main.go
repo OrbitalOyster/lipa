@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -16,6 +17,14 @@ var postgresConfig PostgresConfig
 func init() {
 	config.Load()
 	postgresConfig.Load()
+}
+
+func GetLogin(ginContext *gin.Context) {
+	ginContext.HTML(
+		http.StatusOK,
+		"login.html",
+		gin.H{"Year": time.Now().Year()},
+	)
 }
 
 func GetHome(ginContext *gin.Context) {
@@ -46,6 +55,8 @@ func GetUser(ginContext *gin.Context) {
 
 func CreateEngine() (engine *gin.Engine) {
 	engine = gin.Default()
+	engine.LoadHTMLFiles("login.html")
+	engine.GET("/login", GetLogin)
 	engine.GET("/", GetHome)
 	engine.GET("/user", GetUser)
 	return

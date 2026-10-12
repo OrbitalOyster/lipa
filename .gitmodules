@@ -1,0 +1,12 @@
+[submodule "static/vendor/bootstrap"]
+	path = static/vendor/bootstrap
+	url = https://github.com/twbs/bootstrap
+[submodule "static/vendor/htmx"]
+	path = static/vendor/htmx
+	url = https://github.com/bigskysoftware/htmx
+[submodule "static/vendor/bootstrap-icons"]
+	path = static/vendor/bootstrap-icons
+	url = https://github.com/twbs/icons
+[submodule "static/vendor/bootswatch"]
+	path = static/vendor/bootswatch
+	url = https://github.com/thomaspark/bootswatch
