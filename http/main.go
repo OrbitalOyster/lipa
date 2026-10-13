@@ -55,7 +55,7 @@ func GetUser(ginContext *gin.Context) {
 
 func CreateEngine() (engine *gin.Engine) {
 	engine = gin.Default()
-	engine.LoadHTMLFiles("login.html")
+	engine.LoadHTMLFiles("templates/login.html")
 	engine.GET("/login", GetLogin)
 	engine.GET("/", GetHome)
 	engine.GET("/user", GetUser)

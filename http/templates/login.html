@@ -6,7 +6,7 @@
 		<!-- css -->
 		<link href="/css/style.css" rel="stylesheet" />
 		<!-- Bootstrap theme -->
-		<link rel="stylesheet" href="/bootswatch/minty/bootstrap.min.css" />
+		<link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
 		<!-- Bootstrap icons -->
 		<link
 			rel="stylesheet"
@@ -14,13 +14,18 @@
 		/>
 		<!-- htmx -->
 		<script src="/htmx/htmx.min.js"></script>
-		<!-- Bootstrap js -->
-		<script type="module" src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<!-- js -->
-		<script src="/js/script.js"></script>
+		<script src="/js/toasts.js"></script>
+		<script src="/js/toggle-password.js"></script>
+		<script type="module" src="/js/tooltips.js"></script>
 		<title>Login</title>
 	</head>
-	<body>
+	<body class="bg-light">
+		<!-- Firefox flashing layout voodoo hack -->
+		<script>0;</script>
+		<!-- Toasts -->
+		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
+		<!-- Actual content -->
 		<div class="d-flex flex-column vh-100">
 			<main class="m-auto" style="width: 32rem">
 				<div class="card shadow shadow-sm">
@@ -40,19 +45,19 @@
 									<!-- Cute icon -->
 									<i class="input-group-text bi bi-person-fill fs-5 text-primary"></i>
 									<div class="form-floating">
+										<label for="username">
+											Username
+										</label>
 										<input
 											class="form-control htmx-disable"
 											type="text"
 											id="username"
 											name="username"
 											autocomplete="username"
-											placeholder="username"
+											placeholder=""
 											size="48"
 											autofocus
 										/>
-										<label for="username">
-											Username
-										</label>
 									</div>
 								</div>
 								<!-- Password -->
@@ -60,17 +65,17 @@
 									<!-- Another cute icon -->
 									<i class="input-group-text bi bi-lock-fill fs-5 text-primary"></i>
 									<div class="form-floating">
+										<label for="password-input">
+											Password
+										</label>
 										<input
 											class="form-control htmx-disable"
 											type="password"
 											id="password-input"
 											name="password"
 											autocomplete="current-password"
-											placeholder="password"
+											placeholder=""
 										/>
-										<label for="password-input">
-											Password
-										</label>
 									</div>
 									<!-- Show/hide password -->
 									<button
@@ -101,7 +106,7 @@
 									Remember me
 								</label>
 							</div>
-							<button class="btn btn-primary htmx-disable" type="submit">
+							<button class="btn btn-primary btn-solid htmx-disable" type="submit">
 								<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
 								<span class="spinner-border spinner-border-sm"></span>
 								Log in
@@ -116,4 +121,11 @@
 			</main>
 		</div>
 	</body>
+	<!-- Bootstrap js -->
+	<script type="module">
+		import { initTooltips } from "/js/tooltips.js"
+		initToasts();
+		initTogglePasswordButton("#toggle-password-btn", "#password-input");
+		initTooltips();
+	</script>
 </html>
