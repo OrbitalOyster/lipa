@@ -1,5 +1,7 @@
 "use strict"
 
+import { Toast } from "/bootstrap/js/bootstrap.bundle.js"
+
 /* On toast */
 const onToast = () => {
 	const toastContainer = document.getElementById("toast-container"),
@@ -7,7 +9,7 @@ const onToast = () => {
 	/* For every new toast */
 	toastEls.forEach((toastEl) => {
 		/* Show it */
-		new bootstrap.Toast(toastEl).show()
+		new Toast(toastEl).show()
 		/* Handle funky stuff */
 		const progressBar = toastEl.querySelector(".progress-bar")
 		if (progressBar) {
@@ -31,3 +33,5 @@ const onToast = () => {
 const initToasts = () => {
 	document.body.addEventListener("toast", onToast)
 }
+
+export { initToasts }

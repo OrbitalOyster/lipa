@@ -26,6 +26,9 @@ func GetLogin(ginContext *gin.Context) {
 		gin.H{"Year": time.Now().Year()},
 	)
 }
+func PostLogin(ginContext *gin.Context) {
+	toast(ginContext, "Login", "Try again")
+}
 
 func GetHome(ginContext *gin.Context) {
 	ginContext.JSON(
@@ -55,8 +58,9 @@ func GetUser(ginContext *gin.Context) {
 
 func CreateEngine() (engine *gin.Engine) {
 	engine = gin.Default()
-	engine.LoadHTMLFiles("templates/login.html")
+	engine.LoadHTMLFiles("templates/login.html", "templates/toast.html")
 	engine.GET("/login", GetLogin)
+	engine.POST("/login", PostLogin)
 	engine.GET("/", GetHome)
 	engine.GET("/user", GetUser)
 	return

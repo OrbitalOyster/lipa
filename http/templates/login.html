@@ -1,34 +1,30 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8" />
+		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- css -->
-		<link href="/css/style.css" rel="stylesheet" />
-		<!-- Bootstrap theme -->
+		<!-- Bootstrap -->
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
 		<!-- Bootstrap icons -->
 		<link
 			rel="stylesheet"
 			href="/bootstrap-icons/bootstrap-icons.min.css"
 		/>
+		<!-- css -->
+		<link href="/css/style.css" rel="stylesheet" />
 		<!-- htmx -->
 		<script src="/htmx/htmx.min.js"></script>
-		<!-- js -->
-		<script src="/js/toasts.js"></script>
-		<script src="/js/toggle-password.js"></script>
-		<script type="module" src="/js/tooltips.js"></script>
 		<title>Login</title>
 	</head>
-	<body class="bg-light">
+	<body class="bg-2 color-scheme-light">
 		<!-- Firefox flashing layout voodoo hack -->
 		<script>0;</script>
 		<!-- Toasts -->
 		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
 		<!-- Actual content -->
 		<div class="d-flex flex-column vh-100">
-			<main class="m-auto" style="width: 32rem">
-				<div class="card shadow shadow-sm">
+			<main class="m-auto w-fit">
+				<div class="card shadow-sm">
 					<form
 						hx-disabled-elt=".htmx-disable"
 						hx-indicator="#login-btn-icon"
@@ -43,9 +39,9 @@
 								<!-- Username -->
 								<div class="input-group">
 									<!-- Cute icon -->
-									<i class="input-group-text bi bi-person-fill fs-5 text-primary"></i>
+									<i class="input-group-text bi bi-person-fill fs-lg"></i>
 									<div class="form-floating">
-										<label for="username">
+										<label for="username" class="fg-secondary">
 											Username
 										</label>
 										<input
@@ -63,9 +59,9 @@
 								<!-- Password -->
 								<div class="input-group htmx-disable">
 									<!-- Another cute icon -->
-									<i class="input-group-text bi bi-lock-fill fs-5 text-primary"></i>
+									<i class="input-group-text bi bi-lock-fill fs-lg"></i>
 									<div class="form-floating">
-										<label for="password-input">
+										<label for="password-input" class="fg-secondary">
 											Password
 										</label>
 										<input
@@ -75,26 +71,32 @@
 											name="password"
 											autocomplete="current-password"
 											placeholder=""
+
+											data-bs-attribute="type"
+											data-bs-value="password"
 										/>
 									</div>
 									<!-- Show/hide password -->
 									<button
 										class="theme-primary btn-solid input-group-btn htmx-disable"
 										type="button"
-										id="toggle-password-btn"
-										data-bs-toggle="tooltip"
-										data-bs-placement="right"
-										data-bs-trigger="hover"
-										title="Show or hide password"
+										data-bs-toggle="toggler"
+										data-bs-target="#password-input"
 									>
-										<i class="bi bi-eye-fill fs-5"></i>
+										<i class="bi bi-eye-fill fs-lg"></i>
 									</button>
 								</div>
 							</div>
 						</div>
 						<div class="card-footer d-flex flex-row align-items-center justify-content-between">
 							<!-- Remember me -->
-							<div class="form-field">
+							<div
+								class="form-field"
+								data-bs-toggle="tooltip"
+								data-bs-trigger="hover"
+								data-bs-placement="bottom"
+								title="Stay logged in for 3 days"
+							>
 								<input
 									class="check htmx-disable"
 									type="checkbox"
@@ -124,8 +126,8 @@
 	<!-- Bootstrap js -->
 	<script type="module">
 		import { initTooltips } from "/js/tooltips.js"
+		import { initToasts } from "/js/toasts.js"
 		initToasts();
-		initTogglePasswordButton("#toggle-password-btn", "#password-input");
 		initTooltips();
 	</script>
 </html>
