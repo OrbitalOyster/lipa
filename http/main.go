@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -19,25 +20,7 @@ func init() {
 	postgresConfig.Load()
 }
 
-func GetLogin(ginContext *gin.Context) {
-	ginContext.HTML(
-		http.StatusOK,
-		"login.html",
-		gin.H{"Year": time.Now().Year()},
-	)
-}
-func PostLogin(ginContext *gin.Context) {
-	toast(ginContext, "Login", "Try again")
-}
-
-func GetHome(ginContext *gin.Context) {
-	ginContext.JSON(
-		http.StatusOK,
-		gin.H{"message": "hello"},
-	)
-}
-
-func GetUser(ginContext *gin.Context) {
+func GetUser() string {
 	pool, err := pgxpool.New(context.Background(), postgresConfig.String())
 	if err != nil {
 		panic("Unable to connect to DB" + err.Error())
@@ -46,23 +29,52 @@ func GetUser(ginContext *gin.Context) {
 
 	var username string
 	var password_hash string
-	if err = pool.QueryRow(context.Background(), "SELECT * FROM lipa.users WHERE id = 100").Scan(nil, &username, &password_hash); err != nil {
+	const query = "SELECT * FROM lipa.users WHERE id = 100"
+	if err = pool.QueryRow(context.Background(), query).Scan(nil, &username, &password_hash); err != nil {
 		panic(err)
 	} else {
-		ginContext.JSON(
-			http.StatusOK,
-			gin.H{"user": username},
-		)
+		return username
 	}
 }
 
+func GetLogin(ginContext *gin.Context) {
+	ginContext.HTML(
+		http.StatusOK,
+		"login",
+		gin.H{
+			"Title": "Login",
+			"Year":  time.Now().Year(),
+		},
+	)
+}
+func PostLogin(ginContext *gin.Context) {
+	toast(ginContext, "Login", "Try again")
+}
+
+func GetHome(ginContext *gin.Context) {
+	ginContext.HTML(
+		http.StatusOK,
+		"index",
+		gin.H{
+			"Title": "Main",
+			"User": "Admin",
+		},
+	)
+}
+
 func CreateEngine() (engine *gin.Engine) {
+	/* HTML renderer */
+	renderer := multitemplate.NewRenderer()
+	renderer.AddFromFiles("login", "templates/layouts/master.html", "templates/pages/login.html")
+	renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html", "templates/partials/navbar.html")
+	renderer.AddFromFiles("toast", "templates/partials/toast.html")
+	/* GIN engine */
 	engine = gin.Default()
-	engine.LoadHTMLFiles("templates/login.html", "templates/toast.html")
+	engine.HTMLRender = renderer
+	/* Routes */
 	engine.GET("/login", GetLogin)
 	engine.POST("/login", PostLogin)
 	engine.GET("/", GetHome)
-	engine.GET("/user", GetUser)
 	return
 }
 

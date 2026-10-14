@@ -5,11 +5,6 @@ img.logo {
 	filter: drop-shadow(0 0 2px black);
 }
 
-/* Completely hide modal placeholders */
-.modal-placeholder.modal-content:not(.htmx-request) {
-	display: none;
-}
-
 /* Button icons */
 i.htmx-request {
 	display: none;
@@ -17,48 +12,4 @@ i.htmx-request {
 
 i:not(.htmx-request) + .spinner-border {
 	display: none;
-}
-
-/* Dotted links */
-.btn.btn-link.dotted {
-	text-decoration: var(--bs-link-color) dotted underline;
-}
-
-/* HTMX-updateable elements */
-#task-list,
-#filter-date {
-	transition: filter 0.1s ease-in-out;
-}
-
-/* On task list update */
-#task-list.htmx-request,
-#filter-date.htmx-request {
-	filter: blur(0.25rem);
-	user-select: none;
-}
-
-/* Hide dropdown menus near htmx-disabled buttons */
-.htmx-disable:disabled + .dropdown-menu {
-	display: none;
-}
-
-/* Columns */
-th.select-all {
-	width: 4rem;
-}
-
-th.task-id {
-	width: 6rem;
-}
-
-th.datetime {
-	width: 12rem;
-}
-
-th.status {
-	width: 5rem;
-}
-
-th.actions {
-	width: 6rem;
 }

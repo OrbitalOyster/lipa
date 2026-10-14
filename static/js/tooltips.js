@@ -1,6 +1,6 @@
 "use strict"
 
-import { Tooltip } from "/bootstrap/js/bootstrap.bundle.js"
+import { Tooltip } from "/bootstrap/js/bootstrap.bundle.min.js"
 
 const removeActiveTooltips = () => {
 	document.querySelectorAll(".tooltip").forEach((e) => e.remove())

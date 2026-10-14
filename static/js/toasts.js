@@ -1,6 +1,6 @@
 "use strict"
 
-import { Toast } from "/bootstrap/js/bootstrap.bundle.js"
+import { Toast } from "/bootstrap/js/bootstrap.bundle.min.js"
 
 /* On toast */
 const onToast = () => {

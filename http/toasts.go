@@ -13,7 +13,7 @@ func toast(ginContext *gin.Context, title string, content string) {
 	ginContext.Header("HX-Trigger-After-Settle", "toast")
 	ginContext.HTML(
 		http.StatusOK,
-		"toast.html",
+		"toast",
 		gin.H{
 			"Title":   title,
 			"Time":    time.Now().Format(toastTimeFormat),

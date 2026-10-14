@@ -1,0 +1,15 @@
+{{ define "navbar" }}
+	<nav class="d-flex align-items-center justify-content-between p-2">
+		<div class="d-flex gap-4 align-items-center">
+			<img class="logo" src="/img/goose.webp" />
+			<h2>
+				<a href="/">
+					Lipa
+				</a>
+			</h2>
+		</div>
+		<div>
+			Hello, {{ .User }}
+		</div>
+	</nav>
+{{ end }}
