@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+		<!-- Bootstrap icons -->
+		<link
+			rel="stylesheet"
+			href="/bootstrap-icons/bootstrap-icons.min.css"
+		/>
+		<!-- css -->
+		<link href="/css/style.css" rel="stylesheet" />
+		<!-- htmx -->
+		<script src="/htmx/htmx.min.js"></script>
+		<title>{{ .Title }}</title>
+	</head>
+	<body class="bg-2 color-scheme-light">
+		<!-- Firefox flashing layout voodoo hack -->
+		<script>0;</script>
+		<!-- Toasts -->
+		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
+		<!-- Actual content -->
+		<div class="d-flex flex-column vh-100">
+			<main class="m-auto w-fit">
+				<div class="card shadow-sm">
+					<form
+						hx-disabled-elt=".htmx-disable"
+						hx-indicator="#login-btn-icon"
+						hx-post="/login"
+						hx-swap="none"
+					>
+						<div class="card-header text-center position-relative">
+							Lipa
+						</div>
+						<div class="card-body">
+							<div class="d-flex flex-column gap-2">
+								<!-- Username -->
+								<div class="input-group">
+									<!-- Cute icon -->
+									<i class="input-group-text bi bi-person-fill fs-lg"></i>
+									<div class="form-floating">
+										<label for="username" class="fg-secondary">
+											Username
+										</label>
+										<input
+											class="form-control htmx-disable"
+											type="text"
+											id="username"
+											name="username"
+											autocomplete="username"
+											placeholder=""
+											size="48"
+											autofocus
+										/>
+									</div>
+								</div>
+								<!-- Password -->
+								<div class="input-group htmx-disable">
+									<!-- Another cute icon -->
+									<i class="input-group-text bi bi-lock-fill fs-lg"></i>
+									<div class="form-floating">
+										<label for="password-input" class="fg-secondary">
+											Password
+										</label>
+										<input
+											class="form-control htmx-disable"
+											type="password"
+											id="password-input"
+											name="password"
+											autocomplete="current-password"
+											placeholder=""
+
+											data-bs-attribute="type"
+											data-bs-value="password"
+										/>
+									</div>
+									<!-- Show/hide password -->
+									<button
+										class="theme-primary btn-solid input-group-btn htmx-disable"
+										type="button"
+										data-bs-toggle="toggler"
+										data-bs-target="#password-input"
+									>
+										<i class="bi bi-eye-fill fs-lg"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer d-flex flex-row align-items-center justify-content-between">
+							<!-- Remember me -->
+							<div
+								class="form-field"
+								data-bs-toggle="tooltip"
+								data-bs-trigger="hover"
+								data-bs-placement="bottom"
+								title="Stay logged in for 3 days"
+							>
+								<input
+									class="check htmx-disable"
+									type="checkbox"
+									id="remember-me"
+									name="remember-me"
+									value="true"
+								/>
+								<label class="form-check-label" for="remember-me">
+									Remember me
+								</label>
+							</div>
+							<button class="theme-primary btn-solid htmx-disable" type="submit">
+								<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
+								<span class="spinner-border spinner-border-sm"></span>
+								Log in
+							</button>
+						</div>
+					</form>
+				</div>
+				<div class="text-end p-2">
+					<i class="bi bi-c-circle"></i>
+					{{ .Year }}
+				</div>
+			</main>
+		</div>
+	</body>
+	<!-- Bootstrap js -->
+	<script type="module">
+		import { initTooltips } from "/js/tooltips.js"
+		import { initToasts } from "/js/toasts.js"
+		initToasts();
+		initTooltips();
+	</script>
+</html>

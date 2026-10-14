@@ -1,35 +1,19 @@
 Requirements:
 
 * git
-* docker compose
-* make
-* storage folder
-* config.env file
+* docker
+* .env file
+* empty folder for data
 
 Downloading and building:
 ```bash
 git clone https://github.com/orbitaloyster/lipa.git --recurse-submodules
 cd lipa
-cp example.env config.env
-make build
+cp example.env .env
+docker compose build
 ```
 
 Running:
 ```bash
-make run
-```
-
-Running as service:
-```bash
-make service
-```
-
-Stopping:
-```bash
-make stop
-```
-
-Clean up:
-```bash
-make clean
+docker compose run -d
 ```
