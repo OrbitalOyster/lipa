@@ -66,8 +66,9 @@ func CreateEngine() (engine *gin.Engine) {
 	/* HTML renderer */
 	renderer := multitemplate.NewRenderer()
 	renderer.AddFromFiles("login", "templates/layouts/master.html", "templates/pages/login.html")
-	renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html", "templates/partials/navbar.html")
-	renderer.AddFromFiles("toast", "templates/partials/toast.html")
+	// renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html", "templates/partials/navbar.html")
+	renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html").ParseGlob("templates/partials/*.html")
+	renderer.AddFromFiles("toast", "templates/toast.html")
 	/* GIN engine */
 	engine = gin.Default()
 	engine.HTMLRender = renderer
