@@ -48,7 +48,7 @@ func GetLogin(ginContext *gin.Context) {
 	)
 }
 func PostLogin(ginContext *gin.Context) {
-	toast(ginContext, "Login", "Try again")
+	toast(ginContext, "Login", "Try again", info)
 }
 
 func GetHome(ginContext *gin.Context) {
@@ -62,16 +62,43 @@ func GetHome(ginContext *gin.Context) {
 	)
 }
 
-func CreateEngine() (engine *gin.Engine) {
-	/* HTML renderer */
-	renderer := multitemplate.NewRenderer()
-	renderer.AddFromFiles("login", "templates/layouts/master.html", "templates/pages/login.html")
-	// renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html", "templates/partials/navbar.html")
-	renderer.AddFromFiles("index", "templates/layouts/master.html", "templates/pages/index.html").ParseGlob("templates/partials/*.html")
+/* HTML renderer */
+func CreateRenderer() (renderer multitemplate.Renderer) {
+	const (
+		masterLayout = "templates/layouts/master.html"
+		partialsGlob = "templates/partials/*.html"
+	)
+	renderer = multitemplate.NewRenderer()
+	/* Login page */
+	renderer.AddFromFiles(
+		"login",
+		masterLayout,
+		"templates/pages/login.html",
+	)
+	/* Main page */
+	renderer.AddFromFiles(
+		"index",
+		masterLayout,
+		"templates/pages/index.html",
+	).ParseGlob(partialsGlob)
+	/* Toast */
 	renderer.AddFromFiles("toast", "templates/toast.html")
-	/* GIN engine */
+	return
+}
+
+func Throttle(ginContext *gin.Context) {
+	if ginContext.GetHeader("HX-Request") == "true" {
+		time.Sleep(time.Millisecond * 200)
+	}
+	ginContext.Next()
+}
+
+/* GIN engine */
+func CreateEngine() (engine *gin.Engine) {
 	engine = gin.Default()
-	engine.HTMLRender = renderer
+	engine.HTMLRender = CreateRenderer()
+	/* Middleware */
+	engine.Use(Throttle)
 	/* Routes */
 	engine.GET("/login", GetLogin)
 	engine.POST("/login", PostLogin)

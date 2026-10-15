@@ -5,7 +5,7 @@ import { Toast } from "/bootstrap/js/bootstrap.bundle.min.js"
 /* On toast */
 const onToast = () => {
 	const toastContainer = document.getElementById("toast-container"),
-		toastEls = [...toastContainer.querySelectorAll(".toast:not(.fade)")]
+		toastEls = [...toastContainer.querySelectorAll(".toast:not(.show)")]
 	/* For every new toast */
 	toastEls.forEach((toastEl) => {
 		/* Show it */
