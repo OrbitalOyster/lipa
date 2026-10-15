@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var config HttpConfig
@@ -18,23 +16,6 @@ var postgresConfig PostgresConfig
 func init() {
 	config.Load()
 	postgresConfig.Load()
-}
-
-func GetUser() string {
-	pool, err := pgxpool.New(context.Background(), postgresConfig.String())
-	if err != nil {
-		panic("Unable to connect to DB" + err.Error())
-	}
-	defer pool.Close()
-
-	var username string
-	var password_hash string
-	const query = "SELECT * FROM lipa.users WHERE id = 100"
-	if err = pool.QueryRow(context.Background(), query).Scan(nil, &username, &password_hash); err != nil {
-		panic(err)
-	} else {
-		return username
-	}
 }
 
 func GetLogin(ginContext *gin.Context) {
@@ -47,8 +28,16 @@ func GetLogin(ginContext *gin.Context) {
 		},
 	)
 }
+
 func PostLogin(ginContext *gin.Context) {
-	toast(ginContext, "Login", "Try again", info)
+	username, _ := ginContext.GetPostForm("username")
+	password, _ := ginContext.GetPostForm("password")
+	userId := GetUserId(username, password)
+	if userId > 0 {
+		ginContext.Header("HX-Redirect", "/")
+	} else {
+		toast(ginContext, "Login", "Try again", warning)
+	}
 }
 
 func GetHome(ginContext *gin.Context) {
@@ -57,7 +46,7 @@ func GetHome(ginContext *gin.Context) {
 		"index",
 		gin.H{
 			"Title": "Main",
-			"User": "Admin",
+			"User":  "Admin",
 		},
 	)
 }
@@ -95,7 +84,9 @@ func Throttle(ginContext *gin.Context) {
 
 /* GIN engine */
 func CreateEngine() (engine *gin.Engine) {
-	engine = gin.Default()
+	gin.SetMode(config.GinMode)
+	engine = gin.New()
+	engine.Use(gin.Recovery())
 	engine.HTMLRender = CreateRenderer()
 	/* Middleware */
 	engine.Use(Throttle)
@@ -107,6 +98,8 @@ func CreateEngine() (engine *gin.Engine) {
 }
 
 func main() {
+	log.Printf("Connecting to DB %s", postgresConfig.Name)
+	ConnectPool()
 	log.Printf("Starting http server on port %d", config.Port)
 	CreateEngine().Run(fmt.Sprintf(":%d", config.Port))
 }
