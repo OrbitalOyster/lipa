@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	// "time"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -52,9 +50,5 @@ func toast(ginContext *gin.Context, title string, content string, severity Toast
 	}
 	maps.Copy(data, severityData[severity])
 	ginContext.Header("HX-Trigger-After-Settle", "toast")
-	ginContext.HTML(
-		http.StatusOK,
-		"toast",
-		data,
-	)
+	ginContext.HTML(http.StatusOK, "toast", data)
 }

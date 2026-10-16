@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 var config HttpConfig
@@ -16,28 +17,6 @@ var postgresConfig PostgresConfig
 func init() {
 	config.Load()
 	postgresConfig.Load()
-}
-
-func GetLogin(ginContext *gin.Context) {
-	ginContext.HTML(
-		http.StatusOK,
-		"login",
-		gin.H{
-			"Title": "Login",
-			"Year":  time.Now().Year(),
-		},
-	)
-}
-
-func PostLogin(ginContext *gin.Context) {
-	username, _ := ginContext.GetPostForm("username")
-	password, _ := ginContext.GetPostForm("password")
-	userId := GetUserId(username, password)
-	if userId > 0 {
-		ginContext.Header("HX-Redirect", "/")
-	} else {
-		toast(ginContext, "Login", "Try again", warning)
-	}
 }
 
 func GetHome(ginContext *gin.Context) {
@@ -82,6 +61,31 @@ func Throttle(ginContext *gin.Context) {
 	ginContext.Next()
 }
 
+func Auth(ginContext *gin.Context) {
+	if cookie, err := ginContext.Cookie(config.CookieName); err != nil {
+		log.Println("No cookie")
+		// ginContext.Redirect(http.StatusSeeOther, "/login")
+		// ginContext.JSON(http.StatusForbidden, "Nope")
+	} else {
+		var claims Claims
+		_, err = jwt.ParseWithClaims(
+			cookie,
+			&claims,
+			func(jwtToken *jwt.Token) (any, error) {
+				if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
+				}
+				return config.TokenSecret, nil
+			},
+		)
+		if err != nil {
+			log.Printf("Unable to parse token: %v", err)
+		} else {
+			ginContext.Next()
+		}
+	}
+}
+
 /* GIN engine */
 func CreateEngine() (engine *gin.Engine) {
 	gin.SetMode(config.GinMode)
@@ -90,6 +94,7 @@ func CreateEngine() (engine *gin.Engine) {
 	engine.HTMLRender = CreateRenderer()
 	/* Middleware */
 	engine.Use(Throttle)
+	engine.Use(Auth)
 	/* Routes */
 	engine.GET("/login", GetLogin)
 	engine.POST("/login", PostLogin)

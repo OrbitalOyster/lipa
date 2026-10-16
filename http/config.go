@@ -38,8 +38,12 @@ func (config PostgresConfig) String() string {
 }
 
 type HttpConfig struct {
-	Port    int
-	GinMode string
+	Port               int
+	GinMode            string
+	CookieName         string
+	CookieLifetime     int
+	CookieLongLifetime int
+	TokenSecret        []byte
 }
 
 func (config *HttpConfig) Load() {
@@ -49,4 +53,14 @@ func (config *HttpConfig) Load() {
 		panic(fmt.Errorf("Unable to read http port: %v", err))
 	}
 	config.GinMode = os.Getenv("GIN_MODE")
+	config.CookieName = os.Getenv("COOKIE_NAME")
+	config.CookieLifetime, err = strconv.Atoi(os.Getenv("COOKIE_LIFETIME"))
+	if err != nil {
+		panic(fmt.Errorf("Unable to read cookie lifetime: %v", err))
+	}
+	config.CookieLongLifetime, err = strconv.Atoi(os.Getenv("COOKIE_LONG_LIFETIME"))
+	if err != nil {
+		panic(fmt.Errorf("Unable to read cookie long lifetime: %v", err))
+	}
+	config.TokenSecret = []byte(os.Getenv("TOKEN_SECRET"))
 }
