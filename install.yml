@@ -1,0 +1,14 @@
+- name: Lipa install
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install docker
+      pacman:
+        name: docker
+        state: present
+
+    - name: Create working directory
+      file:
+        path: "/var/opt/INSERT_DATA_FOLDER"
+        state: directory
