@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 var config HttpConfig
@@ -19,13 +18,17 @@ func init() {
 	postgresConfig.Load()
 }
 
-func GetHome(ginContext *gin.Context) {
+func GetMain(ginContext *gin.Context) {
+	username, ok := ginContext.Get("username")
+	if !ok {
+		panic("Username not exist on context")
+	}
 	ginContext.HTML(
 		http.StatusOK,
-		"index",
+		"main",
 		gin.H{
 			"Title": "Main",
-			"User":  "Admin",
+			"User":  username,
 		},
 	)
 }
@@ -45,9 +48,9 @@ func CreateRenderer() (renderer multitemplate.Renderer) {
 	)
 	/* Main page */
 	renderer.AddFromFiles(
-		"index",
+		"main",
 		masterLayout,
-		"templates/pages/index.html",
+		"templates/pages/main.html",
 	).ParseGlob(partialsGlob)
 	/* Toast */
 	renderer.AddFromFiles("toast", "templates/toast.html")
@@ -62,28 +65,26 @@ func Throttle(ginContext *gin.Context) {
 }
 
 func Auth(ginContext *gin.Context) {
+	/* Don't check public routes */
+	if ginContext.Request.RequestURI == "/login" {
+		ginContext.Next()
+		return
+	}
 	if cookie, err := ginContext.Cookie(config.CookieName); err != nil {
-		log.Println("No cookie")
-		// ginContext.Redirect(http.StatusSeeOther, "/login")
-		// ginContext.JSON(http.StatusForbidden, "Nope")
+		log.Printf("Failed to load cookie: %v", err)
 	} else {
-		var claims Claims
-		_, err = jwt.ParseWithClaims(
-			cookie,
-			&claims,
-			func(jwtToken *jwt.Token) (any, error) {
-				if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
-				}
-				return config.TokenSecret, nil
-			},
-		)
+		var claims, err = GetClaimsFromCookie(cookie)
 		if err != nil {
-			log.Printf("Unable to parse token: %v", err)
+			log.Printf("Failed to parse token: %v", err)
 		} else {
+			claims.Save(ginContext)
+			ginContext.Set("username", claims.Username)
 			ginContext.Next()
+			return
 		}
 	}
+	ginContext.Redirect(http.StatusSeeOther, "/login")
+	ginContext.Abort()
 }
 
 /* GIN engine */
@@ -98,7 +99,7 @@ func CreateEngine() (engine *gin.Engine) {
 	/* Routes */
 	engine.GET("/login", GetLogin)
 	engine.POST("/login", PostLogin)
-	engine.GET("/", GetHome)
+	engine.GET("/", GetMain)
 	return
 }
 

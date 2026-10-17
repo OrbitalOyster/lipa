@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 type LoginRequest struct {
@@ -19,6 +19,7 @@ type TokenPayload struct {
 }
 
 func GetLogin(ginContext *gin.Context) {
+	log.Println("Login page")
 	ginContext.HTML(
 		http.StatusOK,
 		"login",
@@ -40,24 +41,11 @@ func PostLogin(ginContext *gin.Context) {
 		if loginRequest.RememberMe == "true" {
 			cookieLifetime = config.CookieLongLifetime
 		}
+		log.Printf("User %s logged in", loginRequest.Username)
 		claims := CreateClaims(userId, loginRequest.Username, cookieLifetime)
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		tokenStr, err := token.SignedString(config.TokenSecret)
-		/* Major screwup */
-		if err != nil {
-			panic(err)
-		}
-		ginContext.SetSameSite(http.SameSiteStrictMode)
-		ginContext.SetCookie(
-			config.CookieName,
-			tokenStr,
-			cookieLifetime,
-			"/",
-			"",
-			false,
-			true,
-		)
+		claims.Save(ginContext)
 		ginContext.Header("HX-Redirect", "/")
+		ginContext.Next()
 	} else {
 		toast(ginContext, "Login", "Try again", warning)
 	}

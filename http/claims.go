@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -17,6 +20,41 @@ func CreateClaims(UserId int, Username string, lifetime int) (claims Claims) {
 	claims.UserID = UserId
 	claims.Username = Username
 	claims.SetLifetime(lifetime)
+	return
+}
+
+func (claims Claims) Save(ginContext *gin.Context) {
+	lifetime := claims.GetLifetime()
+	claims.SetLifetime(lifetime)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenStr, err := token.SignedString(config.TokenSecret)
+	/* Major screwup */
+	if err != nil {
+		panic(err)
+	}
+	ginContext.SetSameSite(http.SameSiteStrictMode)
+	ginContext.SetCookie(
+		config.CookieName,
+		tokenStr,
+		lifetime,
+		"/",
+		"",
+		false,
+		true,
+	)
+}
+
+func GetClaimsFromCookie(cookie string) (claims Claims, err error) {
+	_, err = jwt.ParseWithClaims(
+		cookie,
+		&claims,
+		func(jwtToken *jwt.Token) (any, error) {
+			if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
+			}
+			return config.TokenSecret, nil
+		},
+	)
 	return
 }
 
