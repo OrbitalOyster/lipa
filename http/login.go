@@ -19,7 +19,6 @@ type TokenPayload struct {
 }
 
 func GetLogin(ginContext *gin.Context) {
-	log.Println("Login page")
 	ginContext.HTML(
 		http.StatusOK,
 		"login",
@@ -49,4 +48,10 @@ func PostLogin(ginContext *gin.Context) {
 	} else {
 		toast(ginContext, "Login", "Try again", warning)
 	}
+}
+
+func PostLogout(ginContext *gin.Context) {
+	ginContext.SetCookie(config.CookieName, "", -1, "/", "", false, true)
+	ginContext.Header("HX-Redirect", "/login")
+	ginContext.Next()
 }

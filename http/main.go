@@ -65,11 +65,6 @@ func Throttle(ginContext *gin.Context) {
 }
 
 func Auth(ginContext *gin.Context) {
-	/* Don't check public routes */
-	if ginContext.Request.RequestURI == "/login" {
-		ginContext.Next()
-		return
-	}
 	if cookie, err := ginContext.Cookie(config.CookieName); err != nil {
 		log.Printf("Failed to load cookie: %v", err)
 	} else {
@@ -77,6 +72,7 @@ func Auth(ginContext *gin.Context) {
 		if err != nil {
 			log.Printf("Failed to parse token: %v", err)
 		} else {
+			/* Success */
 			claims.Save(ginContext)
 			ginContext.Set("username", claims.Username)
 			ginContext.Next()
@@ -95,11 +91,14 @@ func CreateEngine() (engine *gin.Engine) {
 	engine.HTMLRender = CreateRenderer()
 	/* Middleware */
 	engine.Use(Throttle)
-	engine.Use(Auth)
-	/* Routes */
+	/* Public routes */
 	engine.GET("/login", GetLogin)
 	engine.POST("/login", PostLogin)
-	engine.GET("/", GetMain)
+	/* Protected routes */
+	protected := engine.Group("/")
+	protected.Use(Auth)
+	protected.GET("/", GetMain)
+	protected.POST("/logout", PostLogout)
 	return
 }
 
