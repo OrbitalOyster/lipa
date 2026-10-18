@@ -15,19 +15,19 @@ const showHTMXModal = () => {
 	modal.show()
 }
 
-/* Confirm modal */
+/* Confirm dialog */
 const confirmMsg = async (title, content) => {
-	const confirmModal = new Dialog("#confirm-modal"),
-		modalEl = document.getElementById("confirm-modal"),
-		titleEl = modalEl.querySelector("#confirm-modal-title"),
-		contentEl = modalEl.querySelector("#confirm-modal-content"),
-		okBtn = modalEl.querySelector("#confirm-modal-ok-btn")
+	const confirmDialog = new Dialog("#confirm-dialog"),
+		dialogEl = document.getElementById("confirm-dialog"),
+		titleEl = dialogEl.querySelector("#confirm-dialog-title"),
+		contentEl = dialogEl.querySelector("#confirm-dialog-content"),
+		okBtn = dialogEl.querySelector("#confirm-dialog-ok-btn")
 	titleEl.textContent = title
 	contentEl.textContent = content
 	/* Focus on okBtn */
 	const onShown = () => { okBtn.focus({ focusVisible: true }) }
-	modalEl.addEventListener("shown.bs.modal", onShown)
-	confirmModal.show()
+	dialogEl.addEventListener("shown.bs.dialog", onShown)
+	confirmDialog.show()
 	return new Promise((resolve) => {
 		const confirmed = () => {
 				resolve(true)
@@ -35,12 +35,12 @@ const confirmMsg = async (title, content) => {
 			},
 			cleanUp = () => {
 				okBtn.removeEventListener("click", confirmed)
-				modalEl.removeEventListener("shown.bs.modal", onShown)
-				modalEl.removeEventListener("hidden.bs.modal", cleanUp)
-				confirmModal.hide()
+				dialogEl.removeEventListener("shown.bs.dialog", onShown)
+				dialogEl.removeEventListener("hidden.bs.dialog", cleanUp)
+				confirmDialog.hide()
 			}
 		okBtn.addEventListener("click", confirmed)
-		modalEl.addEventListener("hidden.bs.modal", cleanUp)
+		dialogEl.addEventListener("hidden.bs.dialog", cleanUp)
 	})
 }
 
@@ -58,9 +58,9 @@ const onHTMXConfirm = (event) => {
 
 /* Set up bootstrap modals */
 const initDialogs = () => {
-	modalEl = document.getElementById("modal")
-	modal = new Dialog("#modal")
-	document.body.addEventListener("hideModal", () => modal.hide())
+	// modalEl = document.getElementById("modal")
+	// modal = new Dialog("#modal")
+	// document.body.addEventListener("hideModal", () => modal.hide())
 	document.addEventListener("htmx:confirm", onHTMXConfirm)
 }
 

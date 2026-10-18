@@ -38,20 +38,25 @@ func CreateRenderer() (renderer multitemplate.Renderer) {
 	const (
 		masterLayout = "templates/layouts/master.html"
 		partialsGlob = "templates/partials/*.html"
+		dialogsGlob = "templates/dialogs/*.html"
 	)
 	renderer = multitemplate.NewRenderer()
 	/* Login page */
-	renderer.AddFromFiles(
+	login := renderer.AddFromFiles(
 		"login",
 		masterLayout,
 		"templates/pages/login.html",
 	)
+	login.ParseGlob(partialsGlob)
+	login.ParseGlob(dialogsGlob)
 	/* Main page */
-	renderer.AddFromFiles(
+	main := renderer.AddFromFiles(
 		"main",
 		masterLayout,
 		"templates/pages/main.html",
-	).ParseGlob(partialsGlob)
+	)
+	main.ParseGlob(partialsGlob)
+	main.ParseGlob(dialogsGlob)
 	/* Toast */
 	renderer.AddFromFiles("toast", "templates/toast.html")
 	return
