@@ -1,4 +1,0 @@
-all:
-  hosts:
-    lipa_host:
-      ansible_connection: local
