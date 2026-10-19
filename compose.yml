@@ -27,8 +27,6 @@ services:
       COOKIE_LONG_LIFETIME: ${COOKIE_LONG_LIFETIME}
       TOKEN_SECRET: ${TOKEN_SECRET}
       TZ: ${TZ}
-    ports:
-      - ${PORT}:${PORT}
     depends_on:
       - db
 
@@ -39,6 +37,6 @@ services:
     volumes:
       - ./static:/usr/share/nginx/html
     ports:
-      - 80:80
+      - ${PORT}:80
     depends_on:
       - http
