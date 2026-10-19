@@ -1,22 +1,37 @@
 {{ define "page" }}
 	<div class="d-flex vh-100">
 		<main class="m-auto w-fit">
-			<div class="card shadow-sm">
+			<div class="card shadow">
 				<form
 					hx-disabled-elt=".htmx-disable"
 					hx-indicator="#login-btn-icon"
 					hx-post="/login"
 					hx-swap="none"
 				>
-					<div class="card-header text-center position-relative">
-						Lipa
+					<div class="card-header d-flex flex-row justify-content-between align-items-center">
+						<div class="d-flex flex-column">
+							<h4>
+								Lipa
+							</h4>
+							<h6 class="fg-secondary">
+								Made by so-called "free thinkers"
+							</h6>
+						</div>
+						<!-- The Goose -->
+						<img
+							class="logo"
+							src="/img/goose.webp"
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							data-bs-title="It's the Goose"
+						/>
 					</div>
 					<div class="card-body">
 						<div class="d-flex flex-column gap-2">
 							<!-- Username -->
 							<div class="input-group">
 								<!-- Cute icon -->
-								<i class="input-group-text bi bi-person-fill fs-lg"></i>
+								<i class="input-group-text bi bi-person-fill fs-lg fg-secondary"></i>
 								<div class="form-floating">
 									<label for="username" class="fg-secondary">
 										Username
@@ -36,7 +51,7 @@
 							<!-- Password -->
 							<div class="input-group htmx-disable">
 								<!-- Another cute icon -->
-								<i class="input-group-text bi bi-lock-fill fs-lg"></i>
+								<i class="input-group-text bi bi-lock-fill fs-lg fg-secondary"></i>
 								<div class="form-floating">
 									<label for="password-input" class="fg-secondary">
 										Password
@@ -48,7 +63,6 @@
 										name="password"
 										autocomplete="current-password"
 										placeholder=""
-
 										data-bs-attribute="type"
 										data-bs-value="password"
 									/>
@@ -69,7 +83,7 @@
 						<!-- Remember me -->
 						<div class="form-field">
 							<input
-								class="check htmx-disable"
+								class="check theme-primary htmx-disable"
 								type="checkbox"
 								id="remember-me"
 								name="remember-me"
