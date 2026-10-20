@@ -1,7 +1,7 @@
 {{ define "page" }}
 	<div class="d-flex vh-100">
 		<main class="m-auto w-fit">
-			<div class="card shadow">
+			<div class="card shadow-sm">
 				<form
 					hx-disabled-elt=".htmx-disable"
 					hx-indicator="#login-btn-icon"
@@ -45,7 +45,7 @@
 										placeholder=""
 										size="48"
 										autofocus
-									/>
+									>
 								</div>
 							</div>
 							<!-- Password -->
@@ -65,7 +65,7 @@
 										placeholder=""
 										data-bs-attribute="type"
 										data-bs-value="password"
-									/>
+									>
 								</div>
 								<!-- Show/hide password -->
 								<button
@@ -88,11 +88,28 @@
 								id="remember-me"
 								name="remember-me"
 								value="true"
-							/>
+							>
 							<label for="remember-me">
 								Remember me
 							</label>
 						</div>
+						<!-- Switch users/orgs -->
+						<div class="form-field">
+							<div class="switch theme-primary">
+								<input
+									type="checkbox"
+									name="user-org"
+									value="true"
+									id="switch-user-org"
+									role="switch"
+									switch
+								>
+							</div>
+							<label for="switch-user-org">
+								Switch me
+							</label>
+						</div>
+						<!-- Log in button -->
 						<button class="theme-primary btn-solid htmx-disable" type="submit">
 							<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
 							<span class="spinner-border spinner-border-sm"></span>

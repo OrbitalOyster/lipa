@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
+	"slices"
 	"time"
 
 	"github.com/gin-contrib/multitemplate"
@@ -33,30 +35,46 @@ func GetMain(ginContext *gin.Context) {
 	)
 }
 
+var (
+	templatesPath = "templates"
+	layoutsPath = filepath.Join(templatesPath, "layouts")
+	dialogsPath = filepath.Join(templatesPath, "dialogs", "*.html")
+	dialogsGlob []string
+	partialsPath = filepath.Join(templatesPath, "partials", "*.html")
+	partialsGlob []string
+	pagesPath = filepath.Join(templatesPath, "pages")
+)
+
+func InitTemplates() {
+	var err error
+	partialsGlob, err = filepath.Glob(partialsPath)
+	if err != nil {
+		panic(fmt.Errorf("Unable to load partials: %v", err))
+	}
+	dialogsGlob, err = filepath.Glob(dialogsPath)
+	if err != nil {
+		panic(fmt.Errorf("Unable to load dialogs: %v", err))
+	}
+}
+
+func AddPage(renderer multitemplate.Renderer, name string, layout string, page string) {
+	files := []string{
+		filepath.Join(layoutsPath, layout),
+		filepath.Join(pagesPath, page),
+	}
+	files = append(files, slices.Concat(partialsGlob, dialogsGlob)...)
+	renderer.AddFromFiles(
+		name,
+		files...
+	)
+}
+
 /* HTML renderer */
 func CreateRenderer() (renderer multitemplate.Renderer) {
-	const (
-		masterLayout = "templates/layouts/master.html"
-		partialsGlob = "templates/partials/*.html"
-		dialogsGlob = "templates/dialogs/*.html"
-	)
 	renderer = multitemplate.NewRenderer()
-	/* Login page */
-	login := renderer.AddFromFiles(
-		"login",
-		masterLayout,
-		"templates/pages/login.html",
-	)
-	login.ParseGlob(partialsGlob)
-	login.ParseGlob(dialogsGlob)
-	/* Main page */
-	main := renderer.AddFromFiles(
-		"main",
-		masterLayout,
-		"templates/pages/main.html",
-	)
-	main.ParseGlob(partialsGlob)
-	main.ParseGlob(dialogsGlob)
+	InitTemplates()
+	AddPage(renderer, "login", "master.html", "login.html")
+	AddPage(renderer, "main", "master.html", "main.html")
 	/* Toast */
 	renderer.AddFromFiles("toast", "templates/toast.html")
 	return
@@ -92,6 +110,9 @@ func Auth(ginContext *gin.Context) {
 func CreateEngine() (engine *gin.Engine) {
 	gin.SetMode(config.GinMode)
 	engine = gin.New()
+	if config.GinMode == "debug" {
+		engine.Use(gin.Logger())
+	}
 	engine.Use(gin.Recovery())
 	engine.HTMLRender = CreateRenderer()
 	/* Middleware */
