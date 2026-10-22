@@ -31,10 +31,13 @@ services:
       - db
 
   nginx:
-    build: nginx
+    image: nginx
     environment:
+      HTTP_HOST: http
+      HTTP_PORT: ${HTTP_PORT}
       TZ: ${TZ}
     volumes:
+      - ./nginx-templates:/etc/nginx/templates
       - ./static:/usr/share/nginx/html
     ports:
       - ${PORT}:${HTTP_PORT}

@@ -30,10 +30,11 @@ clean:
 .ONESHELL:
 
 debug:
-	@trap 'docker container stop lipa-debug1' INT # Stop nginx container on Ctrl-C
-	docker run -p 8080:8080 --add-host=localhost:host-gateway \
-		--name lipa-debug1 --rm -d \
-		-v ./nginx/nginx-debug.conf:/etc/nginx/nginx.conf:ro \
+	@trap 'docker container stop lipa-debug' INT # Stop nginx container on Ctrl-C
+	docker run -p ${DEBUG_PORT}:${HTTP_PORT} --add-host=localhost:host-gateway \
+		--name lipa-debug --rm -d \
+		-e HTTP_HOST=localhost -e HTTP_PORT -e TZ \
+		-v ./nginx-templates/:/etc/nginx/templates:ro \
 		-v ./static/:/usr/share/nginx/html nginx:latest
 	cd http
 	$(DEBUG_CONFIG) go run .
