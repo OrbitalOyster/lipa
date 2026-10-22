@@ -31,10 +31,14 @@ clean:
 
 debug:
 	@trap 'docker container stop lipa-debug' INT # Stop nginx container on Ctrl-C
+	# Add localhost as viable proxy
+	# Set container name, make it delete itself after
+	# Set enviroment variables
+	# Add volumes
 	docker run -p ${DEBUG_PORT}:${HTTP_PORT} --add-host=localhost:host-gateway \
-		--name lipa-debug --rm -d \
+		--name lipa-debug -d --rm \
 		-e HTTP_HOST=localhost -e HTTP_PORT -e TZ \
 		-v ./nginx-templates/:/etc/nginx/templates:ro \
 		-v ./static/:/usr/share/nginx/html nginx:latest
 	cd http
-	$(DEBUG_CONFIG) go run .
+	$(DEBUG_CONFIG) go run . # Run actual server
