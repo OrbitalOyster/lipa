@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 )
@@ -24,6 +25,8 @@ func (config *PostgresConfig) Load() {
 		panic(fmt.Errorf("Unable to read DB port: %v", err))
 	}
 	config.Name = os.Getenv("DB_NAME")
+
+	log.Println(config)
 }
 
 func (config PostgresConfig) String() string {

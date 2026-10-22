@@ -1,6 +1,4 @@
-# Only thing to edit here
 ENV_FILE=.env
-# No edits below
 
 include ${ENV_FILE}
 export
@@ -16,12 +14,6 @@ build:
 run:
 	docker compose up
 
-debug1:
-	docker run -p 8080:8080 --add-host=localhost:host-gateway -v ./nginx/nginx-debug.conf:/etc/nginx/nginx.conf:ro -v ./static/:/usr/share/nginx/html nginx:latest
-
-debug2:
-	cd http && $(DEBUG_CONFIG) go run .
-
 stop:
 	docker compose down
 
@@ -33,3 +25,15 @@ logs:
 
 clean:
 	docker system prune -f
+
+# Don't spawn separate shell for every command
+.ONESHELL:
+
+debug:
+	@trap 'docker container stop lipa-debug1' INT # Stop nginx container on Ctrl-C
+	docker run -p 8080:8080 --add-host=localhost:host-gateway \
+		--name lipa-debug1 --rm -d \
+		-v ./nginx/nginx-debug.conf:/etc/nginx/nginx.conf:ro \
+		-v ./static/:/usr/share/nginx/html nginx:latest
+	cd http
+	$(DEBUG_CONFIG) go run .
