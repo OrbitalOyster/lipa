@@ -10,10 +10,20 @@ Downloading and building:
 git clone https://github.com/orbitaloyster/lipa.git --recurse-submodules
 cd lipa
 cp example.env .env
-docker compose build
+make build
 ```
 
 Running:
 ```bash
-docker compose run -d
+make run
+```
+
+Running as service:
+```bash
+make service
+```
+
+Backup:
+```bash
+./backup.sh
 ```

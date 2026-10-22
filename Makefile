@@ -3,11 +3,6 @@ ENV_FILE=.env
 include ${ENV_FILE}
 export
 
-DEBUG_CONFIG := PORT=${HTTP_PORT} \
-				GIN_MODE=debug \
-				DB_HOST=127.0.0.1 \
-				DB_PORT=${DB_EXTERNAL_PORT}
-
 build:
 	docker compose build
 
@@ -41,4 +36,5 @@ debug:
 		-v ./nginx-templates/:/etc/nginx/templates:ro \
 		-v ./static/:/usr/share/nginx/html nginx:latest
 	cd http
-	$(DEBUG_CONFIG) go run . # Run actual server
+	PORT=${HTTP_PORT} GIN_MODE=debug DB_HOST=127.0.0.1 DB_PORT=${DB_EXTERNAL_PORT}
+	go run . # Run actual server
