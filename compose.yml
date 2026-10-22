@@ -15,7 +15,7 @@ services:
   http:
     build: http
     environment:
-      PORT: ${PORT}
+      PORT: ${HTTP_PORT}
       GIN_MODE: ${GIN_MODE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -37,6 +37,6 @@ services:
     volumes:
       - ./static:/usr/share/nginx/html
     ports:
-      - ${PORT}:80
+      - ${PORT}:${HTTP_PORT}
     depends_on:
       - http

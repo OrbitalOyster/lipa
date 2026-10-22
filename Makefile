@@ -3,7 +3,7 @@ ENV_FILE=.env
 include ${ENV_FILE}
 export
 
-DEBUG_CONFIG := PORT=14002 \
+DEBUG_CONFIG := PORT=${HTTP_PORT} \
 				GIN_MODE=debug \
 				DB_HOST=127.0.0.1 \
 				DB_PORT=${DB_EXTERNAL_PORT}
