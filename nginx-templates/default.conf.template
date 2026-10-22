@@ -8,40 +8,33 @@ server {
   gzip on;
   gzip_types  text/plain application/javascript application/x-javascript text/javascript text/css;
 
+  # Cache
+  expires 30d;
+#  add_header Cache-Control "public, no-transform";
+
   # Root path
   location / {
       proxy_pass http://${HTTP_HOST}:${HTTP_PORT};
-      proxy_cache off;
+      # proxy_cache off;
+      add_header Cache-Control "no-cache";
   }
 
   # Static files
   location ~ ^/(css/|js/|img/|favicon.ico) {
     root /usr/share/nginx/html;
-    # Cache
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
   }
 
   # Vendor static files
   location /bootstrap/ {
     alias /usr/share/nginx/html/vendor/bootstrap/dist/;
-    # Cache
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
   }
 
   location /bootstrap-icons/ {
     alias /usr/share/nginx/html/vendor/bootstrap-icons/font/;
-    # Cache
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
   }
 
   location /htmx/ {
     alias /usr/share/nginx/html/vendor/htmx/dist/;
-    # Cache
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
   }
 
   # All errors from proxied API redirect to custom error page
