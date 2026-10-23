@@ -25,7 +25,7 @@ clean:
 .ONESHELL:
 
 debug:
-	@trap 'docker container stop lipa-debug' INT # Stop nginx container on Ctrl-C
+	@trap 'docker container stop lipa-debug' INT EXIT # Stop nginx container on exit
 	# Add localhost as viable proxy
 	# Set container name, make it delete itself after
 	# Set enviroment variables
@@ -36,5 +36,4 @@ debug:
 		-v ./nginx-templates/:/etc/nginx/templates:ro \
 		-v ./static/:/usr/share/nginx/html nginx:latest
 	cd http
-	PORT=${HTTP_PORT} GIN_MODE=debug DB_HOST=127.0.0.1 DB_PORT=${DB_EXTERNAL_PORT}
-	go run . # Run actual server
+	PORT=${HTTP_PORT} GIN_MODE=debug DB_HOST=127.0.0.1 DB_PORT=${DB_EXTERNAL_PORT} go run . # Run actual server

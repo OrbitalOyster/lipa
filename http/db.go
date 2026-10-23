@@ -40,6 +40,24 @@ func GetUserId(username string, password string) (id int) {
 	}
 }
 
+type Org struct {
+	Id   int    `db:"id"`
+	Name string `db:"name"`
+}
+
+func GetAllOrgs() []Org {
+	const query = "SELECT id, name FROM lipa.orgs"
+	if rows, err := pool.Query(context.Background(), query); err != nil {
+		panic(err)
+	} else {
+		orgs, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org])
+		if err != nil {
+			panic(err)
+		}
+		return orgs
+	}
+}
+
 func ClosePool() {
 	pool.Close()
 }

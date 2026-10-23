@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 )
@@ -16,14 +17,26 @@ type PostgresConfig struct {
 
 func (config *PostgresConfig) Load() {
 	config.User = os.Getenv("DB_USER")
+	if config.User == "" {
+		log.Fatal("Missing DB user")
+	}
 	config.Password = os.Getenv("DB_PASSWORD")
+	if config.Password == "" {
+		log.Fatal("Missing DB password")
+	}
 	config.Host = os.Getenv("DB_HOST")
+	if config.Host == "" {
+		log.Fatal("Missing DB host")
+	}
+	config.Name = os.Getenv("DB_NAME")
+	if config.Name == "" {
+		log.Fatal("Missing DB name")
+	}
 	var err error
 	config.Port, err = strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		panic(fmt.Errorf("Unable to read DB port: %v", err))
 	}
-	config.Name = os.Getenv("DB_NAME")
 }
 
 func (config PostgresConfig) String() string {

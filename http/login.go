@@ -24,6 +24,7 @@ func GetLogin(ginContext *gin.Context) {
 		"login",
 		gin.H{
 			"Title": "Login",
+			"Orgs": GetAllOrgs(),
 			"Year":  time.Now().Year(),
 		},
 	)

@@ -1,6 +1,6 @@
 {{ define "page" }}
 	<div class="d-flex vh-100">
-		<main class="m-auto w-fit">
+		<main class="m-auto" style="width: 36rem">
 			<div class="card shadow-sm">
 				<form
 					hx-disabled-elt=".htmx-disable"
@@ -29,7 +29,11 @@
 					<div class="card-body">
 						<div class="d-flex flex-column gap-2">
 							<!-- Username -->
-							<div class="input-group">
+							<div
+								class="input-group user-org-toggle d-none"
+								data-bs-attribute="class"
+								data-bs-value="d-none"
+							>
 								<!-- Cute icon -->
 								<i class="input-group-text bi bi-person-fill fs-lg fg-secondary"></i>
 								<div class="form-floating">
@@ -48,8 +52,36 @@
 									>
 								</div>
 							</div>
+							<!-- Org -->
+							<div
+								class="input-group user-org-toggle"
+								data-bs-attribute="class"
+								data-bs-value="d-none"
+							>
+								<!-- Cute icon -->
+								<i class="input-group-text bi bi-people-fill fs-lg fg-secondary"></i>
+								<div class="form-floating">
+									<label for="org" class="fg-secondary">
+										Org
+									</label>
+									<select
+										class="form-control htmx-disable"
+										id="org"
+										name="org"
+									>
+										<option hidden>
+											Select org
+										</option>
+										{{ range .Orgs }}
+											<option value="{{ .Id }}">
+												{{ .Name }}
+											</option>
+										{{ end }}
+									</select>
+								</div>
+							</div>
 							<!-- Password -->
-							<div class="input-group htmx-disable">
+							<div class="input-group">
 								<!-- Another cute icon -->
 								<i class="input-group-text bi bi-lock-fill fs-lg fg-secondary"></i>
 								<div class="form-floating">
@@ -98,15 +130,17 @@
 							<div class="switch theme-primary">
 								<input
 									type="checkbox"
-									name="user-org"
+									name="is-user"
 									value="true"
 									id="switch-user-org"
 									role="switch"
+									data-bs-toggle="toggler"
+									data-bs-target=".user-org-toggle"
 									switch
 								>
 							</div>
 							<label for="switch-user-org">
-								Switch me
+								Log in as user
 							</label>
 						</div>
 						<!-- Log in button -->
