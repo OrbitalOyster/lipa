@@ -40,6 +40,18 @@ func GetUserId(username string, password string) (id int) {
 	}
 }
 
+func GetOrgId(orgId string, password string) (id int) {
+	const query = "SELECT id FROM lipa.orgs WHERE id = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
+	if err := pool.QueryRow(context.Background(), query, orgId, password).Scan(&id); err != nil {
+		if err != pgx.ErrNoRows {
+			panic(err)
+		}
+		return -1
+	} else {
+		return
+	}
+}
+
 type Org struct {
 	Id   int    `db:"id"`
 	Name string `db:"name"`
