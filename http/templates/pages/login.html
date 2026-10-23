@@ -41,7 +41,7 @@
 										Username
 									</label>
 									<input
-										class="form-control htmx-disable"
+										class="form-control htmx-disable user-org-toggle"
 										type="text"
 										id="username"
 										name="username"
@@ -49,6 +49,9 @@
 										placeholder=""
 										size="48"
 										autofocus
+										data-bs-attribute="disabled"
+										data-bs-value="true"
+										disabled="true"
 									>
 								</div>
 							</div>
@@ -65,9 +68,11 @@
 										Org
 									</label>
 									<select
-										class="form-control htmx-disable"
+										class="form-control user-org-toggle htmx-disable"
 										id="org"
 										name="org"
+										data-bs-attribute="disabled"
+										data-bs-value="true"
 									>
 										<option hidden>
 											Select org
