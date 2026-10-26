@@ -3,10 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"path/filepath"
 	"slices"
-	"time"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
@@ -15,35 +13,20 @@ import (
 var config HttpConfig
 var postgresConfig PostgresConfig
 
+var (
+	templatesPath = "templates"
+	layoutsPath   = filepath.Join(templatesPath, "layouts")
+	partialsPath  = filepath.Join(templatesPath, "partials", "*.html")
+	partialsGlob  []string
+	dialogsPath   = filepath.Join(templatesPath, "dialogs", "*.html")
+	dialogsGlob   []string
+	pagesPath     = filepath.Join(templatesPath, "pages")
+)
+
 func init() {
 	config.Load()
 	postgresConfig.Load()
 }
-
-func GetMain(ginContext *gin.Context) {
-	name, ok := ginContext.Get("name")
-	if !ok {
-		panic("Name do not exist on context")
-	}
-	ginContext.HTML(
-		http.StatusOK,
-		"main",
-		gin.H{
-			"Title": "Main",
-			"Name":  name,
-		},
-	)
-}
-
-var (
-	templatesPath = "templates"
-	layoutsPath   = filepath.Join(templatesPath, "layouts")
-	dialogsPath   = filepath.Join(templatesPath, "dialogs", "*.html")
-	dialogsGlob   []string
-	partialsPath  = filepath.Join(templatesPath, "partials", "*.html")
-	partialsGlob  []string
-	pagesPath     = filepath.Join(templatesPath, "pages")
-)
 
 func InitTemplates() {
 	var err error
@@ -58,52 +41,25 @@ func InitTemplates() {
 }
 
 func AddPage(renderer multitemplate.Renderer, name string, layout string, page string) {
+	/* layout + page ... */
 	files := []string{
 		filepath.Join(layoutsPath, layout),
 		filepath.Join(pagesPath, page),
 	}
+	/* ... + partials + dialogs */
 	files = append(files, slices.Concat(partialsGlob, dialogsGlob)...)
-	renderer.AddFromFiles(
-		name,
-		files...,
-	)
+	renderer.AddFromFiles(name, files...)
 }
 
 /* HTML renderer */
 func CreateRenderer() (renderer multitemplate.Renderer) {
-	renderer = multitemplate.NewRenderer()
 	InitTemplates()
+	renderer = multitemplate.NewRenderer()
 	AddPage(renderer, "login", "master.html", "login.html")
 	AddPage(renderer, "main", "master.html", "main.html")
 	/* Toast */
 	renderer.AddFromFiles("toast", "templates/toast.html")
 	return
-}
-
-func Throttle(ginContext *gin.Context) {
-	if ginContext.GetHeader("HX-Request") == "true" {
-		time.Sleep(time.Millisecond * 200)
-	}
-	ginContext.Next()
-}
-
-func Auth(ginContext *gin.Context) {
-	if cookie, err := ginContext.Cookie(config.CookieName); err != nil {
-		log.Printf("Failed to load cookie: %v", err)
-	} else {
-		var claims, err = GetClaimsFromCookie(cookie)
-		if err != nil {
-			log.Printf("Failed to parse token: %v", err)
-		} else {
-			/* Success */
-			claims.Save(ginContext)
-			ginContext.Set("name", claims.Name)
-			ginContext.Next()
-			return
-		}
-	}
-	ginContext.Redirect(http.StatusSeeOther, "/login")
-	ginContext.Abort()
 }
 
 /* GIN engine */
