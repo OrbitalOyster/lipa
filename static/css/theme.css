@@ -1,4 +1,5 @@
 :root {
   --bs-primary-bg: #1ABC9C;
   --bs-primary-focus-ring: #76D7C4;
+  --bs-focus-ring-width: 4px;
 }

@@ -11,14 +11,16 @@ import (
 
 /* JWT claims */
 type Claims struct {
-	UserID   int    `json:"user_id"`
-	Username string `json:"username"`
+	ID    int    `json:"id"`
+	IsOrg bool   `json:"is_org"`
+	Name  string `json:"name"`
 	jwt.RegisteredClaims
 }
 
-func CreateClaims(UserId int, Username string, lifetime int) (claims Claims) {
-	claims.UserID = UserId
-	claims.Username = Username
+func CreateClaims(id int, isOrg bool, name string, lifetime int) (claims Claims) {
+	claims.ID = id
+	claims.IsOrg = isOrg
+	claims.Name = name
 	claims.SetLifetime(lifetime)
 	return
 }

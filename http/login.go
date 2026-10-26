@@ -10,13 +10,10 @@ import (
 
 type LoginRequest struct {
 	Username   string `form:"username"`
+	OrgId      string `form:"org-id"`
 	Password   string `form:"password"`
 	RememberMe string `form:"remember-me"`
-	IsUser     string `form:"is-user"`
-}
-
-type TokenPayload struct {
-	UserID string `json:"user_id"`
+	IsOrg      string `form:"is-org"`
 }
 
 func GetLogin(ginContext *gin.Context) {
@@ -36,21 +33,25 @@ func PostLogin(ginContext *gin.Context) {
 	if err := ginContext.Bind(&loginRequest); err != nil {
 		panic(err)
 	}
-	/* User */
-	if loginRequest.IsUser == "true" {
-
-	} else { /* Org */
-
+	cookieLifetime := config.CookieLifetime
+	if loginRequest.RememberMe == "true" {
+		cookieLifetime = config.CookieLongLifetime
 	}
-
-	userId := GetUserId(loginRequest.Username, loginRequest.Password)
-	if userId > 0 {
-		cookieLifetime := config.CookieLifetime
-		if loginRequest.RememberMe == "true" {
-			cookieLifetime = config.CookieLongLifetime
+	var claims Claims
+	/* User */
+	if loginRequest.IsOrg == "false" {
+		if userId := GetUserId(loginRequest.Username, loginRequest.Password); userId > 0 {
+			log.Printf("User %s logged in", loginRequest.Username)
+			claims = CreateClaims(userId, false, loginRequest.Username, cookieLifetime)
 		}
-		log.Printf("User %s logged in", loginRequest.Username)
-		claims := CreateClaims(userId, loginRequest.Username, cookieLifetime)
+	} else { /* Org */
+		if orgId, name := GetOrg(loginRequest.OrgId, loginRequest.Password); orgId > 0 {
+			log.Printf("Org %s logged in", loginRequest.OrgId)
+			claims = CreateClaims(orgId, true, name, cookieLifetime)
+		}
+	}
+	/* Success */
+	if claims.ID > 0 {
 		claims.Save(ginContext)
 		ginContext.Header("HX-Redirect", "/")
 		ginContext.Next()

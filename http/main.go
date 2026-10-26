@@ -21,28 +21,28 @@ func init() {
 }
 
 func GetMain(ginContext *gin.Context) {
-	username, ok := ginContext.Get("username")
+	name, ok := ginContext.Get("name")
 	if !ok {
-		panic("Username not exist on context")
+		panic("Name do not exist on context")
 	}
 	ginContext.HTML(
 		http.StatusOK,
 		"main",
 		gin.H{
 			"Title": "Main",
-			"User":  username,
+			"Name":  name,
 		},
 	)
 }
 
 var (
 	templatesPath = "templates"
-	layoutsPath = filepath.Join(templatesPath, "layouts")
-	dialogsPath = filepath.Join(templatesPath, "dialogs", "*.html")
-	dialogsGlob []string
-	partialsPath = filepath.Join(templatesPath, "partials", "*.html")
-	partialsGlob []string
-	pagesPath = filepath.Join(templatesPath, "pages")
+	layoutsPath   = filepath.Join(templatesPath, "layouts")
+	dialogsPath   = filepath.Join(templatesPath, "dialogs", "*.html")
+	dialogsGlob   []string
+	partialsPath  = filepath.Join(templatesPath, "partials", "*.html")
+	partialsGlob  []string
+	pagesPath     = filepath.Join(templatesPath, "pages")
 )
 
 func InitTemplates() {
@@ -65,7 +65,7 @@ func AddPage(renderer multitemplate.Renderer, name string, layout string, page s
 	files = append(files, slices.Concat(partialsGlob, dialogsGlob)...)
 	renderer.AddFromFiles(
 		name,
-		files...
+		files...,
 	)
 }
 
@@ -97,7 +97,7 @@ func Auth(ginContext *gin.Context) {
 		} else {
 			/* Success */
 			claims.Save(ginContext)
-			ginContext.Set("username", claims.Username)
+			ginContext.Set("name", claims.Name)
 			ginContext.Next()
 			return
 		}

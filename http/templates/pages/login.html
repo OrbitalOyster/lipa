@@ -64,13 +64,14 @@
 								<!-- Cute icon -->
 								<i class="input-group-text bi bi-people-fill fs-lg fg-secondary"></i>
 								<div class="form-floating">
-									<label for="org" class="fg-secondary">
+									<label for="org-id" class="fg-secondary">
 										Org
 									</label>
 									<select
 										class="form-control user-org-toggle htmx-disable"
-										id="org"
-										name="org"
+										id="org-id"
+										name="org-id"
+										autofocus
 										data-bs-attribute="disabled"
 										data-bs-value="true"
 									>
@@ -135,8 +136,8 @@
 							<div class="switch theme-primary">
 								<input
 									type="checkbox"
-									name="is-user"
-									value="true"
+									name="is-org"
+									value="false"
 									id="switch-user-org"
 									role="switch"
 									data-bs-toggle="toggler"
