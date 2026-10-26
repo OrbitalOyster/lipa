@@ -9,11 +9,11 @@ import (
 )
 
 type LoginRequest struct {
-	Username   string `form:"username"`
-	OrgId      string `form:"org-id"`
-	Password   string `form:"password"`
-	RememberMe string `form:"remember-me"`
-	IsOrg      string `form:"is-org"`
+	Username   string `form:"username,default="`
+	OrgId      string `form:"org-id,default=0"`
+	Password   string `form:"password,default="`
+	RememberMe string `form:"remember-me,default=false"`
+	IsOrg      string `form:"is-org,default=true"`
 }
 
 func GetLogin(ginContext *gin.Context) {
@@ -51,7 +51,7 @@ func PostLogin(ginContext *gin.Context) {
 		}
 	}
 	/* Success */
-	if claims.ID > 0 {
+	if claims.UserID > 0 {
 		claims.Save(ginContext)
 		ginContext.Header("HX-Redirect", "/")
 		ginContext.Next()
