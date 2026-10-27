@@ -5,6 +5,8 @@ import (
 	"log"
 	"path/filepath"
 	"slices"
+	"text/template"
+	"time"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
@@ -40,6 +42,16 @@ func InitTemplates() {
 	}
 }
 
+const niceLookingDatetimeFormat = "2.01.2006 15:04:05"
+
+/* FuncMap for HTML templates */
+var TemplateFuncMap = template.FuncMap{
+	/* Human-readable date formatting */
+	"formatDate": func(t time.Time) string {
+		return t.Format(niceLookingDatetimeFormat)
+	},
+}
+
 func AddPage(renderer multitemplate.Renderer, name string, layout string, page string) {
 	/* layout + page ... */
 	files := []string{
@@ -48,7 +60,7 @@ func AddPage(renderer multitemplate.Renderer, name string, layout string, page s
 	}
 	/* ... + partials + dialogs */
 	files = append(files, slices.Concat(partialsGlob, dialogsGlob)...)
-	renderer.AddFromFiles(name, files...)
+	renderer.AddFromFilesFuncs(name, TemplateFuncMap, files...)
 }
 
 /* HTML renderer */
@@ -79,7 +91,7 @@ func CreateEngine() (engine *gin.Engine) {
 	/* Protected routes */
 	protected := engine.Group("/")
 	protected.Use(Auth)
-	protected.GET("/", GetMain)
+	protected.GET("/", GetHome)
 	protected.POST("/logout", PostLogout)
 	return
 }
