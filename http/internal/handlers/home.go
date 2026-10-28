@@ -1,17 +1,18 @@
-package main
+package handlers
 
 import (
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-/* Main */
 func GetHome(ginContext *gin.Context) {
-	name, ok := ginContext.Get("name")
-	if !ok {
-		panic("Name do not exist on context")
+	name, exists := ginContext.Get("name")
+	/* Major screwup */
+	if !exists {
+		log.Fatal("Name do not exist on context")
 	}
 	ginContext.HTML(
 		http.StatusOK,

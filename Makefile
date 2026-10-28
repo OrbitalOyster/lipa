@@ -36,4 +36,4 @@ debug:
 		-v ./nginx-templates/:/etc/nginx/templates:ro \
 		-v ./static/:/usr/share/nginx/html nginx:latest
 	cd http
-	PORT=${HTTP_PORT} GIN_MODE=debug DB_HOST=127.0.0.1 DB_PORT=${DB_EXTERNAL_PORT} go run . # Run actual server
+	PORT=${HTTP_PORT} GIN_MODE=debug DB_HOST=127.0.0.1 DB_PORT=${DB_EXTERNAL_PORT} go run cmd/main.go # Run actual server

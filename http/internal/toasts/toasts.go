@@ -1,4 +1,4 @@
-package main
+package toasts
 
 import (
 	"maps"
@@ -11,44 +11,42 @@ import (
 type ToastSeverity int
 
 const (
-	success ToastSeverity = iota
-	info
-	warning
-	danger
+	Success ToastSeverity = iota
+	Info
+	Warning
+	Danger
 )
 
-const toastTimeFormat = "2.01.2006 15:04:05"
-
-var severityData = map[ToastSeverity]map[string]string{
-	success: {
+var styles = map[ToastSeverity]map[string]string{
+	Success: {
 		"Theme":     "success",
 		"Autohide":  "true",
 		"IconClass": "bi-hand-thumbs-up-fill",
 	},
-	info: {
+	Info: {
 		"Theme":     "info",
 		"Autohide":  "true",
 		"IconClass": "bi-info-circle-fill",
 	},
-	warning: {
+	Warning: {
 		"Theme":     "warning",
 		"Autohide":  "false",
 		"IconClass": "bi-exclamation-triangle-fill",
 	},
-	danger: {
+	Danger: {
 		"Theme":     "danger",
 		"Autohide":  "false",
 		"IconClass": "bi-x-octagon-fill",
 	},
 }
 
-func toast(ginContext *gin.Context, title string, content string, severity ToastSeverity) {
+func Send(ginContext *gin.Context, title string, content string, severity ToastSeverity) {
 	data := map[string]string{
 		"Title":   title,
 		"Content": content,
-		"Time":    time.Now().Format(toastTimeFormat),
+		"Time":    time.Now().Format("2.01.2006 15:04:05"),
 	}
-	maps.Copy(data, severityData[severity])
+	maps.Copy(data, styles[severity])
 	ginContext.Header("HX-Trigger-After-Settle", "toast")
 	ginContext.HTML(http.StatusOK, "toast", data)
 }

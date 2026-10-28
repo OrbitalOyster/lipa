@@ -1,4 +1,4 @@
-package main
+package token
 
 import (
 	"fmt"
@@ -17,44 +17,28 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func CreateClaims(userId int, isOrg bool, name string, lifetime int) (claims Claims) {
-	claims.UserID = userId
-	claims.IsOrg = isOrg
-	claims.Name = name
+func MakeClaims(userId int, isOrg bool, name string, lifetime int) (claims Claims) {
+	claims = Claims{
+		UserID: userId,
+		IsOrg:  isOrg,
+		Name:   name,
+	}
 	claims.SetLifetime(lifetime)
 	return
 }
 
-func (claims Claims) Save(ginContext *gin.Context) {
-	lifetime := claims.GetLifetime()
-	claims.SetLifetime(lifetime)
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString(config.TokenSecret)
-	/* Major screwup */
-	if err != nil {
-		panic(err)
-	}
-	ginContext.SetSameSite(http.SameSiteStrictMode)
-	ginContext.SetCookie(
-		config.CookieName,
-		tokenStr,
-		lifetime,
-		"/",
-		"",
-		false,
-		true,
-	)
-}
-
-func GetClaimsFromCookie(cookie string) (claims Claims, err error) {
+func GetClaimsFromCookie(cookie string, secret []byte) (claims Claims, err error) {
 	_, err = jwt.ParseWithClaims(
 		cookie,
 		&claims,
 		func(jwtToken *jwt.Token) (any, error) {
 			if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("Unexpected signing method: %v", jwtToken.Header["alg"])
+				return nil, fmt.Errorf(
+					"Unexpected signing method: %v",
+					jwtToken.Header["alg"],
+				)
 			}
-			return config.TokenSecret, nil
+			return secret, nil
 		},
 	)
 	return
@@ -73,4 +57,25 @@ func (claims Claims) GetLifetime() (seconds int) {
 						Sub(claims.IssuedAt.Time). /* Substract "issued at" date */
 						Seconds()                  /* Convert to seconds */
 	return int(secondsFloat)
+}
+
+func (claims Claims) Save(ginContext *gin.Context, cookieName string, secret []byte) {
+	lifetime := claims.GetLifetime()
+	claims.SetLifetime(lifetime)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenStr, err := token.SignedString(secret)
+	/* Major screwup */
+	if err != nil {
+		panic(err)
+	}
+	ginContext.SetSameSite(http.SameSiteStrictMode)
+	ginContext.SetCookie(
+		cookieName,
+		tokenStr,
+		lifetime,
+		"/",
+		"",
+		false,
+		true,
+	)
 }
