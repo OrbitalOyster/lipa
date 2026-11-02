@@ -37,7 +37,12 @@ func Auth(tokenConfig config.Token) gin.HandlerFunc {
 				return
 			}
 		}
-		ginContext.Redirect(http.StatusSeeOther, "/login")
+		/* Add HTMX redirect header on HTMX requests, otherwise redirect via http */
+		if ginContext.GetHeader("HX-Request") == "true" {
+			ginContext.Header("HX-Redirect", "/login")
+		} else {
+			ginContext.Redirect(http.StatusSeeOther, "/login")
+		}
 		ginContext.Abort()
 	}
 }

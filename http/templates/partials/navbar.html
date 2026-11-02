@@ -1,13 +1,32 @@
 {{ define "navbar" }}
-	<nav class="d-flex align-items-center justify-content-between p-2">
-		<div class="d-flex gap-4 align-items-center">
+	<nav class="navbar bg-transparent">
+		<a class="navbar-brand fg-primary fs-xl" href="/">
 			<img class="logo" src="/img/goose.webp" />
-			<h2>
-				<a href="/">
-					Lipa
-				</a>
-			</h2>
-		</div>
+			Lipa
+		</a>
+			<ul class="nav gap-8">
+				<li class="nav-item">
+					<a href="/templates">
+						Templates
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="/orgs">
+						Orgs
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="/orgs">
+						Users
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="/reports">
+						Reports
+					</a>
+				</li>
+			</ul>
+
 		<div>
 			Hello, <strong>{{ .Name }}</strong>
 			<button
