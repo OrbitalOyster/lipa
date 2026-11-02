@@ -1,9 +1,12 @@
 {{ define "navbar" }}
 	<nav class="navbar bg-transparent">
-		<a class="navbar-brand fg-primary fs-xl" href="/">
+		<div class="navbar-brand d-flex gap-4">
 			<img class="logo" src="/img/goose.webp" />
-			Lipa
-		</a>
+			<div class="d-flex flex-column">
+				<a class="fs-xl" href="/">Lipa</a>
+				<small class="fg-secondary">Hello from the other side</small>
+			</div>
+		</div>
 			<ul class="nav gap-8">
 				<li class="nav-item">
 					<a href="/templates">
@@ -26,7 +29,6 @@
 					</a>
 				</li>
 			</ul>
-
 		<div>
 			Hello, <strong>{{ .Name }}</strong>
 			<button
@@ -40,4 +42,23 @@
 			</button>
 		</div>
 	</nav>
+
+	<nav class="my-3">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a class="breadcrumb-link" href="/">
+					<i class="bi bi-house"></i>
+				</a>
+			</li>
+			<li class="breadcrumb-divider"></li>
+			<li class="breadcrumb-item">
+				<a class="breadcrumb-link" href="#">Users</a>
+			</li>
+			<li class="breadcrumb-divider"></li>
+			<li class="breadcrumb-item">
+				<a class="breadcrumb-link active" href="#">admin</a>
+			</li>
+		</ol>
+	</nav>
+
 {{ end }}
