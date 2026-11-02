@@ -3,7 +3,6 @@
 		<main class="m-auto" style="width: 36rem">
 			<div class="card shadow-sm">
 				<form
-					autocomplete="off"
 					hx-disabled-elt=".htmx-disable"
 					hx-indicator="#login-btn-icon"
 					hx-post="/login"
@@ -47,6 +46,7 @@
 										id="username"
 										name="username"
 										placeholder=""
+										autocomplete="off"
 										size="48"
 										autofocus
 										data-bs-attribute="disabled"
@@ -100,6 +100,7 @@
 										id="password-input"
 										name="password"
 										placeholder=""
+										autocomplete="off"
 										data-bs-attribute="type"
 										data-bs-value="password"
 									>
@@ -138,6 +139,7 @@
 									type="checkbox"
 									name="is-org"
 									value="false"
+									autocomplete="off"
 									id="switch-user-org"
 									role="switch"
 									data-bs-toggle="toggler"
@@ -160,7 +162,7 @@
 			</div>
 			<div class="text-end p-2">
 				<i class="bi bi-c-circle"></i>
-				{{ .Year }}
+				{{ getYear }}
 			</div>
 		</main>
 	</div>

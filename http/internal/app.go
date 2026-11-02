@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"slices"
 	"strconv"
-	"text/template"
 	"time"
 
 	"github.com/gin-contrib/multitemplate"
@@ -33,6 +32,7 @@ func (app *App) connectToDB() {
 	var err error
 	/* Parse connection string */
 	pgxConfig, err := pgxpool.ParseConfig(app.postgresConfig.String())
+	/* Major screwup */
 	if err != nil {
 		panic(err)
 	}
@@ -45,16 +45,6 @@ func (app *App) connectToDB() {
 	if err != nil {
 		log.Fatalf("Unable to connect to DB: %v", err.Error())
 	}
-}
-
-const niceLookingDatetimeFormat = "2.01.2006 15:04:05"
-
-/* FuncMap for HTML templates */
-var templateFuncMap = template.FuncMap{
-	/* Human-readable date formatting */
-	"formatDate": func(t time.Time) string {
-		return t.Format(niceLookingDatetimeFormat)
-	},
 }
 
 func (app *App) initTemplates() {

@@ -7,7 +7,6 @@ import (
 	"lipa/internal/token"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -30,7 +29,6 @@ func GetLogin(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 			gin.H{
 				"Title": "Login",
 				"Orgs":  orgs,
-				"Year":  time.Now().Year(),
 			},
 		)
 	}
