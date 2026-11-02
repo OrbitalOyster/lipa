@@ -3,6 +3,7 @@
 		<main class="m-auto" style="width: 36rem">
 			<div class="card shadow-sm">
 				<form
+					autocomplete="off"
 					hx-disabled-elt=".htmx-disable"
 					hx-indicator="#login-btn-icon"
 					hx-post="/login"
@@ -45,7 +46,6 @@
 										type="text"
 										id="username"
 										name="username"
-										autocomplete="username"
 										placeholder=""
 										size="48"
 										autofocus
@@ -99,7 +99,6 @@
 										type="password"
 										id="password-input"
 										name="password"
-										autocomplete="current-password"
 										placeholder=""
 										data-bs-attribute="type"
 										data-bs-value="password"
@@ -126,6 +125,7 @@
 								id="remember-me"
 								name="remember-me"
 								value="true"
+								autocomplete="off"
 							>
 							<label for="remember-me">
 								Remember me
