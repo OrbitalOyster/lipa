@@ -71,6 +71,7 @@
 										class="form-control user-org-toggle htmx-disable"
 										id="org-id"
 										name="org-id"
+										autocomplete="off"
 										autofocus
 										data-bs-attribute="disabled"
 										data-bs-value="true"
@@ -95,7 +96,7 @@
 										Password
 									</label>
 									<input
-										class="form-control htmx-disable"
+										class="form-control htmx-disable password-toggle"
 										type="password"
 										id="password-input"
 										name="password"
@@ -110,9 +111,14 @@
 									class="theme-primary btn-solid input-group-btn htmx-disable"
 									type="button"
 									data-bs-toggle="toggler"
-									data-bs-target="#password-input"
+									data-bs-target=".password-toggle"
 								>
-									<i class="bi bi-eye-fill fs-lg"></i>
+									<i
+										class="bi bi-eye-fill fs-lg password-toggle"
+										data-bs-attribute="class"
+										data-bs-value="bi-eye-slash-fill"
+									>
+									</i>
 								</button>
 							</div>
 						</div>
@@ -137,6 +143,7 @@
 							<div class="switch theme-primary">
 								<input
 									type="checkbox"
+									class="htmx-disable"
 									name="is-org"
 									value="false"
 									autocomplete="off"
