@@ -7,14 +7,25 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func GetUserId(pool *pgxpool.Pool, username string, password string) (id int) {
-	const query = "SELECT id FROM lipa.users WHERE username = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
-	if err := pool.QueryRow(context.Background(), query, username, password).Scan(&id); err != nil {
+type User struct {
+	Id    int    `db:"id"`
+	Name  string `db:"name"`
+	Login string `db:"login"`
+}
+
+func GetUser(pool *pgxpool.Pool, login string, password string) (result User, found bool) {
+	const query = "SELECT id, name, login FROM lipa.users WHERE login = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
+	if rows, err := pool.Query(context.Background(), query, login, password); err != nil {
 		if err != pgx.ErrNoRows {
 			panic(err)
+		} else {
+			return result, false
 		}
-		return -1
 	} else {
-		return
+		result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[User])
+		if err != nil {
+			panic(err)
+		}
+		return result, true
 	}
 }
