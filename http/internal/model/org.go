@@ -15,30 +15,28 @@ type Org struct {
 
 func GetAllOrgs(pool *pgxpool.Pool) []Org {
 	const query = "SELECT id, name, ord FROM lipa.orgs ORDER BY ord"
-	if rows, err := pool.Query(context.Background(), query); err != nil {
-		panic(err)
-	} else {
-		orgs, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org])
-		if err != nil {
+	rows, _ := pool.Query(context.Background(), query)
+	if result, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org]); err != nil {
+		if err != pgx.ErrNoRows {
 			panic(err)
+		} else {
+			return result
 		}
-		return orgs
+	} else {
+		return result
 	}
 }
 
-func GetOrg(pool *pgxpool.Pool, id string, password string) (result Org, found bool) {
+func GetOrg(pool *pgxpool.Pool, id string, password string) (Org, bool) {
 	const query = "SELECT id, name, ord FROM lipa.orgs WHERE id = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
-	if rows, err := pool.Query(context.Background(), query, id, password); err != nil {
+	rows, _ := pool.Query(context.Background(), query, id, password)
+	if result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[Org]); err != nil {
 		if err != pgx.ErrNoRows {
 			panic(err)
 		} else {
 			return result, false
 		}
 	} else {
-		result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[Org])
-		if err != nil {
-			panic(err)
-		}
 		return result, true
 	}
 }

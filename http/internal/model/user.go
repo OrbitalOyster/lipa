@@ -13,19 +13,16 @@ type User struct {
 	Login string `db:"login"`
 }
 
-func GetUser(pool *pgxpool.Pool, login string, password string) (result User, found bool) {
+func GetUser(pool *pgxpool.Pool, login string, password string) (User, bool) {
 	const query = "SELECT id, name, login FROM lipa.users WHERE login = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
-	if rows, err := pool.Query(context.Background(), query, login, password); err != nil {
+	rows, _ := pool.Query(context.Background(), query, login, password)
+	if result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[User]); err != nil {
 		if err != pgx.ErrNoRows {
 			panic(err)
 		} else {
 			return result, false
 		}
 	} else {
-		result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[User])
-		if err != nil {
-			panic(err)
-		}
 		return result, true
 	}
 }
