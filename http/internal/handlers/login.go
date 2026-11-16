@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"lipa/internal/config"
+	"lipa/internal/locale"
 	"lipa/internal/model"
 	"lipa/internal/toasts"
 	"lipa/internal/token"
@@ -27,7 +28,7 @@ func GetLogin(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 			http.StatusOK,
 			"login",
 			gin.H{
-				"Title": "Login",
+				"Title": locale.Get("Login"),
 				"Orgs":  orgs,
 			},
 		)
@@ -67,8 +68,8 @@ func PostLogin(tokenConfig config.Token, pool *pgxpool.Pool) gin.HandlerFunc {
 		} else {
 			toasts.Send(
 				ginContext,
-				"Login",
-				"Try again",
+				locale.Get("Login"),
+				locale.Get("LogInFailed"),
 				toasts.Warning,
 			)
 		}
