@@ -26,13 +26,18 @@ server {
     expires 30d;
   }
 
+  location /htmx/ {
+    alias /usr/share/nginx/html/vendor/htmx/dist/;
+    expires 30d;
+  }
+
   location /bootstrap-icons/ {
     alias /usr/share/nginx/html/vendor/bootstrap-icons/font/;
     expires 30d;
   }
 
-  location /htmx/ {
-    alias /usr/share/nginx/html/vendor/htmx/dist/;
+  location /fonts/ {
+    alias /usr/share/nginx/html/vendor/golos/fonts/webfonts/;
     expires 30d;
   }
 

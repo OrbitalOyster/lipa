@@ -7,3 +7,6 @@
 [submodule "static/vendor/bootstrap-icons"]
 	path = static/vendor/bootstrap-icons
 	url = https://github.com/twbs/icons
+[submodule "static/vendor/golos"]
+	path = static/vendor/golos
+	url = https://github.com/googlefonts/golos-text
