@@ -1,36 +1,8 @@
 {{ define "navbar" }}
-	<nav class="navbar bg-transparent">
-		<div class="navbar-brand d-flex align-items-center gap-4">
-			<img class="logo" src="/img/goose.webp" />
-			<div class="d-flex flex-column align-items-start">
-				<a class="fs-xl" href="/">Lipa</a>
-				<small class="fg-secondary">Hello from the other side</small>
-			</div>
-		</div>
-			<ul class="nav gap-8">
-				<li class="nav-item">
-					<a href="/templates">
-						Templates
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="/orgs">
-						Orgs
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="/reports">
-						Reports
-					</a>
-				</li>
-				<li class="nav-item">
-					<a href="/admin">
-						Admin
-					</a>
-				</li>
-			</ul>
+	<nav class="navbar border-bottom p-2">
+		{{ template "breadcrumb" . }}
 		<div>
-			Hello, <strong>{{ .Name }}</strong>
+			{{ l "LoggedInAs" }}: <strong>{{ .Name }}</strong>
 			<button
 				class="btn-solid theme-warning"
 				type="button"
@@ -38,9 +10,8 @@
 				hx-confirm="Log out?"
 			>
 				<i class="bi bi-box-arrow-right"></i>
-				Log out
+				{{ l "LogOut" }}
 			</button>
 		</div>
 	</nav>
-	{{ template "breadcrumb" . }}
 {{ end }}

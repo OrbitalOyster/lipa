@@ -1,15 +1,51 @@
 {{ define "page" }}
-	<main class="lg:col-7 py-4 m-auto">
-		{{ template "navbar" . }}
-		<div class="card shadow-sm">
-			<div class="card-header text-center">
-				<strong>
-					Home
-				</strong>
+	<div class="d-flex flex-row vh-100">
+		<div class="border-end">
+			<div class="d-flex flex-row gap-4 align-items-center p-4">
+				<img class="logo" src="/img/goose.webp" />
+				<div class="d-flex flex-column align-items-start">
+					<a class="fs-xl" href="/">Lipa</a>
+					<small class="fg-secondary">
+						{{ l "Greeting" }}
+					</small>
+				</div>
 			</div>
-			<div class="card-body">
-				<p>Server thinks it's {{ formatDate .Today }} </p>
+			<hr />
+			<ul class="nav nav-justified flex-column">
+				<li class="nav-item">
+					<a class="nav-link" href="/templates">
+						{{ l "Templates" }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/orgs">
+						{{ l "Orgs" }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/reports">
+						{{ l "Reports" }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/admin">
+						{{ l "Admin" }}
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div class="flex-fill d-flex flex-column">
+			{{ template "navbar" . }}
+			<div class="card shadow-sm m-4">
+				<div class="card-header text-center">
+					<strong>
+						Home
+					</strong>
+				</div>
+				<div class="card-body">
+					<p>Server thinks it's {{ formatDate .Today }} </p>
+				</div>
 			</div>
 		</div>
-	</main>
+	</div>
 {{ end }}

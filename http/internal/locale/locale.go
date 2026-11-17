@@ -12,6 +12,13 @@ var strings = map[string]string{
 	"LogInAsUser": "Войти как пользователь",
 	"LogIn": "Войти",
 	"LogInFailed": "Попробуйте ещё раз",
+	/* Navbar */
+	"Templates": "Файлики",
+	"Orgs": "Организации",
+	"Reports": "Отчёты",
+	"Admin": "Администрирование",
+	"LoggedInAs": "Вы зашли как",
+	"LogOut": "Выйти",
 }
 
 func Get(id string) string {
