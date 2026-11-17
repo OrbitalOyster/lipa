@@ -4,10 +4,6 @@
 	src: url("/fonts/GolosText-Regular.woff2") format("woff2");
 }
 
-body {
-	font-family: "Golos";
-}
-
 /* The Goose */
 img.logo {
 	border-radius: 100%;

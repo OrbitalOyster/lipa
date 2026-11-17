@@ -15,6 +15,7 @@ var strings = map[string]string{
 	/* Navbar */
 	"Templates": "Файлики",
 	"Orgs": "Организации",
+	"Forms": "Формы",
 	"Reports": "Отчёты",
 	"Admin": "Администрирование",
 	"LoggedInAs": "Вы зашли как",

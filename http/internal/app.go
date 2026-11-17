@@ -110,7 +110,7 @@ func Start() {
 	/* Protected routes */
 	protected := app.engine.Group("/")
 	protected.Use(handlers.Auth(app.tokenConfig))
-	protected.GET("/", handlers.GetHome)
+	protected.GET("/", handlers.GetHome(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
 	/* Toasts */
