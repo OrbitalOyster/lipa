@@ -113,8 +113,12 @@ func Start() {
 	protected.GET("/", handlers.GetHome(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
+	protected.GET("/sidebar-orgs", handlers.GetOrgsSidebar(app.pool))
 	/* Toasts */
 	app.renderer.AddFromFiles("toast", "templates/toast.html")
+
+	app.renderer.AddFromFiles("sidebar-orgs", "templates/partials/sidebar-orgs.html")
+
 	/* Pages */
 	app.addPage("login", "master.html", "login.html")
 	app.addPage("main", "master.html", "main.html")

@@ -12,7 +12,8 @@
 		<hr />
 		<ul class="nav flex-column px-2 gap-2">
 			<li>
-				<div class="accordion sticky-top">
+				<div class="accordion accordion-sm sticky-top">
+					<!-- Orgs -->
 					<details class="accordion-item">
 						<summary class="accordion-header sticky-top gap-2">
 							<i class="bi bi-people-fill fs-xl"></i>
@@ -35,22 +36,36 @@
 								<input type="text" class="form-control">
 							</div>
 							<hr />
-							<div class="list-group">
-								{{ range .Orgs }}
-									<a href="/orgs/{{ .Id }}" class="list-group-item">
-										{{ .Id }} - {{ .Name }}
-									</a>
-								{{ end }}
+							{{ template "sidebar-orgs" .Orgs }}
+						</div>
+					</details>
+					<!-- Forms -->
+					<details class="accordion-item">
+						<summary class="accordion-header sticky-top gap-2">
+							<i class="bi bi-journal fs-xl"></i>
+							{{ l "Forms" }}
+							<svg
+								class="accordion-icon"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 16 16"
+								fill="none"
+								stroke="currentColor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="m2 5 6 6 6-6"/>
+							</svg>
+						</summary>
+						<div class="accordion-body">
+							<div class="input-group">
+								<i class="input-group-text bi bi-search fs-lg fg-secondary"></i>
+								<input type="text" class="form-control">
 							</div>
+							<hr />
+							Foo
 						</div>
 					</details>
 				</div>
-			</li>
-			<li>
-				<a class="nav-link justify-content-start" href="/forms">
-					<i class="bi bi-journal fs-xl"></i>
-					{{ l "Forms" }}
-				</a>
 			</li>
 			<li>
 				<a class="nav-link justify-content-start" href="/templates">

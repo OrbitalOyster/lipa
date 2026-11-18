@@ -17,7 +17,7 @@ func GetHome(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 		if !exists {
 			log.Fatal("Name do not exist on context")
 		}
-		orgs := model.GetAllOrgs(pgxpool)
+		orgs := model.GetOrgs(pgxpool, "")
 		ginContext.HTML(
 			http.StatusOK,
 			"main",

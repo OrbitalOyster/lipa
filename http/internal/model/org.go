@@ -13,9 +13,9 @@ type Org struct {
 	Ord  int    `db:"ord"`
 }
 
-func GetAllOrgs(pool *pgxpool.Pool) []Org {
-	const query = "SELECT id, name, ord FROM lipa.orgs ORDER BY ord"
-	rows, _ := pool.Query(context.Background(), query)
+func GetOrgs(pool *pgxpool.Pool, filterBy string) []Org {
+	const query = "SELECT id, name, ord FROM lipa.orgs WHERE name LIKE $1 ORDER BY ord"
+	rows, _ := pool.Query(context.Background(), query, "%" + filterBy + "%")
 	if result, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org]); err != nil {
 		if err != pgx.ErrNoRows {
 			panic(err)

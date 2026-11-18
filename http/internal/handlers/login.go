@@ -23,7 +23,7 @@ type LoginRequest struct {
 
 func GetLogin(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		orgs := model.GetAllOrgs(pgxpool)
+		orgs := model.GetOrgs(pgxpool, "")
 		ginContext.HTML(
 			http.StatusOK,
 			"login",
