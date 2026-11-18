@@ -1,90 +1,44 @@
 {{ define "sidebar" }}
-	<aside class="border-end vh-100 overflow-auto" style="width: 32rem">
-		<div class="d-flex flex-row gap-4 align-items-center p-4">
-			<img class="logo" src="/img/goose.webp" />
-			<div class="d-flex flex-column align-items-start">
-				<a class="fs-xl" href="/">Lipa</a>
-				<small class="fg-secondary">
-					{{ l "Greeting" }}
-				</small>
-			</div>
+	<div class="d-flex flex-row gap-4 align-items-center p-4">
+		<img class="logo" src="/img/goose.webp" />
+		<div class="d-flex flex-column align-items-start">
+			<a class="fs-xl" href="/">Lipa</a>
+			<small class="fg-secondary">
+				{{ l "Greeting" }}
+			</small>
 		</div>
-		<hr />
-		<ul class="nav flex-column px-2 gap-2">
-			<li>
-				<div class="accordion accordion-sm sticky-top">
-					<!-- Orgs -->
-					<details class="accordion-item">
-						<summary class="accordion-header sticky-top gap-2">
-							<i class="bi bi-people-fill fs-xl"></i>
-							{{ l "Orgs" }}
-							<svg
-								class="accordion-icon"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 16 16"
-								fill="none"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							>
-								<path d="m2 5 6 6 6-6"/>
-							</svg>
-						</summary>
-						<div class="accordion-body">
-							<div class="input-group">
-								<i class="input-group-text bi bi-search fs-lg fg-secondary"></i>
-								<input type="text" class="form-control">
-							</div>
-							<hr />
-							{{ template "sidebar-orgs" .Orgs }}
-						</div>
-					</details>
-					<!-- Forms -->
-					<details class="accordion-item">
-						<summary class="accordion-header sticky-top gap-2">
-							<i class="bi bi-journal fs-xl"></i>
-							{{ l "Forms" }}
-							<svg
-								class="accordion-icon"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 16 16"
-								fill="none"
-								stroke="currentColor"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							>
-								<path d="m2 5 6 6 6-6"/>
-							</svg>
-						</summary>
-						<div class="accordion-body">
-							<div class="input-group">
-								<i class="input-group-text bi bi-search fs-lg fg-secondary"></i>
-								<input type="text" class="form-control">
-							</div>
-							<hr />
-							Foo
-						</div>
-					</details>
-				</div>
-			</li>
-			<li>
-				<a class="nav-link justify-content-start" href="/templates">
-					<i class="bi bi-filetype-xlsx fs-xl"></i>
-					{{ l "Templates" }}
-				</a>
-			</li>
-			<li>
-				<a class="nav-link justify-content-start" href="/reports">
-					<i class="bi bi-journal-text fs-xl"></i>
-					{{ l "Reports" }}
-				</a>
-			</li>
-			<li>
-				<a class="nav-link justify-content-start" href="/admin">
-					<i class="bi bi-tools fs-xl"></i>
-					{{ l "Admin" }}
-				</a>
-			</li>
-		</ul>
-	</aside>
+	</div>
+	<hr />
+	<ul class="nav flex-column px-2 gap-2">
+		<li>
+			<a class="nav-link justify-content-start" href="/orgs">
+				<i class="bi bi-people-fill fs-xl"></i>
+				{{ l "Orgs" }}
+			</a>
+		</li>
+		<li>
+			<a class="nav-link justify-content-start" href="/forms">
+				<i class="bi bi-journal fs-xl"></i>
+				{{ l "Forms" }}
+			</a>
+		</li>
+		<li>
+			<a class="nav-link justify-content-start" href="/templates">
+				<i class="bi bi-filetype-xlsx fs-xl"></i>
+				{{ l "Templates" }}
+			</a>
+		</li>
+		<li>
+			<a class="nav-link justify-content-start" href="/reports">
+				<i class="bi bi-journal-text fs-xl"></i>
+				{{ l "Reports" }}
+			</a>
+		</li>
+		<li>
+			<a class="nav-link justify-content-start" href="/admin">
+				<i class="bi bi-tools fs-xl"></i>
+				{{ l "Admin" }}
+			</a>
+		</li>
+	</ul>
 {{ end }}

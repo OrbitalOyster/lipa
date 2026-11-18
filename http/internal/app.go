@@ -16,17 +16,23 @@ import (
 )
 
 type App struct {
-	httpConfig     config.Http
-	tokenConfig    config.Token
-	postgresConfig config.Postgres
-	pool           *pgxpool.Pool
-	engine         *gin.Engine
-	renderer       multitemplate.Renderer
-	layoutsPath    string
-	pagesPath      string
-	partialsGlob   []string
-	dialogsGlob    []string
+	httpConfig       config.Http
+	tokenConfig      config.Token
+	postgresConfig   config.Postgres
+	pool             *pgxpool.Pool
+	engine           *gin.Engine
+	renderer         multitemplate.Renderer
+	masterLayoutPath string
+	layoutsPath      string
+	pagesPath        string
+	partialsGlob     []string
+	dialogsGlob      []string
 }
+
+const (
+	templatesPath = "templates"
+	masterLayout  = "master.html"
+)
 
 func (app *App) connectToDB() {
 	var err error
@@ -48,9 +54,9 @@ func (app *App) connectToDB() {
 }
 
 func (app *App) initTemplates() {
-	const templatesPath = "templates"
 	app.pagesPath = filepath.Join(templatesPath, "pages")
 	app.layoutsPath = filepath.Join(templatesPath, "layouts")
+	app.masterLayoutPath = filepath.Join(app.layoutsPath, masterLayout)
 	var err error
 	if app.partialsGlob, err = filepath.Glob(
 		filepath.Join(templatesPath, "partials", "*.html"),
@@ -65,8 +71,9 @@ func (app *App) initTemplates() {
 }
 
 func (app *App) addPage(name string, layout string, page string) {
-	/* layout + page ... */
+	/* master layout + layout + page ... */
 	files := []string{
+		app.masterLayoutPath,
 		filepath.Join(app.layoutsPath, layout),
 		filepath.Join(app.pagesPath, page),
 	}
@@ -111,18 +118,16 @@ func Start() {
 	protected := app.engine.Group("/")
 	protected.Use(handlers.Auth(app.tokenConfig))
 	protected.GET("/", handlers.GetHome(app.pool))
+	protected.GET("/orgs", handlers.GetOrgs(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
-	protected.GET("/sidebar-orgs", handlers.GetOrgsSidebar(app.pool))
 	/* Toasts */
 	app.renderer.AddFromFiles("toast", "templates/toast.html")
-
-	app.renderer.AddFromFiles("sidebar-orgs", "templates/partials/sidebar-orgs.html")
-
 	/* Pages */
-	app.addPage("login", "master.html", "login.html")
-	app.addPage("main", "master.html", "main.html")
-	app.addPage("admin", "master.html", "admin.html")
+	app.addPage("login", "login.html", "login.html")
+	app.addPage("main", "default.html", "main.html")
+	app.addPage("orgs", "default.html", "orgs.html")
+	app.addPage("admin", "default.html", "admin.html")
 	/* Done */
 	log.Printf("Starting http server on port %d", app.httpConfig.Port)
 	app.engine.Run(":" + strconv.Itoa(app.httpConfig.Port))

@@ -1,0 +1,46 @@
+{{ define "layout" }}
+	<body>
+		<!-- Toasts -->
+		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
+		<!-- Dialogs -->
+		<dialog class="dialog dialog-slide-down" id="confirm-dialog">
+			<div class="dialog-header">
+				<h1 class="dialog-title" id="confirm-dialog-title"></h1>
+				<button type="button" class="btn-close" data-bs-dismiss="dialog"></button>
+			</div>
+			<div class="dialog-body" id="confirm-dialog-content"></div>
+			<div class="dialog-footer">
+				<button type="button" class="btn-solid theme-secondary" data-bs-dismiss="dialog" id="confirm-dialog-cancel-btn">
+					Cancel
+				</button>
+				<button type="button" class="btn-solid theme-primary" id="confirm-dialog-ok-btn">
+					Ok
+				</button>
+			</div>
+		</dialog>
+		<!-- Actual page -->
+		<div class="d-flex flex-row">
+			<aside class="flex-grow-7 border-end">
+				<div class="vh-100 sticky-top">
+					{{ template "sidebar" . }}
+				</div>
+			</aside>
+			<div class="flex-grow-1 d-flex flex-column bg-primary bg-20">
+				<nav class="navbar navbar-translucent sticky-top border-bottom p-3">
+					{{ template "navbar" . }}
+				</nav>
+				<main class="p-4">
+					{{ template "page" . }}
+				</main>
+			</div>
+		</div>
+	</body>
+	<script type="module">
+		import { initTooltips } from "/js/tooltips.js"
+		import { initToasts } from "/js/toasts.js"
+		import { initDialogs } from "/js/dialogs.js"
+		initTooltips();
+		initToasts();
+		initDialogs();
+	</script>
+{{ end }}

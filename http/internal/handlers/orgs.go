@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"lipa/internal/model"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,14 +13,13 @@ func GetOrg(pgxpool *pgxpool.Pool, id int) gin.HandlerFunc {
 	}
 }
 
-func GetOrgsSidebar(pgxpool *pgxpool.Pool) gin.HandlerFunc {
+func GetOrgs(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		log.Println("Here")
 		filterBy, _ := ginContext.Params.Get("filterBy")
 		orgs := model.GetOrgs(pgxpool, filterBy)
 		ginContext.HTML(
 			http.StatusOK,
-			"sidebar-orgs",
+			"orgs",
 			gin.H{
 				"Orgs": orgs,
 			},

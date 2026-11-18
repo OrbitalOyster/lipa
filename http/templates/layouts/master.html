@@ -8,28 +8,11 @@
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="/bootstrap-icons/bootstrap-icons.min.css" />
 		<!-- CSS -->
-		<link href="/css/style.css" rel="stylesheet" />
-		<link href="/css/theme.css" rel="stylesheet" />
+		<link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/css/theme.css" />
 		<!-- HTMX -->
 		<script src="/htmx/htmx.min.js"></script>
-		<title>
-			{{ .Title }}
-		</title>
+		<title>{{ .Title }}</title>
 	</head>
-	<body class="bg-2">
-		<!-- Toasts -->
-		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
-		<!-- Dialogs -->
-		{{ template "confirm-dialog" }}
-		<!-- Actual content -->
-		{{ template "page" . }}
-	</body>
-	<script type="module">
-		import { initTooltips } from "/js/tooltips.js"
-		import { initToasts } from "/js/toasts.js"
-		import { initDialogs } from "/js/dialogs.js"
-		initTooltips();
-		initToasts();
-		initDialogs();
-	</script>
+	{{ template "layout" . }}
 </html>

@@ -1,0 +1,13 @@
+{{ define "layout" }}
+	<body class="bg-2">
+		<!-- Toasts -->
+		<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container"></div>
+		<div class="d-flex vh-100">
+			{{ template "page" . }}
+		</div>
+	</body>
+	<script type="module">
+		import { initToasts } from "/js/toasts.js"
+		initToasts();
+	</script>
+{{ end }}

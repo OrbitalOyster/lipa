@@ -1,17 +1,15 @@
 {{ define "navbar" }}
-	<nav class="navbar navbar-translucent sticky-top border-bottom p-2">
-		{{ template "breadcrumb" . }}
-		<div>
-			{{ l "LoggedInAs" }}: <strong>{{ .Name }}</strong>
-			<button
-				class="btn-solid theme-warning"
-				type="button"
-				hx-post="/logout"
-				hx-confirm="Log out?"
-			>
-				<i class="bi bi-box-arrow-right"></i>
-				{{ l "LogOut" }}
-			</button>
-		</div>
-	</nav>
+	{{ template "breadcrumb" . }}
+	<div>
+		{{ l "LoggedInAs" }}: <strong>{{ .Name }}</strong>
+		<button
+			class="btn-solid theme-warning"
+			type="button"
+			hx-post="/logout"
+			hx-confirm="Log out?"
+		>
+			<i class="bi bi-box-arrow-right"></i>
+			{{ l "LogOut" }}
+		</button>
+	</div>
 {{ end }}

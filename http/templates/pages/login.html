@@ -1,173 +1,171 @@
 {{ define "page" }}
-	<div class="d-flex vh-100">
-		<main class="m-auto" style="width: 42rem">
-			<div class="card shadow-sm">
-				<form
-					hx-disabled-elt=".htmx-disable"
-					hx-indicator="#login-btn-icon"
-					hx-post="/login"
-					hx-swap="none"
-				>
-					<div class="card-header d-flex flex-row justify-content-between align-items-center">
-						<div class="d-flex flex-column">
-							<h4>
-								Lipa
-							</h4>
-							<h6 class="fg-secondary">
-								{{ l "Greeting" }}
-							</h6>
-						</div>
-						<!-- The Goose -->
-						<img
-							class="logo"
-							src="/img/goose.webp"
-						/>
+	<main class="m-auto" style="width: 42rem">
+		<div class="card shadow-sm">
+			<form
+				hx-disabled-elt=".htmx-disable"
+				hx-indicator="#login-btn-icon"
+				hx-post="/login"
+				hx-swap="none"
+			>
+				<div class="card-header d-flex flex-row justify-content-between align-items-center">
+					<div class="d-flex flex-column">
+						<h4>
+							Lipa
+						</h4>
+						<h6 class="fg-secondary">
+							{{ l "Greeting" }}
+						</h6>
 					</div>
-					<div class="card-body">
-						<div class="d-flex flex-column gap-4">
-							<!-- Username -->
-							<div
-								class="input-group user-org-toggle d-none"
-								data-bs-attribute="class"
-								data-bs-value="d-none"
-							>
-								<!-- Cute icon -->
-								<i class="input-group-text bi bi-person-fill fs-lg fg-secondary"></i>
-								<div class="form-floating">
-									<label for="username" class="fg-secondary">
-										{{ l "Username" }}
-									</label>
-									<input
-										class="form-control htmx-disable user-org-toggle"
-										type="text"
-										id="username"
-										name="username"
-										placeholder=""
-										autocomplete="off"
-										size="48"
-										autofocus
-										data-bs-attribute="disabled"
-										data-bs-value="true"
-										disabled="true"
-									>
-								</div>
-							</div>
-							<!-- Org -->
-							<div
-								class="input-group user-org-toggle"
-								data-bs-attribute="class"
-								data-bs-value="d-none"
-							>
-								<!-- Cute icon -->
-								<i class="input-group-text bi bi-people-fill fs-lg fg-secondary"></i>
-								<div class="form-floating">
-									<label for="org-id" class="fg-secondary">
-										{{ l "Org" }}
-									</label>
-									<select
-										class="form-control user-org-toggle htmx-disable"
-										id="org-id"
-										name="org-id"
-										autocomplete="off"
-										autofocus
-										data-bs-attribute="disabled"
-										data-bs-value="true"
-									>
-										<option value="" selected hidden>
-											{{ l "SelectOrg" }}
-										</option>
-										{{ range .Orgs }}
-											<option value="{{ .Id }}">
-												{{ .Name }}
-											</option>
-										{{ end }}
-									</select>
-								</div>
-							</div>
-							<!-- Password -->
-							<div class="input-group">
-								<!-- Another cute icon -->
-								<i class="input-group-text bi bi-lock-fill fs-lg fg-secondary"></i>
-								<div class="form-floating">
-									<label for="password-input" class="fg-secondary">
-										{{ l "Password" }}
-									</label>
-									<input
-										class="form-control htmx-disable password-toggle"
-										type="password"
-										id="password-input"
-										name="password"
-										placeholder=""
-										autocomplete="off"
-										data-bs-attribute="type"
-										data-bs-value="password"
-									>
-								</div>
-								<!-- Show/hide password -->
-								<button
-									class="theme-primary btn-solid input-group-btn htmx-disable"
-									type="button"
-									data-bs-toggle="toggler"
-									data-bs-target=".password-toggle"
-								>
-									<i
-										class="bi bi-eye-fill fs-lg password-toggle"
-										data-bs-attribute="class"
-										data-bs-value="bi-eye-slash-fill"
-									>
-									</i>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="card-footer d-flex flex-row align-items-center justify-content-between">
-						<!-- Remember me -->
-						<div class="form-field">
-							<input
-								class="check theme-primary htmx-disable"
-								type="checkbox"
-								id="remember-me"
-								name="remember-me"
-								value="true"
-								autocomplete="off"
-							>
-							<label for="remember-me">
-								{{ l "RememberMe" }}
-							</label>
-						</div>
-						<!-- Switch users/orgs -->
-						<div class="form-field">
-							<div class="switch theme-primary">
+					<!-- The Goose -->
+					<img
+						class="logo"
+						src="/img/goose.webp"
+					/>
+				</div>
+				<div class="card-body">
+					<div class="d-flex flex-column gap-4">
+						<!-- Username -->
+						<div
+							class="input-group user-org-toggle d-none"
+							data-bs-attribute="class"
+							data-bs-value="d-none"
+						>
+							<!-- Cute icon -->
+							<i class="input-group-text bi bi-person-fill fs-lg fg-secondary"></i>
+							<div class="form-floating">
+								<label for="username" class="fg-secondary">
+									{{ l "Username" }}
+								</label>
 								<input
-									type="checkbox"
-									class="htmx-disable"
-									name="is-org"
-									value="false"
+									class="form-control htmx-disable user-org-toggle"
+									type="text"
+									id="username"
+									name="username"
+									placeholder=""
 									autocomplete="off"
-									id="switch-user-org"
-									role="switch"
-									data-bs-toggle="toggler"
-									data-bs-target=".user-org-toggle"
-									switch
+									size="48"
+									autofocus
+									data-bs-attribute="disabled"
+									data-bs-value="true"
+									disabled="true"
 								>
 							</div>
-							<label for="switch-user-org">
-								{{ l "LogInAsUser" }}
-							</label>
 						</div>
-						<!-- Log in button -->
-						<button class="theme-primary btn-solid htmx-disable" type="submit">
-							<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
-							<span class="spinner-border spinner-border-sm"></span>
-							{{ l "LogIn" }}
-						</button>
+						<!-- Org -->
+						<div
+							class="input-group user-org-toggle"
+							data-bs-attribute="class"
+							data-bs-value="d-none"
+						>
+							<!-- Cute icon -->
+							<i class="input-group-text bi bi-people-fill fs-lg fg-secondary"></i>
+							<div class="form-floating">
+								<label for="org-id" class="fg-secondary">
+									{{ l "Org" }}
+								</label>
+								<select
+									class="form-control user-org-toggle htmx-disable"
+									id="org-id"
+									name="org-id"
+									autocomplete="off"
+									autofocus
+									data-bs-attribute="disabled"
+									data-bs-value="true"
+								>
+									<option value="" selected hidden>
+										{{ l "SelectOrg" }}
+									</option>
+									{{ range .Orgs }}
+										<option value="{{ .Id }}">
+											{{ .Name }}
+										</option>
+									{{ end }}
+								</select>
+							</div>
+						</div>
+						<!-- Password -->
+						<div class="input-group">
+							<!-- Another cute icon -->
+							<i class="input-group-text bi bi-lock-fill fs-lg fg-secondary"></i>
+							<div class="form-floating">
+								<label for="password-input" class="fg-secondary">
+									{{ l "Password" }}
+								</label>
+								<input
+									class="form-control htmx-disable password-toggle"
+									type="password"
+									id="password-input"
+									name="password"
+									placeholder=""
+									autocomplete="off"
+									data-bs-attribute="type"
+									data-bs-value="password"
+								>
+							</div>
+							<!-- Show/hide password -->
+							<button
+								class="theme-primary btn-solid input-group-btn htmx-disable"
+								type="button"
+								data-bs-toggle="toggler"
+								data-bs-target=".password-toggle"
+							>
+								<i
+									class="bi bi-eye-fill fs-lg password-toggle"
+									data-bs-attribute="class"
+									data-bs-value="bi-eye-slash-fill"
+								>
+								</i>
+							</button>
+						</div>
 					</div>
-				</form>
-			</div>
-			<div class="text-end p-2">
-				<i class="bi bi-c-circle"></i>
-				{{ getYear }}
-			</div>
-		</main>
-	</div>
+				</div>
+				<div class="card-footer d-flex flex-row align-items-center justify-content-between">
+					<!-- Remember me -->
+					<div class="form-field">
+						<input
+							class="check theme-primary htmx-disable"
+							type="checkbox"
+							id="remember-me"
+							name="remember-me"
+							value="true"
+							autocomplete="off"
+						>
+						<label for="remember-me">
+							{{ l "RememberMe" }}
+						</label>
+					</div>
+					<!-- Switch users/orgs -->
+					<div class="form-field">
+						<div class="switch theme-primary">
+							<input
+								type="checkbox"
+								class="htmx-disable"
+								name="is-org"
+								value="false"
+								autocomplete="off"
+								id="switch-user-org"
+								role="switch"
+								data-bs-toggle="toggler"
+								data-bs-target=".user-org-toggle"
+								switch
+							>
+						</div>
+						<label for="switch-user-org">
+							{{ l "LogInAsUser" }}
+						</label>
+					</div>
+					<!-- Log in button -->
+					<button class="theme-primary btn-solid htmx-disable" type="submit">
+						<i class="bi bi-box-arrow-in-right"	id="login-btn-icon"></i>
+						<span class="spinner-border spinner-border-sm"></span>
+						{{ l "LogIn" }}
+					</button>
+				</div>
+			</form>
+		</div>
+		<div class="text-end p-2">
+			<i class="bi bi-c-circle"></i>
+			{{ getYear }}
+		</div>
+	</main>
 {{ end }}
