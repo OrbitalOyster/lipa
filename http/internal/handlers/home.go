@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"lipa/internal/model"
-	"log"
 	"net/http"
 	"time"
 
@@ -12,17 +11,13 @@ import (
 
 func GetHome(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		name, exists := ginContext.Get("name")
-		/* Major screwup */
-		if !exists {
-			log.Fatal("Name do not exist on context")
-		}
+		name := ginContext.MustGet("name")
 		orgs := model.GetOrgs(pgxpool, "")
 		ginContext.HTML(
 			http.StatusOK,
-			"main",
+			"home",
 			gin.H{
-				"Title": "Main",
+				"Title": "Главная",
 				"Name":  name,
 				"Today": time.Now(),
 				"Orgs":  orgs,

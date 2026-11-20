@@ -125,7 +125,7 @@ func Start() {
 	app.renderer.AddFromFiles("toast", "templates/toast.html")
 	/* Pages */
 	app.addPage("login", "login.html", "login.html")
-	app.addPage("main", "default.html", "main.html")
+	app.addPage("home", "default.html", "home.html")
 	app.addPage("orgs", "default.html", "orgs.html")
 	app.addPage("admin", "default.html", "admin.html")
 	/* Done */
