@@ -3,6 +3,7 @@ package handlers
 import (
 	"lipa/internal/model"
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -17,9 +18,10 @@ func GetOrgList(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
 		filter := ginContext.Query("filter")
 		orgs := model.GetOrgs(pgxpool, filter)
+		ginContext.Header("HX-Push-Url", "/orgs?filter=" + url.QueryEscape(filter))
 		ginContext.HTML(
 			http.StatusOK,
-			"org-list",
+			"org-list.html",
 			gin.H{
 				"Orgs":  orgs,
 			},

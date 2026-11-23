@@ -48,5 +48,5 @@ func Send(ginContext *gin.Context, title string, content string, severity ToastS
 	}
 	maps.Copy(data, styles[severity])
 	ginContext.Header("HX-Trigger-After-Settle", "toast")
-	ginContext.HTML(http.StatusOK, "toast", data)
+	ginContext.HTML(http.StatusOK, "toast.html", data)
 }

@@ -1,0 +1,35 @@
+{{ define "toast.html" }}
+	<div hx-swap-oob="beforeend:#toast-container">
+		<div
+			class="toast theme-{{ .Theme }}"
+			data-bs-autohide="{{ .Autohide }}"
+			data-bs-delay="10000"
+		>
+			<!-- Time -->
+			<div class="toast-header">
+				<i class="bi me-2 {{ .IconClass }}"></i>
+				<strong class="me-auto">
+					{{ .Title }}
+				</strong>
+				<small>
+					{{ .Time }}
+				</small>
+				<button
+					class="btn-close"
+					type="button"
+					data-bs-dismiss="toast"
+				>
+				</button>
+			</div>
+			<!-- Progress bar -->
+			{{ if eq .Autohide "true" }}
+				<div style="height: 2px">
+					<div class="h-100 progress-bar" style="width: 0%"></div>
+				</div>
+			{{ end }}
+			<div class="toast-body">
+				{{ .Content }}
+			</div>
+		</div>
+	</div>
+{{ end }}

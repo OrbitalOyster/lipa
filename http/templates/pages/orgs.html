@@ -3,12 +3,24 @@
 		<div class="card-header flex-row gap-4 align-items-center justify-content-between">
 			{{ l "Orgs" }}
 			<label class="form-control form-adorn">
-				<input type="search" class="form-ghost">
+				<input
+					type="search"
+					class="form-ghost"
+					name="filter"
+					hx-get="/org-list"
+					hx-push-url="/orgs"
+					hx-target="#org-list"
+					hx-swap="outerHTML"
+					hx-indicator="#org-list"
+					hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
+					autocomplete="off"
+					autofocus
+				>
 				<div class="form-adorn-icon">
 					<i class="bi bi-search"></i>
 				</div>
 			</label>
 		</div>
-		{{ template "org-list" .Orgs }}
+		{{ template "org-list.html" . }}
 	</div>
 {{ end }}

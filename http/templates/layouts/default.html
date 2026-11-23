@@ -22,12 +22,12 @@
 		<div class="d-flex flex-row">
 			<aside class="flex-grow-7 border-end">
 				<div class="vh-100 sticky-top">
-					{{ template "sidebar" . }}
+					{{ template "sidebar.html" . }}
 				</div>
 			</aside>
 			<div class="flex-grow-1 d-flex flex-column bg-primary bg-20">
 				<nav class="navbar navbar-translucent sticky-top border-bottom p-3">
-					{{ template "navbar" . }}
+					{{ template "navbar.html" . }}
 				</nav>
 				<main class="m-auto p-4">
 					{{ template "page" . }}

@@ -122,8 +122,9 @@ func Start() {
 	protected.GET("/org-list", handlers.GetOrgList(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
-	/* Toasts */
-	app.renderer.AddFromFiles("toast", "templates/toast.html")
+	/* Standalone partials */
+	app.renderer.AddFromFiles("toast.html", "templates/partials/toast.html")
+	app.renderer.AddFromFiles("org-list.html", "templates/partials/org-list.html")
 	/* Pages */
 	app.addPage("login", "login.html", "login.html")
 	app.addPage("home", "default.html", "home.html")
