@@ -2,13 +2,13 @@
 	<div class="card shadow-sm">
 		<div class="card-header flex-row gap-4 align-items-center justify-content-between">
 			{{ l "Orgs" }}
-			<input type="text" class="form-control" autofocus>
+			<label class="form-control form-adorn">
+				<input type="search" class="form-ghost">
+				<div class="form-adorn-icon">
+					<i class="bi bi-search"></i>
+				</div>
+			</label>
 		</div>
-			<div class="list-group list-group-flush">
-				{{ range .Orgs }}
-					<a class="list-group-item list-group-item-action" href="/orgs/{{ .Id }}">{{ .Id }} - {{ .Name }}</a>
-				{{ end }}
-			</div>
-		</div>
+		{{ template "org-list" .Orgs }}
 	</div>
 {{ end }}

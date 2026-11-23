@@ -8,14 +8,23 @@ import (
 )
 
 type Org struct {
-	Id   int    `db:"id"`
-	Name string `db:"name"`
-	Ord  int    `db:"ord"`
+	Id     int    `db:"id"`
+	Name   string `db:"name"`
+	Ord    int    `db:"ord"`
+	Active bool   `db:"active"`
 }
 
-func GetOrgs(pool *pgxpool.Pool, filterBy string) []Org {
-	const query = "SELECT id, name, ord FROM lipa.orgs WHERE name LIKE $1 ORDER BY ord"
-	rows, _ := pool.Query(context.Background(), query, "%" + filterBy + "%")
+func GetOrgs(pool *pgxpool.Pool, filter string) []Org {
+	const query = `
+		SELECT id, name, ord, active
+		FROM lipa.orgs
+		WHERE name LIKE $1
+		ORDER BY ord`
+	rows, _ := pool.Query(
+		context.Background(),
+		query,
+		"%"+filter+"%",
+	)
 	if result, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org]); err != nil {
 		if err != pgx.ErrNoRows {
 			panic(err)
@@ -27,8 +36,11 @@ func GetOrgs(pool *pgxpool.Pool, filterBy string) []Org {
 	}
 }
 
-func GetOrg(pool *pgxpool.Pool, id string, password string) (Org, bool) {
-	const query = "SELECT id, name, ord FROM lipa.orgs WHERE id = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
+func OrgLogin(pool *pgxpool.Pool, id string, password string) (Org, bool) {
+	const query = `
+		SELECT id, name, ord, active
+		FROM lipa.orgs
+		WHERE id = $1 AND password_hash = encode(sha256($2::bytea), 'hex')`
 	rows, _ := pool.Query(context.Background(), query, id, password)
 	if result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[Org]); err != nil {
 		if err != pgx.ErrNoRows {

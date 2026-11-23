@@ -13,11 +13,25 @@ func GetOrg(pgxpool *pgxpool.Pool, id int) gin.HandlerFunc {
 	}
 }
 
+func GetOrgList(pgxpool *pgxpool.Pool) gin.HandlerFunc {
+	return func(ginContext *gin.Context) {
+		filter := ginContext.Query("filter")
+		orgs := model.GetOrgs(pgxpool, filter)
+		ginContext.HTML(
+			http.StatusOK,
+			"org-list",
+			gin.H{
+				"Orgs":  orgs,
+			},
+		)
+	}
+}
+
 func GetOrgs(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
 		name := ginContext.MustGet("name")
-		filterBy, _ := ginContext.Params.Get("filterBy")
-		orgs := model.GetOrgs(pgxpool, filterBy)
+		filter := ginContext.Query("filter")
+		orgs := model.GetOrgs(pgxpool, filter)
 		ginContext.HTML(
 			http.StatusOK,
 			"orgs",

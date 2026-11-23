@@ -41,12 +41,12 @@ func loginAttempt(tokenConfig config.Token, pool *pgxpool.Pool, loginRequest Log
 		cookieLifetime = tokenConfig.CookieLongLifetime
 	}
 	if loginRequest.IsOrg == "false" { /* User */
-		if user, found := model.GetUser(pool, loginRequest.Username, loginRequest.Password); found {
+		if user, found := model.UserLogin(pool, loginRequest.Username, loginRequest.Password); found {
 			log.Printf("User %s logged in", user.Name)
 			return token.MakeClaims(user.Id, false, user.Name, cookieLifetime), true
 		}
 	} else { /* Org */
-		if org, found := model.GetOrg(pool, loginRequest.OrgId, loginRequest.Password); found {
+		if org, found := model.OrgLogin(pool, loginRequest.OrgId, loginRequest.Password); found {
 			log.Printf("Org %s logged in", org.Name)
 			return token.MakeClaims(org.Id, true, org.Name, cookieLifetime), true
 		}

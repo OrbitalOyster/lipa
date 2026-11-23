@@ -119,6 +119,7 @@ func Start() {
 	protected.Use(handlers.Auth(app.tokenConfig))
 	protected.GET("/", handlers.GetHome(app.pool))
 	protected.GET("/orgs", handlers.GetOrgs(app.pool))
+	protected.GET("/org-list", handlers.GetOrgList(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
 	/* Toasts */
