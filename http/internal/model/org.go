@@ -8,15 +8,37 @@ import (
 )
 
 type Org struct {
-	Id     int    `db:"id"`
-	Name   string `db:"name"`
-	Ord    int    `db:"ord"`
-	Active bool   `db:"active"`
+	Id      int     `db:"id"`
+	Name    string  `db:"name"`
+	Address *string `db:"address"`
+	Ord     int     `db:"ord"`
+	Active  bool    `db:"active"`
+}
+
+func GetOrg(pool *pgxpool.Pool, id int) Org {
+	const query = `
+		SELECT id, name, address, ord, active
+		FROM lipa.orgs
+		WHERE id = $1`
+	rows, _ := pool.Query(
+		context.Background(),
+		query,
+		id,
+	)
+	if result, err := pgx.CollectExactlyOneRow(rows, pgx.RowToStructByName[Org]); err != nil {
+		if err != pgx.ErrNoRows {
+			panic(err)
+		} else {
+			return result
+		}
+	} else {
+		return result
+	}
 }
 
 func GetOrgs(pool *pgxpool.Pool, filter string) []Org {
 	const query = `
-		SELECT id, name, ord, active
+		SELECT id, name, address, ord, active
 		FROM lipa.orgs
 		WHERE name LIKE $1
 		ORDER BY ord`

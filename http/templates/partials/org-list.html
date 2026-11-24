@@ -3,7 +3,14 @@
 		{{ range .Orgs }}
 		<a
 			href="/orgs/{{ .Id }}"
-			class=" list-group-item list-group-item-action {{ if not .Active }} text-decoration-line-through {{ end }}"
+			class="
+				list-group-item
+				list-group-item-action
+				{{ if not .Active }}
+					text-decoration-line-through
+				{{ end }}
+				focus-ring
+			"
 		>
 			{{ .Id }} - {{ .Name }}
 		</a>

@@ -119,6 +119,7 @@ func Start() {
 	protected.Use(handlers.Auth(app.tokenConfig))
 	protected.GET("/", handlers.GetHome(app.pool))
 	protected.GET("/orgs", handlers.GetOrgs(app.pool))
+	protected.GET("/orgs/:id", handlers.GetOrg(app.pool))
 	protected.GET("/org-list", handlers.GetOrgList(app.pool))
 	protected.GET("/admin", handlers.GetAdmin)
 	protected.POST("/logout", handlers.PostLogout(app.tokenConfig))
@@ -129,6 +130,7 @@ func Start() {
 	app.addPage("login", "login.html", "login.html")
 	app.addPage("home", "default.html", "home.html")
 	app.addPage("orgs", "default.html", "orgs.html")
+	app.addPage("org", "default.html", "org.html")
 	app.addPage("admin", "default.html", "admin.html")
 	/* Done */
 	log.Printf("Starting http server on port %d", app.httpConfig.Port)

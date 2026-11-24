@@ -7,6 +7,7 @@
 					type="search"
 					class="form-ghost"
 					name="filter"
+					{{ if not (eq .Filter "") }} value="{{ .Filter }}" {{ end }}
 					hx-get="/org-list"
 					hx-push-url="/orgs"
 					hx-target="#org-list"
