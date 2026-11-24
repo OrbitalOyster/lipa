@@ -16,19 +16,23 @@ func GetOrg(pool *pgxpool.Pool) gin.HandlerFunc {
 		idStr := ginContext.Param("id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
-			ginContext.Status(http.StatusNotFound)
+			ginContext.Status(http.StatusBadRequest)
 			return
 		}
-		org := model.GetOrg(pool, id)
-		ginContext.HTML(
-			http.StatusOK,
-			"org",
-			gin.H{
-				"Title": org.Name,
-				"Name":  name,
-				"Org":   org,
-			},
-		)
+		org, found := model.GetOrg(pool, id)
+		if !found {
+			ginContext.Status(http.StatusNotFound)
+		} else {
+			ginContext.HTML(
+				http.StatusOK,
+				"org",
+				gin.H{
+					"Title": org.Name,
+					"Name":  name,
+					"Org":   org,
+				},
+			)
+		}
 	}
 }
 

@@ -4,6 +4,7 @@
 			{{ .Org.Name }}
 		</div>
 		<div class="card-body">
+			<p>id: {{ .Org.Id }}</p>
 			{{ if not (eq .Org.Address nil) }}
 				<p>Адрес: {{ .Org.Address }}</p>
 			{{ end }}

@@ -15,7 +15,7 @@ type Org struct {
 	Active  bool    `db:"active"`
 }
 
-func GetOrg(pool *pgxpool.Pool, id int) Org {
+func GetOrg(pool *pgxpool.Pool, id int) (Org, bool) {
 	const query = `
 		SELECT id, name, address, ord, active
 		FROM lipa.orgs
@@ -29,10 +29,10 @@ func GetOrg(pool *pgxpool.Pool, id int) Org {
 		if err != pgx.ErrNoRows {
 			panic(err)
 		} else {
-			return result
+			return result, false
 		}
 	} else {
-		return result
+		return result, true
 	}
 }
 
@@ -47,12 +47,8 @@ func GetOrgs(pool *pgxpool.Pool, filter string) []Org {
 		query,
 		"%"+filter+"%",
 	)
-	if result, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org]); err != nil {
-		if err != pgx.ErrNoRows {
-			panic(err)
-		} else {
-			return result
-		}
+	if result, err := pgx.CollectRows(rows, pgx.RowToStructByName[Org]); err != nil && err != pgx.ErrNoRows {
+		panic(err)
 	} else {
 		return result
 	}
@@ -60,7 +56,7 @@ func GetOrgs(pool *pgxpool.Pool, filter string) []Org {
 
 func OrgLogin(pool *pgxpool.Pool, id string, password string) (Org, bool) {
 	const query = `
-		SELECT id, name, ord, active
+		SELECT id, name, address, ord, active
 		FROM lipa.orgs
 		WHERE id = $1 AND password_hash = encode(sha256($2::bytea), 'hex')`
 	rows, _ := pool.Query(context.Background(), query, id, password)

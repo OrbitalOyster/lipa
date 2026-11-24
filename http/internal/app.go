@@ -118,6 +118,7 @@ func Start() {
 	protected := app.engine.Group("/")
 	protected.Use(handlers.Auth(app.tokenConfig))
 	protected.GET("/", handlers.GetHome(app.pool))
+	protected.GET("/xlsx", handlers.GetXLSX(app.pool))
 	protected.GET("/orgs", handlers.GetOrgs(app.pool))
 	protected.GET("/orgs/:id", handlers.GetOrg(app.pool))
 	protected.GET("/org-list", handlers.GetOrgList(app.pool))
@@ -129,6 +130,7 @@ func Start() {
 	/* Pages */
 	app.addPage("login", "login.html", "login.html")
 	app.addPage("home", "default.html", "home.html")
+	app.addPage("xlsx", "default.html", "xlsx.html")
 	app.addPage("orgs", "default.html", "orgs.html")
 	app.addPage("org", "default.html", "org.html")
 	app.addPage("admin", "default.html", "admin.html")

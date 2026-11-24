@@ -14,7 +14,10 @@ type User struct {
 }
 
 func UserLogin(pool *pgxpool.Pool, login string, password string) (User, bool) {
-	const query = "SELECT id, name, login FROM lipa.users WHERE login = $1 AND password_hash = encode(sha256($2::bytea), 'hex')"
+	const query = `
+		SELECT id, name, login
+		FROM lipa.users
+		WHERE login = $1 AND password_hash = encode(sha256($2::bytea), 'hex')`
 	rows, _ := pool.Query(context.Background(), query, login, password)
 	if result, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[User]); err != nil {
 		if err != pgx.ErrNoRows {
