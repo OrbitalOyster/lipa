@@ -11,16 +11,16 @@ import (
 
 func GetHome(pgxpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		name := ginContext.MustGet("name")
+		username := ginContext.MustGet("Username")
 		orgs := model.GetOrgs(pgxpool, "")
 		ginContext.HTML(
 			http.StatusOK,
 			"home",
 			gin.H{
-				"Title": "Главная",
-				"Name":  name,
-				"Today": time.Now(),
-				"Orgs":  orgs,
+				"Title":    "Главная",
+				"Username": username,
+				"Today":    time.Now(),
+				"Orgs":     orgs,
 			},
 		)
 	}

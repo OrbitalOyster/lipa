@@ -32,7 +32,7 @@ func Auth(tokenConfig config.Token) gin.HandlerFunc {
 					tokenConfig.CookieName,
 					tokenConfig.TokenSecret,
 				)
-				ginContext.Set("name", claims.Name)
+				ginContext.Set("Username", claims.Username)
 				ginContext.Next()
 				return
 			}

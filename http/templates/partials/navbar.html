@@ -1,7 +1,7 @@
 {{ define "navbar.html" }}
 	{{ template "breadcrumb.html" . }}
 	<div>
-		{{ l "LoggedInAs" }}: <strong>{{ .Name }}</strong>
+		{{ l "LoggedInAs" }}: <strong>{{ .Username }}</strong>
 		<button
 			class="btn-solid theme-warning"
 			type="button"

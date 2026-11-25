@@ -12,7 +12,7 @@ import (
 
 func GetOrg(pool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		name := ginContext.MustGet("name")
+		username := ginContext.MustGet("Username")
 		idStr := ginContext.Param("id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
@@ -27,9 +27,9 @@ func GetOrg(pool *pgxpool.Pool) gin.HandlerFunc {
 				http.StatusOK,
 				"org",
 				gin.H{
-					"Title": org.Name,
-					"Name":  name,
-					"Org":   org,
+					"Title":    org.Name,
+					"Username": username,
+					"Org":      org,
 				},
 			)
 		}
@@ -57,17 +57,17 @@ func GetOrgList(pool *pgxpool.Pool) gin.HandlerFunc {
 
 func GetOrgs(pool *pgxpool.Pool) gin.HandlerFunc {
 	return func(ginContext *gin.Context) {
-		name := ginContext.MustGet("name")
+		username := ginContext.MustGet("Username")
 		filter := ginContext.Query("filter")
 		orgs := model.GetOrgs(pool, filter)
 		ginContext.HTML(
 			http.StatusOK,
 			"orgs",
 			gin.H{
-				"Title":  "Организации",
-				"Name":   name,
-				"Orgs":   orgs,
-				"Filter": filter,
+				"Title":    "Организации",
+				"Username": username,
+				"Orgs":     orgs,
+				"Filter":   filter,
 			},
 		)
 	}
