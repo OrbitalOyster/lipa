@@ -4,6 +4,33 @@
 			Файлики
 		</div>
 		<div class="card-body">
+			<button
+				type="button"
+				class="btn-solid theme-primary"
+				data-bs-toggle="dialog"
+				data-bs-target="#upload-xlsx-dialog"
+			>
+				<i class="bi bi-cloud-plus"></i>
+				Загрузить
+			</button>
+			<table class="table">
+				<thead>
+					<th class="text-center">Имя файла</th>
+					<th class="text-center">Хэш</th>
+					<th class="text-center">Действия</th>
+				</thead>
+				<tbody>
+					{{ range .XLSXs }}
+						<tr>
+							<td>{{ .Filename }}</td>
+							<td>{{ .Hash }}</td>
+							<td class="text-center">
+								<i class="bi bi-three-dots-vertical"></i>
+							</td>
+						</tr>
+					{{ end }}
+				</tbody>
+			</table>
 		</div>
 	</div>
 {{ end }}

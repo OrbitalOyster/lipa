@@ -1,0 +1,47 @@
+{{ define "upload-xlsx-dialog.html" }}
+	<dialog class="dialog dialog-lg dialog-slide-down" id="upload-xlsx-dialog">
+		<div class="dialog-header">
+			<h1 class="dialog-title">{{ l "UploadXLSX" }}</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="dialog"></button>
+		</div>
+		<div class="dialog-body">
+			<ol class="stepper">
+				<li class="stepper-item" id="step-1">
+					<form
+						hx-encoding="multipart/form-data"
+						hx-post="/xlsx"
+						hx-target="#step-1"
+						hx-swap="outerHTML"
+					>
+						<label for="xlsx-upload-file">
+							Выберите файл:
+						</label>
+						<input
+							type="file"
+							id="xlsx-upload-file"
+							name="xlsx-file"
+							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+							required
+						>
+						<button type="submit" class="btn-solid theme-primary">
+							Загрузить
+						</button>
+					</form>
+				</li>
+				<li class="stepper-item">Проверка формата</li>
+				<li class="stepper-item">Проверка на повтор</li>
+				<li class="stepper-item">Проверка содержимого</li>
+				<li class="stepper-item">Готово</li>
+			</ol>
+		</div>
+		<div class="dialog-footer">
+			<button
+				type="button"
+				class="btn-solid theme-secondary"
+				data-bs-dismiss="dialog"
+			>
+				{{ l "Cancel" }}
+			</button>
+		</div>
+	</dialog>
+{{ end }}

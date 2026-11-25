@@ -1,14 +1,10 @@
-{{ define "confirm-dialog" }}
+{{ define "confirm-dialog.html" }}
 	<dialog class="dialog dialog-slide-down" id="confirm-dialog">
 		<div class="dialog-header">
-			<h1 class="dialog-title" id="confirm-dialog-title">
-				[INSERT TITLE]
-			</h1>
+			<h1 class="dialog-title" id="confirm-dialog-title"></h1>
 			<button type="button" class="btn-close" data-bs-dismiss="dialog"></button>
 		</div>
-		<div class="dialog-body" id="confirm-dialog-content">
-			[INSERT CONTENT]
-		</div>
+		<div class="dialog-body" id="confirm-dialog-content"></div>
 		<div class="dialog-footer">
 			<button
 				type="button"
@@ -16,14 +12,16 @@
 				data-bs-dismiss="dialog"
 				id="confirm-dialog-cancel-btn"
 			>
-				Cancel
+				<i class="bi bi-x-lg"></i>
+				{{ l "Cancel" }}
 			</button>
 			<button
 				type="button"
 				class="btn-solid theme-primary"
 				id="confirm-dialog-ok-btn"
 			>
-				Ok
+				<i class="bi bi-check2"></i>
+				{{ l "Ok" }}
 			</button>
 		</div>
 	</dialog>

@@ -119,6 +119,7 @@ func Start() {
 	protected.Use(handlers.Auth(app.tokenConfig))
 	protected.GET("/", handlers.GetHome(app.pool))
 	protected.GET("/xlsx", handlers.GetXLSX(app.pool))
+	protected.POST("/xlsx", handlers.PostXLSX())
 	protected.GET("/orgs", handlers.GetOrgs(app.pool))
 	protected.GET("/orgs/:id", handlers.GetOrg(app.pool))
 	protected.GET("/org-list", handlers.GetOrgList(app.pool))
@@ -127,6 +128,7 @@ func Start() {
 	/* Standalone partials */
 	app.renderer.AddFromFiles("toast.html", "templates/partials/toast.html")
 	app.renderer.AddFromFiles("org-list.html", "templates/partials/org-list.html")
+	app.renderer.AddFromFiles("xlsx-upload-step-1.html", "templates/partials/xlsx-upload-step-1.html")
 	/* Pages */
 	app.addPage("login", "login.html", "login.html")
 	app.addPage("home", "default.html", "home.html")
