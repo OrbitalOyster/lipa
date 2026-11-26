@@ -1,10 +1,9 @@
-{{ define "upload-xlsx-dialog.html" }}
-	<dialog class="dialog dialog-lg dialog-slide-down" id="upload-xlsx-dialog">
-		<div class="dialog-header">
-			<h1 class="dialog-title">{{ l "UploadXLSX" }}</h1>
-			<button type="button" class="btn-close" data-bs-dismiss="dialog"></button>
+{{ define "page" }}
+	<div class="card shadow-sm">
+		<div class="card-header flex-row gap-4 align-items-center justify-content-between">
+			Загрузить .xlsx
 		</div>
-		<div class="dialog-body">
+		<div class="card-body">
 			<ol class="stepper">
 				<li class="stepper-item" id="step-1">
 					<form
@@ -24,7 +23,7 @@
 							required
 						>
 						<button type="submit" class="btn-solid theme-primary">
-							Загрузить
+							{{ l "Ok" }}
 						</button>
 					</form>
 				</li>
@@ -34,14 +33,5 @@
 				<li class="stepper-item">Готово</li>
 			</ol>
 		</div>
-		<div class="dialog-footer">
-			<button
-				type="button"
-				class="btn-solid theme-secondary"
-				data-bs-dismiss="dialog"
-			>
-				{{ l "Cancel" }}
-			</button>
-		</div>
-	</dialog>
+	</div>
 {{ end }}
